@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "es6",
+      "es2015",
+      "es2016",
+      "es2017",
+      "esnext"
+    ],
+    "target": "es6",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "outDir": "./dist/",
+    "rootDir": "./src/",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "declaration": false
+  },
+  "files": [
+    "./src/typings.d.ts",
+    "./src/index.ts"
+  ]
+}
