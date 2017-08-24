@@ -3,6 +3,8 @@ import { decode } from 'jsonwebtoken';
 
 export interface IGraphQLContext {
   games: GamesManager;
+  game?: IGameObject;
+  player?: IPlayer;
 }
 
 export const createContext = (): IGraphQLContext => {

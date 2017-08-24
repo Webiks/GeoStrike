@@ -1,8 +1,8 @@
-import { gameById } from '../queries/game-by-id';
+import { currentGame } from '../queries/current-game';
 
 const resolvers = {
   Query: {
-    game: gameById,
+    currentGame,
   },
 };
 

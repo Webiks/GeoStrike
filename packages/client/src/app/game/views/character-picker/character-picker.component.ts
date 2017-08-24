@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
-const AVAILABLE_CHARACTERS = [
+export const AVAILABLE_CHARACTERS = [
   {
     name: 'Eitan',
     description: 'Speaks Russian',

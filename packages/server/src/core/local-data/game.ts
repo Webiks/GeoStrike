@@ -1,12 +1,13 @@
 import { v4 } from 'uuid';
 import { sign } from 'jsonwebtoken';
-import { GameState } from '../../types';
+import { GameState, PlayerState } from '../../types';
 
 export interface IPlayer {
   playerId: string;
   token: string;
   character: string;
   username: string;
+  state: PlayerState;
 }
 
 export interface IGameObject {
@@ -47,6 +48,7 @@ export class GamesManager {
       character,
       token: playerToken,
       username,
+      state: 'WAITING',
     };
 
     game.players.push(player);
@@ -86,5 +88,14 @@ export class GamesManager {
     }
 
     throw new Error('Game does not exists');
+  }
+
+  playerReady(gameId: string, playerId: string) {
+    const game = this.getGameById(gameId);
+    const player = game.players.find(p => p.playerId === playerId);
+
+    if (player) {
+      player.state = 'READY';
+    }
   }
 }

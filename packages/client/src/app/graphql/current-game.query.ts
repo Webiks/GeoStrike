@@ -1,9 +1,9 @@
 import gql from 'graphql-tag';
 import { gameFragment } from './game.fragment';
 
-export const gameDataSubscription = gql`
-  subscription gameData {
-    gameData {
+export const currentGameQuery = gql`
+  query currentGame {
+    currentGame {
       ...GameFields
     }
   }
