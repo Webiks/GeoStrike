@@ -12,9 +12,11 @@ import { CreateNewGameDialogComponent } from './views/create-new-game-dialog/cre
 import { JoinGameDialogComponent } from './views/join-game-dialog/join-game-dialog.component';
 import { CharacterPickerComponent } from './views/character-picker/character-picker.component';
 import { GameService } from './services/game.service';
-import { ActiveGameService } from './services/active-game.service';
 import { GameRoomComponent } from './views/game-room/game-room.component';
 import { FormsModule } from '@angular/forms';
+import { getApolloClient } from '../core/network/apollo-client';
+import { ApolloModule } from 'apollo-angular';
+import { client, SUBSCRIPTIONS_SOCKET } from '../core/network/websocket';
 
 @NgModule({
   declarations: [
@@ -35,6 +37,7 @@ import { FormsModule } from '@angular/forms';
     MdProgressSpinnerModule,
     MdInputModule,
     FormsModule,
+    ApolloModule.forRoot(getApolloClient),
   ],
   exports: [
     MainComponent,
@@ -42,7 +45,7 @@ import { FormsModule } from '@angular/forms';
   ],
   providers: [
     GameService,
-    ActiveGameService,
+    { provide: SUBSCRIPTIONS_SOCKET, useValue: client },
   ],
   entryComponents: [
     CreateNewGameDialogComponent,

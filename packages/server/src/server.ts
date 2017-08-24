@@ -8,6 +8,10 @@ import { logger } from './core/logger/logger';
 import { schema } from './graphql/schema';
 import { graphiqlExpress, graphqlExpress } from 'graphql-server-express';
 import { createContext, resolveGameAndPlayer } from './graphql/context';
+import { createServer } from 'http';
+import { SubscriptionServer } from 'subscriptions-transport-ws';
+import { execute, subscribe } from 'graphql';
+import * as WebSocket from 'ws';
 
 export async function initServer() {
   const env = process.env.NODE_ENV || 'development';
@@ -43,7 +47,7 @@ export async function initServer() {
         }
       },
       context: {
-        ...resolveGameAndPlayer(request, context.games),
+        ...resolveGameAndPlayer(request.headers['player-token'] as string, context.games),
         ...context,
       },
     }))
@@ -54,10 +58,31 @@ export async function initServer() {
     graphiqlExpress({
       endpointURL: '/graphql',
       query: ``,
+      subscriptionsEndpoint: 'ws://localhost:3000/subscriptions',
     })
   );
 
-  server.listen(PORT, () => {
+  const httpServer = createServer(server);
+
+  httpServer.listen(PORT, () => {
     logger.info(`Server started on port ${PORT}...`);
+    logger.info(`GraphQL HTTP: http://localhost:${PORT}/graphql`);
+    logger.info(`GraphiQL HTTP: http://localhost:${PORT}/graphiql`);
+    logger.info(`GraphQL Subscriptions WebSocket: ws://localhost:${PORT}/subscriptions`);
+
+    SubscriptionServer.create({
+      execute,
+      subscribe,
+      schema,
+      onConnect: connectionParams => {
+        return {
+          ...resolveGameAndPlayer(connectionParams['player-token'], context.games),
+          ...context,
+        };
+      },
+    }, {
+      server: httpServer,
+      path: '/subscriptions',
+    });
   });
 }

@@ -1,14 +1,26 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import { createNewGameMutation } from '../../graphql/create-new-game.mutation';
 import { ApolloQueryResult } from 'apollo-client';
 import { Observable } from 'rxjs/Observable';
 import { CreateNewGame, JoinGame } from '../../types';
 import { joinGameMutation } from '../../graphql/join-game.mutation';
+import { SubscriptionClient } from 'subscriptions-transport-ws';
+import { SUBSCRIPTIONS_SOCKET } from '../../core/network/websocket';
 
 @Injectable()
 export class GameService {
-  constructor(private apollo: Apollo) {
+  constructor(private apollo: Apollo,
+              @Inject(SUBSCRIPTIONS_SOCKET) private socket: SubscriptionClient) {
+  }
+
+  refreshConnection() {
+    this.socket.close(true, true);
+    this.socket['connect']();
+  }
+
+  subscribeToGameData() {
+
   }
 
   createNewGame(character: string): Observable<ApolloQueryResult<CreateNewGame.Mutation>> {

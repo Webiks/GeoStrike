@@ -11,9 +11,7 @@ export const createContext = (): IGraphQLContext => {
   };
 };
 
-export const resolveGameAndPlayer = (request, games: GamesManager): { game: IGameObject, player: IPlayer } => {
-  const headerValue = request.headers['player-token'];
-
+export const resolveGameAndPlayer = (headerValue: string, games: GamesManager): { game?: IGameObject, player?: IPlayer } => {
   if (headerValue) {
     const decodedPlayerToken: { gameId: string, playerId: string } = decode(headerValue) as any;
 
@@ -39,5 +37,5 @@ export const resolveGameAndPlayer = (request, games: GamesManager): { game: IGam
     }
   }
 
-  return null;
+  return {};
 };

@@ -1,14 +1,8 @@
-import { ApolloClient, createNetworkInterface } from 'apollo-client';
-import { AuthorizationMiddleware } from './authorization-middleware';
-
-const networkInterface = createNetworkInterface({
-  uri: 'http://localhost:3000/graphql'
-});
-
-networkInterface.use([new AuthorizationMiddleware()]);
+import { ApolloClient } from 'apollo-client';
+import { client } from './websocket';
 
 const apolloClient = new ApolloClient({
-  networkInterface,
+  networkInterface: client,
 });
 
 export function getApolloClient() {

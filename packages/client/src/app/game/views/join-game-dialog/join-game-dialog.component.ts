@@ -3,7 +3,6 @@ import { GameService } from '../../services/game.service';
 import { AuthorizationMiddleware } from '../../../core/network/authorization-middleware';
 import { ApolloQueryResult } from 'apollo-client';
 import { JoinGame } from '../../../types';
-import { ActiveGameService } from '../../services/active-game.service';
 import { MdDialogRef } from '@angular/material';
 import { Router } from '@angular/router';
 
@@ -20,8 +19,7 @@ export class JoinGameDialogComponent implements OnInit {
 
   constructor(private router: Router,
               private dialogRef: MdDialogRef<any>,
-              private gameService: GameService,
-              private activeGameService: ActiveGameService) {
+              private gameService: GameService) {
   }
 
   ngOnInit() {
@@ -41,7 +39,6 @@ export class JoinGameDialogComponent implements OnInit {
 
       if (!result.loading && result.data) {
         AuthorizationMiddleware.setToken(result.data.joinGame.playerToken);
-        this.activeGameService.current = result.data.joinGame.game.id;
         this.goToGame();
       }
     }, (error) => {

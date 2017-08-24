@@ -3,7 +3,6 @@ import { GameService } from '../../services/game.service';
 import { CreateNewGame } from '../../../types';
 import { ApolloQueryResult } from 'apollo-client';
 import { AuthorizationMiddleware } from '../../../core/network/authorization-middleware';
-import { ActiveGameService } from '../../services/active-game.service';
 import { Router } from '@angular/router';
 import { MdDialogRef } from '@angular/material';
 
@@ -19,8 +18,7 @@ export class CreateNewGameDialogComponent {
 
   constructor(private dialogRef: MdDialogRef<any>,
               private router: Router,
-              private gameService: GameService,
-              private activeGameService: ActiveGameService) {
+              private gameService: GameService) {
   }
 
   characterChanged(name) {
@@ -36,7 +34,6 @@ export class CreateNewGameDialogComponent {
       if (!result.loading && result.data) {
         AuthorizationMiddleware.setToken(result.data.createNewGame.playerToken);
         this.gameCode = result.data.createNewGame.game.gameCode;
-        this.activeGameService.current = result.data.createNewGame.game.id;
       }
     });
   }
