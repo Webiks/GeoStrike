@@ -2,9 +2,15 @@
 # yarn lockfile v1
 
 
-"@angular/animations@^4.0.0":
-  version "4.3.3"
-  resolved "https://registry.yarnpkg.com/@angular/animations/-/animations-4.3.3.tgz#b71ddd453673929f550b171cca99952b3aaa831c"
+"@angular/animations@^4.3.6":
+  version "4.3.6"
+  resolved "https://registry.yarnpkg.com/@angular/animations/-/animations-4.3.6.tgz#bf9283ec7c8c98b32f569d84dcda10890fdc0262"
+  dependencies:
+    tslib "^1.7.1"
+
+"@angular/cdk@^2.0.0-beta.8":
+  version "2.0.0-beta.8"
+  resolved "https://registry.yarnpkg.com/@angular/cdk/-/cdk-2.0.0-beta.8.tgz#71961c851dfbeb19e085e898bf5e4461408f8b57"
   dependencies:
     tslib "^1.7.1"
 
@@ -117,6 +123,12 @@
 "@angular/language-service@^4.0.0":
   version "4.3.3"
   resolved "https://registry.yarnpkg.com/@angular/language-service/-/language-service-4.3.3.tgz#638cfca1342c394f713f8c0fa398c26032e156f4"
+
+"@angular/material@^2.0.0-beta.8":
+  version "2.0.0-beta.8"
+  resolved "https://registry.yarnpkg.com/@angular/material/-/material-2.0.0-beta.8.tgz#a92852abc9261aea26c2401f576645470be2cf38"
+  dependencies:
+    tslib "^1.7.1"
 
 "@angular/platform-browser-dynamic@^4.0.0":
   version "4.3.3"

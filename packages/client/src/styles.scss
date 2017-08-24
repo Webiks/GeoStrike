@@ -5,6 +5,9 @@ html, body {
   padding: 0;
   overflow: hidden;
 }
+
 .map-container {
   height: 100vh;
 }
+
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";

@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { AngularCesiumModule } from 'angular-cesium';
+import { AppRoutingModule } from './app.module.routing';
 
 @NgModule({
   declarations: [
@@ -10,7 +10,7 @@ import { AngularCesiumModule } from 'angular-cesium';
   ],
   imports: [
     BrowserModule,
-    AngularCesiumModule,
+    AppRoutingModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
