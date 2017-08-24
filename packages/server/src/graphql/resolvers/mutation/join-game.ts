@@ -1,7 +1,7 @@
 import { IGraphQLContext } from '../../context';
 
-export const createNewGame = (rootValue, { character }, { games }: IGraphQLContext) => {
-  const game = games.createNewGame();
+export const joinGame = (rootValue, { gameCode, character }, { games }: IGraphQLContext) => {
+  const game = games.getGameByCode(gameCode);
   const player = games.addPlayerToGame(game.gameId, character);
 
   return {

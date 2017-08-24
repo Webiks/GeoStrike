@@ -5,6 +5,10 @@ const resolvers = {
     id: (game: IGameObject) => game.gameId,
     gameCode: (game: IGameObject) => game.gameCode,
   },
+  CreateOrJoinResult: {
+    game: result => result.game,
+    playerToken: result => result.player.token,
+  },
 };
 
 export default resolvers;

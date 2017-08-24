@@ -1,9 +1,19 @@
 import { v4 } from 'uuid';
+import { sign } from 'jsonwebtoken';
+
+export interface IPlayer {
+  playerId: string;
+  token: string;
+  character: string;
+}
 
 export interface IGameObject {
   gameId: string;
   gameCode: string;
+  players: IPlayer[];
 }
+
+const TOKENS_SECRET = 'sdf43tSWDG#%Tsdfw4';
 
 export class GamesManager {
   private activeGames: Map<string, IGameObject> = new Map<string, IGameObject>();
@@ -20,13 +30,55 @@ export class GamesManager {
     return gameCode;
   }
 
+  addPlayerToGame(gameId: string, character: string): IPlayer {
+    const game = this.getGameById(gameId);
+    const playerId = v4();
+    const playerToken = sign({
+      gameId: game.gameId,
+      playerId,
+    }, TOKENS_SECRET);
+
+    const player: IPlayer = {
+      playerId,
+      character,
+      token: playerToken,
+    };
+
+    game.players.push(player);
+
+    return player;
+  }
+
   createNewGame(): IGameObject {
     const gameId = v4();
     const gameCode = this.generateGameCode();
 
-    return {
+    const gameObject: IGameObject = {
       gameId,
       gameCode,
+      players: [],
     };
+
+    this.activeGames.set(gameId, gameObject);
+
+    return gameObject;
+  }
+
+  getGameById(id: string): IGameObject {
+    if (this.activeGames.has(id)) {
+      return this.activeGames.get(id);
+    }
+
+    throw new Error('Game does not exists');
+  }
+
+  getGameByCode(code: string): IGameObject {
+    for (const [key, value] of this.activeGames.entries()) {
+      if (value.gameCode === code) {
+        return value;
+      }
+    }
+
+    throw new Error('Game does not exists');
   }
 }

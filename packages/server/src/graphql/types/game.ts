@@ -7,4 +7,9 @@ export const schema = gql`
     gameCode: String!
     userToken: String!
   }
+
+  type CreateOrJoinResult {
+    game: Game!
+    playerToken: String!
+  }
 `;
