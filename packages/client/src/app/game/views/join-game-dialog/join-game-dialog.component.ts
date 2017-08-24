@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 export class JoinGameDialogComponent implements OnInit {
   private gameCode = '';
   private error = '';
+  private username = '';
   private characterName: string = null;
   private loading = false;
 
@@ -34,17 +35,18 @@ export class JoinGameDialogComponent implements OnInit {
     this.loading = true;
     this.error = '';
 
-    this.gameService.joinGame(this.gameCode, this.characterName).subscribe((result: ApolloQueryResult<JoinGame.Mutation>) => {
-      this.loading = result.loading;
+    this.gameService.joinGame(this.gameCode, this.characterName, this.username)
+      .subscribe((result: ApolloQueryResult<JoinGame.Mutation>) => {
+        this.loading = result.loading;
 
-      if (!result.loading && result.data) {
-        AuthorizationMiddleware.setToken(result.data.joinGame.playerToken);
-        this.goToGame();
-      }
-    }, (error) => {
-      this.loading = false;
-      this.error = error.message;
-    });
+        if (!result.loading && result.data) {
+          AuthorizationMiddleware.setToken(result.data.joinGame.playerToken);
+          this.goToGame();
+        }
+      }, (error) => {
+        this.loading = false;
+        this.error = error.message;
+      });
   }
 
   goToGame() {

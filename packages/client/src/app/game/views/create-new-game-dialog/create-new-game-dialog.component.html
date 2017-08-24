@@ -2,6 +2,9 @@
   <md-spinner *ngIf="loading"></md-spinner>
   <div *ngIf="!loading && !gameCode">
     <character-picker [selectedCharacter]="characterName" (select)="characterChanged($event)"></character-picker>
+    <md-input-container>
+      <input mdInput placeholder="Username" required [(ngModel)]="username">
+    </md-input-container>
     <button md-raised-button (click)="createGame()">Create Game</button>
   </div>
   <div *ngIf="gameCode" class="game-created">

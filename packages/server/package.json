@@ -6,7 +6,8 @@
   "scripts": {
     "start": "nodemon --exec ts-node src/index.ts",
     "start:debug": "nodemon --exec ts-node --inspect src/index.ts",
-    "lint": "tslint 'src/**/*.ts' --exclude 'src/models/**'"
+    "lint": "tslint 'src/**/*.ts' --exclude 'src/models/**'",
+    "generate:types": "gql-gen --url http://localhost:3000/graphql --template typescript --out src/types.d.ts"
   },
   "devDependencies": {
     "nodemon": "^1.11.0",
@@ -26,6 +27,7 @@
     "express": "^4.15.3",
     "express-session": "^1.15.5",
     "graphql": "^0.10.5",
+    "graphql-code-generator": "^0.8.10",
     "graphql-server-express": "^1.1.2",
     "graphql-subscriptions": "^0.4.4",
     "graphql-tag": "^2.4.2",

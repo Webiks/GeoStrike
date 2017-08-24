@@ -1,0 +1,10 @@
+<md-card class="character-item" (click)="click.emit(name)"
+         [ngClass]="{'selected' : selected}">
+  <md-card-title>
+    {{ name }}
+  </md-card-title>
+  <img md-card-image [src]="image" />
+  <md-card-content>
+    {{ description }}
+  </md-card-content>
+</md-card>

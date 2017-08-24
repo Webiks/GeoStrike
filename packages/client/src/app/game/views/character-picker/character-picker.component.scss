@@ -1,16 +1,3 @@
 .character-picker {
   flex-direction: column;
-
-  .character-item {
-    img {
-      max-height: 200px;
-      object-fit: cover;
-    }
-
-    cursor: pointer;
-  }
-
-  .selected {
-    background-color: khaki;
-  }
 }

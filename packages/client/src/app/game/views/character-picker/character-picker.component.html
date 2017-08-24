@@ -1,16 +1,13 @@
 <div class="character-picker">
   <md-grid-list gutterSize="20" cols="3" rowHeight="300px">
     <md-grid-tile *ngFor="let character of availableCharacters">
-      <md-card class="character-item" (click)="select.emit(character.name)"
-               [ngClass]="{'selected' : selectedCharacter === character.name}">
-        <md-card-title>
-          {{ character.name }}
-        </md-card-title>
-        <img md-card-image [src]="character.imageUrl" />
-        <md-card-content>
-          {{ character.description }}
-        </md-card-content>
-      </md-card>
+      <character-item
+          (click)="select.emit(character.name)"
+          [description]="character.description"
+          [name]="character.name"
+          [selected]="character.name === selectedCharacter"
+          [image]="character.imageUrl">
+      </character-item>
     </md-grid-tile>
   </md-grid-list>
 </div>

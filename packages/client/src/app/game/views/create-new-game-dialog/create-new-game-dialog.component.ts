@@ -13,6 +13,7 @@ import { MdDialogRef } from '@angular/material';
 })
 export class CreateNewGameDialogComponent {
   private characterName: string = null;
+  private username = '';
   private loading = false;
   private gameCode: string = null;
 
@@ -28,7 +29,7 @@ export class CreateNewGameDialogComponent {
   createGame() {
     this.loading = true;
 
-    this.gameService.createNewGame(this.characterName).subscribe((result: ApolloQueryResult<CreateNewGame.Mutation>) => {
+    this.gameService.createNewGame(this.characterName, this.username).subscribe((result: ApolloQueryResult<CreateNewGame.Mutation>) => {
       this.loading = result.loading;
 
       if (!result.loading && result.data) {

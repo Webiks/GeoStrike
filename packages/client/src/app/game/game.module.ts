@@ -17,6 +17,7 @@ import { FormsModule } from '@angular/forms';
 import { getApolloClient } from '../core/network/apollo-client';
 import { ApolloModule } from 'apollo-angular';
 import { client, SUBSCRIPTIONS_SOCKET } from '../core/network/websocket';
+import { CharacterItemComponent } from './views/character-item/character-item.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { client, SUBSCRIPTIONS_SOCKET } from '../core/network/websocket';
     JoinGameDialogComponent,
     CharacterPickerComponent,
     GameRoomComponent,
+    CharacterItemComponent,
   ],
   imports: [
     BrowserModule,
