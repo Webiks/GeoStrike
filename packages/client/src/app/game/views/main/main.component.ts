@@ -14,15 +14,15 @@ export class MainComponent {
 
   openCreateGameDialog() {
     this.dialog.open(CreateNewGameDialogComponent, {
-      height: '400px',
-      width: '600px',
+      height: '60%',
+      width: '60%',
     });
   }
 
   openJoinGameDialog() {
     this.dialog.open(JoinGameDialogComponent, {
-      height: '400px',
-      width: '600px',
+      height: '80%',
+      width: '60%',
     });
   }
 }

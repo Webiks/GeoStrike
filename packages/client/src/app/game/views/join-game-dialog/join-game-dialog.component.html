@@ -1,0 +1,14 @@
+<div>
+  <h2>Join Game!</h2>
+  <div>{{ error }}</div>
+  <md-spinner *ngIf="loading"></md-spinner>
+  <div *ngIf="!loading">
+    <character-picker [selectedCharacter]="characterName" (select)="characterChanged($event)"></character-picker>
+    <br />
+    <md-input-container>
+      <input mdInput placeholder="Game Code" required [(ngModel)]="gameCode">
+    </md-input-container>
+    <br />
+    <button md-raised-button (click)="joinGame()">Join Game</button>
+  </div>
+</div>

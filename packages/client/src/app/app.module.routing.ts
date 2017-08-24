@@ -1,12 +1,17 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { MainComponent } from './game/main/main.component';
+import { MainComponent } from './game/views/main/main.component';
 import { GameModule } from './game/game.module';
+import { GameRoomComponent } from './game/views/game-room/game-room.component';
 
 const routes: Routes = [
   {
     path: '',
     component: MainComponent,
+  },
+  {
+    path: 'room',
+    component: GameRoomComponent,
   },
   {
     path: '**',

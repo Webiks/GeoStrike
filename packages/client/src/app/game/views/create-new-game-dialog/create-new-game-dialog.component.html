@@ -1,0 +1,12 @@
+<div>
+  <md-spinner *ngIf="loading"></md-spinner>
+  <div *ngIf="!loading && !gameCode">
+    <character-picker [selectedCharacter]="characterName" (select)="characterChanged($event)"></character-picker>
+    <button md-raised-button (click)="createGame()">Create Game</button>
+  </div>
+  <div *ngIf="gameCode" class="game-created">
+    <h3>Your game is created! your game code is:</h3>
+    <h1>{{ gameCode }}</h1>
+    <button md-raised-button (click)="goToGame()">Start Game</button>
+  </div>
+</div>
