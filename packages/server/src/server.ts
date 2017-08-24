@@ -7,7 +7,7 @@ import { Express } from 'express';
 import { logger } from './core/logger/logger';
 import { schema } from './graphql/schema';
 import { graphiqlExpress, graphqlExpress } from 'graphql-server-express';
-import { createContext } from './graphql/context';
+import { createContext, resolveGameAndPlayer } from './graphql/context';
 
 export async function initServer() {
   const env = process.env.NODE_ENV || 'development';
@@ -43,7 +43,7 @@ export async function initServer() {
         }
       },
       context: {
-        player: null, // TODO: Implement using UserGameToken header
+        ...resolveGameAndPlayer(request, context.games),
         ...context,
       },
     }))
