@@ -18,6 +18,8 @@ import { getApolloClient } from '../core/network/apollo-client';
 import { ApolloModule } from 'apollo-angular';
 import { client, SUBSCRIPTIONS_SOCKET } from '../core/network/websocket';
 import { CharacterItemComponent } from './views/character-item/character-item.component';
+import { GameMapComponent } from './views/game-map/game-map.component';
+import { GameCountdownComponent } from './views/game-countdown/game-countdown.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +29,8 @@ import { CharacterItemComponent } from './views/character-item/character-item.co
     CharacterPickerComponent,
     GameRoomComponent,
     CharacterItemComponent,
+    GameMapComponent,
+    GameCountdownComponent,
   ],
   imports: [
     BrowserModule,
