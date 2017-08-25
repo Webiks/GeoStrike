@@ -25,4 +25,12 @@ export class GameMapComponent implements OnInit {
     return new Cesium.Cartesian3(x, y, z);
   }
 
+  getOrientation(player) {
+    const heading = Cesium.Math.toRadians(0.0);
+    const pitch = Cesium.Math.toRadians(0.0);
+    const roll = Cesium.Math.toRadians(0.0);
+    const hpr = new Cesium.HeadingPitchRoll(heading, pitch, roll);
+
+    return Cesium.Transforms.headingPitchRollQuaternion(this.getPosition(player), hpr);
+  }
 }

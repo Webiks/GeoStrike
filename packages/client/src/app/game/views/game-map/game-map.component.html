@@ -1,12 +1,12 @@
 <ac-map>
   <ac-layer acFor="let player of data$" [context]="this">
-    <ac-billboard-desc props="{
-                    image: '/assets/soldier_temp.png',
-                    position: getPosition(player),
-                    width: 100,
-                    height: 100,
+    <ac-model-desc props="{
+                    minimumPixelSize: 100,
+										maximumScale : 20000,
+										uri: '/assets/soldier.gltf',
+										position: getPosition(player),
+										orientation: getOrientation(player)
                   }">
-    </ac-billboard-desc>
-
+    </ac-model-desc>
   </ac-layer>
 </ac-map>
