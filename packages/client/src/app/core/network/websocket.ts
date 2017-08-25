@@ -4,7 +4,13 @@ import { AuthorizationMiddleware } from './authorization-middleware';
 
 export const client = new SubscriptionClient('ws://localhost:3000/subscriptions', {
   reconnect: true,
-  connectionParams: () => ({ 'player-token': AuthorizationMiddleware.token }),
+  connectionParams: () => {
+    if (!AuthorizationMiddleware.token || AuthorizationMiddleware.token === '') {
+      return {};
+    }
+
+    return { 'player-token': AuthorizationMiddleware.token };
+  },
 });
 
 export const SUBSCRIPTIONS_SOCKET = new InjectionToken<SubscriptionClient>('subscription.ws');

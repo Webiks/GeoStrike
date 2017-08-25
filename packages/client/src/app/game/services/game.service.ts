@@ -10,6 +10,8 @@ import { SUBSCRIPTIONS_SOCKET } from '../../core/network/websocket';
 import { gameDataSubscription } from '../../graphql/game-data.subscription';
 import { readyMutation } from '../../graphql/ready.mutation';
 import { currentGameQuery } from '../../graphql/current-game.query';
+import { AuthorizationMiddleware } from '../../core/network/authorization-middleware';
+import 'rxjs/add/operator/first';
 
 @Injectable()
 export class GameService {
@@ -18,8 +20,10 @@ export class GameService {
   }
 
   refreshConnection() {
-    this.socket.close(true, true);
-    this.socket['connect']();
+    if (!AuthorizationMiddleware.token || AuthorizationMiddleware.token === '') {
+      this.socket.close(true, true);
+      this.socket['connect']();
+    }
   }
 
   getCurrentGameData(): ApolloQueryObservable<CurrentGame.Query> {
@@ -27,13 +31,15 @@ export class GameService {
       query: currentGameQuery,
     });
 
-    queryRes.subscribeToMore({
-      document: gameDataSubscription,
-      updateQuery: (prev, { subscriptionData: { data: { gameData }} }) => {
-        return {
-          currentGame: gameData
-        };
-      }
+    (queryRes as any).first().subscribe(() => {
+      queryRes.subscribeToMore({
+        document: gameDataSubscription,
+        updateQuery: (prev, { subscriptionData: { data: { gameData }} }) => {
+          return {
+            currentGame: gameData
+          };
+        }
+      });
     });
 
     return queryRes;

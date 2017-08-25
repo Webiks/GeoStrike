@@ -52,7 +52,7 @@ export class GameRoomComponent implements OnInit, OnDestroy {
   }
 
   startGame() {
-    this.router.navigate(['/game', this.game.id]);
+    this.router.navigate(['/game', AuthorizationMiddleware.token]);
   }
 
   getCharacter(characterName: string) {

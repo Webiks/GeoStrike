@@ -1,10 +1,8 @@
-import { ESubscriptionTopics, pubsub } from '../../pubsub';
+import { gameData } from '../subscriptions/game-data';
 
 const resolvers = {
   Subscription: {
-    gameData: {
-      subscribe: () => pubsub.asyncIterator(ESubscriptionTopics.GAME_STATE_CHANGED),
-    },
+    gameData
   },
 };
 

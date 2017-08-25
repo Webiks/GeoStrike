@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { MainComponent } from './game/views/main/main.component';
 import { GameModule } from './game/game.module';
 import { GameRoomComponent } from './game/views/game-room/game-room.component';
-import { GameMapComponent } from './game/views/game-map/game-map.component';
+import { GameContainerComponent } from './game/views/game-container/game-container.component';
 
 const routes: Routes = [
   {
@@ -15,8 +15,8 @@ const routes: Routes = [
     component: GameRoomComponent,
   },
   {
-    path: 'game/:id',
-    component: GameMapComponent,
+    path: 'game/:playerToken',
+    component: GameContainerComponent,
   },
   {
     path: '**',
