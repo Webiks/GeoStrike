@@ -2,12 +2,21 @@ import { v4 } from 'uuid';
 import { sign } from 'jsonwebtoken';
 import { GameState, PlayerState } from '../../types';
 
+interface ICartesian3Location {
+  x: number;
+  y: number;
+  z: number;
+}
+
 export interface IPlayer {
   playerId: string;
   token: string;
   character: string;
   username: string;
   state: PlayerState;
+  game: IGameObject;
+  initialLocation: ICartesian3Location;
+  currentLocation: ICartesian3Location;
 }
 
 export interface IGameObject {
@@ -18,6 +27,13 @@ export interface IGameObject {
 }
 
 const TOKENS_SECRET = 'sdf43tSWDG#%Tsdfw4';
+
+const DEFAULT_PLAYERS_LOCATION = [
+  { x: 1550673.088988461, y: -4493525.238126923, z: 4238303.0193881355 },
+  { x: 1550635.687128656, y: -4493541.399794866, z: 4238299.591664443 },
+  { x: 1550651.2920068908, y: -4493566.551705495, z: 4238267.4323070375 },
+  { x: 1550666.5874257954, y: -4493592.65530189, z: 4238234.382695068 },
+];
 
 export class GamesManager {
   private activeGames: Map<string, IGameObject> = new Map<string, IGameObject>();
@@ -49,6 +65,9 @@ export class GamesManager {
       token: playerToken,
       username,
       state: 'WAITING',
+      game,
+      initialLocation: DEFAULT_PLAYERS_LOCATION[game.players.length],
+      currentLocation: DEFAULT_PLAYERS_LOCATION[game.players.length],
     };
 
     game.players.push(player);

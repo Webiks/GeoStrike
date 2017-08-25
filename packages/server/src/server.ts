@@ -11,7 +11,6 @@ import { createContext, resolveGameAndPlayer } from './graphql/context';
 import { createServer } from 'http';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import { execute, subscribe } from 'graphql';
-import * as WebSocket from 'ws';
 
 export async function initServer() {
   const env = process.env.NODE_ENV || 'development';

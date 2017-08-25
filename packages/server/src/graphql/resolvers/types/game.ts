@@ -1,4 +1,5 @@
 import { IGameObject } from '../../../core/local-data/game';
+import { IGraphQLContext } from '../../context';
 
 const resolvers = {
   Game: {
@@ -12,6 +13,7 @@ const resolvers = {
 
       return 'ACTIVE';
     },
+    me: (game: IGameObject, args, { player }: IGraphQLContext) => player || null,
   },
   CreateOrJoinResult: {
     game: result => result.game,

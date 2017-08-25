@@ -17,7 +17,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
   private gameData$: ApolloQueryObservable<CurrentGame.Query>;
   private game: CurrentGame.CurrentGame;
   private gameDataSubscription: Subscription;
-  private players$: Subject<AcNotification[]> = new Subject<AcNotification[]>();
+  private players$: Subject<AcNotification> = new Subject<AcNotification>();
 
   constructor(private gameService: GameService, private activatedRoute: ActivatedRoute, private router: Router) {
   }
@@ -41,9 +41,10 @@ export class GameContainerComponent implements OnInit, OnDestroy {
           actionType: ActionType.ADD_UPDATE,
           id: player.id,
           entity: new AcEntity(player),
-        }));
+        })).forEach(notification => {
+          this.players$.next(notification);
+        });
 
-        this.players$.next(playersNotifications);
       }, e => {
         this.router.navigate(['/']);
       });

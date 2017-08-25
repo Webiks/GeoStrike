@@ -19,4 +19,10 @@ export class GameMapComponent implements OnInit {
     });
   }
 
+  getPosition(player) {
+    const { x, y, z } = player.currentLocation.location;
+
+    return new Cesium.Cartesian3(x, y, z);
+  }
+
 }

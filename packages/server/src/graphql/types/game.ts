@@ -12,6 +12,7 @@ export const schema = gql`
     players: [Player!]
     gameCode: String!
     state: GameState!
+    me: Player
   }
 
   type CreateOrJoinResult {

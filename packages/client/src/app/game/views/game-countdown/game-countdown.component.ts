@@ -23,7 +23,7 @@ export class GameCountdownComponent implements OnInit {
         this.done.emit();
         clearInterval(intervalHandler);
       }
-    }, this.count * 1000);
+    }, 1000);
   }
 
 }

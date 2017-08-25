@@ -6,7 +6,9 @@ export const schema = gql`
     username: String!
     character: String!
     state: PlayerState!
-    isMe: Boolean
+    isMe: Boolean!
+    initialLocation: PlayerLocation!
+    currentLocation: PlayerLocation!
   }
 
   enum PlayerState {
@@ -15,5 +17,16 @@ export const schema = gql`
     ALIVE,
     IN_BUILDING,
     DEAD,
+  }
+
+  type Location {
+    x: Float!
+    y: Float!
+    z: Float!
+  }
+
+  type PlayerLocation {
+    location: Location
+    direction: Location
   }
 `;

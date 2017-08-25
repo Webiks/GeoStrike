@@ -11,6 +11,12 @@ export const client = new SubscriptionClient('ws://localhost:3000/subscriptions'
 
     return { 'player-token': AuthorizationMiddleware.token };
   },
+  connectionCallback: (error => {
+    if (error) {
+      AuthorizationMiddleware.setToken('');
+      window.location.href = '/';
+    }
+  })
 });
 
 export const SUBSCRIPTIONS_SOCKET = new InjectionToken<SubscriptionClient>('subscription.ws');

@@ -11,6 +11,30 @@ export const gameFragment = gql`
       state
       isMe
       id
+      currentLocation {
+        ...LocationFields
+      }
+    }
+    me {
+      initialLocation {
+        ...LocationFields
+      }
+      currentLocation {
+        ...LocationFields
+      }
+    }
+  }
+
+  fragment LocationFields on PlayerLocation {
+    location {
+      x
+      y
+      z
+    }
+    direction {
+      x
+      y
+      z
     }
   }
 `;

@@ -20,10 +20,8 @@ export class GameService {
   }
 
   refreshConnection() {
-    if (!AuthorizationMiddleware.token || AuthorizationMiddleware.token === '') {
-      this.socket.close(true, true);
-      this.socket['connect']();
-    }
+    this.socket.close(true, true);
+    this.socket['connect']();
   }
 
   getCurrentGameData(): ApolloQueryObservable<CurrentGame.Query> {
@@ -34,7 +32,7 @@ export class GameService {
     (queryRes as any).first().subscribe(() => {
       queryRes.subscribeToMore({
         document: gameDataSubscription,
-        updateQuery: (prev, { subscriptionData: { data: { gameData }} }) => {
+        updateQuery: (prev, { subscriptionData: { data: { gameData } } }) => {
           return {
             currentGame: gameData
           };
