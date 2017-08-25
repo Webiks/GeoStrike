@@ -11,7 +11,7 @@ const routes: Routes = [
     component: MainComponent,
   },
   {
-    path: 'room',
+    path: 'room/:playerToken',
     component: GameRoomComponent,
   },
   {

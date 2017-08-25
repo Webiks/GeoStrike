@@ -41,6 +41,6 @@ export class CreateNewGameDialogComponent {
 
   goToGame() {
     this.dialogRef.close();
-    this.router.navigate(['/room']);
+    this.router.navigate(['/room', AuthorizationMiddleware.token]);
   }
 }

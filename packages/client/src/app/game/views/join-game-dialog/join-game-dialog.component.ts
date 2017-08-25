@@ -51,6 +51,6 @@ export class JoinGameDialogComponent implements OnInit {
 
   goToGame() {
     this.dialogRef.close();
-    this.router.navigate(['/room']);
+    this.router.navigate(['/room', AuthorizationMiddleware.token]);
   }
 }

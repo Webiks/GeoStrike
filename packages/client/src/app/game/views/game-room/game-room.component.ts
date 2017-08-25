@@ -3,8 +3,9 @@ import { GameService } from '../../services/game.service';
 import { CurrentGame } from '../../../types';
 import { ApolloQueryObservable } from 'apollo-angular';
 import { AVAILABLE_CHARACTERS } from '../character-picker/character-picker.component';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
+import { AuthorizationMiddleware } from '../../../core/network/authorization-middleware';
 
 @Component({
   selector: 'game-room',
@@ -17,18 +18,25 @@ export class GameRoomComponent implements OnInit, OnDestroy {
   private gameDataSubscription: Subscription;
   private gameStarted = false;
 
-  constructor(private gameService: GameService, private router: Router) {
+  constructor(private activatedRoute: ActivatedRoute, private gameService: GameService, private router: Router) {
   }
 
   ngOnInit() {
-    this.gameService.refreshConnection();
-    this.gameData$ = this.gameService.getCurrentGameData();
-    this.gameDataSubscription = this.gameData$.subscribe(({ data: { currentGame }, loading }) => {
-      this.game = currentGame;
+    this.activatedRoute.params.subscribe(params => {
+      if (params.playerToken) {
+        AuthorizationMiddleware.setToken(params.playerToken);
+        this.gameService.refreshConnection();
+        this.gameData$ = this.gameService.getCurrentGameData();
+        this.gameDataSubscription = this.gameData$.subscribe(({ data: { currentGame } }) => {
+          this.game = currentGame;
 
-      if (this.game && this.game.state === 'ACTIVE') {
-        this.gameStarted = true;
-        this.gameDataSubscription.unsubscribe();
+          if (this.game && this.game.state === 'ACTIVE') {
+            this.gameStarted = true;
+            this.gameDataSubscription.unsubscribe();
+          }
+        });
+      } else {
+        this.router.navigate(['/']);
       }
     });
   }
