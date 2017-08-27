@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ViewChild, HostListener } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { AcMapComponent, AcNotification, ViewerConfiguration, ActionType } from 'angular-cesium';
+import { AcMapComponent, AcNotification, ViewerConfiguration, ActionType, GeoUtilsService } from 'angular-cesium';
 import { GameFields } from '../../../types';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
@@ -91,6 +91,7 @@ export class GameMapComponent implements OnInit {
   @HostListener('mousemove', ['$event'])
   onMousemove(event: MouseEvent) {
     const currentState = this.me$.getValue();
+    if (!currentState) return;
     const rotateStep = event.movementX / 10;
     this.me$.next({
       ...currentState,
@@ -100,10 +101,12 @@ export class GameMapComponent implements OnInit {
 
   preRenderHandler() {
     const currentState = this.me$.getValue();
+    if (!currentState) return;
+
     const heading = Cesium.Math.toRadians(-180 + currentState.heading);
-    const pitch = Cesium.Math.toRadians(-7.5);
-    const range = 3;
-    const playerHead = Cesium.Cartesian3.add(currentState.location, new Cesium.Cartesian3(0, 0, 4), new Cesium.Cartesian3());
+    const pitch = Cesium.Math.toRadians(-10);
+    const range = 10;
+    const playerHead = Cesium.Cartesian3.add(currentState.location, new Cesium.Cartesian3(0,0,0), new Cesium.Cartesian3());
 
     this.viewer.camera.lookAt(playerHead, new Cesium.HeadingPitchRange(heading, pitch, range));
   }
