@@ -26,7 +26,7 @@ export const schema = gql`
   }
 
   type PlayerLocation {
-    location: Location
-    direction: Location
+    location: Location!
+    heading: Float!
   }
 `;

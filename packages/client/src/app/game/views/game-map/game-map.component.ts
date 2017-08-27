@@ -26,9 +26,9 @@ export class GameMapComponent implements OnInit {
   }
 
   getOrientation(player) {
-    const heading = Cesium.Math.toRadians(0.0);
-    const pitch = Cesium.Math.toRadians(0.0);
-    const roll = Cesium.Math.toRadians(0.0);
+    const heading = Cesium.Math.toRadians(player.currentLocation.heading);
+    const pitch = Cesium.Math.toRadians(0);
+    const roll = Cesium.Math.toRadians(0);
     const hpr = new Cesium.HeadingPitchRoll(heading, pitch, roll);
 
     return Cesium.Transforms.headingPitchRollQuaternion(this.getPosition(player), hpr);

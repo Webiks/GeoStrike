@@ -31,10 +31,6 @@ export const gameFragment = gql`
       y
       z
     }
-    direction {
-      x
-      y
-      z
-    }
+    heading
   }
 `;

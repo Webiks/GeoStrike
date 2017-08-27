@@ -17,6 +17,7 @@ export interface IPlayer {
   game: IGameObject;
   initialLocation: ICartesian3Location;
   currentLocation: ICartesian3Location;
+  heading: number;
 }
 
 export interface IGameObject {
@@ -68,6 +69,7 @@ export class GamesManager {
       game,
       initialLocation: DEFAULT_PLAYERS_LOCATION[game.players.length],
       currentLocation: DEFAULT_PLAYERS_LOCATION[game.players.length],
+      heading: 0,
     };
 
     game.players.push(player);

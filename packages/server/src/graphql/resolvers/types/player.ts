@@ -17,11 +17,11 @@ const resolvers = {
     },
     initialLocation: (player: IPlayer) => ({
       location: player.initialLocation,
-      direction: { x: 0, y: 0, z: 0 },
+      heading: 0,
     }),
     currentLocation: (player: IPlayer) => ({
       location: player.currentLocation,
-      direction: { x: 0, y: 0, z: 0 },
+      heading: player.heading,
     }),
     isMe: (somePlayer: IPlayer, args, { player }: IGraphQLContext) => {
       return player !== undefined && somePlayer.playerId === player.playerId;
