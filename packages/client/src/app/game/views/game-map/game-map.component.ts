@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, HostListener } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { AcMapComponent, AcNotification, ViewerConfiguration, ActionType } from 'angular-cesium';
 import { GameFields } from '../../../types';
@@ -61,6 +61,8 @@ export class GameMapComponent implements OnInit {
       screenSpaceCameraController.enableTilt = false;
       screenSpaceCameraController.enableRotate = false;
       screenSpaceCameraController.enableZoom = false;
+      const canvas = viewer.canvas;
+      canvas.onclick = () => canvas.requestPointerLock();
     };
   }
 
@@ -85,12 +87,25 @@ export class GameMapComponent implements OnInit {
     });
   }
 
-  preRenderHandler() {
-    const heading = Cesium.Math.toRadians(-180.0);
-    const pitch = Cesium.Math.toRadians(-30);
-    const range = 10.0;
+  // XXX: Should this be a layer as well?
+  @HostListener('mousemove', ['$event'])
+  onMousemove(event: MouseEvent) {
+    const currentState = this.me$.getValue();
+    const rotateStep = event.movementX / 10;
+    this.me$.next({
+      ...currentState,
+      heading: currentState.heading + rotateStep,
+    })
+  }
 
-    this.viewer.camera.lookAt(this.me$.getValue().location, new Cesium.HeadingPitchRange(heading, pitch, range));
+  preRenderHandler() {
+    const currentState = this.me$.getValue();
+    const heading = Cesium.Math.toRadians(-180 + currentState.heading);
+    const pitch = Cesium.Math.toRadians(-7.5);
+    const range = 3;
+    const playerHead = Cesium.Cartesian3.add(currentState.location, new Cesium.Cartesian3(0, 0, 4), new Cesium.Cartesian3());
+
+    this.viewer.camera.lookAt(playerHead, new Cesium.HeadingPitchRange(heading, pitch, range));
   }
 
   getPosition(location) {

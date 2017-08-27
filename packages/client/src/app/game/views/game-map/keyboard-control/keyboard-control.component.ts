@@ -22,7 +22,7 @@ export class KeyboardControlComponent implements OnInit {
         action: () => {
           const currentState = this.me$.getValue();
           const position = currentState.location;
-          const result = GeoUtilsService.pointByLocationDistanceAndAzimuth(position, 1, currentState.heading, true);
+          const result = GeoUtilsService.pointByLocationDistanceAndAzimuth(position, 0.5, currentState.heading, true);
 
           this.me$.next({
             ...currentState,
@@ -34,7 +34,7 @@ export class KeyboardControlComponent implements OnInit {
         action: () => {
           const currentState = this.me$.getValue();
           const position = currentState.location;
-          const result = GeoUtilsService.pointByLocationDistanceAndAzimuth(position, -1, currentState.heading, true);
+          const result = GeoUtilsService.pointByLocationDistanceAndAzimuth(position, -0.5, currentState.heading, true);
 
           this.me$.next({
             ...currentState,
