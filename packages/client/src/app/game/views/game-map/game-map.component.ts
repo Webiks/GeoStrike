@@ -44,6 +44,7 @@ export class GameMapComponent implements OnInit {
       viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
       screenSpaceCameraController.enableTilt = false;
       screenSpaceCameraController.enableRotate = false;
+      screenSpaceCameraController.enableZoom = false;
       viewer.scene.preRender.addEventListener(this.preRenderHandler.bind(this, viewer));
     };
   }
@@ -51,7 +52,7 @@ export class GameMapComponent implements OnInit {
   preRenderHandler() {
     this.gameData.subscribe((currentGame) => {
       const result = this.getModelMatrix(currentGame.me);
-      this.viewer.camera.lookAtTransform(result, new Cesium.Cartesian3(-20, 0, 15));
+      this.viewer.camera.lookAtTransform(result, new Cesium.Cartesian3(0, 15, 5));
     });
   }
 
