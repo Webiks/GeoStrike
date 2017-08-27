@@ -22,10 +22,8 @@ export class KeyboardControlComponent implements OnInit {
         action: (camera) => {
           const currentState = this.me$.getValue();
           const position = currentState.location;
-          const moveScratch = new Cesium.Cartesian3();
-          const result = new Cesium.Cartesian3();
-          Cesium.Cartesian3.multiplyByScalar(Cesium.Cartesian3.clone(camera.direction), 0.1, moveScratch);
-          Cesium.Cartesian3.add(position, moveScratch, result);
+          const step = headingVector(currentState.heading);
+          const result = Cesium.Cartesian3.add(position, step, new Cesium.Cartesian3());
 
           this.me$.next({
             ...currentState,
@@ -35,4 +33,10 @@ export class KeyboardControlComponent implements OnInit {
       },
     });
   }
+}
+
+function headingVector(heading: number) {
+  const x = Math.cos(heading);
+  const y = Math.sin(heading);
+  return new Cesium.Cartesian3(x, y, 0);
 }
