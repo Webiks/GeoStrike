@@ -6,7 +6,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 const matrix3Scratch = new Cesium.Matrix3();
 
-enum MeModelState {
+export enum MeModelState {
   WALKING,
   RUNNING,
   LYING,
