@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { KeyboardControlService } from 'angular-cesium';
+import { KeyboardControlService, GeoUtilsService } from 'angular-cesium';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { MeState } from '../game-map.component';
 
@@ -10,7 +10,7 @@ import { MeState } from '../game-map.component';
 export class KeyboardControlComponent implements OnInit {
   @Input() me$: BehaviorSubject<MeState>;
 
-  constructor(private keyboardControlService: KeyboardControlService) { }
+  constructor(private keyboardControlService: KeyboardControlService) {}
 
   ngOnInit() {
     this.me$.subscribe((meState: MeState) => {
@@ -19,11 +19,22 @@ export class KeyboardControlComponent implements OnInit {
 
     this.keyboardControlService.setKeyboardControls({
       W: {
-        action: (camera) => {
+        action: () => {
           const currentState = this.me$.getValue();
           const position = currentState.location;
-          const step = headingVector(currentState.heading);
-          const result = Cesium.Cartesian3.add(position, step, new Cesium.Cartesian3());
+          const result = GeoUtilsService.pointByLocationDistanceAndAzimuth(position, 1, currentState.heading, true);
+
+          this.me$.next({
+            ...currentState,
+            location: result,
+          });
+        },
+      },
+      S: {
+        action: () => {
+          const currentState = this.me$.getValue();
+          const position = currentState.location;
+          const result = GeoUtilsService.pointByLocationDistanceAndAzimuth(position, -1, currentState.heading, true);
 
           this.me$.next({
             ...currentState,
@@ -33,10 +44,4 @@ export class KeyboardControlComponent implements OnInit {
       },
     });
   }
-}
-
-function headingVector(heading: number) {
-  const x = Math.cos(heading);
-  const y = Math.sin(heading);
-  return new Cesium.Cartesian3(x, y, 0);
 }
