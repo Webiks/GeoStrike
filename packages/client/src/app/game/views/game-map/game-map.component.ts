@@ -2,9 +2,7 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { AcMapComponent, AcNotification, ViewerConfiguration, ActionType } from 'angular-cesium';
 import { GameFields } from '../../../types';
-import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observer } from 'rxjs/Observer';
 
 const matrix3Scratch = new Cesium.Matrix3();
 
@@ -15,7 +13,7 @@ enum MeModelState {
   SHOOTING,
 }
 
-interface MeState {
+export interface MeState {
   id: string;
   location: any; // Cesium.Cartesian3
   heading: number;
@@ -88,8 +86,11 @@ export class GameMapComponent implements OnInit {
   }
 
   preRenderHandler() {
-    const result = this.getModelMatrix(this.me$.getValue().location, this.me$.getValue().heading);
-    this.viewer.camera.lookAtTransform(result, new Cesium.Cartesian3(0, 15, 5));
+    const heading = Cesium.Math.toRadians(-180.0);
+    const pitch = Cesium.Math.toRadians(-30);
+    const range = 10.0;
+
+    this.viewer.camera.lookAt(this.me$.getValue().location, new Cesium.HeadingPitchRange(heading, pitch, range));
   }
 
   getPosition(location) {
@@ -115,6 +116,12 @@ export class GameMapComponent implements OnInit {
     } else {
       return Cesium.Matrix4.fromRotationTranslation(Cesium.Matrix3.fromQuaternion(orientation, matrix3Scratch), location, null);
     }
+  }
+
+  getCharacterModelMatrix(location, heading) {
+    const orientation = this.getOrientation(location, 180);
+
+    return Cesium.Matrix4.fromRotationTranslation(Cesium.Matrix3.fromQuaternion(orientation, matrix3Scratch), location, null);
   }
 
   getTilesMatrix() {

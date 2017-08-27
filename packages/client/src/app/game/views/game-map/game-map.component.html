@@ -8,6 +8,7 @@
   </ac-3d-tile-layer>
   <ac-layer acFor="let me of meNotifications$" [context]="this">
     <ac-model-desc props="{
+                    modelMatrix: getCharacterModelMatrix(me.location, me.heading),
                     heightReference: getHeightReference(),
                     scale: 0.01,
 										uri: '/assets/soldier.gltf',
@@ -16,4 +17,5 @@
                   }">
     </ac-model-desc>
   </ac-layer>
+  <keyboard-control [me$]="me$"></keyboard-control>
 </ac-map>

@@ -21,6 +21,7 @@ import { CharacterItemComponent } from './views/character-item/character-item.co
 import { GameContainerComponent } from './views/game-container/game-container.component';
 import { GameCountdownComponent } from './views/game-countdown/game-countdown.component';
 import { GameMapComponent } from './views/game-map/game-map.component';
+import { KeyboardControlComponent } from './views/game-map/keyboard-control/keyboard-control.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { GameMapComponent } from './views/game-map/game-map.component';
     GameContainerComponent,
     GameCountdownComponent,
     GameMapComponent,
+    KeyboardControlComponent,
   ],
   imports: [
     BrowserModule,
