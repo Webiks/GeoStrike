@@ -1,9 +1,26 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { AcMapComponent, AcNotification, ViewerConfiguration } from 'angular-cesium';
+import { AcMapComponent, AcNotification, ViewerConfiguration, ActionType } from 'angular-cesium';
 import { GameFields } from '../../../types';
+import { Subject } from 'rxjs/Subject';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observer } from 'rxjs/Observer';
 
 const matrix3Scratch = new Cesium.Matrix3();
+
+enum MeModelState {
+  WALKING,
+  RUNNING,
+  LYING,
+  SHOOTING,
+}
+
+interface MeState {
+  id: string;
+  location: any; // Cesium.Cartesian3
+  heading: number;
+  state: MeModelState;
+}
 
 @Component({
   selector: 'game-map',
@@ -17,6 +34,8 @@ export class GameMapComponent implements OnInit {
   @Input() private playersPositions: Observable<AcNotification>;
   @Input() private gameData: Observable<GameFields.Fragment>;
   @ViewChild(AcMapComponent) private mapInstance: AcMapComponent;
+
+  private me$: BehaviorSubject<MeState> = new BehaviorSubject<MeState>(null);
 
   private viewer: any;
 
@@ -37,7 +56,6 @@ export class GameMapComponent implements OnInit {
 
     viewerConf.viewerModifier = (viewer) => {
       this.viewer = viewer;
-      Cesium.Math.setRandomNumberSeed(3);
       viewer.scene.globe.depthTestAgainstTerrain = true;
       viewer.bottomContainer.remove();
       const screenSpaceCameraController = viewer.scene.screenSpaceCameraController;
@@ -45,47 +63,58 @@ export class GameMapComponent implements OnInit {
       screenSpaceCameraController.enableTilt = false;
       screenSpaceCameraController.enableRotate = false;
       screenSpaceCameraController.enableZoom = false;
-      viewer.scene.preRender.addEventListener(this.preRenderHandler.bind(this, viewer));
     };
   }
 
-  preRenderHandler() {
-    this.gameData.subscribe((currentGame) => {
-      const result = this.getModelMatrix(currentGame.me);
-      this.viewer.camera.lookAtTransform(result, new Cesium.Cartesian3(0, 15, 5));
-    });
+  get meNotifications$() {
+    return this.me$.filter(f => f !== null).map(meState => ({
+      actionType: ActionType.ADD_UPDATE,
+      id: meState.id,
+      entity: meState,
+    }));
   }
 
   ngOnInit() {
+    this.gameData.first().subscribe(value => {
+      this.me$.next({
+        id: 'me',
+        location: this.getPosition(value.me.currentLocation.location),
+        heading: value.me.currentLocation.heading,
+        state: MeModelState.WALKING,
+      });
+
+      this.viewer.scene.preRender.addEventListener(this.preRenderHandler.bind(this));
+    });
   }
 
-  getPosition(player) {
-    const { x, y, z } = player.currentLocation.location;
+  preRenderHandler() {
+    const result = this.getModelMatrix(this.me$.getValue().location, this.me$.getValue().heading);
+    this.viewer.camera.lookAtTransform(result, new Cesium.Cartesian3(0, 15, 5));
+  }
+
+  getPosition(location) {
+    const { x, y, z } = location;
 
     return new Cesium.Cartesian3(x, y, z);
   }
 
-  getOrientation(player) {
-    const heading = Cesium.Math.toRadians(player.currentLocation.heading);
+  getOrientation(location, heading) {
+    const headingC = Cesium.Math.toRadians(heading);
     const pitch = Cesium.Math.toRadians(0);
     const roll = Cesium.Math.toRadians(0);
-    const hpr = new Cesium.HeadingPitchRoll(heading, pitch, roll);
+    const hpr = new Cesium.HeadingPitchRoll(headingC, pitch, roll);
 
-    return Cesium.Transforms.headingPitchRollQuaternion(this.getPosition(player), hpr);
+    return Cesium.Transforms.headingPitchRollQuaternion(this.getPosition(location), hpr);
   }
 
-  getModelMatrix(entity) {
-    let result = null;
-    const position = this.getPosition(entity);
-    const orientation = this.getOrientation(entity);
+  getModelMatrix(location, heading) {
+    const orientation = this.getOrientation(location, heading);
 
     if (!Cesium.defined(orientation)) {
-      result = Cesium.Transforms.eastNorthUpToFixedFrame(position, undefined, result);
+      return Cesium.Transforms.eastNorthUpToFixedFrame(location, undefined, null);
     } else {
-      result = Cesium.Matrix4.fromRotationTranslation(Cesium.Matrix3.fromQuaternion(orientation, matrix3Scratch), position, result);
+      return Cesium.Matrix4.fromRotationTranslation(Cesium.Matrix3.fromQuaternion(orientation, matrix3Scratch), location, null);
     }
-
-    return result;
   }
 
   getTilesMatrix() {
