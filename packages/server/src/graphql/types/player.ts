@@ -7,7 +7,6 @@ export const schema = gql`
     character: String!
     state: PlayerState!
     isMe: Boolean!
-    initialLocation: PlayerLocation!
     currentLocation: PlayerLocation!
   }
 

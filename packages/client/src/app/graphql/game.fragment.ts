@@ -16,9 +16,6 @@ export const gameFragment = gql`
       }
     }
     me {
-      initialLocation {
-        ...LocationFields
-      }
       currentLocation {
         ...LocationFields
       }

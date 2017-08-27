@@ -15,10 +15,6 @@ const resolvers = {
         return 'ALIVE';
       }
     },
-    initialLocation: (player: IPlayer) => ({
-      location: player.initialLocation,
-      heading: 0,
-    }),
     currentLocation: (player: IPlayer) => ({
       location: player.currentLocation,
       heading: player.heading,
