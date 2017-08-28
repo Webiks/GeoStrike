@@ -124,4 +124,13 @@ export class GamesManager {
       player.state = 'READY';
     }
   }
+
+  updatePlayerPosition(gameId: string, playerId: string, position: ICartesian3Location) {
+    const game = this.getGameById(gameId);
+    const player = game.players.find(p => p.playerId === playerId);
+
+    if (player) {
+      player.currentLocation = position;
+    }
+  }
 }

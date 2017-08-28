@@ -22,6 +22,11 @@ import { GameContainerComponent } from './views/game-container/game-container.co
 import { GameCountdownComponent } from './views/game-countdown/game-countdown.component';
 import { GameMapComponent } from './views/game-map/game-map.component';
 import { KeyboardControlComponent } from './views/game-map/keyboard-control/keyboard-control.component';
+import { MeComponent } from './views/game-map/me/me.component';
+import { CharacterService } from './services/character.service';
+import { WorldComponent } from './views/game-map/world/world.component';
+import { OtherPlayersComponent } from './views/game-map/other-players/other-players.component';
+import { UtilsService } from './services/utils.service';
 
 @NgModule({
   declarations: [
@@ -35,6 +40,9 @@ import { KeyboardControlComponent } from './views/game-map/keyboard-control/keyb
     GameCountdownComponent,
     GameMapComponent,
     KeyboardControlComponent,
+    MeComponent,
+    WorldComponent,
+    OtherPlayersComponent,
   ],
   imports: [
     BrowserModule,
@@ -55,6 +63,8 @@ import { KeyboardControlComponent } from './views/game-map/keyboard-control/keyb
   ],
   providers: [
     GameService,
+    UtilsService,
+    CharacterService,
     { provide: SUBSCRIPTIONS_SOCKET, useValue: client },
   ],
   entryComponents: [

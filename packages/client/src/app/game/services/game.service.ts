@@ -3,7 +3,7 @@ import { Apollo, ApolloQueryObservable } from 'apollo-angular';
 import { createNewGameMutation } from '../../graphql/create-new-game.mutation';
 import { ApolloQueryResult } from 'apollo-client';
 import { Observable } from 'rxjs/Observable';
-import { CreateNewGame, CurrentGame, JoinGame, Ready, Team } from '../../types';
+import { CreateNewGame, CurrentGame, JoinGame, Ready, Team, UpdatePosition } from '../../types';
 import { joinGameMutation } from '../../graphql/join-game.mutation';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 import { SUBSCRIPTIONS_SOCKET } from '../../core/network/websocket';
@@ -12,6 +12,7 @@ import { readyMutation } from '../../graphql/ready.mutation';
 import { currentGameQuery } from '../../graphql/current-game.query';
 import { AuthorizationMiddleware } from '../../core/network/authorization-middleware';
 import 'rxjs/add/operator/first';
+import { updatePositionMutation } from '../../graphql/update-position.mutation';
 
 @Injectable()
 export class GameService {
@@ -68,6 +69,19 @@ export class GameService {
   readyToPlay(): Observable<ApolloQueryResult<Ready.Mutation>> {
     return this.apollo.mutate<Ready.Mutation>({
       mutation: readyMutation,
+    });
+  }
+
+  updatePosition(cartesianPosition: any): Observable<ApolloQueryResult<UpdatePosition.Mutation>> {
+    return this.apollo.mutate<UpdatePosition.Mutation>({
+      mutation: updatePositionMutation,
+      variables: {
+        position: {
+          x: cartesianPosition.x,
+          y: cartesianPosition.y,
+          z: cartesianPosition.z,
+        }
+      }
     });
   }
 }

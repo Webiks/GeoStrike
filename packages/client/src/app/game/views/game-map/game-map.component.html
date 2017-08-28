@@ -1,31 +1,6 @@
 <ac-map>
-  <ac-3d-tile-layer
-      [options]="{
-      maximumMemoryUsage: 1024,
-      modelMatrix: getTilesMatrix(),
-      url: 'https://beta.cesium.com/api/assets/1461?access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkYWJmM2MzNS02OWM5LTQ3OWItYjEyYS0xZmNlODM5ZDNkMTYiLCJpZCI6NDQsImFzc2V0cyI6WzE0NjFdLCJpYXQiOjE0OTkyNjQ3NDN9.vuR75SqPDKcggvUrG_vpx0Av02jdiAxnnB1fNf-9f7s'
-    }">
-  </ac-3d-tile-layer>
-  <ac-layer acFor="let me of meNotifications$" [context]="this">
-    <ac-model-desc props="{
-                    modelMatrix: getCharacterModelMatrix(me.location, me.heading),
-                    heightReference: getHeightReference(),
-                    scale: 0.01,
-										uri: '/assets/soldier.gltf',
-										position: me.location,
-										orientation: getOrientation(me.location, me.heading)
-                  }">
-    </ac-model-desc>
-  </ac-layer>
-  <ac-layer acFor="let player of playersPositions" [context]="this">
-    <ac-model-desc props="{
-                    heightReference: getHeightReference(),
-                    scale: 0.01,
-										uri: '/assets/soldier.gltf',
-										position: getPosition(player.currentLocation.location),
-										orientation: getOrientation(player.currentLocation.location, player.currentLocation.heading)
-                  }">
-    </ac-model-desc>
-  </ac-layer>
-  <keyboard-control [me$]="me$"></keyboard-control>
+  <world></world>
+  <me></me>
+  <other-players [playersPositions]="playersPositions"></other-players>
+  <keyboard-control></keyboard-control>
 </ac-map>

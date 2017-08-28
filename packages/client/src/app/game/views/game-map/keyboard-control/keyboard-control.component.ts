@@ -1,74 +1,51 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { KeyboardControlService, GeoUtilsService } from 'angular-cesium';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { MeModelState, MeState } from '../game-map.component';
+import { CharacterService, MeModelState } from '../../../services/character.service';
 
 @Component({
   selector: 'keyboard-control',
   template: '',
 })
 export class KeyboardControlComponent implements OnInit {
-  @Input() me$: BehaviorSubject<MeState>;
-
-  constructor(private keyboardControlService: KeyboardControlService) {
+  constructor(private character: CharacterService, private keyboardControlService: KeyboardControlService) {
   }
 
   buildMovementConfig(multipleBy) {
     return {
       validation: () => {
-        return this.me$.getValue().state === MeModelState.RUNNING || this.me$.getValue().state === MeModelState.WALKING;
+        return this.character.state === MeModelState.RUNNING || this.character.state === MeModelState.WALKING;
       },
-      params: () => {
-        if (this.me$.getValue().state === MeModelState.WALKING) {
-          return { speed: 0.4 };
-        } else if (this.me$.getValue().state === MeModelState.RUNNING) {
-          return { speed: 0.7 };
+      action: () => {
+        const position = this.character.location;
+        let speed = 0.2;
+
+        if (this.character.state = MeModelState.RUNNING) {
+          speed = 0.5;
         }
 
-        return {};
-      },
-      action: (camera, globe, params) => {
-        const currentState = this.me$.getValue();
-        const position = currentState.location;
-        const result = GeoUtilsService.pointByLocationDistanceAndAzimuth(
+        this.character.location = GeoUtilsService.pointByLocationDistanceAndAzimuth(
           position,
-          multipleBy * params.speed,
-          Cesium.Math.toRadians(currentState.heading),
+          multipleBy * speed,
+          Cesium.Math.toRadians(this.character.heading),
           true);
-
-        this.me$.next({
-          ...currentState,
-          location: result,
-        });
       },
     };
   }
 
   ngOnInit() {
     this.keyboardControlService.setKeyboardControls({
-      W: this.buildMovementConfig(1),
-      S: this.buildMovementConfig(-1),
-      Space: {
-        action: () => {
-          const currentState = this.me$.getValue();
-
-          this.me$.next({
-            ...currentState,
-            state: MeModelState.RUNNING
-          });
-        }
-      }
+      WalkForward: this.buildMovementConfig(-1),
+      WalkBackward: this.buildMovementConfig(1),
+      RunForward: this.buildMovementConfig(-1),
     }, (keyEvent: KeyboardEvent) => {
       if (keyEvent.code === 'KeyW' || keyEvent.code === 'ArrowUp') {
-        return 'W';
-      } else if (keyEvent.code === 'KeyD' || keyEvent.code === 'ArrowRight') {
-        return 'D';
-      } else if (keyEvent.code === 'KeyA' || keyEvent.code === 'ArrowLeft') {
-        return 'A';
+        if (keyEvent.shiftKey) {
+          this.character.state = MeModelState.RUNNING;
+        }
+
+        return 'WalkForward';
       } else if (keyEvent.code === 'KeyS' || keyEvent.code === 'ArrowDown') {
-        return 'S';
-      } else if (keyEvent.keyCode === 32) {
-        return 'Space';
+        return 'WalkBackward';
       } else {
         return String.fromCharCode(keyEvent.keyCode);
       }

@@ -30,6 +30,12 @@ export const schema = gql`
     z: Float!
   }
 
+  input LocationInput {
+    x: Float!
+    y: Float!
+    z: Float!
+  }
+
   type PlayerLocation {
     location: Location!
     heading: Float!
