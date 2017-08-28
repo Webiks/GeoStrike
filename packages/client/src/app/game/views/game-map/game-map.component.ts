@@ -1,13 +1,10 @@
 import { Component, Input, OnInit, ViewChild, HostListener } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { AcMapComponent, AcNotification, ViewerConfiguration, ActionType, GeoUtilsService } from 'angular-cesium';
+import { AcMapComponent, AcNotification, ViewerConfiguration } from 'angular-cesium';
 import { GameFields } from '../../../types';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { CharacterService, MeModelState } from '../../services/character.service';
 import { UtilsService } from '../../services/utils.service';
-
-const matrix3Scratch = new Cesium.Matrix3();
-
+import { GameService } from '../../services/game.service';
 
 @Component({
   selector: 'game-map',
@@ -24,7 +21,7 @@ export class GameMapComponent implements OnInit {
 
   private viewer: any;
 
-  constructor(private character: CharacterService, private viewerConf: ViewerConfiguration, private utils: UtilsService) {
+  constructor(private gameService: GameService, private character: CharacterService, private viewerConf: ViewerConfiguration, private utils: UtilsService) {
     viewerConf.viewerOptions = {
       selectionIndicator: false,
       timeline: false,
@@ -74,6 +71,7 @@ export class GameMapComponent implements OnInit {
 
     const heading = this.character.heading;
     this.character.heading = heading + (event.movementX / 10);
+    this.gameService.updatePosition(this.character.location, this.character.heading);
   }
 
   preRenderHandler() {

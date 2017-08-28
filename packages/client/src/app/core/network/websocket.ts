@@ -2,7 +2,7 @@ import { SubscriptionClient } from 'subscriptions-transport-ws';
 import { InjectionToken } from '@angular/core';
 import { AuthorizationMiddleware } from './authorization-middleware';
 
-export const client = new SubscriptionClient('ws://localhost:3000/subscriptions', {
+export const client = new SubscriptionClient('ws://192.168.1.11:3000/subscriptions', {
   reconnect: true,
   connectionParams: () => {
     if (!AuthorizationMiddleware.token || AuthorizationMiddleware.token === '') {

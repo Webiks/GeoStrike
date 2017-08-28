@@ -125,12 +125,13 @@ export class GamesManager {
     }
   }
 
-  updatePlayerPosition(gameId: string, playerId: string, position: ICartesian3Location) {
+  updatePlayerPosition(gameId: string, playerId: string, position: ICartesian3Location, heading: number) {
     const game = this.getGameById(gameId);
     const player = game.players.find(p => p.playerId === playerId);
 
     if (player) {
       player.currentLocation = position;
+      player.heading = heading;
     }
   }
 }

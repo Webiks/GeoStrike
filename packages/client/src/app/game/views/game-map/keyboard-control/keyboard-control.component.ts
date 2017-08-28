@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { KeyboardControlService, GeoUtilsService } from 'angular-cesium';
 import { CharacterService, MeModelState } from '../../../services/character.service';
+import { GameService } from '../../../services/game.service';
 
 @Component({
   selector: 'keyboard-control',
   template: '',
 })
 export class KeyboardControlComponent implements OnInit {
-  constructor(private character: CharacterService, private keyboardControlService: KeyboardControlService) {
+  constructor(private gameService: GameService, private character: CharacterService, private keyboardControlService: KeyboardControlService) {
   }
 
   buildMovementConfig(multipleBy) {
@@ -17,10 +18,10 @@ export class KeyboardControlComponent implements OnInit {
       },
       action: () => {
         const position = this.character.location;
-        let speed = 0.2;
+        let speed = 0.15;
 
         if (this.character.state = MeModelState.RUNNING) {
-          speed = 0.5;
+          speed = 0.2;
         }
 
         this.character.location = GeoUtilsService.pointByLocationDistanceAndAzimuth(
@@ -28,6 +29,7 @@ export class KeyboardControlComponent implements OnInit {
           multipleBy * speed,
           Cesium.Math.toRadians(this.character.heading),
           true);
+        this.gameService.updatePosition(this.character.location, this.character.heading);
       },
     };
   }

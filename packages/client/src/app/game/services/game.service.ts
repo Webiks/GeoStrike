@@ -10,9 +10,9 @@ import { SUBSCRIPTIONS_SOCKET } from '../../core/network/websocket';
 import { gameDataSubscription } from '../../graphql/game-data.subscription';
 import { readyMutation } from '../../graphql/ready.mutation';
 import { currentGameQuery } from '../../graphql/current-game.query';
-import { AuthorizationMiddleware } from '../../core/network/authorization-middleware';
 import 'rxjs/add/operator/first';
 import { updatePositionMutation } from '../../graphql/update-position.mutation';
+import { Throttle } from 'lodash-decorators';
 
 @Injectable()
 export class GameService {
@@ -72,7 +72,8 @@ export class GameService {
     });
   }
 
-  updatePosition(cartesianPosition: any): Observable<ApolloQueryResult<UpdatePosition.Mutation>> {
+  @Throttle(16)
+  updatePosition(cartesianPosition: any, heading: number): Observable<ApolloQueryResult<UpdatePosition.Mutation>> {
     return this.apollo.mutate<UpdatePosition.Mutation>({
       mutation: updatePositionMutation,
       variables: {
@@ -80,8 +81,9 @@ export class GameService {
           x: cartesianPosition.x,
           y: cartesianPosition.y,
           z: cartesianPosition.z,
-        }
-      }
+        },
+        heading,
+      },
     });
   }
 }

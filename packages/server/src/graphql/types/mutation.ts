@@ -4,7 +4,7 @@ export const schema = gql`
   type Mutation {
     createNewGame(character: String!, username: String!): CreateOrJoinResult
     joinGame(gameCode: String!, character: String!, username: String!, team: Team!): CreateOrJoinResult
-    updatePosition(position: LocationInput!): Player
+    updatePosition(position: LocationInput!, heading: Float!): Player
     ready: Game
   }
 `;

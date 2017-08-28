@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import { playerFragment } from './player.fragment';
 
 export const gameFragment = gql`
   fragment GameFields on Game {
@@ -12,25 +13,6 @@ export const gameFragment = gql`
       ...PlayerFields
     }
   }
-
-  fragment PlayerFields on Player {
-    team
-    username
-    character
-    state
-    isMe
-    id
-    currentLocation {
-      ...LocationFields
-    }
-  }
-
-  fragment LocationFields on PlayerLocation {
-    location {
-      x
-      y
-      z
-    }
-    heading
-  }
+  
+  ${playerFragment}
 `;
