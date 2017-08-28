@@ -45,6 +45,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
           id: player.id,
           entity: new AcEntity(player),
         })).forEach(notification => {
+          console.log(notification);
           this.players$.next(notification);
         });
 

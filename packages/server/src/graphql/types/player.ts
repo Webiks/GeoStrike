@@ -8,6 +8,12 @@ export const schema = gql`
     state: PlayerState!
     isMe: Boolean!
     currentLocation: PlayerLocation!
+    team: Team!
+  }
+
+  enum Team {
+    BLUE,
+    RED,
   }
 
   enum PlayerState {

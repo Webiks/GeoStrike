@@ -6,19 +6,22 @@ export const gameFragment = gql`
     gameCode
     state
     players {
-      username
-      character
-      state
-      isMe
-      id
-      currentLocation {
-        ...LocationFields
-      }
+      ...PlayerFields
     }
     me {
-      currentLocation {
-        ...LocationFields
-      }
+      ...PlayerFields
+    }
+  }
+
+  fragment PlayerFields on Player {
+    team
+    username
+    character
+    state
+    isMe
+    id
+    currentLocation {
+      ...LocationFields
     }
   }
 

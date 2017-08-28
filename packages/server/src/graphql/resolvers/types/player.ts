@@ -6,6 +6,7 @@ const resolvers = {
     id: (player: IPlayer) => player.playerId,
     character: (player: IPlayer) => player.character,
     username: (player: IPlayer) => player.username,
+    team: (player: IPlayer) => player.team,
     state: (player: IPlayer) => {
       const otherWaiting = player.game.players.some(p => p.state === 'WAITING');
 

@@ -17,5 +17,15 @@
                   }">
     </ac-model-desc>
   </ac-layer>
+  <ac-layer acFor="let player of playersPositions" [context]="this">
+    <ac-model-desc props="{
+                    heightReference: getHeightReference(),
+                    scale: 0.01,
+										uri: '/assets/soldier.gltf',
+										position: getPosition(player.currentLocation.location),
+										orientation: getOrientation(player.currentLocation.location, player.currentLocation.heading)
+                  }">
+    </ac-model-desc>
+  </ac-layer>
   <keyboard-control [me$]="me$"></keyboard-control>
 </ac-map>

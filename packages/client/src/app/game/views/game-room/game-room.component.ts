@@ -41,6 +41,13 @@ export class GameRoomComponent implements OnInit, OnDestroy {
     });
   }
 
+  getPlayers() {
+    return [
+      ...this.game.players,
+      this.game.me,
+    ];
+  }
+
   ngOnDestroy() {
     if (this.gameDataSubscription) {
       this.gameDataSubscription.unsubscribe();

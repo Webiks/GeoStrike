@@ -3,7 +3,7 @@ import { Apollo, ApolloQueryObservable } from 'apollo-angular';
 import { createNewGameMutation } from '../../graphql/create-new-game.mutation';
 import { ApolloQueryResult } from 'apollo-client';
 import { Observable } from 'rxjs/Observable';
-import { CreateNewGame, CurrentGame, JoinGame, Ready } from '../../types';
+import { CreateNewGame, CurrentGame, JoinGame, Ready, Team } from '../../types';
 import { joinGameMutation } from '../../graphql/join-game.mutation';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 import { SUBSCRIPTIONS_SOCKET } from '../../core/network/websocket';
@@ -53,13 +53,14 @@ export class GameService {
     });
   }
 
-  joinGame(gameCode: string, character: string, username: string): Observable<ApolloQueryResult<JoinGame.Mutation>> {
+  joinGame(gameCode: string, character: string, username: string, team: Team): Observable<ApolloQueryResult<JoinGame.Mutation>> {
     return this.apollo.mutate<JoinGame.Mutation>({
       mutation: joinGameMutation,
       variables: {
         gameCode,
         character,
         username,
+        team,
       },
     });
   }

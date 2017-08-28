@@ -96,7 +96,7 @@ export class GameMapComponent implements OnInit {
     this.me$.next({
       ...currentState,
       heading: currentState.heading + rotateStep,
-    })
+    });
   }
 
   preRenderHandler() {

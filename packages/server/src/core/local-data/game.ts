@@ -8,6 +8,11 @@ interface ICartesian3Location {
   z: number;
 }
 
+export enum Team {
+  RED = 'RED',
+  BLUE = 'BLUE',
+}
+
 export interface IPlayer {
   playerId: string;
   token: string;
@@ -17,6 +22,7 @@ export interface IPlayer {
   game: IGameObject;
   currentLocation: ICartesian3Location;
   heading: number;
+  team: Team;
 }
 
 export interface IGameObject {
@@ -50,7 +56,7 @@ export class GamesManager {
     return gameCode;
   }
 
-  addPlayerToGame(gameId: string, character: string, username: string): IPlayer {
+  addPlayerToGame(gameId: string, character: string, username: string, team: Team): IPlayer {
     const game = this.getGameById(gameId);
     const playerId = v4();
     const playerToken = sign({
@@ -68,6 +74,7 @@ export class GamesManager {
       game,
       currentLocation: DEFAULT_PLAYERS_LOCATION[game.players.length],
       heading: 0,
+      team,
     };
 
     game.players.push(player);

@@ -5,7 +5,13 @@ const resolvers = {
   Game: {
     id: (game: IGameObject) => game.gameId,
     gameCode: (game: IGameObject) => game.gameCode,
-    players: (game: IGameObject) => game.players,
+    players: (game: IGameObject, args, { player }) => {
+      if (player) {
+        return game.players.filter(p => p.playerId !== player.playerId);
+      }
+
+      return game.players || [];
+    },
     state: (game: IGameObject) => {
       if (game.players.some(player => player.state === 'WAITING')) {
         return 'WAITING';

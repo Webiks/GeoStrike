@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { GameService } from '../../services/game.service';
 import { AuthorizationMiddleware } from '../../../core/network/authorization-middleware';
 import { ApolloQueryResult } from 'apollo-client';
-import { JoinGame } from '../../../types';
+import { JoinGame, Team } from '../../../types';
 import { MdDialogRef } from '@angular/material';
 import { Router } from '@angular/router';
 
@@ -17,6 +17,7 @@ export class JoinGameDialogComponent implements OnInit {
   private username = '';
   private characterName: string = null;
   private loading = false;
+  private team: Team = 'BLUE';
 
   constructor(private router: Router,
               private dialogRef: MdDialogRef<any>,
@@ -35,7 +36,7 @@ export class JoinGameDialogComponent implements OnInit {
     this.loading = true;
     this.error = '';
 
-    this.gameService.joinGame(this.gameCode, this.characterName, this.username)
+    this.gameService.joinGame(this.gameCode, this.characterName, this.username, this.team)
       .subscribe((result: ApolloQueryResult<JoinGame.Mutation>) => {
         this.loading = result.loading;
 
