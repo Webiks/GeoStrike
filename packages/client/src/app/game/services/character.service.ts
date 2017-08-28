@@ -8,6 +8,11 @@ export enum MeModelState {
   SHOOTING,
 }
 
+export enum ViewState {
+  FPV,
+  SEMI_FPV,
+}
+
 export interface CharacterState {
   id: string;
   location: any; // Cesium.Cartesian3
@@ -18,12 +23,25 @@ export interface CharacterState {
 @Injectable()
 export class CharacterService {
   private _character: BehaviorSubject<CharacterState> = null;
+  private _viewState = new BehaviorSubject<ViewState>(ViewState.SEMI_FPV);
 
   constructor() {
   }
 
   get initialized() {
     return this._character !== null;
+  }
+
+  get viewState(): ViewState {
+    return this._viewState.getValue();
+  }
+
+  set viewState(value: ViewState) {
+    this._viewState.next(value);
+  }
+
+  get viewState$() {
+    return this._viewState.asObservable();
   }
 
   initCharacter(state) {

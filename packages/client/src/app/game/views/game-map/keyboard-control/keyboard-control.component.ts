@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { KeyboardControlService, GeoUtilsService } from 'angular-cesium';
-import { CharacterService, MeModelState } from '../../../services/character.service';
+import { CharacterService, MeModelState, ViewState } from '../../../services/character.service';
 import { GameService } from '../../../services/game.service';
 
 @Component({
@@ -34,10 +34,32 @@ export class KeyboardControlComponent implements OnInit {
     };
   }
 
+  buildViewMoveConfig() {
+    return {
+      validation: () => {
+        return this.character.state === MeModelState.RUNNING || this.character.state === MeModelState.WALKING;
+      },
+      action: () => {
+        let newState;
+
+        if (this.character.viewState === ViewState.SEMI_FPV) {
+          newState = ViewState.FPV;
+        } else {
+          newState = ViewState.SEMI_FPV;
+        }
+
+        this.character.viewState = newState;
+
+        return true;
+      },
+    };
+  }
+
   ngOnInit() {
     this.keyboardControlService.setKeyboardControls({
       Forward: this.buildMovementConfig(-1),
       Backward: this.buildMovementConfig(1),
+      ChangeViewMode: this.buildViewMoveConfig(),
     }, (keyEvent: KeyboardEvent) => {
       if (keyEvent.code === 'KeyW' || keyEvent.code === 'ArrowUp') {
         if (keyEvent.shiftKey) {
@@ -47,6 +69,10 @@ export class KeyboardControlComponent implements OnInit {
         }
 
         return 'Forward';
+      } else if (keyEvent.code === 'Tab') {
+        keyEvent.preventDefault();
+        
+        return 'ChangeViewMode';
       } else if (keyEvent.code === 'KeyS' || keyEvent.code === 'ArrowDown') {
         return 'Backward';
       } else {

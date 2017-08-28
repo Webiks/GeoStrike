@@ -2,7 +2,7 @@ import { Component, Input, OnInit, ViewChild, HostListener } from '@angular/core
 import { Observable } from 'rxjs/Observable';
 import { AcMapComponent, AcNotification, ViewerConfiguration } from 'angular-cesium';
 import { GameFields } from '../../../types';
-import { CharacterService, MeModelState } from '../../services/character.service';
+import { CharacterService, MeModelState, ViewState } from '../../services/character.service';
 import { UtilsService } from '../../services/utils.service';
 import { GameService } from '../../services/game.service';
 
@@ -81,8 +81,9 @@ export class GameMapComponent implements OnInit {
 
     const heading = Cesium.Math.toRadians(-180 + this.character.heading);
     const pitch = Cesium.Math.toRadians(-10);
-    const range = 10;
-    const playerHead = Cesium.Cartesian3.add(this.character.location, new Cesium.Cartesian3(0, 0, 0), new Cesium.Cartesian3());
+    const range = this.character.viewState === ViewState.SEMI_FPV ? 3 : 0.1;
+    const playerHead = new Cesium.Cartesian3(0.4174665722530335, -1.4575908118858933, 1.3042816752567887);
+    Cesium.Cartesian3.add(this.character.location, playerHead, playerHead);
 
     this.viewer.camera.lookAt(playerHead, new Cesium.HeadingPitchRange(heading, pitch, range));
   }
