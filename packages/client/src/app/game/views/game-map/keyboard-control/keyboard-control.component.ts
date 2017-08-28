@@ -20,8 +20,8 @@ export class KeyboardControlComponent implements OnInit {
         const position = this.character.location;
         let speed = 0.15;
 
-        if (this.character.state = MeModelState.RUNNING) {
-          speed = 0.2;
+        if (this.character.state === MeModelState.RUNNING) {
+          speed = 0.3;
         }
 
         this.character.location = GeoUtilsService.pointByLocationDistanceAndAzimuth(
@@ -36,18 +36,19 @@ export class KeyboardControlComponent implements OnInit {
 
   ngOnInit() {
     this.keyboardControlService.setKeyboardControls({
-      WalkForward: this.buildMovementConfig(-1),
-      WalkBackward: this.buildMovementConfig(1),
-      RunForward: this.buildMovementConfig(-1),
+      Forward: this.buildMovementConfig(-1),
+      Backward: this.buildMovementConfig(1),
     }, (keyEvent: KeyboardEvent) => {
       if (keyEvent.code === 'KeyW' || keyEvent.code === 'ArrowUp') {
         if (keyEvent.shiftKey) {
           this.character.state = MeModelState.RUNNING;
+        } else {
+          this.character.state = MeModelState.WALKING;
         }
 
-        return 'WalkForward';
+        return 'Forward';
       } else if (keyEvent.code === 'KeyS' || keyEvent.code === 'ArrowDown') {
-        return 'WalkBackward';
+        return 'Backward';
       } else {
         return String.fromCharCode(keyEvent.keyCode);
       }
