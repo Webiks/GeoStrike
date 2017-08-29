@@ -2,6 +2,13 @@
     [options]="{
       maximumMemoryUsage: 1024,
       modelMatrix: getTilesMatrix(),
-      url: newYorkTilesUrl
+      url: newYorkTilesUrl,
+      skipLevelOfDetail : true,
+      baseScreenSpaceError : 1024,
+      skipScreenSpaceErrorFactor : 16,
+      skipLevels : 1,
+      immediatelyLoadDesiredLevelOfDetail : false,
+      loadSiblings : false,
+      cullWithChildrenBounds : true
     }">
 </ac-3d-tile-layer>
