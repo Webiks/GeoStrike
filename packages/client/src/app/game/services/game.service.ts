@@ -13,6 +13,7 @@ import { currentGameQuery } from '../../graphql/current-game.query';
 import 'rxjs/add/operator/first';
 import { updatePositionMutation } from '../../graphql/update-position.mutation';
 import { Throttle } from 'lodash-decorators';
+import { GameSettingsService } from './game-settings.service';
 
 @Injectable()
 export class GameService {
@@ -72,7 +73,7 @@ export class GameService {
     });
   }
 
-  @Throttle(16)
+  @Throttle(GameSettingsService.serverUpdateThrottle)
   updatePosition(cartesianPosition: any, heading: number): Observable<ApolloQueryResult<UpdatePosition.Mutation>> {
     return this.apollo.mutate<UpdatePosition.Mutation>({
       mutation: updatePositionMutation,
