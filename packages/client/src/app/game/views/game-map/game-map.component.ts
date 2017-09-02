@@ -18,7 +18,7 @@ import { GameService } from '../../services/game.service';
   styleUrls: ['./game-map.component.scss']
 })
 export class GameMapComponent implements OnInit, OnDestroy {
-
+  public static readonly DETAULT_PITCH = -10;
 
   @Input() private playersPositions: Observable<AcNotification>;
   @Input() private gameData: Observable<GameFields.Fragment>;
@@ -69,6 +69,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
         id: 'me',
         location: this.utils.getPosition(value.me.currentLocation.location),
         heading: value.me.currentLocation.heading,
+        pitch: GameMapComponent.DETAULT_PITCH,
         state: MeModelState.WALKING,
       });
 
@@ -87,6 +88,8 @@ export class GameMapComponent implements OnInit, OnDestroy {
       return;
     }
 
+    const pitch= this.character.pitch;
+    this.character.pitch = pitch - (event.movementY / 10);
     const heading = this.character.heading;
     this.character.heading = heading + (event.movementX / 10);
     this.gameService.updatePosition(this.character.location, this.character.heading);
@@ -98,7 +101,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
     }
 
     const heading = Cesium.Math.toRadians(-180 + this.character.heading);
-    const pitch = Cesium.Math.toRadians(-10);
+    const pitch = Cesium.Math.toRadians(this.character.pitch);
     const range = this.character.viewState === ViewState.SEMI_FPV ? 3 : 0.1;
     const playerHead = new Cesium.Cartesian3(0.4174665722530335, -1.4575908118858933, 1.3042816752567887);
     Cesium.Cartesian3.add(this.character.location, playerHead, playerHead);

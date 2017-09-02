@@ -17,6 +17,7 @@ export interface CharacterState {
   id: string;
   location: any; // Cesium.Cartesian3
   heading: number;
+  pitch: number;
   state: MeModelState;
 }
 
@@ -62,6 +63,10 @@ export class CharacterService {
     return this._character.getValue().heading;
   }
 
+  get pitch() {
+    return this._character.getValue().pitch;
+  }
+
   get state() : MeModelState {
     return this._character.getValue().state;
   }
@@ -80,6 +85,12 @@ export class CharacterService {
   set heading(value: number) {
     this.modifyCurrentStateValue({
       heading: value,
+    });
+  }
+
+  set pitch(value: number) {
+    this.modifyCurrentStateValue({
+      pitch: value,
     });
   }
 
