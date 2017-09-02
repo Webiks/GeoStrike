@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { KeyboardControlService, GeoUtilsService } from 'angular-cesium';
+import { KeyboardControlService, GeoUtilsService, KeyboardControlParams } from 'angular-cesium';
 import { CharacterService, MeModelState, ViewState } from '../../../services/character.service';
 import { GameService } from '../../../services/game.service';
 
@@ -31,52 +31,57 @@ export class KeyboardControlComponent implements OnInit {
           true);
         this.gameService.updatePosition(this.character.location, this.character.heading);
       },
-    };
+    } as KeyboardControlParams;
   }
 
-  buildViewMoveConfig() {
-    return {
-      validation: () => {
-        return this.character.state === MeModelState.RUNNING || this.character.state === MeModelState.WALKING;
-      },
-      action: () => {
-        let newState;
+  changeViewMove() {
+    let newState = ViewState.SEMI_FPV;
+    if (this.character.viewState === ViewState.SEMI_FPV) {
+      newState = ViewState.FPV;
+    }
+    this.character.viewState = newState;
+  }
 
-        if (this.character.viewState === ViewState.SEMI_FPV) {
-          newState = ViewState.FPV;
-        } else {
-          newState = ViewState.SEMI_FPV;
-        }
+  changeMeShootState() {
+    let newState = MeModelState.WALKING;
+    if (this.character.state !== MeModelState.SHOOTING) {
+      newState = MeModelState.SHOOTING;
+    }
+    console.log('change', newState);
+    this.character.state = newState;
 
-        this.character.viewState = newState;
-
-        return true;
-      },
-    };
   }
 
   ngOnInit() {
     this.keyboardControlService.setKeyboardControls({
       Forward: this.buildMovementConfig(-1),
       Backward: this.buildMovementConfig(1),
-      ChangeViewMode: this.buildViewMoveConfig(),
     }, (keyEvent: KeyboardEvent) => {
       if (keyEvent.code === 'KeyW' || keyEvent.code === 'ArrowUp') {
-        if (keyEvent.shiftKey) {
-          this.character.state = MeModelState.RUNNING;
-        } else {
-          this.character.state = MeModelState.WALKING;
+        if (this.character.state !== MeModelState.SHOOTING) {
+          this.character.state = keyEvent.shiftKey ? MeModelState.RUNNING : MeModelState.WALKING;
         }
-
         return 'Forward';
-      } else if (keyEvent.code === 'Tab') {
-        keyEvent.preventDefault();
-
-        return 'ChangeViewMode';
       } else if (keyEvent.code === 'KeyS' || keyEvent.code === 'ArrowDown') {
         return 'Backward';
       } else {
         return String.fromCharCode(keyEvent.keyCode);
+      }
+    });
+
+    // Regitster Other keys because keyboardControl key are triggered by cesium tick
+    document.addEventListener('keydown', (keyEvent: KeyboardEvent) => {
+      switch (keyEvent.code) {
+        case 'Tab':
+          keyEvent.preventDefault();
+          this.changeViewMove();
+          break;
+        case 'Space':
+          keyEvent.preventDefault();
+          this.changeMeShootState();
+          break;
+        default:
+          break;
       }
     });
   }

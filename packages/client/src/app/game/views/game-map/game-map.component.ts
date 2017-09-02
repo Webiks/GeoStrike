@@ -58,6 +58,8 @@ export class GameMapComponent implements OnInit, OnDestroy {
       screenSpaceCameraController.enableZoom = false;
       const canvas = viewer.canvas;
       canvas.onclick = () => canvas.requestPointerLock();
+
+       // viewer.extend(Cesium.viewerCesiumInspectorMixin);
     };
 
     this.onMousemove = this.onMousemove.bind(this);
@@ -88,8 +90,11 @@ export class GameMapComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const pitch= this.character.pitch;
-    this.character.pitch = pitch - (event.movementY / 10);
+    if ( this.character.state === MeModelState.SHOOTING){
+      const pitch = this.character.pitch;
+      this.character.pitch = pitch - (event.movementY / 10);
+    }
+    
     const heading = this.character.heading;
     this.character.heading = heading + (event.movementX / 10);
     this.gameService.updatePosition(this.character.location, this.character.heading);
@@ -100,8 +105,9 @@ export class GameMapComponent implements OnInit, OnDestroy {
       return;
     }
 
+    const pitchDeg = this.character.state === MeModelState.SHOOTING ? this.character.pitch: GameMapComponent.DETAULT_PITCH;
+    const pitch = Cesium.Math.toRadians(pitchDeg);
     const heading = Cesium.Math.toRadians(-180 + this.character.heading);
-    const pitch = Cesium.Math.toRadians(this.character.pitch);
     const range = this.character.viewState === ViewState.SEMI_FPV ? 3 : 0.1;
     const playerHead = new Cesium.Cartesian3(0.4174665722530335, -1.4575908118858933, 1.3042816752567887);
     Cesium.Cartesian3.add(this.character.location, playerHead, playerHead);
