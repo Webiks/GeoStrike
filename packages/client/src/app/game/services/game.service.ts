@@ -3,7 +3,7 @@ import { Apollo, ApolloQueryObservable } from 'apollo-angular';
 import { createNewGameMutation } from '../../graphql/create-new-game.mutation';
 import { ApolloQueryResult } from 'apollo-client';
 import { Observable } from 'rxjs/Observable';
-import { CreateNewGame, CurrentGame, JoinGame, Ready, Team, UpdatePosition } from '../../types';
+import { CreateNewGame, CurrentGame, JoinGame, Ready, Team, UpdatePosition, NotifyKill } from '../../types';
 import { joinGameMutation } from '../../graphql/join-game.mutation';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 import { gameDataSubscription } from '../../graphql/game-data.subscription';
@@ -13,6 +13,7 @@ import 'rxjs/add/operator/first';
 import { updatePositionMutation } from '../../graphql/update-position.mutation';
 import { Throttle } from 'lodash-decorators';
 import { ApolloService } from '../../core/configured-apollo/network/apollo.service';
+import { notifyKillMutation } from "../../graphql/notify-kill.mutation";
 
 @Injectable()
 export class GameService {
@@ -86,6 +87,15 @@ export class GameService {
         },
         heading,
       },
+    });
+  }
+
+  nottifyKill(killedPlayerId){
+    return this.apollo.mutate<NotifyKill.Mutation>({
+      mutation: notifyKillMutation,
+      variables: {
+        playerId: killedPlayerId,
+      } as NotifyKill.Variables
     });
   }
 }
