@@ -6,18 +6,20 @@ import { Observable } from 'rxjs/Observable';
 import { CreateNewGame, CurrentGame, JoinGame, Ready, Team, UpdatePosition } from '../../types';
 import { joinGameMutation } from '../../graphql/join-game.mutation';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
-import { SUBSCRIPTIONS_SOCKET } from '../../core/network/websocket';
 import { gameDataSubscription } from '../../graphql/game-data.subscription';
 import { readyMutation } from '../../graphql/ready.mutation';
 import { currentGameQuery } from '../../graphql/current-game.query';
 import 'rxjs/add/operator/first';
 import { updatePositionMutation } from '../../graphql/update-position.mutation';
 import { Throttle } from 'lodash-decorators';
+import { ApolloService } from '../../core/configured-apollo/network/apollo.service';
 
 @Injectable()
 export class GameService {
+  private socket: SubscriptionClient;
   constructor(private apollo: Apollo,
-              @Inject(SUBSCRIPTIONS_SOCKET) private socket: SubscriptionClient) {
+              subscriptionClientService: ApolloService) {
+    this.socket = subscriptionClientService.subscriptionClient;
   }
 
   refreshConnection() {

@@ -3,7 +3,11 @@ import { NgModule } from '@angular/core';
 import { AngularCesiumModule } from 'angular-cesium';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
-  MdButtonModule, MdCardModule, MdDialogModule, MdGridListModule, MdInputModule,
+  MdButtonModule ,
+  MdCardModule ,
+  MdDialogModule ,
+  MdGridListModule ,
+  MdInputModule ,
   MdProgressSpinnerModule
 } from '@angular/material';
 
@@ -14,9 +18,6 @@ import { CharacterPickerComponent } from './views/character-picker/character-pic
 import { GameService } from './services/game.service';
 import { GameRoomComponent } from './views/game-room/game-room.component';
 import { FormsModule } from '@angular/forms';
-import { getApolloClient } from '../core/network/apollo-client';
-import { ApolloModule } from 'apollo-angular';
-import { client, SUBSCRIPTIONS_SOCKET } from '../core/network/websocket';
 import { CharacterItemComponent } from './views/character-item/character-item.component';
 import { GameContainerComponent } from './views/game-container/game-container.component';
 import { GameCountdownComponent } from './views/game-countdown/game-countdown.component';
@@ -27,50 +28,50 @@ import { CharacterService } from './services/character.service';
 import { WorldComponent } from './views/game-map/world/world.component';
 import { OtherPlayersComponent } from './views/game-map/other-players/other-players.component';
 import { UtilsService } from './services/utils.service';
+import { ConfiguredApolloModule } from '../core/configured-apollo/configured-apollo.module';
 
 @NgModule({
   declarations: [
-    MainComponent,
-    CreateNewGameDialogComponent,
-    JoinGameDialogComponent,
-    CharacterPickerComponent,
-    GameRoomComponent,
-    CharacterItemComponent,
-    GameContainerComponent,
-    GameCountdownComponent,
-    GameMapComponent,
-    KeyboardControlComponent,
-    MeComponent,
-    WorldComponent,
-    OtherPlayersComponent,
-  ],
+    MainComponent ,
+    CreateNewGameDialogComponent ,
+    JoinGameDialogComponent ,
+    CharacterPickerComponent ,
+    GameRoomComponent ,
+    CharacterItemComponent ,
+    GameContainerComponent ,
+    GameCountdownComponent ,
+    GameMapComponent ,
+    KeyboardControlComponent ,
+    MeComponent ,
+    WorldComponent ,
+    OtherPlayersComponent ,
+  ] ,
   imports: [
-    BrowserModule,
-    AngularCesiumModule,
-    BrowserAnimationsModule,
-    MdButtonModule,
-    MdCardModule,
-    MdDialogModule,
-    MdGridListModule,
-    MdProgressSpinnerModule,
-    MdInputModule,
-    FormsModule,
-    ApolloModule.forRoot(getApolloClient),
-  ],
+    BrowserModule ,
+    AngularCesiumModule ,
+    BrowserAnimationsModule ,
+    MdButtonModule ,
+    MdCardModule ,
+    MdDialogModule ,
+    MdGridListModule ,
+    MdProgressSpinnerModule ,
+    MdInputModule ,
+    FormsModule ,
+    ConfiguredApolloModule ,
+  ] ,
   exports: [
-    MainComponent,
-    GameRoomComponent,
-  ],
+    MainComponent ,
+    GameRoomComponent ,
+  ] ,
   providers: [
-    GameService,
-    UtilsService,
-    CharacterService,
-    { provide: SUBSCRIPTIONS_SOCKET, useValue: client },
-  ],
+    GameService ,
+    UtilsService ,
+    CharacterService ,
+  ] ,
   entryComponents: [
-    CreateNewGameDialogComponent,
-    JoinGameDialogComponent,
-  ],
+    CreateNewGameDialogComponent ,
+    JoinGameDialogComponent ,
+  ] ,
 })
 export class GameModule {
 }

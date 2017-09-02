@@ -13,7 +13,7 @@ import 'rxjs/add/observable/combineLatest';
 export class MeComponent implements OnInit{
 
   showWeapon$ : Observable<boolean>;
-  constructor(private character: CharacterService, private utils: UtilsService) {
+  constructor(private character: CharacterService) {
   }
 
   get notifications$() {

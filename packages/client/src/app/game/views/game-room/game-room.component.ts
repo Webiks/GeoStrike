@@ -5,7 +5,7 @@ import { ApolloQueryObservable } from 'apollo-angular';
 import { AVAILABLE_CHARACTERS } from '../character-picker/character-picker.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
-import { AuthorizationMiddleware } from '../../../core/network/authorization-middleware';
+import { AuthorizationMiddleware } from '../../../core/configured-apollo/network/authorization-middleware';
 
 @Component({
   selector: 'game-room',

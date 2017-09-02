@@ -1,4 +1,7 @@
-import { Component, Input, OnInit, ViewChild, HostListener } from '@angular/core';
+import {
+  Component , Input , OnInit , ViewChild , HostListener , ElementRef , OnDestroy , NgZone ,
+  ChangeDetectorRef
+} from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { AcMapComponent, AcNotification, ViewerConfiguration } from 'angular-cesium';
 import { GameFields } from '../../../types';
@@ -14,14 +17,22 @@ import { GameService } from '../../services/game.service';
   ],
   styleUrls: ['./game-map.component.scss']
 })
-export class GameMapComponent implements OnInit {
+export class GameMapComponent implements OnInit, OnDestroy {
+
+
   @Input() private playersPositions: Observable<AcNotification>;
   @Input() private gameData: Observable<GameFields.Fragment>;
   @ViewChild(AcMapComponent) private mapInstance: AcMapComponent;
 
   private viewer: any;
 
-  constructor(private gameService: GameService, private character: CharacterService, private viewerConf: ViewerConfiguration, private utils: UtilsService) {
+  constructor(private gameService: GameService,
+              private character: CharacterService,
+              private viewerConf: ViewerConfiguration,
+              private utils: UtilsService,
+              private elementRef: ElementRef,
+              private ngZone: NgZone,
+              private cd: ChangeDetectorRef) {
     viewerConf.viewerOptions = {
       selectionIndicator: false,
       timeline: false,
@@ -48,6 +59,8 @@ export class GameMapComponent implements OnInit {
       const canvas = viewer.canvas;
       canvas.onclick = () => canvas.requestPointerLock();
     };
+
+    this.onMousemove = this.onMousemove.bind(this);
   }
 
   ngOnInit() {
@@ -60,10 +73,15 @@ export class GameMapComponent implements OnInit {
       });
 
       this.viewer.scene.preRender.addEventListener(this.preRenderHandler.bind(this));
+
+      this.ngZone.runOutsideAngular(()=>{
+        this.elementRef.nativeElement.addEventListener('mousemove',this.onMousemove);
+      });
+
+      this.cd.detectChanges();
     });
   }
 
-  @HostListener('mousemove', ['$event'])
   onMousemove(event: MouseEvent) {
     if (!this.character.initialized) {
       return;
@@ -86,5 +104,9 @@ export class GameMapComponent implements OnInit {
     Cesium.Cartesian3.add(this.character.location, playerHead, playerHead);
 
     this.viewer.camera.lookAt(playerHead, new Cesium.HeadingPitchRange(heading, pitch, range));
+  }
+
+  ngOnDestroy (): void {
+    this.elementRef.nativeElement.removeEventListener('mousemove',this.onMousemove)
   }
 }
