@@ -22,14 +22,14 @@ export interface CharacterState {
 
 @Injectable()
 export class CharacterService {
-  private _character: BehaviorSubject<CharacterState> = null;
+  private _character= new BehaviorSubject<CharacterState>(null);
   private _viewState = new BehaviorSubject<ViewState>(ViewState.SEMI_FPV);
 
   constructor() {
   }
 
   get initialized() {
-    return this._character !== null;
+    return this._character.getValue() !== null;
   }
 
   get viewState(): ViewState {
@@ -45,7 +45,9 @@ export class CharacterService {
   }
 
   initCharacter(state) {
-    this._character = new BehaviorSubject<CharacterState>(state);
+    this._character.next({
+      ...state,
+    });
   }
 
   get state$() {
@@ -60,7 +62,7 @@ export class CharacterService {
     return this._character.getValue().heading;
   }
 
-  get state() {
+  get state() : MeModelState {
     return this._character.getValue().state;
   }
 

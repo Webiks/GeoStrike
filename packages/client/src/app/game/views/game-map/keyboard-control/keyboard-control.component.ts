@@ -21,7 +21,7 @@ export class KeyboardControlComponent implements OnInit {
         let speed = 0.15;
 
         if (this.character.state === MeModelState.RUNNING) {
-          speed = 0.3;
+          speed = 0.5;
         }
 
         this.character.location = GeoUtilsService.pointByLocationDistanceAndAzimuth(
@@ -71,7 +71,7 @@ export class KeyboardControlComponent implements OnInit {
         return 'Forward';
       } else if (keyEvent.code === 'Tab') {
         keyEvent.preventDefault();
-        
+
         return 'ChangeViewMode';
       } else if (keyEvent.code === 'KeyS' || keyEvent.code === 'ArrowDown') {
         return 'Backward';
