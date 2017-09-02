@@ -13,7 +13,7 @@ import 'rxjs/add/observable/combineLatest';
 export class MeComponent implements OnInit{
 
   showWeapon$ : Observable<boolean>;
-  constructor(private character: CharacterService) {
+  constructor(private character: CharacterService, public utils: UtilsService) {
   }
 
   get notifications$() {
@@ -28,7 +28,6 @@ export class MeComponent implements OnInit{
     this.showWeapon$ = Observable.combineLatest(
       this.character.viewState$.map(viewState=> viewState === ViewState.FPV),
       this.character.state$.map(meState=> meState && meState.state === MeModelState.SHOOTING))
-      .do(x=>console.log(x))
       .map((result=> !(result[0] || result[1])));
   }
 }
