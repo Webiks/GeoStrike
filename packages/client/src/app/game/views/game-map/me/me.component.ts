@@ -1,6 +1,6 @@
-import { Component , OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActionType } from 'angular-cesium';
-import { CharacterService , MeModelState , ViewState } from '../../../services/character.service';
+import { CharacterService, MeModelState, ViewState } from '../../../services/character.service';
 import { UtilsService } from '../../../services/utils.service';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
@@ -10,9 +10,10 @@ import 'rxjs/add/observable/combineLatest';
   templateUrl: './me.component.html',
   styleUrls: ['./me.component.scss'],
 })
-export class MeComponent implements OnInit{
+export class MeComponent implements OnInit {
 
-  showWeapon$ : Observable<boolean>;
+  showWeapon$: Observable<boolean>;
+  showCross$: Observable<boolean>;
   constructor(private character: CharacterService, public utils: UtilsService) {
   }
 
@@ -24,10 +25,11 @@ export class MeComponent implements OnInit{
     }));
   }
 
-  ngOnInit (): void {
+  ngOnInit(): void {
     this.showWeapon$ = Observable.combineLatest(
-      this.character.viewState$.map(viewState=> viewState === ViewState.FPV),
-      this.character.state$.map(meState=> meState && meState.state === MeModelState.SHOOTING))
-      .map((result=> !(result[0] || result[1])));
+      this.character.viewState$.map(viewState => viewState === ViewState.FPV),
+      this.character.state$.map(meState => meState && meState.state === MeModelState.SHOOTING))
+      .map((result => result[0] || result[1]));
+      this.showCross$ = this.character.state$.map(meState => meState && meState.state === MeModelState.SHOOTING);
   }
 }

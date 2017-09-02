@@ -47,7 +47,6 @@ export class KeyboardControlComponent implements OnInit {
     if (this.character.state !== MeModelState.SHOOTING) {
       newState = MeModelState.SHOOTING;
     }
-    console.log('change', newState);
     this.character.state = newState;
 
   }
