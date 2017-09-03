@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { GameFields } from '../../types';
+import { UtilsService } from './utils.service';
+import { GameSettingsService } from './game-settings.service';
 
 export enum MeModelState {
   WALKING,
@@ -25,7 +28,7 @@ export class CharacterService {
   private _character: BehaviorSubject<CharacterState> = null;
   private _viewState = new BehaviorSubject<ViewState>(ViewState.SEMI_FPV);
 
-  constructor() {
+  constructor(private utils: UtilsService) {
   }
 
   get initialized() {
@@ -91,5 +94,14 @@ export class CharacterService {
     this.modifyCurrentStateValue({
       state: value,
     });
+  }
+
+  public validateState(player: GameFields.Players){
+    const clientLocation = this.utils.getPosition(this.location);
+    const serverLocation = this.utils.getPosition(player.currentLocation);
+    const serverClientDistance = Cesium.Cartesian3.distance(serverLocation, clientLocation);
+    if(serverClientDistance > GameSettingsService.serverClientDistanceThreshold){
+      this.location = player.currentLocation;
+    }
   }
 }

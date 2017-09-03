@@ -8,6 +8,7 @@ import { Subject } from 'rxjs/Subject';
 import { AcEntity, AcNotification, ActionType } from 'angular-cesium';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
+import { CharacterService } from '../../services/character.service';
 
 @Component({
   selector: 'game-container',
@@ -21,7 +22,10 @@ export class GameContainerComponent implements OnInit, OnDestroy {
   private gameDataSubscription: Subscription;
   private players$: Subject<AcNotification> = new Subject<AcNotification>();
 
-  constructor(private gameService: GameService, private activatedRoute: ActivatedRoute, private router: Router) {
+  constructor(private gameService: GameService,
+              private activatedRoute: ActivatedRoute,
+              private character: CharacterService,
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -39,7 +43,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
       this.gameDataSubscription = this.gameData$.subscribe(currentGame => {
         this.game = currentGame;
         this.me = currentGame.players.find(p => p.isMe);
-
+        this.character.validateState(this.me);
         this.game.players.map<AcNotification>(player => ({
           actionType: ActionType.ADD_UPDATE,
           id: player.id,
