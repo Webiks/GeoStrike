@@ -57,13 +57,15 @@ export class KeyboardControlComponent implements OnInit {
   }
 
 
-  toggleInspector (inspectorClass) {
+  toggleInspector (inspectorClass, inspectorProp) {
     if (!environment.production) {
       if (!this.inspector) {
         this.cesiumService.getViewer().extend(inspectorClass);
         this.inspector = true;
       } else {
-        this.cesiumService.getViewer().cesiumInspector.container.remove();
+        this.cesiumService.getViewer()[inspectorProp].container.remove();
+
+        // window['vieww'] =      this.cesiumService.getViewer();
         this.cesiumService.getViewer().cesium3DTilesInspector.container.remove();
         this.inspector = false;
       }
@@ -99,10 +101,10 @@ export class KeyboardControlComponent implements OnInit {
           this.changeMeShootState();
           break;
         case 'KeyI':
-          this.toggleInspector(Cesium.viewerCesiumInspectorMixin);
+          this.toggleInspector(Cesium.viewerCesiumInspectorMixin,'cesiumInspector');
           break;
         case 'KeyO':
-          this.toggleInspector(Cesium.viewerCesium3DTilesInspectorMixin);
+          this.toggleInspector(Cesium.viewerCesium3DTilesInspectorMixin,'cesium3DTilesInspector');
           break;
         default:
           break;
