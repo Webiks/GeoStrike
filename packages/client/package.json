@@ -9,7 +9,6 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "prestart": "yarn generate:types",
     "generate:types": "gql-gen --url http://localhost:3000/graphql --template typescript --out src/app/types.d.ts -- ./src/app/**/graphql/*.ts "
   },
   "private": true,

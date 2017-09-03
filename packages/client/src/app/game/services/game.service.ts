@@ -1,9 +1,9 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Apollo, ApolloQueryObservable } from 'apollo-angular';
 import { createNewGameMutation } from '../../graphql/create-new-game.mutation';
 import { ApolloQueryResult } from 'apollo-client';
 import { Observable } from 'rxjs/Observable';
-import { CreateNewGame, CurrentGame, JoinGame, Ready, Team, UpdatePosition, NotifyKill } from '../../types';
+import { CreateNewGame, CurrentGame, JoinGame, NotifyKill, Ready, Team, UpdatePosition } from '../../types';
 import { joinGameMutation } from '../../graphql/join-game.mutation';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 import { gameDataSubscription } from '../../graphql/game-data.subscription';
@@ -13,7 +13,8 @@ import 'rxjs/add/operator/first';
 import { updatePositionMutation } from '../../graphql/update-position.mutation';
 import { Throttle } from 'lodash-decorators';
 import { ApolloService } from '../../core/configured-apollo/network/apollo.service';
-import { notifyKillMutation } from "../../graphql/notify-kill.mutation";
+import { notifyKillMutation } from '../../graphql/notify-kill.mutation';
+import { GameSettingsService } from './game-settings.service';
 
 @Injectable()
 export class GameService {
@@ -75,7 +76,7 @@ export class GameService {
     });
   }
 
-  @Throttle(16)
+  @Throttle(GameSettingsService.serverUpdateThrottle)
   updatePosition(cartesianPosition: any, heading: number): Observable<ApolloQueryResult<UpdatePosition.Mutation>> {
     return this.apollo.mutate<UpdatePosition.Mutation>({
       mutation: updatePositionMutation,
