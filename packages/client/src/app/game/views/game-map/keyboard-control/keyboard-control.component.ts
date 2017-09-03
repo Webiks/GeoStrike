@@ -21,7 +21,7 @@ export class KeyboardControlComponent implements OnInit {
         let speed = 0.15;
 
         if (this.character.state === MeModelState.RUNNING) {
-          speed = 0.5;
+          speed = 0.3;
         }
 
         this.character.location = GeoUtilsService.pointByLocationDistanceAndAzimuth(

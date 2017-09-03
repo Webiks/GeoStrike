@@ -18,7 +18,7 @@ import { GameService } from '../../services/game.service';
   styleUrls: ['./game-map.component.scss']
 })
 export class GameMapComponent implements OnInit, OnDestroy {
-  public static readonly DETAULT_PITCH = -10;
+  public static readonly DEFAULT_PITCH = -5;
 
   @Input() private playersPositions: Observable<AcNotification>;
   @Input() private gameData: Observable<GameFields.Fragment>;
@@ -59,7 +59,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
       const canvas = viewer.canvas;
       canvas.onclick = () => canvas.requestPointerLock();
 
-       // viewer.extend(Cesium.viewerCesiumInspectorMixin);
+       viewer.extend(Cesium.viewerCesiumInspectorMixin);
     };
 
     this.onMousemove = this.onMousemove.bind(this);
@@ -71,7 +71,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
         id: 'me',
         location: this.utils.getPosition(value.me.currentLocation.location),
         heading: value.me.currentLocation.heading,
-        pitch: GameMapComponent.DETAULT_PITCH,
+        pitch: GameMapComponent.DEFAULT_PITCH,
         state: MeModelState.WALKING,
       });
 
@@ -94,7 +94,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
       const pitch = this.character.pitch;
       this.character.pitch = pitch - (event.movementY / 10);
     }
-    
+
     const heading = this.character.heading;
     this.character.heading = heading + (event.movementX / 10);
     this.gameService.updatePosition(this.character.location, this.character.heading);
@@ -105,7 +105,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const pitchDeg = this.character.state === MeModelState.SHOOTING ? this.character.pitch: GameMapComponent.DETAULT_PITCH;
+    const pitchDeg = this.character.state === MeModelState.SHOOTING ? this.character.pitch: GameMapComponent.DEFAULT_PITCH;
     const pitch = Cesium.Math.toRadians(pitchDeg);
     const heading = Cesium.Math.toRadians(-180 + this.character.heading);
     const range = this.character.viewState === ViewState.FPV || this.character.state === MeModelState.SHOOTING ? 0.1 : 3;

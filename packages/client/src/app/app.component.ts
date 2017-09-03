@@ -9,8 +9,6 @@ declare var Zone;
 })
 export class AppComponent implements DoCheck{
   ngDoCheck (): void {
-
-    console.log('do check',Zone.current);
   }
   constructor() {
   }
