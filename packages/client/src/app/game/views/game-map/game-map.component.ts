@@ -59,7 +59,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
       const canvas = viewer.canvas;
       canvas.onclick = () => canvas.requestPointerLock();
 
-       viewer.extend(Cesium.viewerCesiumInspectorMixin);
+       // viewer.extend(Cesium.viewerCesiumInspectorMixin);
     };
 
     this.onMousemove = this.onMousemove.bind(this);
