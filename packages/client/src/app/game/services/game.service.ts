@@ -12,11 +12,15 @@ import { readyMutation } from '../../graphql/ready.mutation';
 import { currentGameQuery } from '../../graphql/current-game.query';
 import 'rxjs/add/operator/first';
 import { updatePositionMutation } from '../../graphql/update-position.mutation';
-import { Throttle } from 'lodash-decorators';
+import { CharacterService } from './character.service';
+import { GameSettingsService } from './game-settings.service';
 
 @Injectable()
 export class GameService {
+  private serverPositionUpdateInterval;
+
   constructor(private apollo: Apollo,
+              private character: CharacterService,
               @Inject(SUBSCRIPTIONS_SOCKET) private socket: SubscriptionClient) {
   }
 
@@ -72,17 +76,26 @@ export class GameService {
     });
   }
 
-  @Throttle(16)
-  updatePosition(cartesianPosition: any, heading: number): Observable<ApolloQueryResult<UpdatePosition.Mutation>> {
-    return this.apollo.mutate<UpdatePosition.Mutation>({
+  startServerUpdatingLoop() {
+    this.serverPositionUpdateInterval =
+      setInterval(() => this.updateServerOnPosition(), GameSettingsService.serverUpdatingRate);
+  }
+
+  updateServerOnPosition() {
+    const location = this.character.location;
+    const heading = this.character.heading;
+    if (!location || !heading) {
+      return;
+    }
+    this.apollo.mutate<UpdatePosition.Mutation>({
       mutation: updatePositionMutation,
       variables: {
         position: {
-          x: cartesianPosition.x,
-          y: cartesianPosition.y,
-          z: cartesianPosition.z,
+          x: location.x,
+          y: location.y,
+          z: location.z,
         },
-        heading,
+        heading
       },
     });
   }

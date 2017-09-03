@@ -43,7 +43,9 @@ export class GameContainerComponent implements OnInit, OnDestroy {
       this.gameDataSubscription = this.gameData$.subscribe(currentGame => {
         this.game = currentGame;
         this.me = currentGame.players.find(p => p.isMe);
-        this.character.validateState(this.me);
+        if(this.me){
+          this.character.validateState(this.me);
+        }
         this.game.players.map<AcNotification>(player => ({
           actionType: ActionType.ADD_UPDATE,
           id: player.id,

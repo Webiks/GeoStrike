@@ -47,6 +47,7 @@ export class GameMapComponent implements OnInit {
       screenSpaceCameraController.enableZoom = false;
       const canvas = viewer.canvas;
       canvas.onclick = () => canvas.requestPointerLock();
+      viewer.extend(Cesium.viewerCesiumInspectorMixin);
     };
   }
 
@@ -58,6 +59,7 @@ export class GameMapComponent implements OnInit {
         heading: value.me.currentLocation.heading,
         state: MeModelState.WALKING,
       });
+      this.gameService.startServerUpdatingLoop();
 
       this.viewer.scene.preRender.addEventListener(this.preRenderHandler.bind(this));
     });
@@ -71,7 +73,6 @@ export class GameMapComponent implements OnInit {
 
     const heading = this.character.heading;
     this.character.heading = heading + (event.movementX / 10);
-    this.gameService.updatePosition(this.character.location, this.character.heading);
   }
 
   preRenderHandler() {

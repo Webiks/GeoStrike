@@ -1,4 +1,4 @@
-import { IGameObject } from '../../../core/local-data/game';
+import { IGameObject, IPlayer } from '../../../core/local-data/game';
 import { IGraphQLContext } from '../../context';
 
 const resolvers = {
@@ -7,7 +7,7 @@ const resolvers = {
     gameCode: (game: IGameObject) => game.gameCode,
     players: (game: IGameObject, args, { player }) => {
       if (player) {
-        return game.players.filter(p => p.playerId !== player.playerId);
+        return game.players.filter((p: IPlayer) => p.playerId !== player.playerId);
       }
 
       return game.players || [];

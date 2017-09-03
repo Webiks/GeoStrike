@@ -29,7 +29,6 @@ export class KeyboardControlComponent implements OnInit {
           multipleBy * speed,
           Cesium.Math.toRadians(this.character.heading),
           true);
-        this.gameService.updatePosition(this.character.location, this.character.heading);
       },
     };
   }
@@ -71,7 +70,7 @@ export class KeyboardControlComponent implements OnInit {
         return 'Forward';
       } else if (keyEvent.code === 'Tab') {
         keyEvent.preventDefault();
-        
+
         return 'ChangeViewMode';
       } else if (keyEvent.code === 'KeyS' || keyEvent.code === 'ArrowDown') {
         return 'Backward';

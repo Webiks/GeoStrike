@@ -56,15 +56,15 @@ export class CharacterService {
   }
 
   get location() {
-    return this._character.getValue().location;
+    return this._character && this._character.getValue() && this._character.getValue().location;
   }
 
   get heading() {
-    return this._character.getValue().heading;
+    return this._character && this._character.getValue() && this._character.getValue().heading;
   }
 
   get state() {
-    return this._character.getValue().state;
+    return this._character && this._character.getValue() && this._character.getValue().state;
   }
 
   get currentStateValue(): CharacterState {
@@ -97,7 +97,11 @@ export class CharacterService {
   }
 
   public validateState(player: GameFields.Players){
-    const clientLocation = this.utils.getPosition(this.location);
+    const location = this.location;
+    if(!location){
+      return;
+    }
+    const clientLocation = this.utils.getPosition(location);
     const serverLocation = this.utils.getPosition(player.currentLocation);
     const serverClientDistance = Cesium.Cartesian3.distance(serverLocation, clientLocation);
     if(serverClientDistance > GameSettingsService.serverClientDistanceThreshold){

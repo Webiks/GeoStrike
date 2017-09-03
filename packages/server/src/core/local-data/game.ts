@@ -2,6 +2,7 @@ import { v4 } from 'uuid';
 import { sign } from 'jsonwebtoken';
 import { GameState, PlayerState } from '../../types';
 import { ESubscriptionTopics, pubsub } from '../../graphql/pubsub';
+import { gameData } from '../../graphql/resolvers/subscriptions/game-data';
 
 interface ICartesian3Location {
   x: number;
@@ -30,7 +31,8 @@ export interface IGameObject {
   gameId: string;
   gameCode: string;
   gameUpdateInterval: any,
-  players: Map<string, IPlayer>;
+  playersMap: Map<string, IPlayer>;
+  players: IPlayer[],
   state: GameState;
 }
 
@@ -74,12 +76,13 @@ export class GamesManager {
       username,
       state: 'WAITING',
       game,
-      currentLocation: DEFAULT_PLAYERS_LOCATION[game.players.size],
+      currentLocation: DEFAULT_PLAYERS_LOCATION[game.players.length],
       heading: 0,
       team,
     };
 
-    game.players.set(playerId, player);
+    game.playersMap.set(playerId, player);
+    game.players.push(player);
 
     return player;
   }
@@ -91,11 +94,19 @@ export class GamesManager {
     const gameObject: IGameObject = {
       gameId,
       gameCode,
-      gameUpdateInterval: setInterval(() => {
-        pubsub.publish(ESubscriptionTopics.GAME_STATE_CHANGED, { gameData: gameObject })
-      }, 100),
-      players: new Map<string, IPlayer>(),
+      playersMap: new Map<string, IPlayer>(),
+      players: [],
       state: 'WAITING',
+      gameUpdateInterval: setInterval(() => {
+        pubsub.publish(ESubscriptionTopics.GAME_STATE_CHANGED, {
+          gameData: {
+            gameId,
+            gameCode,
+            players: gameObject.players,
+            state: gameObject.state,
+          }
+        })
+      }, 100),
     };
 
     this.activeGames.set(gameId, gameObject);
@@ -123,7 +134,7 @@ export class GamesManager {
 
   playerReady(gameId: string, playerId: string) {
     const game = this.getGameById(gameId);
-    const player = game.players.get(playerId);
+    const player = game.playersMap.get(playerId);
 
     if (player) {
       player.state = 'READY';
@@ -132,7 +143,7 @@ export class GamesManager {
 
   updatePlayerPosition(gameId: string, playerId: string, position: ICartesian3Location, heading: number) {
     const game = this.getGameById(gameId);
-    const player = game.players.get(playerId);
+    const player = game.playersMap.get(playerId);
 
     if (player) {
       player.currentLocation = position;
