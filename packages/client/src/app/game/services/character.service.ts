@@ -17,19 +17,20 @@ export interface CharacterState {
   id: string;
   location: any; // Cesium.Cartesian3
   heading: number;
+  pitch: number;
   state: MeModelState;
 }
 
 @Injectable()
 export class CharacterService {
-  private _character: BehaviorSubject<CharacterState> = null;
+  private _character= new BehaviorSubject<CharacterState>(null);
   private _viewState = new BehaviorSubject<ViewState>(ViewState.SEMI_FPV);
 
   constructor() {
   }
 
   get initialized() {
-    return this._character !== null;
+    return this._character.getValue() !== null;
   }
 
   get viewState(): ViewState {
@@ -45,7 +46,9 @@ export class CharacterService {
   }
 
   initCharacter(state) {
-    this._character = new BehaviorSubject<CharacterState>(state);
+    this._character.next({
+      ...state,
+    });
   }
 
   get state$() {
@@ -60,7 +63,11 @@ export class CharacterService {
     return this._character.getValue().heading;
   }
 
-  get state() {
+  get pitch() {
+    return this._character.getValue().pitch;
+  }
+
+  get state() : MeModelState {
     return this._character.getValue().state;
   }
 
@@ -78,6 +85,12 @@ export class CharacterService {
   set heading(value: number) {
     this.modifyCurrentStateValue({
       heading: value,
+    });
+  }
+
+  set pitch(value: number) {
+    this.modifyCurrentStateValue({
+      pitch: value,
     });
   }
 

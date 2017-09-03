@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { GameService } from '../../services/game.service';
 import { CreateNewGame } from '../../../types';
 import { ApolloQueryResult } from 'apollo-client';
-import { AuthorizationMiddleware } from '../../../core/network/authorization-middleware';
+import { AuthorizationMiddleware } from '../../../core/configured-apollo/network/authorization-middleware';
 import { Router } from '@angular/router';
 import { MdDialogRef } from '@angular/material';
 

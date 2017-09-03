@@ -4,7 +4,7 @@
                     scale: 0.01,
 										uri: '/assets/soldier.gltf',
 										position: interpolatePlayerPosition(player.id, utils.getPosition(player.currentLocation.location)),
-										orientation: utils.getOrientation(player.currentLocation.location, player.currentLocation.heading)
+										orientation: getOrientation(player.currentLocation.location, player.currentLocation.heading, player.state)
                   }">
   </ac-model-desc>
 </ac-layer>

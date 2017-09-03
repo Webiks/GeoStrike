@@ -3,6 +3,7 @@ import { AcNotification } from 'angular-cesium';
 import { Observable } from 'rxjs/Observable';
 import { UtilsService } from '../../../services/utils.service';
 import { InterpolationService, InterpolationType } from '../../../services/interpolation.service';
+import { PlayerState } from "../../../../types";
 
 @Component({
   selector: 'other-players',
@@ -29,5 +30,14 @@ export class OtherPlayersComponent {
         cesiumSampledProperty: positionProperty,
       }, InterpolationType.POSITION);
     }
+  }
+
+  getOrientation(location,heading: number, state: PlayerState) {
+    if (state === 'DEAD'){
+      return this.utils.getOrientation(location, heading,0,90);
+    }else{
+      return this.utils.getOrientation(location, heading);
+    }
+
   }
 }

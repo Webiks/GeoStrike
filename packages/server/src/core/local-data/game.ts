@@ -134,4 +134,12 @@ export class GamesManager {
       player.heading = heading;
     }
   }
+
+  updatePlayerState(gameId: string, playerId:string, newState: PlayerState){
+    const game = this.getGameById(gameId);
+    const player = game.players.find(p => p.playerId === playerId);
+    if (player) {
+      player.state = newState;
+    }
+  }
 }
