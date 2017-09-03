@@ -12,16 +12,10 @@ export class MeComponent {
   }
 
   get notifications$() {
-    const a = this.character.state$.filter(f => f !== null).map(meState => ({
+    return this.character.state$.filter(f => f !== null).map(meState => ({
       actionType: ActionType.ADD_UPDATE,
       id: meState.id,
       entity: meState,
     }));
-
-    a.subscribe(z => {
-      console.log(z);
-    });
-
-    return a;
   }
 }

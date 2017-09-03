@@ -1,5 +1,4 @@
 import { IGraphQLContext } from '../../context';
-import { ESubscriptionTopics, pubsub } from '../../pubsub';
 
 export const updatePosition = (rootValue, { position, heading }, { games, game, player }: IGraphQLContext) => {
   if (!game || !player) {
