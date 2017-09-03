@@ -1,27 +1,55 @@
-import { Component , OnInit } from '@angular/core';
-import { CesiumService , GeoUtilsService , KeyboardControlParams , KeyboardControlService } from 'angular-cesium';
-import { CharacterService , MeModelState , ViewState } from '../../../services/character.service';
+import { Component, OnInit } from '@angular/core';
+import {
+  CesiumService,
+  GeoUtilsService,
+  KeyboardControlParams,
+  KeyboardControlService,
+} from 'angular-cesium';
+import {
+  CharacterService,
+  MeModelState,
+  ViewState,
+} from '../../../services/character.service';
 import { GameService } from '../../../services/game.service';
 import { environment } from '../../../../../environments/environment';
 
+const Direction = {
+  Forward: 'Forward',
+  Backward: 'Backward',
+  Left: 'Left',
+  Right: 'Right',
+};
+
+const DirectionsDelta = {
+  [Direction.Forward]: 180,
+  [Direction.Backward]: 0,
+  [Direction.Left]: 90,
+  [Direction.Right]: -90,
+};
+
 @Component({
-  selector: 'keyboard-control' ,
-  template: '' ,
+  selector: 'keyboard-control',
+  template: '',
 })
 export class KeyboardControlComponent implements OnInit {
   inspector = false;
 
-  constructor (private gameService: GameService ,
-               private character: CharacterService ,
-               private keyboardControlService: KeyboardControlService ,
-               private cesiumService: CesiumService) {
-  }
+  constructor(
+    private gameService: GameService,
+    private character: CharacterService,
+    private keyboardControlService: KeyboardControlService,
+    private cesiumService: CesiumService
+  ) {}
 
-  buildMovementConfig (multipleBy) {
+  buildMovementConfig(direction: string) {
+    const delta = DirectionsDelta[direction];
     return {
       validation: () => {
-        return this.character.state === MeModelState.RUNNING || this.character.state === MeModelState.WALKING;
-      } ,
+        return (
+          this.character.state === MeModelState.RUNNING ||
+          this.character.state === MeModelState.WALKING
+        );
+      },
       action: () => {
         const position = this.character.location;
         let speed = 0.15;
@@ -31,16 +59,17 @@ export class KeyboardControlComponent implements OnInit {
         }
 
         this.character.location = GeoUtilsService.pointByLocationDistanceAndAzimuth(
-          position ,
-          multipleBy * speed ,
-          Cesium.Math.toRadians(this.character.heading) ,
-          true);
-        this.gameService.updatePosition(this.character.location , this.character.heading);
-      } ,
+          position,
+          speed,
+          Cesium.Math.toRadians(this.character.heading + delta),
+          true
+        );
+        this.gameService.updatePosition(this.character.location, this.character.heading);
+      },
     } as KeyboardControlParams;
   }
 
-  changeViewMove () {
+  changeViewMove() {
     let newState = ViewState.SEMI_FPV;
     if (this.character.viewState === ViewState.SEMI_FPV) {
       newState = ViewState.FPV;
@@ -48,7 +77,7 @@ export class KeyboardControlComponent implements OnInit {
     this.character.viewState = newState;
   }
 
-  changeMeShootState () {
+  changeMeShootState() {
     let newState = MeModelState.WALKING;
     if (this.character.state !== MeModelState.SHOOTING) {
       newState = MeModelState.SHOOTING;
@@ -56,8 +85,7 @@ export class KeyboardControlComponent implements OnInit {
     this.character.state = newState;
   }
 
-
-  toggleInspector (inspectorClass, inspectorProp) {
+  toggleInspector(inspectorClass, inspectorProp) {
     if (!environment.production) {
       if (!this.inspector) {
         this.cesiumService.getViewer().extend(inspectorClass);
@@ -72,25 +100,37 @@ export class KeyboardControlComponent implements OnInit {
     }
   }
 
-  ngOnInit () {
-    this.keyboardControlService.setKeyboardControls({
-      Forward: this.buildMovementConfig(-1) ,
-      Backward: this.buildMovementConfig(1) ,
-    } , (keyEvent: KeyboardEvent) => {
-      if (keyEvent.code === 'KeyW' || keyEvent.code === 'ArrowUp') {
-        if (this.character.state !== MeModelState.SHOOTING) {
-          this.character.state = keyEvent.shiftKey ? MeModelState.RUNNING : MeModelState.WALKING;
+  ngOnInit() {
+    this.keyboardControlService.setKeyboardControls(
+      {
+        [Direction.Forward]: this.buildMovementConfig(Direction.Forward),
+        [Direction.Backward]: this.buildMovementConfig(Direction.Backward),
+        [Direction.Left]: this.buildMovementConfig(Direction.Left),
+        [Direction.Right]: this.buildMovementConfig(Direction.Right),
+      },
+      (keyEvent: KeyboardEvent) => {
+        if (keyEvent.code === 'KeyW' || keyEvent.code === 'ArrowUp') {
+          if (this.character.state !== MeModelState.SHOOTING) {
+            this.character.state = keyEvent.shiftKey
+              ? MeModelState.RUNNING
+              : MeModelState.WALKING;
+          }
+
+          return Direction.Forward;
+        } else if (keyEvent.code === 'KeyS' || keyEvent.code === 'ArrowDown') {
+          return Direction.Backward;
+        } else if (keyEvent.code === 'KeyA' || keyEvent.code === 'ArrowLeft') {
+          return Direction.Left;
+        } else if (keyEvent.code === 'KeyD' || keyEvent.code === 'ArrowRight') {
+          return Direction.Right;
+        } else {
+          return String.fromCharCode(keyEvent.keyCode);
         }
-        return 'Forward';
-      } else if (keyEvent.code === 'KeyS' || keyEvent.code === 'ArrowDown') {
-        return 'Backward';
-      } else {
-        return String.fromCharCode(keyEvent.keyCode);
       }
-    });
+    );
 
     // Regitster Other keys because keyboardControl key are triggered by cesium tick
-    document.addEventListener('keydown' , (keyEvent: KeyboardEvent) => {
+    document.addEventListener('keydown', (keyEvent: KeyboardEvent) => {
       switch (keyEvent.code) {
         case 'Tab':
           keyEvent.preventDefault();
@@ -101,10 +141,13 @@ export class KeyboardControlComponent implements OnInit {
           this.changeMeShootState();
           break;
         case 'KeyI':
-          this.toggleInspector(Cesium.viewerCesiumInspectorMixin,'cesiumInspector');
+          this.toggleInspector(Cesium.viewerCesiumInspectorMixin, 'cesiumInspector');
           break;
         case 'KeyO':
-          this.toggleInspector(Cesium.viewerCesium3DTilesInspectorMixin,'cesium3DTilesInspector');
+          this.toggleInspector(
+            Cesium.viewerCesium3DTilesInspectorMixin,
+            'cesium3DTilesInspector'
+          );
           break;
         default:
           break;
