@@ -4,8 +4,9 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 export enum MeModelState {
   WALKING,
   RUNNING,
-  LYING,
+  CRAWLING,
   SHOOTING,
+  DEAD,
 }
 
 export enum ViewState {

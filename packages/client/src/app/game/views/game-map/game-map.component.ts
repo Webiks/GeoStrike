@@ -88,10 +88,8 @@ export class GameMapComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if ( this.character.state === MeModelState.SHOOTING){
-      const pitch = this.character.pitch;
-      this.character.pitch = pitch - (event.movementY / 10);
-    }
+    const pitch = this.character.pitch;
+    this.character.pitch = pitch - (event.movementY / 10);
 
     const heading = this.character.heading;
     this.character.heading = heading + (event.movementX / 10);
@@ -103,10 +101,13 @@ export class GameMapComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const pitchDeg = this.character.state === MeModelState.SHOOTING ? this.character.pitch: GameMapComponent.DEFAULT_PITCH;
+    const pitchDeg = this.character.pitch;
     const pitch = Cesium.Math.toRadians(pitchDeg);
     const heading = Cesium.Math.toRadians(-180 + this.character.heading);
-    const range = this.character.viewState === ViewState.FPV || this.character.state === MeModelState.SHOOTING ? 0.1 : 3;
+
+    const isFPV = this.character.viewState === ViewState.FPV;
+    const isShooting = this.character.state === MeModelState.SHOOTING;
+    const range = isFPV || isShooting ? 0.1 : 3;
     const playerHead = new Cesium.Cartesian3(0.4174665722530335, -1.4575908118858933, 1.3042816752567887);
     Cesium.Cartesian3.add(this.character.location, playerHead, playerHead);
 

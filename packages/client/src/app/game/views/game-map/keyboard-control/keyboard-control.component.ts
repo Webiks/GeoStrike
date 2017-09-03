@@ -47,7 +47,9 @@ export class KeyboardControlComponent implements OnInit {
       validation: () => {
         return (
           this.character.state === MeModelState.RUNNING ||
-          this.character.state === MeModelState.WALKING
+          this.character.state === MeModelState.WALKING ||
+          this.character.state === MeModelState.SHOOTING ||
+          this.character.state === MeModelState.CRAWLING
         );
       },
       action: () => {
