@@ -3,7 +3,7 @@
                     heightReference: utils.getClampedToGroundHeightReference(),
                     scale: 0.01,
 										uri: '/assets/soldier.gltf',
-										position: me.location,
+										position: utils.getPosition(me.location),
 										orientation: utils.getOrientation(me.location, me.heading)
                   }">
   </ac-model-desc>

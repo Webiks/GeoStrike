@@ -1,6 +1,7 @@
 import { v4 } from 'uuid';
 import { sign } from 'jsonwebtoken';
 import { GameState, PlayerState } from '../../types';
+import { ESubscriptionTopics, pubsub } from '../../graphql/pubsub';
 
 interface ICartesian3Location {
   x: number;
@@ -28,7 +29,8 @@ export interface IPlayer {
 export interface IGameObject {
   gameId: string;
   gameCode: string;
-  players: IPlayer[];
+  gameUpdateInterval: any,
+  players: Map<string, IPlayer>;
   state: GameState;
 }
 
@@ -72,12 +74,12 @@ export class GamesManager {
       username,
       state: 'WAITING',
       game,
-      currentLocation: DEFAULT_PLAYERS_LOCATION[game.players.length],
+      currentLocation: DEFAULT_PLAYERS_LOCATION[game.players.size],
       heading: 0,
       team,
     };
 
-    game.players.push(player);
+    game.players.set(playerId, player);
 
     return player;
   }
@@ -89,7 +91,10 @@ export class GamesManager {
     const gameObject: IGameObject = {
       gameId,
       gameCode,
-      players: [],
+      gameUpdateInterval: setInterval(() => {
+        pubsub.publish(ESubscriptionTopics.GAME_STATE_CHANGED, { gameData: gameObject })
+      }, 100),
+      players: new Map<string, IPlayer>(),
       state: 'WAITING',
     };
 
@@ -118,7 +123,7 @@ export class GamesManager {
 
   playerReady(gameId: string, playerId: string) {
     const game = this.getGameById(gameId);
-    const player = game.players.find(p => p.playerId === playerId);
+    const player = game.players.get(playerId);
 
     if (player) {
       player.state = 'READY';
@@ -127,7 +132,7 @@ export class GamesManager {
 
   updatePlayerPosition(gameId: string, playerId: string, position: ICartesian3Location, heading: number) {
     const game = this.getGameById(gameId);
-    const player = game.players.find(p => p.playerId === playerId);
+    const player = game.players.get(playerId);
 
     if (player) {
       player.currentLocation = position;
