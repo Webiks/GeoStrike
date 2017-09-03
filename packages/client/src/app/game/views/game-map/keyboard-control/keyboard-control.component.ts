@@ -64,6 +64,7 @@ export class KeyboardControlComponent implements OnInit {
         this.inspector = true;
       } else {
         this.cesiumService.getViewer().cesiumInspector.container.remove();
+        this.cesiumService.getViewer().cesium3DTilesInspector.container.remove();
         this.inspector = false;
       }
     }
