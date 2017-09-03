@@ -8,3 +8,7 @@
                   }">
   </ac-model-desc>
 </ac-layer>
+<div *ngIf="showWeapon$ | async">
+  <img src="assets/gun1.png" class="gun" alt="">
+</div>
+<img #cross *ngIf="showCross$ | async" src="assets/focus.png"  class="gun-cross" alt="">

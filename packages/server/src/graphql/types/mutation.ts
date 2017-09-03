@@ -6,5 +6,6 @@ export const schema = gql`
     joinGame(gameCode: String!, character: String!, username: String!, team: Team!): CreateOrJoinResult
     updatePosition(position: LocationInput!, heading: Float!): Player
     ready: Game
+    notifyKill(playerId: String!): Player
   }
 `;

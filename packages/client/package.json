@@ -25,7 +25,7 @@
     "@angular/platform-browser": "^4.0.0",
     "@angular/platform-browser-dynamic": "^4.0.0",
     "@angular/router": "^4.0.0",
-    "angular-cesium": "^0.0.18",
+    "angular-cesium": "^0.0.20",
     "apollo-angular": "^0.13.0",
     "apollo-client": "^1.9.1",
     "cesium": "^1.36.0",
