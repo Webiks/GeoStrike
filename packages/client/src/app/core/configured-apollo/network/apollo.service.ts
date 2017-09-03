@@ -6,34 +6,34 @@ import ApolloClient from 'apollo-client/ApolloClient';
 @Injectable()
 export class ApolloService {
 
-   private _subscriptionClient: SubscriptionClient;
-   private _apolloClient: ApolloClient;
+  private _subscriptionClient: SubscriptionClient;
+  private _apolloClient: ApolloClient;
 
-   constructor(ngZone: NgZone){
-       ngZone.runOutsideAngular(()=> {
-         this._subscriptionClient = new SubscriptionClient('ws://localhost:3000/subscriptions', {
-           reconnect: true,
-           connectionParams: () => {
-             if (!AuthorizationMiddleware.token || AuthorizationMiddleware.token === '') {
-               return {};
-             }
+  constructor (ngZone: NgZone) {
+    ngZone.runOutsideAngular(() => {
+      this._subscriptionClient = new SubscriptionClient('ws://localhost:3000/subscriptions' , {
+        reconnect: true ,
+        connectionParams: () => {
+          if (!AuthorizationMiddleware.token || AuthorizationMiddleware.token === '') {
+            return {};
+          }
 
-             return { 'player-token': AuthorizationMiddleware.token };
-           },
-           connectionCallback: (error => {
-             if (error) {
-               AuthorizationMiddleware.setToken('');
-               window.location.href = '/';
-             }
-           })
-         });
+          return {'player-token': AuthorizationMiddleware.token};
+        } ,
+        connectionCallback: (error => {
+          if (error) {
+            AuthorizationMiddleware.setToken('');
+            window.location.href = '/';
+          }
+        })
+      });
 
 
-         this._apolloClient = new ApolloClient({
-           networkInterface: this._subscriptionClient,
-         });
-       });
-   }
+      this._apolloClient = new ApolloClient({
+        networkInterface: this._subscriptionClient ,
+      });
+    });
+  }
 
   get subscriptionClient (): SubscriptionClient {
     return this._subscriptionClient;

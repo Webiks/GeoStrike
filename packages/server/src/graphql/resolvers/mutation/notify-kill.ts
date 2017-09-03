@@ -9,6 +9,5 @@ export const notifyKill = (rootValue, { playerId }, { games, game, player }: IGr
   games.updatePlayerState(game.gameId, playerId, 'DEAD');
   pubsub.publish(ESubscriptionTopics.GAME_STATE_CHANGED, { gameData: game });
 
-  console.log(game);
   return player;
 };

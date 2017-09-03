@@ -90,7 +90,7 @@ export class GameService {
     });
   }
 
-  nottifyKill(killedPlayerId){
+  notifyKill(killedPlayerId){
     return this.apollo.mutate<NotifyKill.Mutation>({
       mutation: notifyKillMutation,
       variables: {

@@ -141,6 +141,5 @@ export class GamesManager {
     if (player) {
       player.state = newState;
     }
-    console.log(player);
   }
 }
