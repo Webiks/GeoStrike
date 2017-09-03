@@ -47,7 +47,6 @@ export class GameMapComponent implements OnInit {
       screenSpaceCameraController.enableZoom = false;
       const canvas = viewer.canvas;
       canvas.onclick = () => canvas.requestPointerLock();
-      viewer.extend(Cesium.viewerCesiumInspectorMixin);
     };
   }
 

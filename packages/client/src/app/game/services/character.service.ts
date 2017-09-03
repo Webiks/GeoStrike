@@ -97,15 +97,9 @@ export class CharacterService {
   }
 
   public validateState(player: GameFields.Players){
-    const location = this.location;
-    if(!location){
-      return;
-    }
-    const clientLocation = this.utils.getPosition(location);
-    const serverLocation = this.utils.getPosition(player.currentLocation);
-    const serverClientDistance = Cesium.Cartesian3.distance(serverLocation, clientLocation);
-    if(serverClientDistance > GameSettingsService.serverClientDistanceThreshold){
-      this.location = player.currentLocation;
+    if(this.initialized && player.syncState === 'INVALID'){
+      this.location = player.currentLocation.location;
+      this.heading = player.currentLocation.heading;
     }
   }
 }

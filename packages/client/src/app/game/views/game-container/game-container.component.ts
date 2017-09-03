@@ -42,7 +42,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
       this.gameData$ = (this.gameService.getCurrentGameData() as Observable<any>).map(({ data: { currentGame } }) => currentGame);
       this.gameDataSubscription = this.gameData$.subscribe(currentGame => {
         this.game = currentGame;
-        this.me = currentGame.players.find(p => p.isMe);
+        this.me = currentGame.me;
         if(this.me){
           this.character.validateState(this.me);
         }

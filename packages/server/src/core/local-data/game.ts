@@ -1,8 +1,9 @@
 import { v4 } from 'uuid';
 import { sign } from 'jsonwebtoken';
-import { GameState, PlayerState } from '../../types';
+import { GameState, PlayerSyncState, PlayerState } from '../../types';
 import { ESubscriptionTopics, pubsub } from '../../graphql/pubsub';
-import { gameData } from '../../graphql/resolvers/subscriptions/game-data';
+import * as Cesium from 'cesium';
+import { gameSettings } from '../../settings/settings';
 
 interface ICartesian3Location {
   x: number;
@@ -25,14 +26,15 @@ export interface IPlayer {
   currentLocation: ICartesian3Location;
   heading: number;
   team: Team;
+  syncState: PlayerSyncState;
 }
 
 export interface IGameObject {
   gameId: string;
   gameCode: string;
-  gameUpdateInterval: any,
+  gameUpdateInterval: any;
   playersMap: Map<string, IPlayer>;
-  players: IPlayer[],
+  players: IPlayer[];
   state: GameState;
 }
 
@@ -79,6 +81,7 @@ export class GamesManager {
       currentLocation: DEFAULT_PLAYERS_LOCATION[game.players.length],
       heading: 0,
       team,
+      syncState: 'VALID',
     };
 
     game.playersMap.set(playerId, player);
@@ -144,10 +147,22 @@ export class GamesManager {
   updatePlayerPosition(gameId: string, playerId: string, position: ICartesian3Location, heading: number) {
     const game = this.getGameById(gameId);
     const player = game.playersMap.get(playerId);
-
-    if (player) {
-      player.currentLocation = position;
-      player.heading = heading;
+    if (player && position) {
+      if(this.validatePlayerPosition(player.currentLocation, position)) {
+        player.syncState = 'VALID';
+        player.currentLocation = position;
+        player.heading = heading;
+      }
+      else{
+        player.syncState = 'INVALID';
+      }
     }
+  }
+
+  validatePlayerPosition(currentLocation: ICartesian3Location, newLocation: ICartesian3Location): boolean {
+    const currentPosition = new Cesium.Cartesian3(currentLocation.x, currentLocation.y, currentLocation.z);
+    const newPosition = new Cesium.Cartesian3(newLocation.x, newLocation.y, newLocation.z);
+    const distance = Cesium.Cartesian3.distance(currentPosition, newPosition);
+    return distance < gameSettings.serverClientDistanceThreshold;
   }
 }

@@ -3,6 +3,7 @@ import gql from 'graphql-tag';
 export const playerFragment = gql`
   fragment PlayerFields on Player {
     team
+    syncState
     username
     character
     state

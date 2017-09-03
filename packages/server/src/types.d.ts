@@ -47,8 +47,9 @@ export interface JoinGameMutationArgs {
   username: string; 
 }
 
-export type PlayerState = "WAITING" | "READY" | "ALIVE" | "IN_BUILDING" | "DEAD";
+export type PlayerState = 'WAITING' | 'READY' | 'ALIVE' | 'IN_BUILDING' | 'DEAD';
 
+export type PlayerSyncState = 'VALID' | 'INVALID'
 
-export type GameState = "WAITING" | "ACTIVE" | "DONE";
+export type GameState = 'WAITING' | 'ACTIVE' | 'DONE';
 
