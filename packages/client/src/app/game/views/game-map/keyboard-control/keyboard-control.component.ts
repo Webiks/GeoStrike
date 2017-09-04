@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import {
   CesiumService,
   GeoUtilsService,
@@ -38,7 +38,8 @@ export class KeyboardControlComponent implements OnInit {
     private gameService: GameService,
     private character: CharacterService,
     private keyboardControlService: KeyboardControlService,
-    private cesiumService: CesiumService
+    private cesiumService: CesiumService,
+    private ngZone: NgZone,
   ) {}
 
   buildMovementConfig(direction: string) {
@@ -94,9 +95,6 @@ export class KeyboardControlComponent implements OnInit {
         this.inspector = true;
       } else {
         this.cesiumService.getViewer()[inspectorProp].container.remove();
-
-        // window['vieww'] =      this.cesiumService.getViewer();
-        this.cesiumService.getViewer().cesium3DTilesInspector.container.remove();
         this.inspector = false;
       }
     }
@@ -128,32 +126,39 @@ export class KeyboardControlComponent implements OnInit {
         } else {
           return String.fromCharCode(keyEvent.keyCode);
         }
-      }
+      },
+      true
     );
 
-    // Regitster Other keys because keyboardControl key are triggered by cesium tick
-    document.addEventListener('keydown', (keyEvent: KeyboardEvent) => {
-      switch (keyEvent.code) {
-        case 'Tab':
-          keyEvent.preventDefault();
-          this.changeViewMove();
-          break;
-        case 'Space':
-          keyEvent.preventDefault();
-          this.changeMeShootState();
-          break;
-        case 'KeyI':
-          this.toggleInspector(Cesium.viewerCesiumInspectorMixin, 'cesiumInspector');
-          break;
-        case 'KeyO':
-          this.toggleInspector(
-            Cesium.viewerCesium3DTilesInspectorMixin,
-            'cesium3DTilesInspector'
-          );
-          break;
-        default:
-          break;
-      }
+    this.ngZone.runOutsideAngular(()=>{
+      // Regitster Other keys because keyboardControl key are triggered by cesium tick
+      document.addEventListener('keydown', (keyEvent: KeyboardEvent) => {
+        switch (keyEvent.code) {
+          case 'Tab':
+            this.ngZone.run(()=>{
+              keyEvent.preventDefault();
+              this.changeViewMove();
+            });
+            break;
+          case 'Space':
+            this.ngZone.run(()=>{
+              keyEvent.preventDefault();
+              this.changeMeShootState();
+            });
+            break;
+          case 'KeyI':
+            this.toggleInspector(Cesium.viewerCesiumInspectorMixin, 'cesiumInspector');
+            break;
+          case 'KeyO':
+            this.toggleInspector(
+              Cesium.viewerCesium3DTilesInspectorMixin,
+              'cesium3DTilesInspector'
+            );
+            break;
+          default:
+            break;
+        }
+      });
     });
   }
 }
