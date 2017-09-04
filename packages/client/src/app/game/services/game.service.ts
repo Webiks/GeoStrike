@@ -49,7 +49,6 @@ export class GameService {
   }
 
   createNewGame(character: string, username: string, team: Team): Observable<ApolloQueryResult<CreateNewGame.Mutation>> {
-    console.log(team);
     return this.apollo.mutate<CreateNewGame.Mutation>({
       mutation: createNewGameMutation,
       variables: {

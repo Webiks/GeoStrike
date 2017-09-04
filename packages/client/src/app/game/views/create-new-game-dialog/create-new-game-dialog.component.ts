@@ -25,7 +25,6 @@ export class CreateNewGameDialogComponent {
   ) {}
 
   characterChanged({ name, team }) {
-    console.log(name, team);
     this.characterName = name;
     this.team = team;
   }
