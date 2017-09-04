@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { GameFields } from '../../types';
+import { UtilsService } from './utils.service';
+import { GameSettingsService } from './game-settings.service';
 
 export enum MeModelState {
   WALKING,
@@ -27,7 +30,7 @@ export class CharacterService {
   private _character= new BehaviorSubject<CharacterState>(null);
   private _viewState = new BehaviorSubject<ViewState>(ViewState.SEMI_FPV);
 
-  constructor() {
+  constructor(private utils: UtilsService) {
   }
 
   get initialized() {
@@ -57,19 +60,19 @@ export class CharacterService {
   }
 
   get location() {
-    return this._character.getValue().location;
+    return this._character && this._character.getValue() && this._character.getValue().location;
   }
 
   get heading() {
-    return this._character.getValue().heading;
+    return this._character && this._character.getValue() && this._character.getValue().heading;
   }
 
   get pitch() {
-    return this._character.getValue().pitch;
+    return this._character && this._character.getValue() && this._character.getValue().pitch;
   }
 
   get state() : MeModelState {
-    return this._character.getValue().state;
+    return this._character && this._character.getValue() && this._character.getValue().state;
   }
 
   get currentStateValue(): CharacterState {
@@ -105,5 +108,16 @@ export class CharacterService {
     this.modifyCurrentStateValue({
       state: value,
     });
+  }
+
+  updateCharacter() {
+    this.state = this.state;
+  }
+
+  public syncState(player: GameFields.Players){
+    if(this.initialized && player.syncState === 'INVALID'){
+      this.location = player.currentLocation.location;
+      this.heading = player.currentLocation.heading;
+    }
   }
 }

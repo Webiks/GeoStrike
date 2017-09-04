@@ -72,6 +72,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
         pitch: GameMapComponent.DEFAULT_PITCH,
         state: MeModelState.WALKING,
       });
+      this.gameService.startServerUpdatingLoop();
 
       this.viewer.scene.preRender.addEventListener(this.preRenderHandler.bind(this));
 
@@ -93,7 +94,6 @@ export class GameMapComponent implements OnInit, OnDestroy {
 
     const heading = this.character.heading;
     this.character.heading = heading + (event.movementX / 10);
-    this.gameService.updatePosition(this.character.location, this.character.heading);
   }
 
   preRenderHandler() {

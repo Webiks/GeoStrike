@@ -11,16 +11,20 @@ import { readyMutation } from '../../graphql/ready.mutation';
 import { currentGameQuery } from '../../graphql/current-game.query';
 import 'rxjs/add/operator/first';
 import { updatePositionMutation } from '../../graphql/update-position.mutation';
-import { Throttle } from 'lodash-decorators';
 import { ApolloService } from '../../core/configured-apollo/network/apollo.service';
 import { notifyKillMutation } from '../../graphql/notify-kill.mutation';
 import { GameSettingsService } from './game-settings.service';
+import { CharacterService } from './character.service';
 
 @Injectable()
 export class GameService {
   private socket: SubscriptionClient;
+  private serverPositionUpdateInterval;
+  private lastStateSentToServer;
+
   constructor(private apollo: Apollo,
-              subscriptionClientService: ApolloService) {
+              subscriptionClientService: ApolloService,
+              private character: CharacterService,) {
     this.socket = subscriptionClientService.subscriptionClient;
   }
 
@@ -77,22 +81,59 @@ export class GameService {
     });
   }
 
-  @Throttle(GameSettingsService.serverUpdateThrottle)
-  updatePosition(cartesianPosition: any, heading: number): Observable<ApolloQueryResult<UpdatePosition.Mutation>> {
-    return this.apollo.mutate<UpdatePosition.Mutation>({
+  startServerUpdatingLoop() {
+    this.serverPositionUpdateInterval =
+      setInterval(() => this.updateServerOnPosition(), GameSettingsService.serverUpdatingRate);
+  }
+
+
+  updateServerOnPosition() {
+    const state = this.createState();
+    if(!state || !this.isDifferentFromLastState(state)){
+      return;
+    }
+
+    this.lastStateSentToServer = state;
+    this.apollo.mutate<UpdatePosition.Mutation>({
       mutation: updatePositionMutation,
-      variables: {
-        position: {
-          x: cartesianPosition.x,
-          y: cartesianPosition.y,
-          z: cartesianPosition.z,
-        },
-        heading,
-      },
+      variables: {...state},
     });
   }
 
-  notifyKill(killedPlayerId){
+  createState() {
+    const location = this.character.location;
+    const heading = this.character.heading;
+    if (!location || !heading) {
+      return;
+    }
+
+    return {
+      position: {
+        x: location.x,
+        y: location.y,
+        z: location.z,
+      },
+      heading,
+    };
+  }
+
+  isDifferentFromLastState(state): boolean {
+    if (!this.lastStateSentToServer) {
+      return true;
+    }
+    const oldStatePosition = this.lastStateSentToServer.position;
+    const oldStateHeading = this.lastStateSentToServer.heading;
+    const newStatePosition = state.position;
+    const newStateHeading = state.heading;
+    return (
+      oldStatePosition.x !== newStatePosition.x ||
+      oldStatePosition.y !== newStatePosition.y ||
+      oldStatePosition.z !== newStatePosition.z ||
+      oldStateHeading !== newStateHeading
+    );
+  }
+
+  notifyKill(killedPlayerId) {
     return this.apollo.mutate<NotifyKill.Mutation>({
       mutation: notifyKillMutation,
       variables: {

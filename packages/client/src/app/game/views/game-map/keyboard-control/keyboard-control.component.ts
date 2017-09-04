@@ -10,7 +10,6 @@ import {
   MeModelState,
   ViewState,
 } from '../../../services/character.service';
-import { GameService } from '../../../services/game.service';
 import { environment } from '../../../../../environments/environment';
 
 const Direction = {
@@ -35,7 +34,6 @@ export class KeyboardControlComponent implements OnInit {
   inspector = false;
 
   constructor(
-    private gameService: GameService,
     private character: CharacterService,
     private keyboardControlService: KeyboardControlService,
     private cesiumService: CesiumService
@@ -66,7 +64,6 @@ export class KeyboardControlComponent implements OnInit {
           Cesium.Math.toRadians(this.character.heading + delta),
           true
         );
-        this.gameService.updatePosition(this.character.location, this.character.heading);
       },
     } as KeyboardControlParams;
   }
@@ -77,6 +74,7 @@ export class KeyboardControlComponent implements OnInit {
       newState = ViewState.FPV;
     }
     this.character.viewState = newState;
+    this.character.updateCharacter();
   }
 
   changeMeShootState() {
@@ -94,9 +92,6 @@ export class KeyboardControlComponent implements OnInit {
         this.inspector = true;
       } else {
         this.cesiumService.getViewer()[inspectorProp].container.remove();
-
-        // window['vieww'] =      this.cesiumService.getViewer();
-        this.cesiumService.getViewer().cesium3DTilesInspector.container.remove();
         this.inspector = false;
       }
     }
@@ -128,7 +123,7 @@ export class KeyboardControlComponent implements OnInit {
         } else {
           return String.fromCharCode(keyEvent.keyCode);
         }
-      }
+      },
     );
 
     // Regitster Other keys because keyboardControl key are triggered by cesium tick

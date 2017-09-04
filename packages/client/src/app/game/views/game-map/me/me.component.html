@@ -4,7 +4,8 @@
                     scale: 0.01,
 										uri: '/assets/soldier.gltf',
 										position: me.location,
-										orientation: utils.getOrientation(me.location, me.heading)
+										orientation: utils.getOrientation(me.location, me.heading),
+										show: character.viewState === semiFPVViewState
                   }">
   </ac-model-desc>
 </ac-layer>
