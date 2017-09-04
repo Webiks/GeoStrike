@@ -74,6 +74,7 @@ export class KeyboardControlComponent implements OnInit {
       newState = ViewState.FPV;
     }
     this.character.viewState = newState;
+    this.character.updateCharacter();
   }
 
   changeMeShootState() {
@@ -91,9 +92,6 @@ export class KeyboardControlComponent implements OnInit {
         this.inspector = true;
       } else {
         this.cesiumService.getViewer()[inspectorProp].container.remove();
-
-        // window['vieww'] =      this.cesiumService.getViewer();
-        this.cesiumService.getViewer().cesium3DTilesInspector.container.remove();
         this.inspector = false;
       }
     }
@@ -125,7 +123,7 @@ export class KeyboardControlComponent implements OnInit {
         } else {
           return String.fromCharCode(keyEvent.keyCode);
         }
-      }
+      },
     );
 
     // Regitster Other keys because keyboardControl key are triggered by cesium tick

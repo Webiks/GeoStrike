@@ -1,4 +1,4 @@
 export const Settings = {
-  serverClientDistanceThreshold: 50,
-  clientsUpdateRate: 100,
+  serverClientDistanceThreshold: 10,
+  clientsUpdateRate: 50,
 };

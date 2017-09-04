@@ -3,8 +3,9 @@
                     heightReference: utils.getClampedToGroundHeightReference(),
                     scale: 0.01,
 										uri: '/assets/soldier.gltf',
-										position: utils.getPosition(me.location),
-										orientation: utils.getOrientation(me.location, me.heading)
+										position: me.location,
+										orientation: utils.getOrientation(me.location, me.heading),
+										show: character.viewState === semiFPVViewState
                   }">
   </ac-model-desc>
 </ac-layer>

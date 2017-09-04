@@ -51,7 +51,7 @@ export class GameContainerComponent implements OnInit , OnDestroy {
           this.game = currentGame;
           this.me = currentGame.me;
           if(this.me){
-            this.character.validateState(this.me);
+            this.character.syncState(this.me);
           }
 
           if (this.me && this.me.state === 'DEAD' && !this.killedDialogOpen) {

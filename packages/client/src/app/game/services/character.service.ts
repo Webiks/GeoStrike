@@ -110,7 +110,11 @@ export class CharacterService {
     });
   }
 
-  public validateState(player: GameFields.Players){
+  updateCharacter() {
+    this.state = this.state;
+  }
+
+  public syncState(player: GameFields.Players){
     if(this.initialized && player.syncState === 'INVALID'){
       this.location = player.currentLocation.location;
       this.heading = player.currentLocation.heading;
