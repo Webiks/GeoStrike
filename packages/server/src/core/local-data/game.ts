@@ -1,10 +1,9 @@
 import { v4 } from 'uuid';
 import { sign } from 'jsonwebtoken';
-import { GameState, PlayerSyncState, PlayerState } from '../../types';
-import { ESubscriptionTopics, pubsub } from '../../graphql/pubsub';
+import { GameState, PlayerState, PlayerSyncState } from '../../types';
 import * as Cesium from 'cesium';
 import { Settings } from '../../settings/settings';
-import { createClientsUpdater } from '../clients-updater/clients-updater';
+import { startClientsUpdater } from '../clients-updater/clients-updater';
 
 interface ICartesian3Location {
   x: number;
@@ -102,7 +101,7 @@ export class GamesManager {
       players: [],
       state: 'WAITING',
     };
-    gameObject.clientsUpdater = createClientsUpdater(gameObject);
+    startClientsUpdater(gameObject);
     this.activeGames.set(gameId, gameObject);
 
     return gameObject;
@@ -139,18 +138,18 @@ export class GamesManager {
     const game = this.getGameById(gameId);
     const player = game.playersMap.get(playerId);
     if (player && position) {
-      if(this.validatePlayerPosition(player.currentLocation, position)) {
+      if (this.validatePlayerPosition(player.currentLocation, position)) {
         player.syncState = 'VALID';
         player.currentLocation = position;
         player.heading = heading;
       }
-      else{
+      else {
         player.syncState = 'INVALID';
       }
     }
   }
 
-  updatePlayerState(gameId: string, playerId:string, newState: PlayerState){
+  updatePlayerState(gameId: string, playerId: string, newState: PlayerState) {
     const game = this.getGameById(gameId);
     const player = game.playersMap.get(playerId);
     if (player) {
