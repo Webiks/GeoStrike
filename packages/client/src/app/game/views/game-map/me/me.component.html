@@ -1,4 +1,4 @@
-<ac-layer *ngIf="character.initialized" acFor="let me of notifications$" [context]="this">
+<ac-layer acFor="let me of notifications$" [context]="this">
   <ac-model-desc props="{
                     heightReference: utils.getClampedToGroundHeightReference(),
                     scale: 0.01,

@@ -26,6 +26,9 @@ export class MainComponent {
     this.dialog.open(JoinGameDialogComponent, {
       height: '85%',
       width: '90%',
+      position: {
+        left: '10%',
+      },
     });
   }
 }
