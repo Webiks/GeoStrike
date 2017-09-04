@@ -1,6 +1,9 @@
 import { v4 } from 'uuid';
 import { sign } from 'jsonwebtoken';
-import { GameState, PlayerState } from '../../types';
+import { GameState, PlayerState, PlayerSyncState } from '../../types';
+import * as Cesium from 'cesium';
+import { Settings } from '../../settings/settings';
+import { startClientsUpdater } from '../clients-updater/clients-updater';
 
 interface ICartesian3Location {
   x: number;
@@ -23,13 +26,16 @@ export interface IPlayer {
   currentLocation: ICartesian3Location;
   heading: number;
   team: Team;
+  syncState: PlayerSyncState;
 }
 
 export interface IGameObject {
   gameId: string;
   gameCode: string;
+  playersMap: Map<string, IPlayer>;
   players: IPlayer[];
   state: GameState;
+  clientsUpdater?: any;
 }
 
 const TOKENS_SECRET = 'sdf43tSWDG#%Tsdfw4';
@@ -75,8 +81,10 @@ export class GamesManager {
       currentLocation: DEFAULT_PLAYERS_LOCATION[game.players.length],
       heading: 0,
       team,
+      syncState: 'VALID',
     };
 
+    game.playersMap.set(playerId, player);
     game.players.push(player);
 
     return player;
@@ -89,10 +97,11 @@ export class GamesManager {
     const gameObject: IGameObject = {
       gameId,
       gameCode,
+      playersMap: new Map<string, IPlayer>(),
       players: [],
       state: 'WAITING',
     };
-
+    startClientsUpdater(gameObject);
     this.activeGames.set(gameId, gameObject);
 
     return gameObject;
@@ -118,7 +127,7 @@ export class GamesManager {
 
   playerReady(gameId: string, playerId: string) {
     const game = this.getGameById(gameId);
-    const player = game.players.find(p => p.playerId === playerId);
+    const player = game.playersMap.get(playerId);
 
     if (player) {
       player.state = 'READY';
@@ -127,19 +136,31 @@ export class GamesManager {
 
   updatePlayerPosition(gameId: string, playerId: string, position: ICartesian3Location, heading: number) {
     const game = this.getGameById(gameId);
-    const player = game.players.find(p => p.playerId === playerId);
-
-    if (player) {
-      player.currentLocation = position;
-      player.heading = heading;
+    const player = game.playersMap.get(playerId);
+    if (player && position) {
+      if (this.validatePlayerPosition(player.currentLocation, position)) {
+        player.syncState = 'VALID';
+        player.currentLocation = position;
+        player.heading = heading;
+      }
+      else {
+        player.syncState = 'INVALID';
+      }
     }
   }
 
-  updatePlayerState(gameId: string, playerId:string, newState: PlayerState){
+  updatePlayerState(gameId: string, playerId: string, newState: PlayerState) {
     const game = this.getGameById(gameId);
-    const player = game.players.find(p => p.playerId === playerId);
+    const player = game.playersMap.get(playerId);
     if (player) {
       player.state = newState;
     }
+  }
+
+  validatePlayerPosition(currentLocation: ICartesian3Location, newLocation: ICartesian3Location): boolean {
+    const currentPosition = new Cesium.Cartesian3(currentLocation.x, currentLocation.y, currentLocation.z);
+    const newPosition = new Cesium.Cartesian3(newLocation.x, newLocation.y, newLocation.z);
+    const distance = Cesium.Cartesian3.distance(currentPosition, newPosition);
+    return distance < Settings.serverClientDistanceThreshold;
   }
 }

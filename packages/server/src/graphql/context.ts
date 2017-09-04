@@ -21,7 +21,7 @@ export const resolveGameAndPlayer = (headerValue: string, games: GamesManager): 
       const game = games.getGameById(decodedPlayerToken.gameId);
 
       if (game) {
-        const player = game.players.find(p => p.playerId === decodedPlayerToken.playerId);
+        const player = game.playersMap.get(decodedPlayerToken.playerId);
 
         if (player) {
           return {

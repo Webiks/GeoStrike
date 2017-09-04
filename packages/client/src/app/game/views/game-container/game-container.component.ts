@@ -26,6 +26,7 @@ export class GameContainerComponent implements OnInit , OnDestroy {
   private killedDialogOpen = false;
 
   constructor (private gameService: GameService ,
+               private character: CharacterService,
                private activatedRoute: ActivatedRoute ,
                private router: Router ,
                private ngZone: NgZone ,
@@ -49,6 +50,9 @@ export class GameContainerComponent implements OnInit , OnDestroy {
         this.gameDataSubscription = this.gameData$.subscribe(currentGame => {
           this.game = currentGame;
           this.me = currentGame.me;
+          if(this.me){
+            this.character.syncState(this.me);
+          }
 
           if (this.me && this.me.state === 'DEAD' && !this.killedDialogOpen) {
             this.killedDialogOpen = true;

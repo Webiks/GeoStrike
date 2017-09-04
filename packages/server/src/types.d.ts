@@ -1,7 +1,7 @@
 /* tslint:disable */
 
 export interface Query {
-  currentGame: Game | null; 
+  currentGame: Game | null;
 }
 
 export interface Game {
@@ -9,7 +9,7 @@ export interface Game {
   players: Player[]; 
   gameCode: string; 
   state: GameState; 
-  me: Player | null; 
+  me: Player | null;
 }
 
 export interface Player {
@@ -17,28 +17,28 @@ export interface Player {
   username: string; 
   character: string; 
   state: PlayerState; 
-  isMe: boolean; 
-  currentLocation: PlayerLocation; 
-  team: Team; 
+  isMe: boolean;
+  currentLocation: PlayerLocation;
+  team: Team;
 }
 
 export interface PlayerLocation {
-  location: Location; 
-  heading: number; 
+  location: Location;
+  heading: number;
 }
 
 export interface Location {
-  x: number; 
-  y: number; 
-  z: number; 
+  x: number;
+  y: number;
+  z: number;
 }
 
 export interface Mutation {
   createNewGame: CreateOrJoinResult | null; 
   joinGame: CreateOrJoinResult | null; 
-  updatePosition: Player | null; 
-  ready: Game | null; 
-  notifyKill: Player | null; 
+  updatePosition: Player | null;
+  ready: Game | null;
+  notifyKill: Player | null;
 }
 
 export interface CreateOrJoinResult {
@@ -52,9 +52,9 @@ export interface Subscription {
 }
 
 export interface LocationInput {
-  x: number; 
-  y: number; 
-  z: number; 
+  x: number;
+  y: number;
+  z: number;
 }
 export interface CreateNewGameMutationArgs {
   character: string; 
@@ -65,21 +65,21 @@ export interface JoinGameMutationArgs {
   gameCode: string; 
   character: string; 
   username: string; 
-  team: Team; 
+  team: Team;
 }
 export interface UpdatePositionMutationArgs {
-  position: LocationInput; 
-  heading: number; 
+  position: LocationInput;
+  heading: number;
 }
 export interface NotifyKillMutationArgs {
-  playerId: string; 
+  playerId: string;
 }
 
-export type PlayerState = "WAITING" | "READY" | "ALIVE" | "IN_BUILDING" | "DEAD";
+export type PlayerState = 'WAITING' | 'READY' | 'ALIVE' | 'IN_BUILDING' | 'DEAD';
 
+export type PlayerSyncState = 'VALID' | 'INVALID'
 
-export type Team = "BLUE" | "RED";
+export type Team = 'BLUE' | 'RED';
 
-
-export type GameState = "WAITING" | "ACTIVE" | "DONE";
+export type GameState = 'WAITING' | 'ACTIVE' | 'DONE';
 

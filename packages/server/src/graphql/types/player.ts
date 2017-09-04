@@ -9,8 +9,14 @@ export const schema = gql`
     isMe: Boolean!
     currentLocation: PlayerLocation!
     team: Team!
+    syncState: PlayerSyncState!
   }
 
+  enum PlayerSyncState {
+      VALID,
+      INVALID,
+  }
+  
   enum Team {
     BLUE,
     RED,
