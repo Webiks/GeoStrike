@@ -57,7 +57,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
       screenSpaceCameraController.enableRotate = false;
       screenSpaceCameraController.enableZoom = false;
       const canvas = viewer.canvas;
-      canvas.onclick = () => canvas.requestPointerLock();
+      document.onclick = () => canvas.requestPointerLock();
     };
 
     this.onMousemove = this.onMousemove.bind(this);
