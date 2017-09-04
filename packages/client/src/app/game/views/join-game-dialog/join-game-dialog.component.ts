@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GameService } from '../../services/game.service';
-import { AuthorizationMiddleware } from '../../../core/network/authorization-middleware';
+import { AuthorizationMiddleware } from '../../../core/configured-apollo/network/authorization-middleware';
 import { ApolloQueryResult } from 'apollo-client';
 import { JoinGame, Team } from '../../../types';
 import { MdDialogRef } from '@angular/material';

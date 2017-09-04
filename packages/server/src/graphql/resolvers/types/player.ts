@@ -10,11 +10,11 @@ const resolvers = {
     syncState: (player: IPlayer) => player.syncState,
     state: (player: IPlayer) => {
       const otherWaiting = player.game.players.some(p => p.state === 'WAITING');
-
+      //TODO why??
       if (otherWaiting) {
         return player.state;
       } else {
-        return 'ALIVE';
+        return player.state;
       }
     },
     currentLocation: (player: IPlayer) => ({

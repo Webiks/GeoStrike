@@ -1,20 +1,54 @@
 import { Component, OnInit } from '@angular/core';
-import { KeyboardControlService, GeoUtilsService } from 'angular-cesium';
-import { CharacterService, MeModelState, ViewState } from '../../../services/character.service';
-import { GameService } from '../../../services/game.service';
+import {
+  CesiumService,
+  GeoUtilsService,
+  KeyboardControlParams,
+  KeyboardControlService,
+} from 'angular-cesium';
+import {
+  CharacterService,
+  MeModelState,
+  ViewState,
+} from '../../../services/character.service';
+import { environment } from '../../../../../environments/environment';
+
+const Direction = {
+  Forward: 'Forward',
+  Backward: 'Backward',
+  Left: 'Left',
+  Right: 'Right',
+};
+
+const DirectionsDelta = {
+  [Direction.Forward]: 180,
+  [Direction.Backward]: 0,
+  [Direction.Left]: 90,
+  [Direction.Right]: -90,
+};
 
 @Component({
   selector: 'keyboard-control',
   template: '',
 })
 export class KeyboardControlComponent implements OnInit {
-  constructor(private gameService: GameService, private character: CharacterService, private keyboardControlService: KeyboardControlService) {
-  }
+  inspector = false;
 
-  buildMovementConfig(multipleBy) {
+  constructor(
+    private character: CharacterService,
+    private keyboardControlService: KeyboardControlService,
+    private cesiumService: CesiumService
+  ) {}
+
+  buildMovementConfig(direction: string) {
+    const delta = DirectionsDelta[direction];
     return {
       validation: () => {
-        return this.character.state === MeModelState.RUNNING || this.character.state === MeModelState.WALKING;
+        return (
+          this.character.state === MeModelState.RUNNING ||
+          this.character.state === MeModelState.WALKING ||
+          this.character.state === MeModelState.SHOOTING ||
+          this.character.state === MeModelState.CRAWLING
+        );
       },
       action: () => {
         const position = this.character.location;
@@ -26,56 +60,96 @@ export class KeyboardControlComponent implements OnInit {
 
         this.character.location = GeoUtilsService.pointByLocationDistanceAndAzimuth(
           position,
-          multipleBy * speed,
-          Cesium.Math.toRadians(this.character.heading),
-          true);
+          speed,
+          Cesium.Math.toRadians(this.character.heading + delta),
+          true
+        );
       },
-    };
+    } as KeyboardControlParams;
   }
 
-  buildViewMoveConfig() {
-    return {
-      validation: () => {
-        return this.character.state === MeModelState.RUNNING || this.character.state === MeModelState.WALKING;
-      },
-      action: () => {
-        let newState;
+  changeViewMove() {
+    let newState = ViewState.SEMI_FPV;
+    if (this.character.viewState === ViewState.SEMI_FPV) {
+      newState = ViewState.FPV;
+    }
+    this.character.viewState = newState;
+  }
 
-        if (this.character.viewState === ViewState.SEMI_FPV) {
-          newState = ViewState.FPV;
-        } else {
-          newState = ViewState.SEMI_FPV;
-        }
+  changeMeShootState() {
+    let newState = MeModelState.WALKING;
+    if (this.character.state !== MeModelState.SHOOTING) {
+      newState = MeModelState.SHOOTING;
+    }
+    this.character.state = newState;
+  }
 
-        this.character.viewState = newState;
+  toggleInspector(inspectorClass, inspectorProp) {
+    if (!environment.production) {
+      if (!this.inspector) {
+        this.cesiumService.getViewer().extend(inspectorClass);
+        this.inspector = true;
+      } else {
+        this.cesiumService.getViewer()[inspectorProp].container.remove();
 
-        return true;
-      },
-    };
+        // window['vieww'] =      this.cesiumService.getViewer();
+        this.cesiumService.getViewer().cesium3DTilesInspector.container.remove();
+        this.inspector = false;
+      }
+    }
   }
 
   ngOnInit() {
-    this.keyboardControlService.setKeyboardControls({
-      Forward: this.buildMovementConfig(-1),
-      Backward: this.buildMovementConfig(1),
-      ChangeViewMode: this.buildViewMoveConfig(),
-    }, (keyEvent: KeyboardEvent) => {
-      if (keyEvent.code === 'KeyW' || keyEvent.code === 'ArrowUp') {
-        if (keyEvent.shiftKey) {
-          this.character.state = MeModelState.RUNNING;
+    this.keyboardControlService.setKeyboardControls(
+      {
+        [Direction.Forward]: this.buildMovementConfig(Direction.Forward),
+        [Direction.Backward]: this.buildMovementConfig(Direction.Backward),
+        [Direction.Left]: this.buildMovementConfig(Direction.Left),
+        [Direction.Right]: this.buildMovementConfig(Direction.Right),
+      },
+      (keyEvent: KeyboardEvent) => {
+        if (keyEvent.code === 'KeyW' || keyEvent.code === 'ArrowUp') {
+          if (this.character.state !== MeModelState.SHOOTING) {
+            this.character.state = keyEvent.shiftKey
+              ? MeModelState.RUNNING
+              : MeModelState.WALKING;
+          }
+
+          return Direction.Forward;
+        } else if (keyEvent.code === 'KeyS' || keyEvent.code === 'ArrowDown') {
+          return Direction.Backward;
+        } else if (keyEvent.code === 'KeyA' || keyEvent.code === 'ArrowLeft') {
+          return Direction.Left;
+        } else if (keyEvent.code === 'KeyD' || keyEvent.code === 'ArrowRight') {
+          return Direction.Right;
         } else {
-          this.character.state = MeModelState.WALKING;
+          return String.fromCharCode(keyEvent.keyCode);
         }
+      }
+    );
 
-        return 'Forward';
-      } else if (keyEvent.code === 'Tab') {
-        keyEvent.preventDefault();
-
-        return 'ChangeViewMode';
-      } else if (keyEvent.code === 'KeyS' || keyEvent.code === 'ArrowDown') {
-        return 'Backward';
-      } else {
-        return String.fromCharCode(keyEvent.keyCode);
+    // Regitster Other keys because keyboardControl key are triggered by cesium tick
+    document.addEventListener('keydown', (keyEvent: KeyboardEvent) => {
+      switch (keyEvent.code) {
+        case 'Tab':
+          keyEvent.preventDefault();
+          this.changeViewMove();
+          break;
+        case 'Space':
+          keyEvent.preventDefault();
+          this.changeMeShootState();
+          break;
+        case 'KeyI':
+          this.toggleInspector(Cesium.viewerCesiumInspectorMixin, 'cesiumInspector');
+          break;
+        case 'KeyO':
+          this.toggleInspector(
+            Cesium.viewerCesium3DTilesInspectorMixin,
+            'cesium3DTilesInspector'
+          );
+          break;
+        default:
+          break;
       }
     });
   }

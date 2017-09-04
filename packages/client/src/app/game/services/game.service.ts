@@ -1,27 +1,30 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Apollo, ApolloQueryObservable } from 'apollo-angular';
 import { createNewGameMutation } from '../../graphql/create-new-game.mutation';
 import { ApolloQueryResult } from 'apollo-client';
 import { Observable } from 'rxjs/Observable';
-import { CreateNewGame, CurrentGame, JoinGame, Ready, Team, UpdatePosition } from '../../types';
+import { CreateNewGame, CurrentGame, JoinGame, NotifyKill, Ready, Team, UpdatePosition } from '../../types';
 import { joinGameMutation } from '../../graphql/join-game.mutation';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
-import { SUBSCRIPTIONS_SOCKET } from '../../core/network/websocket';
 import { gameDataSubscription } from '../../graphql/game-data.subscription';
 import { readyMutation } from '../../graphql/ready.mutation';
 import { currentGameQuery } from '../../graphql/current-game.query';
 import 'rxjs/add/operator/first';
 import { updatePositionMutation } from '../../graphql/update-position.mutation';
-import { CharacterService } from './character.service';
+import { ApolloService } from '../../core/configured-apollo/network/apollo.service';
+import { notifyKillMutation } from '../../graphql/notify-kill.mutation';
 import { GameSettingsService } from './game-settings.service';
+import { CharacterService } from './character.service';
 
 @Injectable()
 export class GameService {
+  private socket: SubscriptionClient;
   private serverPositionUpdateInterval;
 
   constructor(private apollo: Apollo,
-              private character: CharacterService,
-              @Inject(SUBSCRIPTIONS_SOCKET) private socket: SubscriptionClient) {
+              subscriptionClientService: ApolloService,
+              private character: CharacterService,) {
+    this.socket = subscriptionClientService.subscriptionClient;
   }
 
   refreshConnection() {
@@ -81,6 +84,7 @@ export class GameService {
       setInterval(() => this.updateServerOnPosition(), GameSettingsService.serverUpdatingRate);
   }
 
+
   updateServerOnPosition() {
     const location = this.character.location;
     const heading = this.character.heading;
@@ -97,6 +101,15 @@ export class GameService {
         },
         heading
       },
+    });
+  }
+
+  notifyKill(killedPlayerId) {
+    return this.apollo.mutate<NotifyKill.Mutation>({
+      mutation: notifyKillMutation,
+      variables: {
+        playerId: killedPlayerId,
+      } as NotifyKill.Variables
     });
   }
 }

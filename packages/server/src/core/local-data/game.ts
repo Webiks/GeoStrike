@@ -159,6 +159,14 @@ export class GamesManager {
     }
   }
 
+  updatePlayerState(gameId: string, playerId:string, newState: PlayerState){
+    const game = this.getGameById(gameId);
+    const player = game.playersMap.get(playerId);
+    if (player) {
+      player.state = newState;
+    }
+  }
+
   validatePlayerPosition(currentLocation: ICartesian3Location, newLocation: ICartesian3Location): boolean {
     const currentPosition = new Cesium.Cartesian3(currentLocation.x, currentLocation.y, currentLocation.z);
     const newPosition = new Cesium.Cartesian3(newLocation.x, newLocation.y, newLocation.z);
