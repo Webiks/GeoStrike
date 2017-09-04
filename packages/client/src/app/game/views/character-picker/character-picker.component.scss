@@ -1,3 +1,15 @@
 .character-picker {
   flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  border: 1px white solid;
+  border-bottom-left-radius: 10px;
+  border-top-right-radius: 10px;
+
+  .header {
+    font-size: 40pt;
+    color: white;
+    text-align: center;
+    height: 30px;
+  }
 }

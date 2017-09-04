@@ -59,6 +59,7 @@ export interface LocationInput {
 export interface CreateNewGameMutationArgs {
   character: string; 
   username: string; 
+  team: Team; 
 }
 export interface JoinGameMutationArgs {
   gameCode: string; 

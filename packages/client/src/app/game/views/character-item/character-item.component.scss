@@ -1,12 +1,32 @@
 .character-item {
+  flex: 1;
+  padding: 20px;
+  color: white;
+  border: 1px white solid;
+  border-bottom-left-radius: 10px;
+  border-top-right-radius: 10px;
+  opacity: 0.4;
+  height: 170px;
+  width: 170px;
+
   img {
-    max-height: 200px;
+    max-height: 110px;
+    width: 170px;
     object-fit: cover;
+    object-position: 50% 0%;
   }
 
   cursor: pointer;
 }
 
 .selected {
-  background-color: khaki;
+  opacity: 1;
+}
+
+.blue {
+  background: linear-gradient(#1B476B, #000000);
+}
+
+.red {
+  background: linear-gradient(#6B1B1B, #000000);
 }

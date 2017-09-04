@@ -1,20 +1,21 @@
 
-<div *ngIf="game">
+<div *ngIf="game" class="game-room">
   <div *ngIf="!gameStarted">
-    <h1>Waiting for all player to be ready to play...</h1>
-    <md-grid-list gutterSize="20" cols="3" rowHeight="300px">
-      <md-grid-tile *ngFor="let player of getPlayers()">
+    <h1 class="header">Waiting for all player to be ready to play...</h1>
+    <div class="players">
+      <div class="player-container" *ngFor="let player of getPlayers()">
         <character-item
-            [selected]="false"
+            [selected]="true"
             [name]="player.isMe ? 'Me (' + player.username + ')' : player.username"
             [description]="player.state"
-            [image]="getCharacter(player.character).imageUrl">
-          <div *ngIf="player.isMe">
-            <button md-raised-button (click)="ready()">READY</button>
-          </div>
+            [image]="getCharacter(player.character).imageUrl"
+            [team]="player.team">
         </character-item>
-      </md-grid-tile>
-    </md-grid-list>
+        <div *ngIf="player.isMe" class="ready">
+          <button md-raised-button (click)="ready()">READY</button>
+        </div>
+      </div>
+    </div>
   </div>
   <div *ngIf="gameStarted">
     <game-countdown [count]="3" (done)="onCountdownDown()"></game-countdown>

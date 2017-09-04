@@ -15,8 +15,8 @@ export class JoinGameDialogComponent implements OnInit {
   private gameCode = '';
   private error = '';
   private username = '';
-  private characterName: string = null;
   private loading = false;
+  private characterName: string = null;
   private team: Team = 'BLUE';
 
   constructor(private router: Router,
@@ -28,8 +28,9 @@ export class JoinGameDialogComponent implements OnInit {
   }
 
 
-  characterChanged(name) {
+  characterChanged({ name, team }) {
     this.characterName = name;
+    this.team = team;
   }
 
   joinGame() {
