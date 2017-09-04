@@ -3,7 +3,7 @@ import { sign } from 'jsonwebtoken';
 import { GameState, PlayerSyncState, PlayerState } from '../../types';
 import { ESubscriptionTopics, pubsub } from '../../graphql/pubsub';
 import * as Cesium from 'cesium';
-import { gameSettings } from '../../settings/settings';
+import { Settings } from '../../settings/settings';
 
 interface ICartesian3Location {
   x: number;
@@ -109,7 +109,7 @@ export class GamesManager {
             state: gameObject.state,
           }
         })
-      }, 100),
+      }, Settings.clientsUpdateRate),
     };
 
     this.activeGames.set(gameId, gameObject);
@@ -171,6 +171,6 @@ export class GamesManager {
     const currentPosition = new Cesium.Cartesian3(currentLocation.x, currentLocation.y, currentLocation.z);
     const newPosition = new Cesium.Cartesian3(newLocation.x, newLocation.y, newLocation.z);
     const distance = Cesium.Cartesian3.distance(currentPosition, newPosition);
-    return distance < gameSettings.serverClientDistanceThreshold;
+    return distance < Settings.serverClientDistanceThreshold;
   }
 }
