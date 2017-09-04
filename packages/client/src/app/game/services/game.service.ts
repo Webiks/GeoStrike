@@ -20,6 +20,7 @@ import { CharacterService } from './character.service';
 export class GameService {
   private socket: SubscriptionClient;
   private serverPositionUpdateInterval;
+  private lastStateSentToServer;
 
   constructor(private apollo: Apollo,
               subscriptionClientService: ApolloService,
@@ -87,22 +88,49 @@ export class GameService {
 
 
   updateServerOnPosition() {
+    const state = this.createState();
+    if(!state || !this.isDifferentFromLastState(state)){
+      return;
+    }
+
+    this.lastStateSentToServer = state;
+    this.apollo.mutate<UpdatePosition.Mutation>({
+      mutation: updatePositionMutation,
+      variables: {...state},
+    });
+  }
+
+  createState() {
     const location = this.character.location;
     const heading = this.character.heading;
     if (!location || !heading) {
       return;
     }
-    this.apollo.mutate<UpdatePosition.Mutation>({
-      mutation: updatePositionMutation,
-      variables: {
-        position: {
-          x: location.x,
-          y: location.y,
-          z: location.z,
-        },
-        heading
+
+    return {
+      position: {
+        x: location.x,
+        y: location.y,
+        z: location.z,
       },
-    });
+      heading,
+    };
+  }
+
+  isDifferentFromLastState(state): boolean {
+    if (!this.lastStateSentToServer) {
+      return true;
+    }
+    const oldStatePosition = this.lastStateSentToServer.position;
+    const oldStateHeading = this.lastStateSentToServer.heading;
+    const newStatePosition = state.position;
+    const newStateHeading = state.heading;
+    return (
+      oldStatePosition.x !== newStatePosition.x ||
+      oldStatePosition.y !== newStatePosition.y ||
+      oldStatePosition.z !== newStatePosition.z ||
+      oldStateHeading !== newStateHeading
+    );
   }
 
   notifyKill(killedPlayerId) {
