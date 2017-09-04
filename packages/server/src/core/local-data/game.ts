@@ -4,6 +4,7 @@ import { GameState, PlayerSyncState, PlayerState } from '../../types';
 import { ESubscriptionTopics, pubsub } from '../../graphql/pubsub';
 import * as Cesium from 'cesium';
 import { Settings } from '../../settings/settings';
+import { createClientsUpdater } from '../clients-updater/clients-updater';
 
 interface ICartesian3Location {
   x: number;
@@ -32,10 +33,10 @@ export interface IPlayer {
 export interface IGameObject {
   gameId: string;
   gameCode: string;
-  gameUpdateInterval: any;
   playersMap: Map<string, IPlayer>;
   players: IPlayer[];
   state: GameState;
+  clientsUpdater?: any;
 }
 
 const TOKENS_SECRET = 'sdf43tSWDG#%Tsdfw4';
@@ -100,18 +101,8 @@ export class GamesManager {
       playersMap: new Map<string, IPlayer>(),
       players: [],
       state: 'WAITING',
-      gameUpdateInterval: setInterval(() => {
-        pubsub.publish(ESubscriptionTopics.GAME_STATE_CHANGED, {
-          gameData: {
-            gameId,
-            gameCode,
-            players: gameObject.players,
-            state: gameObject.state,
-          }
-        })
-      }, Settings.clientsUpdateRate),
     };
-
+    gameObject.clientsUpdater = createClientsUpdater(gameObject);
     this.activeGames.set(gameId, gameObject);
 
     return gameObject;
