@@ -1,11 +1,13 @@
-<div>
+<div class="create-new-game-dialog">
   <md-spinner *ngIf="loading"></md-spinner>
-  <div *ngIf="!loading && !gameCode">
+  <div *ngIf="!loading && !gameCode" class="content">
     <character-picker [selectedCharacter]="characterName" (select)="characterChanged($event)"></character-picker>
-    <md-input-container>
-      <input mdInput placeholder="Username" required [(ngModel)]="username">
-    </md-input-container>
-    <button md-raised-button (click)="createGame()">Create Game</button>
+    <div class="actions">
+      <md-input-container>
+        <input mdInput placeholder="Username" required [(ngModel)]="username">
+      </md-input-container>
+      <button md-raised-button (click)="createGame()">Create Game</button>
+    </div>
   </div>
   <div *ngIf="gameCode" class="game-created">
     <h3>Your game is created! your game code is:</h3>

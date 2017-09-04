@@ -1,9 +1,11 @@
 <div class="character-picker">
-  <md-grid-list gutterSize="20" cols="3" rowHeight="300px">
+  <h1 class="header">Choose your character</h1>
+  <md-grid-list gutterSize="20" cols="4">
     <md-grid-tile *ngFor="let character of availableCharacters">
       <character-item
-          (click)="select.emit(character.name)"
+          (click)="select.emit(character)"
           [description]="character.description"
+          [team]="character.team"
           [name]="character.name"
           [selected]="character.name === selectedCharacter"
           [image]="character.imageUrl">

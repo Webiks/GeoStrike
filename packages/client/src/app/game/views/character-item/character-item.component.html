@@ -1,11 +1,10 @@
-<md-card class="character-item" (click)="click.emit(name)"
-         [ngClass]="{'selected' : selected}">
-  <md-card-title>
-    {{ name }}
-  </md-card-title>
+<div class="character-item" (click)="click.emit({name: name, team: team})"
+         [ngClass]="{'selected' : selected, 'blue': team === 'BLUE', 'red': team === 'RED'}">
   <img md-card-image [src]="image" />
-  <md-card-content>
-    {{ description }}
-    <ng-content></ng-content>
-  </md-card-content>
-</md-card>
+  <h3>
+    {{ name }}
+    <span>
+      {{ '(' + description + ')' }}
+    </span>
+  </h3>
+</div>

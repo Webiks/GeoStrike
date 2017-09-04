@@ -14,8 +14,11 @@ export class MainComponent {
 
   openCreateGameDialog() {
     this.dialog.open(CreateNewGameDialogComponent, {
-      height: '60%',
-      width: '60%',
+      height: '85%',
+      width: '90%',
+      position: {
+        left: '10%',
+      },
     });
   }
 

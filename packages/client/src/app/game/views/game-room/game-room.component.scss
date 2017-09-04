@@ -1,0 +1,22 @@
+.game-room {
+  padding: 20px;
+
+  .header {
+    color: white;
+  }
+
+  .players {
+    display: flex;
+    align-content: flex-start;
+
+    .player-container {
+      display: flex;
+      flex-direction: column;
+
+      .ready {
+        align-self: center;
+        margin: 10px;
+      }
+    }
+  }
+}
