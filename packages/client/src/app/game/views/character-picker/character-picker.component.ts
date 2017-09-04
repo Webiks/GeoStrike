@@ -2,22 +2,28 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 export const AVAILABLE_CHARACTERS = [
   {
-    name: 'Eitan',
-    description: 'Speaks Russian',
-    // tslint:disable-next-line
-    imageUrl: 'https://scontent.ftlv1-1.fna.fbcdn.net/v/t31.0-8/18238543_447257052333221_4423008766681926894_o.jpg?oh=c18dc10cbcc317e366e672f7ac8b8644&oe=5A2CD20E'
+    name: 'Steve Rogers',
+    description: 'Blue Team',
+    team: 'BLUE',
+    imageUrl: '/assets/characters/soldier_temp.png',
   },
   {
-    name: 'David',
-    description: 'Pashosh is included',
-    // tslint:disable-next-line
-    imageUrl: 'https://scontent.ftlv1-1.fna.fbcdn.net/v/t31.0-8/856999_10200413794563189_701601511_o.jpg?oh=051480dff94662cec4ffcbfabe29f488&oe=5A352FC1'
+    name: 'Anthony Stark',
+    description: 'Blue Team',
+    team: 'BLUE',
+    imageUrl: '/assets/characters/soldier_temp.png',
   },
   {
-    name: 'Tomer',
-    description: 'Shit in the pool',
-    // tslint:disable-next-line
-    imageUrl: 'https://scontent.ftlv1-1.fna.fbcdn.net/v/t1.0-9/10933934_1038125566201555_2751753187717304132_n.jpg?oh=2e19a30638a79407e9dd64f154b26b7d&oe=5A1B029C'
+    name: 'Peter Parker',
+    description: 'Red Team',
+    team: 'RED',
+    imageUrl: '/assets/characters/soldier_temp.png',
+  },
+  {
+    name: 'Bruce Wayne',
+    description: 'Red Team',
+    team: 'RED',
+    imageUrl: '/assets/characters/soldier_temp.png',
   },
 ];
 

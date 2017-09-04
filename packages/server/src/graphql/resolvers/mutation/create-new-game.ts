@@ -1,9 +1,8 @@
 import { IGraphQLContext } from '../../context';
-import { Team } from '../../../core/local-data/game';
 
-export const createNewGame = (rootValue, { character, username }, { games }: IGraphQLContext) => {
+export const createNewGame = (rootValue, { character, username, team }, { games }: IGraphQLContext) => {
   const game = games.createNewGame();
-  const player = games.addPlayerToGame(game.gameId, character, username, Team.RED);
+  const player = games.addPlayerToGame(game.gameId, character, username, team);
 
   return {
     game,
