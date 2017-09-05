@@ -70,6 +70,7 @@ export class KeyboardControlComponent implements OnInit {
   }
 
   changeViewMove() {
+    this.character.state = MeModelState.WALKING;
     let newState = ViewState.SEMI_FPV;
     if (this.character.viewState === ViewState.SEMI_FPV) {
       newState = ViewState.FPV;
@@ -82,6 +83,7 @@ export class KeyboardControlComponent implements OnInit {
     let newState = MeModelState.WALKING;
     if (this.character.state !== MeModelState.SHOOTING) {
       newState = MeModelState.SHOOTING;
+      this.character.viewState = ViewState.FPV;
     }
     this.character.state = newState;
   }

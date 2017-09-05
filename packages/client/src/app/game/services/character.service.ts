@@ -27,10 +27,15 @@ export interface CharacterState {
 
 @Injectable()
 export class CharacterService {
-  private _character= new BehaviorSubject<CharacterState>(null);
+  private _character = new BehaviorSubject<CharacterState>(null);
   private _viewState = new BehaviorSubject<ViewState>(ViewState.SEMI_FPV);
+  private _entity;
 
   constructor(private utils: UtilsService) {
+  }
+
+  get entity() {
+    return this._entity;
   }
 
   get initialized() {
@@ -71,7 +76,7 @@ export class CharacterService {
     return this._character && this._character.getValue() && this._character.getValue().pitch;
   }
 
-  get state() : MeModelState {
+  get state(): MeModelState {
     return this._character && this._character.getValue() && this._character.getValue().state;
   }
 
@@ -84,6 +89,10 @@ export class CharacterService {
       ...this.currentStateValue,
       ...changes,
     });
+  }
+
+  set entity(value) {
+    this._entity = value;
   }
 
   set heading(value: number) {
@@ -114,8 +123,8 @@ export class CharacterService {
     this.state = this.state;
   }
 
-  public syncState(player: GameFields.Players){
-    if(this.initialized && player.syncState === 'INVALID'){
+  public syncState(player: GameFields.Players) {
+    if (this.initialized && player.syncState === 'INVALID') {
       this.location = player.currentLocation.location;
       this.heading = player.currentLocation.heading;
     }

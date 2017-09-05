@@ -1,7 +1,4 @@
-import {
-  Component , Input , OnInit , ViewChild , HostListener , ElementRef , OnDestroy , NgZone ,
-  ChangeDetectorRef
-} from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { AcMapComponent, AcNotification, ViewerConfiguration } from 'angular-cesium';
 import { GameFields } from '../../../types';
@@ -58,6 +55,13 @@ export class GameMapComponent implements OnInit, OnDestroy {
       screenSpaceCameraController.enableZoom = false;
       const canvas = viewer.canvas;
       document.onclick = () => canvas.requestPointerLock();
+      const cesiumTerrainProviderMeshes = new Cesium.CesiumTerrainProvider({
+        url: 'https://assets.agi.com/stk-terrain/v1/tilesets/world/tiles',
+        requestWaterMask: true,
+        requestVertexNormals: true
+      });
+      viewer.terrainProvider = cesiumTerrainProviderMeshes;
+      // viewer.scene.globe.depthTestAgainstTerrain = false;
     };
 
     this.onMousemove = this.onMousemove.bind(this);
@@ -76,8 +80,8 @@ export class GameMapComponent implements OnInit, OnDestroy {
 
       this.viewer.scene.preRender.addEventListener(this.preRenderHandler.bind(this));
 
-      this.ngZone.runOutsideAngular(()=>{
-        this.elementRef.nativeElement.addEventListener('mousemove',this.onMousemove);
+      this.ngZone.runOutsideAngular(() => {
+        this.elementRef.nativeElement.addEventListener('mousemove', this.onMousemove);
       });
 
       this.cd.detectChanges();
@@ -107,14 +111,18 @@ export class GameMapComponent implements OnInit, OnDestroy {
 
     const isFPV = this.character.viewState === ViewState.FPV;
     const isShooting = this.character.state === MeModelState.SHOOTING;
-    const range = isFPV || isShooting ? 0.1 : 3;
+    const range = isFPV || isShooting ? 0.1 : 5;
     const playerHead = new Cesium.Cartesian3(0.4174665722530335, -1.4575908118858933, 1.3042816752567887);
     Cesium.Cartesian3.add(this.character.location, playerHead, playerHead);
 
-    this.viewer.camera.lookAt(playerHead, new Cesium.HeadingPitchRange(heading, pitch, range));
+    this.viewer.flyTo(this.character.entity,
+      {
+        duration: 0,
+        offset: new Cesium.HeadingPitchRange(heading, pitch, range)
+      });
   }
 
-  ngOnDestroy (): void {
-    this.elementRef.nativeElement.removeEventListener('mousemove',this.onMousemove)
+  ngOnDestroy(): void {
+    this.elementRef.nativeElement.removeEventListener('mousemove', this.onMousemove)
   }
 }

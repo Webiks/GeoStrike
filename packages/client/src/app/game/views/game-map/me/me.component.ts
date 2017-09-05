@@ -7,6 +7,7 @@ import 'rxjs/add/observable/combineLatest';
 import 'rxjs/add/observable/fromEvent';
 import { Subscription } from 'rxjs/Subscription';
 import { GameService } from '../../../services/game.service';
+import { BasicDesc } from 'angular-cesium/src/services/basic-desc/basic-desc.service';
 
 @Component({
   selector: 'me',
@@ -14,16 +15,16 @@ import { GameService } from '../../../services/game.service';
   styleUrls: ['./me.component.scss'],
 })
 export class MeComponent implements OnInit, OnDestroy {
-
   @ViewChild('cross') crossElement: ElementRef;
-  @ViewChild('gunShotSound') gunShotSound: ElementRef;
 
+  @ViewChild('gunShotSound') gunShotSound: ElementRef;
+  @ViewChild('meModel') meModel: BasicDesc;
   showWeapon$: Observable<boolean>;
+
   showCross$: Observable<boolean>;
   clickSub$: Subscription;
   semiFPVViewState = ViewState.SEMI_FPV;
   isMuzzleFlashShown = false;
-
   constructor(private character: CharacterService,
               public utils: UtilsService,
               private cesiumService: CesiumService,
@@ -63,6 +64,9 @@ export class MeComponent implements OnInit, OnDestroy {
       this.character.state$.map(meState => meState && meState.state === MeModelState.SHOOTING))
       .map((result => result[0] || result[1]));
     this.showCross$ = this.character.state$.map(meState => meState && meState.state === MeModelState.SHOOTING);
+    this.meModel.onDraw.subscribe(entity => {
+      this.character.entity = entity.cesiumEntity;
+    });
 
     this.setShotEvent();
   }

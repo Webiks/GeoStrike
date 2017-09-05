@@ -1,11 +1,10 @@
 <ac-layer acFor="let me of notifications$" [context]="this">
-  <ac-model-desc props="{
+  <ac-model-desc #meModel props="{
                     heightReference: utils.getClampedToGroundHeightReference(),
                     scale: 0.01,
 										uri: '/assets/soldier.gltf',
 										position: me.location,
-										orientation: utils.getOrientation(me.location, me.heading),
-										show: character.viewState === semiFPVViewState
+										orientation: utils.getOrientation(me.location, me.heading)
                   }">
   </ac-model-desc>
 </ac-layer>
