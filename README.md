@@ -30,3 +30,13 @@
  ng serve --disableHostCheck --host 0.0.0.0
  ```
  * Now you and other players on the same lan can connect to http://[your_ip]:4200
+ 
+ ## Game Controls
+ * `Tab` - switch FPV/SemiFPV
+ * `Shift` - run
+ * `Space` - switch to shooting mode
+ * `w,a,s,d` - move
+ * `mouse_move` - look around
+ * `mouse_click` - shoot (in shooting mode only)
+ 
+ 
