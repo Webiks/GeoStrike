@@ -39,4 +39,12 @@
  * `mouse_move` - look around
  * `mouse_click` - shoot (in shooting mode only)
  
+  ## Start a game
+ * login to client http://[ip]:4200
+ * choose new game
+ * select character and user name
+ * User code is shown (for other player to join your game they should choose "Join game" option and insert your game code)
+ * Press "start game" and press "ready" when you want to start the game
+ 
+ 
  
