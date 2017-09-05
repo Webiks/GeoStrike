@@ -280,9 +280,9 @@ amdefine@>=0.0.4:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
 
-angular-cesium@^0.0.20:
-  version "0.0.20"
-  resolved "https://registry.yarnpkg.com/angular-cesium/-/angular-cesium-0.0.20.tgz#21317d28b7020f97742504319b62860afc6517bc"
+angular-cesium@^0.0.24:
+  version "0.0.24"
+  resolved "https://registry.yarnpkg.com/angular-cesium/-/angular-cesium-0.0.24.tgz#09c47d8f90da11791b89dbe35a1fb1da6930fd5c"
   dependencies:
     angular2parse "^1.0.5"
     geodesy "^1.1.1"
