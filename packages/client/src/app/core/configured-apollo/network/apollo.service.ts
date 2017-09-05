@@ -2,6 +2,7 @@ import { SubscriptionClient } from 'subscriptions-transport-ws';
 import { Injectable , NgZone } from '@angular/core';
 import { AuthorizationMiddleware } from './authorization-middleware';
 import ApolloClient from 'apollo-client/ApolloClient';
+import { environment } from '../../../../environments/environment';
 
 @Injectable()
 export class ApolloService {
@@ -11,7 +12,7 @@ export class ApolloService {
 
   constructor (ngZone: NgZone) {
     ngZone.runOutsideAngular(() => {
-      this._subscriptionClient = new SubscriptionClient('ws://localhost:3000/subscriptions' , {
+      this._subscriptionClient = new SubscriptionClient(`ws://${environment.serverUrl}/subscriptions` , {
         reconnect: true ,
         connectionParams: () => {
           if (!AuthorizationMiddleware.token || AuthorizationMiddleware.token === '') {
