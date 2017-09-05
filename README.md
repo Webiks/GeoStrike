@@ -12,7 +12,7 @@
  ```bash
   yarn start
  ```
- * enjoy: https://localhost:4200
+ * enjoy: http://localhost:4200
  
  ## enable remote users
  * change `apollo.service.ts` connction url to your ip
