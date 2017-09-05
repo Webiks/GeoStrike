@@ -22,6 +22,7 @@ export class MeComponent implements OnInit, OnDestroy {
   showCross$: Observable<boolean>;
   clickSub$: Subscription;
   semiFPVViewState = ViewState.SEMI_FPV;
+  isMuzzleFlashShown = false;
 
   constructor(private character: CharacterService,
               public utils: UtilsService,
@@ -41,6 +42,7 @@ export class MeComponent implements OnInit, OnDestroy {
     this.clickSub$ = Observable.fromEvent(document.body, 'click')
       .filter(() => this.character.state === MeModelState.SHOOTING)
       .subscribe((e: MouseEvent) => {
+        this.showGunMuzzleFlash();
         this.soundGunFire();
         const crossElement = this.crossElement.nativeElement;
         const crossLocation = {
@@ -71,8 +73,12 @@ export class MeComponent implements OnInit, OnDestroy {
 
   private soundGunFire() {
     const soundElement = this.gunShotSound.nativeElement;
-    soundElement.pause();
     soundElement.currentTime = 0;
     soundElement.play();
+  }
+
+  private showGunMuzzleFlash() {
+    this.isMuzzleFlashShown = true;
+    setTimeout(() => this.isMuzzleFlashShown = false, 20);
   }
 }
