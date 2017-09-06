@@ -42,6 +42,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
       navigationHelpButton: false,
       navigationInstructionsInitiallyVisible: false,
       terrainProviderViewModels: [],
+      terrainShadows : Cesium.ShadowMode.ENABLED
     };
 
     viewerConf.viewerModifier = (viewer) => {
@@ -55,13 +56,8 @@ export class GameMapComponent implements OnInit, OnDestroy {
       screenSpaceCameraController.enableZoom = false;
       const canvas = viewer.canvas;
       document.onclick = () => canvas.requestPointerLock();
-      const cesiumTerrainProviderMeshes = new Cesium.CesiumTerrainProvider({
-        url: 'https://assets.agi.com/stk-terrain/v1/tilesets/world/tiles',
-        requestWaterMask: true,
-        requestVertexNormals: true
-      });
-      viewer.terrainProvider = cesiumTerrainProviderMeshes;
-      // viewer.scene.globe.depthTestAgainstTerrain = false;
+      viewer.scene.globe.enableLighting = true;
+      viewer.scene.fog.enabled = true;
     };
 
     this.onMousemove = this.onMousemove.bind(this);

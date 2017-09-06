@@ -20,11 +20,12 @@ export class MeComponent implements OnInit, OnDestroy {
   @ViewChild('gunShotSound') gunShotSound: ElementRef;
   @ViewChild('meModel') meModel: BasicDesc;
   showWeapon$: Observable<boolean>;
-
   showCross$: Observable<boolean>;
   clickSub$: Subscription;
-  semiFPVViewState = ViewState.SEMI_FPV;
   isMuzzleFlashShown = false;
+  transparentColor = new Cesium.Color(0, 0, 0, 0.01);
+  normalColor = new Cesium.Color(1, 1, 1, 1);
+
   constructor(private character: CharacterService,
               public utils: UtilsService,
               private cesiumService: CesiumService,
@@ -84,5 +85,12 @@ export class MeComponent implements OnInit, OnDestroy {
   private showGunMuzzleFlash() {
     this.isMuzzleFlashShown = true;
     setTimeout(() => this.isMuzzleFlashShown = false, 20);
+  }
+
+  getColor() {
+    if (this.character.viewState === ViewState.FPV) {
+      return this.transparentColor;
+    }
+    return this.normalColor;
   }
 }
