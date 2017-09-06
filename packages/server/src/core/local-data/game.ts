@@ -41,8 +41,8 @@ export interface IGameObject {
 const TOKENS_SECRET = 'sdf43tSWDG#%Tsdfw4';
 
 const DEFAULT_PLAYERS_LOCATION = [
-  // {x: -1371108.6511167218, y: -5508684.080096612, z: 2901825.449865087},
-  {x: 968815.8877312046, y: -4760208.079454847, z: 4120764.6170923957},
+  { x: -1371108.6511167218, y: -5508684.080096612, z: 2901825.449865087 },
+  // {x: 968815.8877312046, y: -4760208.079454847, z: 4120764.6170923957},
   // { x: 1333422.9356770117, y: -4654805.289160995, z: 4137634.8619940765 },
   { x: 1333372.2794363261, y: -4654805.238712306, z: 4137651.1335756676 },
   { x: 1333427.435864061, y: -4654696.156980868, z: 4137755.369174167 },
@@ -144,8 +144,7 @@ export class GamesManager {
         player.syncState = 'VALID';
         player.currentLocation = position;
         player.heading = heading;
-      }
-      else {
+      } else {
         player.syncState = 'INVALID';
       }
     }
