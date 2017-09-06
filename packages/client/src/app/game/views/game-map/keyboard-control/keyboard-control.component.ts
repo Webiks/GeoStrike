@@ -53,10 +53,10 @@ export class KeyboardControlComponent implements OnInit {
       },
       action: () => {
         const position = this.character.location;
-        let speed = 0.15;
+        let speed = environment.movement.walkingSpeed;
 
         if (this.character.state === MeModelState.RUNNING) {
-          speed = 0.3;
+          speed = environment.movement.runningSpeed;
         }
 
         this.character.location = GeoUtilsService.pointByLocationDistanceAndAzimuth(
