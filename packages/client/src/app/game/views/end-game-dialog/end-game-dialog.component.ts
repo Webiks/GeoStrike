@@ -13,7 +13,7 @@ export class EndGameDialogComponent implements OnInit {
   }
 
   reload(){
-    location.reload();
+    location.href = '/'
   }
 
 }
