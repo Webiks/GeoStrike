@@ -1,7 +1,4 @@
-import {
-  Component , Input , OnInit , ViewChild , HostListener , ElementRef , OnDestroy , NgZone ,
-  ChangeDetectorRef
-} from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { AcMapComponent, AcNotification, ViewerConfiguration } from 'angular-cesium';
 import { GameFields } from '../../../types';
@@ -25,6 +22,8 @@ export class GameMapComponent implements OnInit, OnDestroy {
   @ViewChild(AcMapComponent) private mapInstance: AcMapComponent;
 
   private viewer: any;
+  private lastPlayerLocation;
+  private lastPlayerHPR: { heading: number, pitch: number, range: number };
 
   constructor(private gameService: GameService,
               private character: CharacterService,
@@ -76,8 +75,8 @@ export class GameMapComponent implements OnInit, OnDestroy {
 
       this.viewer.scene.preRender.addEventListener(this.preRenderHandler.bind(this));
 
-      this.ngZone.runOutsideAngular(()=>{
-        this.elementRef.nativeElement.addEventListener('mousemove',this.onMousemove);
+      this.ngZone.runOutsideAngular(() => {
+        this.elementRef.nativeElement.addEventListener('mousemove', this.onMousemove);
       });
 
       this.cd.detectChanges();
@@ -100,21 +99,30 @@ export class GameMapComponent implements OnInit, OnDestroy {
     if (!this.character.initialized) {
       return;
     }
+    const isFPV = this.character.viewState === ViewState.FPV;
+    const isShooting = this.character.state === MeModelState.SHOOTING;
+    const range = isFPV || isShooting ? 0.1 : 3;
+
+    if (this.lastPlayerLocation === this.character.location &&
+      this.lastPlayerHPR.heading === this.character.heading &&
+      this.lastPlayerHPR.pitch === this.character.pitch &&
+      this.lastPlayerHPR.range === range) {
+      return;
+    }
 
     const pitchDeg = this.character.pitch;
     const pitch = Cesium.Math.toRadians(pitchDeg);
     const heading = Cesium.Math.toRadians(-180 + this.character.heading);
 
-    const isFPV = this.character.viewState === ViewState.FPV;
-    const isShooting = this.character.state === MeModelState.SHOOTING;
-    const range = isFPV || isShooting ? 0.1 : 3;
     const playerHead = new Cesium.Cartesian3(0.4174665722530335, -1.4575908118858933, 1.3042816752567887);
     Cesium.Cartesian3.add(this.character.location, playerHead, playerHead);
 
     this.viewer.camera.lookAt(playerHead, new Cesium.HeadingPitchRange(heading, pitch, range));
+    this.lastPlayerLocation = this.character.location;
+    this.lastPlayerHPR = {heading: this.character.heading, pitch: this.character.pitch, range};
   }
 
-  ngOnDestroy (): void {
-    this.elementRef.nativeElement.removeEventListener('mousemove',this.onMousemove)
+  ngOnDestroy(): void {
+    this.elementRef.nativeElement.removeEventListener('mousemove', this.onMousemove)
   }
 }
