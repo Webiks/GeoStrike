@@ -1,15 +1,6 @@
 import { Component, NgZone, OnInit } from '@angular/core';
-import {
-  CesiumService,
-  GeoUtilsService,
-  KeyboardControlParams,
-  KeyboardControlService,
-} from 'angular-cesium';
-import {
-  CharacterService,
-  MeModelState,
-  ViewState,
-} from '../../../services/character.service';
+import { CesiumService, GeoUtilsService, KeyboardControlParams, KeyboardControlService, } from 'angular-cesium';
+import { CharacterService, MeModelState, ViewState, } from '../../../services/character.service';
 import { environment } from '../../../../../environments/environment';
 
 const Direction = {
@@ -31,14 +22,33 @@ const DirectionsDelta = {
   template: '',
 })
 export class KeyboardControlComponent implements OnInit {
-  inspector = false;
+  private COLLIDE_FACTOR_METER = 3;
+  private inspector = false;
+  private viewer;
 
-  constructor(
-    private character: CharacterService,
-    private keyboardControlService: KeyboardControlService,
-    private cesiumService: CesiumService,
-    private ngZone: NgZone,
-  ) {}
+  constructor(private character: CharacterService,
+              private keyboardControlService: KeyboardControlService,
+              private cesiumService: CesiumService,
+              private ngZone: NgZone,) {
+    this.viewer = cesiumService.getViewer();
+  }
+
+  detectCollision(fromLocation): boolean {
+    const centerWindowPosition = {
+      x: document.body.clientWidth / 2,
+      y: document.body.clientHeight / 2,
+    };
+    const centerPos = this.viewer.scene.pickPosition(centerWindowPosition);
+    const pickedFeature = this.viewer.scene.pick(centerWindowPosition);
+
+    // if center point isnt undefined and if the center is a tile or a model
+    if (centerPos && pickedFeature) {
+      const distance = Cesium.Cartesian3.distance(fromLocation, centerPos);
+      return distance < this.COLLIDE_FACTOR_METER;
+    } else {
+      return false;
+    }
+  }
 
   buildMovementConfig(direction: string) {
     const delta = DirectionsDelta[direction];
@@ -59,12 +69,17 @@ export class KeyboardControlComponent implements OnInit {
           speed = environment.movement.runningSpeed;
         }
 
-        this.character.location = GeoUtilsService.pointByLocationDistanceAndAzimuth(
+
+        const nextLocation = GeoUtilsService.pointByLocationDistanceAndAzimuth(
           position,
           speed,
           Cesium.Math.toRadians(this.character.heading + delta),
           true
         );
+        if (direction !== Direction.Forward || !this.detectCollision(nextLocation)) {
+          this.character.location = nextLocation;
+        }
+
       },
     } as KeyboardControlParams;
   }
@@ -103,8 +118,8 @@ export class KeyboardControlComponent implements OnInit {
       {
         [Direction.Forward]: this.buildMovementConfig(Direction.Forward),
         [Direction.Backward]: this.buildMovementConfig(Direction.Backward),
-        [Direction.Left]: this.buildMovementConfig(Direction.Left),
-        [Direction.Right]: this.buildMovementConfig(Direction.Right),
+        // [Direction.Left]: this.buildMovementConfig(Direction.Left),
+        // [Direction.Right]: this.buildMovementConfig(Direction.Right),
       },
       (keyEvent: KeyboardEvent) => {
         if (keyEvent.code === 'KeyW' || keyEvent.code === 'ArrowUp') {
@@ -117,10 +132,10 @@ export class KeyboardControlComponent implements OnInit {
           return Direction.Forward;
         } else if (keyEvent.code === 'KeyS' || keyEvent.code === 'ArrowDown') {
           return Direction.Backward;
-        } else if (keyEvent.code === 'KeyA' || keyEvent.code === 'ArrowLeft') {
-          return Direction.Left;
-        } else if (keyEvent.code === 'KeyD' || keyEvent.code === 'ArrowRight') {
-          return Direction.Right;
+        // } else if (keyEvent.code === 'KeyA' || keyEvent.code === 'ArrowLeft') {
+        //   return Direction.Left;
+        // } else if (keyEvent.code === 'KeyD' || keyEvent.code === 'ArrowRight') {
+        //   return Direction.Right;
         } else {
           return String.fromCharCode(keyEvent.keyCode);
         }
@@ -128,18 +143,18 @@ export class KeyboardControlComponent implements OnInit {
       true
     );
 
-    this.ngZone.runOutsideAngular(()=>{
+    this.ngZone.runOutsideAngular(() => {
       // Regitster Other keys because keyboardControl key are triggered by cesium tick
       document.addEventListener('keydown', (keyEvent: KeyboardEvent) => {
         switch (keyEvent.code) {
           case 'Tab':
-            this.ngZone.run(()=>{
+            this.ngZone.run(() => {
               keyEvent.preventDefault();
               this.changeViewMove();
             });
             break;
           case 'Space':
-            this.ngZone.run(()=>{
+            this.ngZone.run(() => {
               keyEvent.preventDefault();
               this.changeMeShootState();
             });
