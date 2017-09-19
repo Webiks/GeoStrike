@@ -5,6 +5,7 @@ import { GameFields } from '../../../types';
 import { CharacterService, MeModelState, ViewState } from '../../services/character.service';
 import { UtilsService } from '../../services/utils.service';
 import { GameService } from '../../services/game.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'game-map',
@@ -21,6 +22,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
   @Input() private gameData: Observable<GameFields.Fragment>;
   @ViewChild(AcMapComponent) private mapInstance: AcMapComponent;
 
+  public createPathMode = environment.createPathMode;
   private viewer: any;
   private lastPlayerLocation;
   private lastPlayerHPR: { heading: number, pitch: number, range: number };
@@ -52,17 +54,22 @@ export class GameMapComponent implements OnInit, OnDestroy {
       viewer.bottomContainer.remove();
       const screenSpaceCameraController = viewer.scene.screenSpaceCameraController;
       viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
-      screenSpaceCameraController.enableTilt = false;
-      screenSpaceCameraController.enableRotate = false;
-      screenSpaceCameraController.enableZoom = false;
-      const canvas = viewer.canvas;
-      document.onclick = () => canvas.requestPointerLock();
+      if (!this.createPathMode) {
+        screenSpaceCameraController.enableTilt = false;
+        screenSpaceCameraController.enableRotate = false;
+        screenSpaceCameraController.enableZoom = false;
+        const canvas = viewer.canvas;
+        document.onclick = () => canvas.requestPointerLock();
+      }
     };
 
     this.onMousemove = this.onMousemove.bind(this);
   }
 
   ngOnInit() {
+    if (this.createPathMode){
+      return;
+    }
     this.gameData.first().subscribe(value => {
       this.character.initCharacter({
         id: 'me',

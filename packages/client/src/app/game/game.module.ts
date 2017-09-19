@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { AngularCesiumModule } from 'angular-cesium';
+import { AngularCesiumModule, CoordinateConverter } from 'angular-cesium';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   MdButtonModule,
@@ -30,6 +30,7 @@ import { OtherPlayersComponent } from './views/game-map/other-players/other-play
 import { UtilsService } from './services/utils.service';
 import { ConfiguredApolloModule } from '../core/configured-apollo/configured-apollo.module';
 import { EndGameDialogComponent } from './views/end-game-dialog/end-game-dialog.component';
+import { PathCreatorComponent } from './views/game-map/path-creator/path-creator.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { EndGameDialogComponent } from './views/end-game-dialog/end-game-dialog.
     WorldComponent,
     OtherPlayersComponent,
     EndGameDialogComponent,
+    PathCreatorComponent,
   ],
   imports: [
     BrowserModule,
