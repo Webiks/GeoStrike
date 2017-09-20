@@ -6,14 +6,17 @@ const resolvers = {
     id: (game: IGameObject) => game.gameId,
     gameCode: (game: IGameObject) => game.gameCode,
     players: (game: IGameObject, args, { player }) => {
+      const players = Array.from(game.playersMap.values());
       if (player) {
-        return game.players.filter((p: IPlayer) => p.playerId !== player.playerId);
+
+        return players.filter((p: IPlayer) => p.playerId !== player.playerId);
       }
 
-      return game.players || [];
+      return players || [];
     },
     state: (game: IGameObject) => {
-      if (game.players.some(player => player.state === 'WAITING')) {
+      const players = Array.from(game.playersMap.values());
+      if (players.some(player => player.state === 'WAITING')) {
         return 'WAITING';
       }
 

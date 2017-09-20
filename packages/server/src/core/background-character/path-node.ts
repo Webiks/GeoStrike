@@ -22,8 +22,6 @@ export const loadPath = () => {
     pathsGraph.push(pathWithPoints);
   });
 
-
-  console.log(pathsGraph);
   return pathsGraph;
 };
 

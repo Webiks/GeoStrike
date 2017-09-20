@@ -7,7 +7,7 @@ function updateClientsLoop(gameObject: IGameObject) {
     gameData: {
       gameId: gameObject.gameId,
       gameCode: gameObject.gameCode,
-      players: gameObject.players,
+      players: Array.from(gameObject.playersMap.values()),
       state: gameObject.state,
     },
   });

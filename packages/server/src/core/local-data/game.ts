@@ -4,8 +4,9 @@ import { GameState, PlayerState, PlayerSyncState } from '../../types';
 import * as Cesium from 'cesium';
 import { Settings } from '../../settings/settings';
 import { startClientsUpdater } from '../clients-updater/clients-updater';
+import { BackgroundCharacterManager } from '../background-character/background-character-manager';
 
-interface ICartesian3Location {
+export interface ICartesian3Location {
   x: number;
   y: number;
   z: number;
@@ -14,6 +15,13 @@ interface ICartesian3Location {
 export enum Team {
   RED = 'RED',
   BLUE = 'BLUE',
+  NONE = 'NONE',
+}
+
+export enum CharacterType {
+  PLAYER = 'PLAYER',
+  BACKGROUND_CHARACTER = 'BACKGROUND_CHARACTER',
+  ADMIN_OVERVIEW = 'ADMIN_OVERVIEW',
 }
 
 export interface IPlayer {
@@ -27,15 +35,16 @@ export interface IPlayer {
   heading: number;
   team: Team;
   syncState: PlayerSyncState;
+  type: CharacterType;
 }
 
 export interface IGameObject {
   gameId: string;
   gameCode: string;
   playersMap: Map<string, IPlayer>;
-  players: IPlayer[];
   state: GameState;
   clientsUpdater?: any;
+  bgCharactersManager: BackgroundCharacterManager;
 }
 
 const TOKENS_SECRET = 'sdf43tSWDG#%Tsdfw4';
@@ -62,7 +71,20 @@ export class GamesManager {
     return gameCode;
   }
 
-  addPlayerToGame(gameId: string, character: string, username: string, team: Team): IPlayer {
+
+  addPlayerToGame(gameId: string, player: IPlayer){
+    const game = this.getGameById(gameId);
+    const playerToAdd = {
+      ...player,
+      game,
+    } as IPlayer;
+
+    game.playersMap.set(player.playerId, playerToAdd);
+
+    return player;
+  }
+
+  addRealPlayerToGame(gameId: string, character: string, username: string, team: Team): IPlayer {
     const game = this.getGameById(gameId);
     const playerId = v4();
     const playerToken = sign({
@@ -78,14 +100,14 @@ export class GamesManager {
       username,
       state: 'WAITING',
       game,
-      currentLocation: DEFAULT_PLAYERS_LOCATION[game.players.length],
+      currentLocation: DEFAULT_PLAYERS_LOCATION[game.playersMap.size],
       heading: 0,
       team,
+      type: CharacterType.PLAYER,
       syncState: 'VALID',
     };
 
     game.playersMap.set(playerId, player);
-    game.players.push(player);
 
     return player;
   }
@@ -94,15 +116,19 @@ export class GamesManager {
     const gameId = v4();
     const gameCode = this.generateGameCode();
 
+    const bgCharactersManager = new BackgroundCharacterManager(gameId,this);
     const gameObject: IGameObject = {
       gameId,
       gameCode,
       playersMap: new Map<string, IPlayer>(),
-      players: [],
       state: 'WAITING',
+      bgCharactersManager,
     };
     startClientsUpdater(gameObject);
     this.activeGames.set(gameId, gameObject);
+
+    bgCharactersManager.initBgCharacters();
+    bgCharactersManager.startCharactersMovement();
 
     return gameObject;
   }
@@ -162,5 +188,12 @@ export class GamesManager {
     const newPosition = new Cesium.Cartesian3(newLocation.x, newLocation.y, newLocation.z);
     const distance = Cesium.Cartesian3.distance(currentPosition, newPosition);
     return distance < Settings.serverClientDistanceThreshold;
+  }
+
+  endGame(gameId: string){
+    const game = this.getGameById(gameId);
+    game.bgCharactersManager.stop();
+
+    // TODO other end game logic...
   }
 }
