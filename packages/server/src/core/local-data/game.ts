@@ -116,7 +116,7 @@ export class GamesManager {
     const gameId = v4();
     const gameCode = this.generateGameCode();
 
-    const bgCharactersManager = new BackgroundCharacterManager(gameId,this);
+    const bgCharactersManager = new BackgroundCharacterManager(gameId, this);
     const gameObject: IGameObject = {
       gameId,
       gameCode,

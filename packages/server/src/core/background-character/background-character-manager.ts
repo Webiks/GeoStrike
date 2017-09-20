@@ -19,7 +19,6 @@ export class BackgroundCharacterManager {
     this.NUMBER_OF_BG_CHARACTERS = Settings.backgroundCharacters.updateIntervalMs;
     this.UPDATE_INTERVAL_MS = Settings.backgroundCharacters.updateIntervalMs;
     this.UPDATE_DISTANCE = Settings.backgroundCharacters.updateDistanceMeters;
-    this.game = this.gameManager.getGameById(this.gameId);
     this.availablePathNodes = loadPath();
   }
 
@@ -28,14 +27,14 @@ export class BackgroundCharacterManager {
   }
 
   initBgCharacters() {
-    const game = this.game;
+    this.game = this.gameManager.getGameById(this.gameId);
     for (let i = 0; i < this.NUMBER_OF_BG_CHARACTERS; i++) {
       const currentPath = this.availablePathNodes[i];
       const bgPlayer = {
         playerId: v4(),
         character: 'old_lady',
         state: 'ALIVE',
-        game,
+        game: this.game,
         currentLocation: currentPath.location,
         heading: 0,
         team: Team.NONE,
