@@ -36,6 +36,9 @@ export class KeyboardControlComponent implements OnInit {
 
   private getDepthDistance(fromLocation: Cartesian3, toWindowPosition: Cartesian2) {
     const toLocation = this.viewer.scene.pickPosition(toWindowPosition);
+    if (!toLocation){
+      return Number.MAX_SAFE_INTEGER;
+    }
     const distance = Cesium.Cartesian3.distance(fromLocation, toLocation);
     return distance ? distance : Number.MAX_SAFE_INTEGER;
   }
