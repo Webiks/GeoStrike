@@ -166,7 +166,7 @@ export class GamesManager {
     const game = this.getGameById(gameId);
     const player = game.playersMap.get(playerId);
     if (player && position) {
-      if (skipValidation && this.validatePlayerPosition(player.currentLocation, position)) {
+      if (skipValidation || this.validatePlayerPosition(player.currentLocation, position)) {
         player.syncState = 'VALID';
         player.currentLocation = position;
         player.heading = heading;

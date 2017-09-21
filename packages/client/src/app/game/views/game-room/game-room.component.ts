@@ -42,8 +42,9 @@ export class GameRoomComponent implements OnInit, OnDestroy {
   }
 
   getPlayers() {
+    const players = this.game.players.filter(p=> p.type === 'PLAYER');
     return [
-      ...this.game.players,
+      ...players,
       this.game.me,
     ];
   }

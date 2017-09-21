@@ -10,5 +10,5 @@ export const environment = {
     runningSpeed: 0.3,
     walkingSpeed: 0.15,
   },
-  createPathMode: true,
+  createPathMode: false,
 };
