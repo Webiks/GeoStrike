@@ -50,10 +50,10 @@ export interface IGameObject {
 const TOKENS_SECRET = 'sdf43tSWDG#%Tsdfw4';
 
 const DEFAULT_PLAYERS_LOCATION = [
-  { x: 1333422.9356770117, y: -4654805.289160995, z: 4137634.8619940765 },
-  { x: 1333372.2794363261, y: -4654805.238712306, z: 4137651.1335756676 },
-  { x: 1333427.435864061, y: -4654696.156980868, z: 4137755.369174167 },
-  { x: 1333425.271653392, y: -4654860.0793055175, z: 4137572.887568583 },
+  {x: 1333422.9356770117, y: -4654805.289160995, z: 4137634.8619940765},
+  {x: 1333372.2794363261, y: -4654805.238712306, z: 4137651.1335756676},
+  {x: 1333427.435864061, y: -4654696.156980868, z: 4137755.369174167},
+  {x: 1333425.271653392, y: -4654860.0793055175, z: 4137572.887568583},
 ];
 
 export class GamesManager {
@@ -72,7 +72,7 @@ export class GamesManager {
   }
 
 
-  addPlayerToGame(gameId: string, player: IPlayer){
+  addPlayerToGame(gameId: string, player: IPlayer) {
     const game = this.getGameById(gameId);
     const playerToAdd = {
       ...player,
@@ -93,6 +93,8 @@ export class GamesManager {
       username,
     }, TOKENS_SECRET);
 
+    const realPlayerCount = Array.from(game.playersMap.values())
+      .filter(player => player.type === CharacterType.PLAYER).length;
     const player: IPlayer = {
       playerId,
       character,
@@ -100,7 +102,7 @@ export class GamesManager {
       username,
       state: 'WAITING',
       game,
-      currentLocation: DEFAULT_PLAYERS_LOCATION[game.playersMap.size],
+      currentLocation: DEFAULT_PLAYERS_LOCATION[realPlayerCount],
       heading: 0,
       team,
       type: CharacterType.PLAYER,
@@ -160,11 +162,11 @@ export class GamesManager {
     }
   }
 
-  updatePlayerPosition(gameId: string, playerId: string, position: ICartesian3Location, heading: number) {
+  updatePlayerPosition(gameId: string, playerId: string, position: ICartesian3Location, heading: number, skipValidation = false) {
     const game = this.getGameById(gameId);
     const player = game.playersMap.get(playerId);
     if (player && position) {
-      if (this.validatePlayerPosition(player.currentLocation, position)) {
+      if (skipValidation && this.validatePlayerPosition(player.currentLocation, position)) {
         player.syncState = 'VALID';
         player.currentLocation = position;
         player.heading = heading;
@@ -190,7 +192,7 @@ export class GamesManager {
     return distance < Settings.serverClientDistanceThreshold;
   }
 
-  endGame(gameId: string){
+  endGame(gameId: string) {
     const game = this.getGameById(gameId);
     game.bgCharactersManager.stop();
 
