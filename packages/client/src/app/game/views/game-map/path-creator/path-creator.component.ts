@@ -23,7 +23,7 @@ interface PathNode {
   providers: [CoordinateConverter]
 })
 export class PathCreatorComponent implements OnInit {
-  defaultStartLocation = {x: 1333422.9356770117, y: -4654805.289160995, z: 4138634.8619940765};
+  defaultStartLocation = Cesium.Cartesian3.fromDegrees(-74.0150259073203,40.70489562994595,1000);
   showJsonPanel = false;
   points$: Subject<AcNotification>;
   pointsPathMap: Map<string, PathNode> = new Map();
