@@ -7,23 +7,21 @@ export class PathNode {
 }
 
 
-export const loadPath = () => {
+const loadPath = () => {
 
   const pathsJson = require('../../settings/background-characters-path.json');
-  const pathsGraph: [PathNode] = [] as [PathNode];
-  const pathsMap: Map<string, PathNode> = new Map();
+  const pathsMap: Map<string, any> = new Map();
 
   pathsJson.forEach(jsonPath => pathsMap.set(jsonPath.id, jsonPath));
-  pathsJson.forEach(jsonPath => {
-    const pathWithPoints: PathNode = {...jsonPath};
-    pathWithPoints.points = [] as [PathNode];
-    jsonPath.points.forEach(pointId => pathWithPoints.points.push(pathsMap.get(pointId)));
+  for (let [id, pathNode] of pathsMap) {
+    pathNode.points = pathNode.points.map(pointId => pathsMap.get(pointId));
+  }
 
-    pathsGraph.push(pathWithPoints);
-  });
-
-  return pathsGraph;
+  const pathGraph =  Array.from(pathsMap.values());
+  return pathGraph as [PathNode];
 };
+
+export const pathsGraph: [PathNode] = loadPath();
 
 
 
