@@ -3,14 +3,14 @@ import gql from 'graphql-tag';
 export const schema = gql`
     type Player {
         id: String!
-        username: String!
+        username: String
         character: String!
         state: PlayerState!
         isMe: Boolean!
         currentLocation: PlayerLocation!
         team: Team!
         syncState: PlayerSyncState!
-        type: CharacterType
+        type: CharacterType!
     }
 
     enum CharacterType {
@@ -27,6 +27,7 @@ export const schema = gql`
     enum Team {
         BLUE,
         RED,
+        NONE,
     }
 
     enum PlayerState {
