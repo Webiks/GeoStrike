@@ -4,12 +4,7 @@ import { Settings } from '../../settings/settings';
 
 function updateClientsLoop(gameObject: IGameObject) {
   pubsub.publish(ESubscriptionTopics.GAME_STATE_CHANGED, {
-    gameData: {
-      gameId: gameObject.gameId,
-      gameCode: gameObject.gameCode,
-      players: Array.from(gameObject.playersMap.values()),
-      state: gameObject.state,
-    },
+    gameData: gameObject
   });
 
   gameObject.clientsUpdater = setTimeout(() => {
