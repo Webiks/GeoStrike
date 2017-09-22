@@ -1,2 +1,7 @@
-<game-map [playersPositions]="players$" [gameData]="gameData$"></game-map>
-<button md-raised-button class="help-btn" (click)="openHelp($event)"> help</button>
+<game-map [playersPositions]="players$" [gameData]="gameData$">
+  <div class="right-btn-panel">
+    <button md-icon-button class="help-btn" (click)="openHelp($event)">
+      <md-icon svgIcon="help"></md-icon>
+    </button>
+  </div>
+</game-map>

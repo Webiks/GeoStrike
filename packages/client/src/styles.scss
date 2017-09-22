@@ -1,3 +1,4 @@
+@import '~@angular/material/prebuilt-themes/purple-green.css';
 
 @font-face {
   font-family: 'AGENCYR';
@@ -22,20 +23,13 @@ body {
 }
 
 .mat-dialog-container {
-  //background-color: rgba(0, 0, 0, 0.9); // TODO all other
   border-radius: 10px !important;
   background-color: transparent;
 }
 
-@import '~@angular/material/prebuilt-themes/purple-green.css';
 
-.container-how-to-play{
-  //height: 60vh;
-  //width: 70vw;
-  background: rgba(0, 0, 0, 0.76);
-  border-radius: 10px;
-  border: 1px solid #FFFFFF;
-  color: white;
+.general-dialog {
+  background-color: rgba(0, 0, 0, 0.9);
 }
 
 :root {

@@ -6,7 +6,8 @@
       <div class="button" [ngClass]="{'space-btn':keyInfo.keyName === 'Space' }">
         <span *ngIf="keyInfo.keyName !== 'LeftMouse'; else mouse"> {{keyInfo.keyName}}</span>
         <ng-template #mouse>
-          <img src="/assets/left-mouse.svg" alt="" class="mouse">
+          <!--<img src="/assets/icons/left-mouse.svg" alt="" class="mouse">-->
+          <md-icon svgIcon="left-mouse" class="mouse"></md-icon>
         </ng-template>
       </div>
     </div>

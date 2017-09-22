@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MdDialog } from '@angular/material';
 import { KeyboardKeysService } from '../../../core/services/keyboard-keys.service';
 
 @Component({
   selector: 'how-to-play-dialog',
   templateUrl: './how-to-play-dialog.component.html',
-  styleUrls: ['./how-to-play-dialog.component.scss']
+  styleUrls: ['./how-to-play-dialog.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class HowToPlayDialogComponent implements OnInit {
 

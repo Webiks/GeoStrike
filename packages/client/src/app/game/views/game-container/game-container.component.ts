@@ -61,6 +61,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
               height: '30%',
               width: '60%',
               disableClose: true,
+              panelClass: 'general-dialog',
             });
           }
 

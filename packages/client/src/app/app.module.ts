@@ -3,12 +3,14 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.module.routing';
 import { KeyboardKeysService } from './core/services/keyboard-keys.service';
+import { HttpModule } from '@angular/http';
 
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
+    HttpModule,
     BrowserModule,
     AppRoutingModule
   ],
