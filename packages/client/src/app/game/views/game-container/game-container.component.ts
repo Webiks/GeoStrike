@@ -11,6 +11,7 @@ import 'rxjs/add/operator/map';
 import { EndGameDialogComponent } from '../end-game-dialog/end-game-dialog.component';
 import { MdDialog } from '@angular/material';
 import { CharacterService } from '../../services/character.service';
+import { HowToPlayDialogComponent } from '../how-to-play-dialog/how-to-play-dialog.component';
 
 @Component({
   selector: 'game-container' ,
@@ -76,6 +77,14 @@ export class GameContainerComponent implements OnInit , OnDestroy {
       });
     });
 
+  }
+
+  openHelp(){
+      this.dialog.open(HowToPlayDialogComponent,{
+        height: '75%',
+        width: '85%',
+        panelClass: 'container-how-to-play'
+      })
   }
 
   ngOnDestroy () {

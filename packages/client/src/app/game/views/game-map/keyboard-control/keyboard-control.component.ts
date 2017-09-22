@@ -1,16 +1,8 @@
 import { Component, NgZone, OnInit } from '@angular/core';
-import {
-  CesiumService,
-  GeoUtilsService,
-  KeyboardControlParams,
-  KeyboardControlService,
-} from 'angular-cesium';
-import {
-  CharacterService,
-  MeModelState,
-  ViewState,
-} from '../../../services/character.service';
+import { CesiumService, GeoUtilsService, KeyboardControlParams, KeyboardControlService, } from 'angular-cesium';
+import { CharacterService, MeModelState, ViewState, } from '../../../services/character.service';
 import { environment } from '../../../../../environments/environment';
+import { KeyboardKeysService } from '../../../../core/services/keyboard-keys.service';
 
 const Direction = {
   Forward: 'Forward',
@@ -33,12 +25,12 @@ const DirectionsDelta = {
 export class KeyboardControlComponent implements OnInit {
   inspector = false;
 
-  constructor(
-    private character: CharacterService,
-    private keyboardControlService: KeyboardControlService,
-    private cesiumService: CesiumService,
-    private ngZone: NgZone,
-  ) {}
+  constructor(private character: CharacterService,
+              private keyboardControlService: KeyboardControlService,
+              private cesiumService: CesiumService,
+              private keyboardKeysService: KeyboardKeysService,
+              private ngZone: NgZone) {
+  }
 
   buildMovementConfig(direction: string) {
     const delta = DirectionsDelta[direction];
@@ -128,35 +120,35 @@ export class KeyboardControlComponent implements OnInit {
       true
     );
 
-    this.ngZone.runOutsideAngular(()=>{
-      // Regitster Other keys because keyboardControl key are triggered by cesium tick
-      document.addEventListener('keydown', (keyEvent: KeyboardEvent) => {
-        switch (keyEvent.code) {
-          case 'Tab':
-            this.ngZone.run(()=>{
-              keyEvent.preventDefault();
-              this.changeViewMove();
-            });
-            break;
-          case 'Space':
-            this.ngZone.run(()=>{
-              keyEvent.preventDefault();
-              this.changeMeShootState();
-            });
-            break;
-          case 'KeyI':
-            this.toggleInspector(Cesium.viewerCesiumInspectorMixin, 'cesiumInspector');
-            break;
-          case 'KeyO':
-            this.toggleInspector(
-              Cesium.viewerCesium3DTilesInspectorMixin,
-              'cesium3DTilesInspector'
-            );
-            break;
-          default:
-            break;
-        }
+    this.addKeyboardEvents();
+  }
+
+  private addKeyboardEvents() {
+    this.keyboardKeysService.init();
+    this.keyboardKeysService.registerKeyBoardEventDescription('LeftMouse', 'Shoot');
+    this.keyboardKeysService.registerKeyBoardEventDescription('KeyW', 'Move Forward');
+    this.keyboardKeysService.registerKeyBoardEventDescription('KeyS', 'Move Backward');
+    this.keyboardKeysService.registerKeyBoardEvent('Tab', 'Switch FPV/Semi FPV',
+      (keyEvent: KeyboardEvent) => {
+        this.ngZone.run(() => {
+          keyEvent.preventDefault();
+          this.changeViewMove();
+        });
       });
-    });
+    this.keyboardKeysService.registerKeyBoardEvent('Space', 'Switch Shooting Mode',
+      (keyEvent: KeyboardEvent) => {
+        this.ngZone.run(() => {
+          keyEvent.preventDefault();
+          this.changeMeShootState();
+        });
+      });
+    this.keyboardKeysService.registerKeyBoardEvent('KeyI', null,
+      (keyEvent: KeyboardEvent) => {
+        this.toggleInspector(Cesium.viewerCesiumInspectorMixin, 'cesiumInspector');
+      });
+    this.keyboardKeysService.registerKeyBoardEvent('KeyO', null,
+      (keyEvent: KeyboardEvent) => {
+        this.toggleInspector(Cesium.viewerCesium3DTilesInspectorMixin, 'cesium3DTilesInspector');
+      });
   }
 }

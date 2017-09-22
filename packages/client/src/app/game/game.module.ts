@@ -6,7 +6,7 @@ import {
   MdButtonModule,
   MdCardModule,
   MdDialogModule,
-  MdGridListModule,
+  MdGridListModule, MdIconModule,
   MdInputModule,
   MdProgressSpinnerModule
 } from '@angular/material';
@@ -30,6 +30,8 @@ import { OtherPlayersComponent } from './views/game-map/other-players/other-play
 import { UtilsService } from './services/utils.service';
 import { ConfiguredApolloModule } from '../core/configured-apollo/configured-apollo.module';
 import { EndGameDialogComponent } from './views/end-game-dialog/end-game-dialog.component';
+import { HowToPlayDialogComponent } from './views/how-to-play-dialog/how-to-play-dialog.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -47,10 +49,12 @@ import { EndGameDialogComponent } from './views/end-game-dialog/end-game-dialog.
     WorldComponent,
     OtherPlayersComponent,
     EndGameDialogComponent,
+    HowToPlayDialogComponent,
   ],
   imports: [
     BrowserModule,
     AngularCesiumModule,
+    SharedModule,
     BrowserAnimationsModule,
     MdButtonModule,
     MdCardModule,
@@ -58,6 +62,7 @@ import { EndGameDialogComponent } from './views/end-game-dialog/end-game-dialog.
     MdGridListModule,
     MdProgressSpinnerModule,
     MdInputModule,
+    MdIconModule,
     FormsModule,
     ConfiguredApolloModule,
   ],
@@ -74,6 +79,7 @@ import { EndGameDialogComponent } from './views/end-game-dialog/end-game-dialog.
     CreateNewGameDialogComponent,
     JoinGameDialogComponent,
     EndGameDialogComponent,
+    HowToPlayDialogComponent,
   ],
 })
 export class GameModule {

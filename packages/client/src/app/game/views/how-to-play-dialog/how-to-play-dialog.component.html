@@ -1,0 +1,17 @@
+<div class="container">
+  <div class="title">HOW TO PLAY</div>
+  <div class="buttons-container">
+    <div *ngFor="let keyInfo of keys" class="button-info">
+      <div> {{keyInfo.description}}</div>
+      <div class="button" [ngClass]="{'space-btn':keyInfo.keyName === 'Space' }">
+        <span *ngIf="keyInfo.keyName !== 'LeftMouse'; else mouse"> {{keyInfo.keyName}}</span>
+        <ng-template #mouse>
+          <img src="/assets/left-mouse.svg" alt="" class="mouse">
+        </ng-template>
+      </div>
+    </div>
+  </div>
+  <div class="btn-row">
+    <big-button (click)="dialog.closeAll()" text="BACK TO THE GAME"></big-button>
+  </div>
+</div>
