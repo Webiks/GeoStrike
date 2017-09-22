@@ -10,10 +10,13 @@ export class EndGameDialogComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    document.onclick = undefined;
+    document.exitPointerLock();
+
   }
 
   reload(){
-    location.reload();
+    location.href = '/'
   }
 
 }
