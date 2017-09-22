@@ -82,7 +82,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
 
   openHelp(event: Event) {
     this.dialog.open(HowToPlayDialogComponent, {
-      height: '75%',
+      height: '80%',
       width: '85%',
       panelClass: 'container-how-to-play'
     })

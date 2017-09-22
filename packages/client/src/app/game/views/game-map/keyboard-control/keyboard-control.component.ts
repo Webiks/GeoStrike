@@ -174,6 +174,7 @@ export class KeyboardControlComponent implements OnInit {
           this.changeViewMove();
         });
       });
+    this.keyboardKeysService.registerKeyBoardEventDescription('Shift', 'Run');
     this.keyboardKeysService.registerKeyBoardEvent('Space', 'Switch Shooting Mode',
       (keyEvent: KeyboardEvent) => {
         this.ngZone.run(() => {
