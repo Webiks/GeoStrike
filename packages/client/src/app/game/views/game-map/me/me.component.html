@@ -9,7 +9,7 @@
                   }">
   </ac-model-desc>
 </ac-layer>
-<img *ngIf="showWeapon$ | async" src="assets/gun1.png" class="gun" alt="">
+<img *ngIf="showWeapon$ | async" src="assets/gun1.png" class="gun" alt="" (click)="canvasPropagation()">
 <img *ngIf="isMuzzleFlashShown" src="assets/muzzle-flash.png" class="gun-flare" alt="">
 <img #cross *ngIf="showCross$ | async" src="assets/focus.png" class="gun-cross" alt="">
 <audio #gunShotSound src="assets/sound/smg_shoot.wav"></audio>

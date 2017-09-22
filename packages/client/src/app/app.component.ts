@@ -1,7 +1,8 @@
 import { Component , DoCheck } from '@angular/core';
 import {ViewerConfiguration} from 'angular-cesium';
+import { MdIconRegistry } from '@angular/material';
+import { DomSanitizer } from '@angular/platform-browser';
 
-declare var Zone;
 @Component({
   selector: 'app-root',
   template: `<router-outlet></router-outlet>`,
@@ -10,6 +11,12 @@ declare var Zone;
 export class AppComponent implements DoCheck{
   ngDoCheck (): void {
   }
-  constructor() {
+  constructor(iconRegistry: MdIconRegistry, sanitizer: DomSanitizer) {
+    iconRegistry.addSvgIcon(
+      'help',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/help.svg'));
+    iconRegistry.addSvgIcon(
+      'left-mouse',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/left-mouse.svg'));
   }
 }

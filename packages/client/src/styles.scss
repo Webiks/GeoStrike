@@ -1,3 +1,11 @@
+@import '~@angular/material/prebuilt-themes/purple-green.css';
+
+@font-face {
+  font-family: 'AGENCYR';
+  src: url('/assets/fonts/AGENCYR.eot');
+  src: local('/assets/fonts/AGENCYR'), url('/assets/fonts/AGENCYR.woff') format('woff'), url('/assets/fonts/AGENCYR.ttf') format('truetype');
+}
+
 html,
 body {
   width: 100%;
@@ -5,7 +13,7 @@ body {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  font-family: sans-serif;
+  font-family: AGENCYR, sans-serif !important;
   background-image: url('/assets/menu/background.jpg');
   background-size: cover;
 }
@@ -15,8 +23,16 @@ body {
 }
 
 .mat-dialog-container {
-  background-color: rgba(0, 0, 0, 0.9);
-  border-radius: 10px;
+  border-radius: 10px !important;
+  background-color: transparent;
 }
 
-@import '~@angular/material/prebuilt-themes/purple-green.css';
+
+.general-dialog {
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+:root {
+  --light-green: #6FCF97;
+  --grey: #4F4F4F;
+}
