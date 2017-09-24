@@ -1,0 +1,19 @@
+<ac-layer acFor="let point of points$" [context]="this">
+  <ac-point-desc props="{
+                   position: point.location,
+                   pixelSize: 10,
+                   color: redColor,
+                  }">
+  </ac-point-desc>
+</ac-layer>
+<ac-polyline [props]="{
+  positions: getLinePositions(),
+  width: 2,
+  followSurface: false}">
+</ac-polyline>
+
+<div class="path-panel" *ngIf="showJsonPanel">
+  {{pointPaths | json}}
+</div>
+<button md-raised-button (click)="showJSONPath()" class="json-path">GET PATH</button>
+<button md-raised-button (click)="reset()" class="reset">RESET</button>

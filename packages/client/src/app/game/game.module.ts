@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { AngularCesiumModule } from 'angular-cesium';
+import { AngularCesiumModule, CoordinateConverter } from 'angular-cesium';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   MdButtonModule,
@@ -32,6 +32,7 @@ import { ConfiguredApolloModule } from '../core/configured-apollo/configured-apo
 import { EndGameDialogComponent } from './views/end-game-dialog/end-game-dialog.component';
 import { HowToPlayDialogComponent } from './views/how-to-play-dialog/how-to-play-dialog.component';
 import { SharedModule } from '../shared/shared.module';
+import { PathCreatorComponent } from './views/game-map/path-creator/path-creator.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { SharedModule } from '../shared/shared.module';
     WorldComponent,
     OtherPlayersComponent,
     EndGameDialogComponent,
+    PathCreatorComponent,
     HowToPlayDialogComponent,
   ],
   imports: [

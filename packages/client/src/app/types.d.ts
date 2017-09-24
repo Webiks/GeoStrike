@@ -14,13 +14,14 @@ export interface Game {
 
 export interface Player {
   id: string; 
-  username: string; 
+  username: string | null; 
   character: string; 
   state: PlayerState; 
   isMe: boolean; 
   currentLocation: PlayerLocation; 
   team: Team; 
   syncState: PlayerSyncState; 
+  type: CharacterType; 
 }
 
 export interface PlayerLocation {
@@ -79,10 +80,13 @@ export interface NotifyKillMutationArgs {
 export type PlayerState = "WAITING" | "READY" | "ALIVE" | "IN_BUILDING" | "DEAD";
 
 
-export type Team = "BLUE" | "RED";
+export type Team = "BLUE" | "RED" | "NONE";
 
 
 export type PlayerSyncState = "VALID" | "INVALID";
+
+
+export type CharacterType = "PLAYER" | "BACKGROUND_CHARACTER" | "ADMIN_OVERVIEW";
 
 
 export type GameState = "WAITING" | "ACTIVE" | "DONE";
@@ -205,11 +209,12 @@ export namespace PlayerFields {
   export type Fragment = {
     team: Team; 
     syncState: PlayerSyncState; 
-    username: string; 
+    username: string | null; 
     character: string; 
     state: PlayerState; 
     isMe: boolean; 
     id: string; 
+    type: CharacterType; 
     currentLocation: CurrentLocation; 
   }
 

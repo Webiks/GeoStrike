@@ -9,6 +9,7 @@ export const playerFragment = gql`
     state
     isMe
     id
+    type 
     currentLocation {
       ...LocationFields
     }

@@ -6,7 +6,7 @@ import * as session from 'express-session';
 import { Express } from 'express';
 import { logger } from './core/logger/logger';
 import { schema } from './graphql/schema';
-import { graphiqlExpress, graphqlExpress } from 'graphql-server-express';
+import { graphiqlExpress, graphqlExpress } from 'apollo-server-express';
 import { createContext, resolveGameAndPlayer } from './graphql/context';
 import { createServer } from 'http';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
@@ -49,6 +49,7 @@ export async function initServer() {
         ...resolveGameAndPlayer(request.headers['player-token'] as string, context.games),
         ...context,
       },
+      debug: true,
     }))
   );
 

@@ -9,13 +9,7 @@ const resolvers = {
     team: (player: IPlayer) => player.team,
     syncState: (player: IPlayer) => player.syncState,
     state: (player: IPlayer) => {
-      const otherWaiting = player.game.players.some(p => p.state === 'WAITING');
-      //TODO why??
-      if (otherWaiting) {
         return player.state;
-      } else {
-        return player.state;
-      }
     },
     currentLocation: (player: IPlayer) => ({
       location: player.currentLocation,

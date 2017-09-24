@@ -1,49 +1,57 @@
 import gql from 'graphql-tag';
 
 export const schema = gql`
-  type Player {
-    id: String!
-    username: String!
-    character: String!
-    state: PlayerState!
-    isMe: Boolean!
-    currentLocation: PlayerLocation!
-    team: Team!
-    syncState: PlayerSyncState!
-  }
+    type Player {
+        id: String!
+        username: String
+        character: String!
+        state: PlayerState!
+        isMe: Boolean!
+        currentLocation: PlayerLocation!
+        team: Team!
+        syncState: PlayerSyncState!
+        type: CharacterType!
+    }
 
-  enum PlayerSyncState {
-      VALID,
-      INVALID,
-  }
-  
-  enum Team {
-    BLUE,
-    RED,
-  }
+    enum CharacterType {
+        PLAYER,
+        BACKGROUND_CHARACTER,
+        ADMIN_OVERVIEW,
+    }
 
-  enum PlayerState {
-    WAITING,
-    READY,
-    ALIVE,
-    IN_BUILDING,
-    DEAD,
-  }
+    enum PlayerSyncState {
+        VALID,
+        INVALID,
+    }
 
-  type Location {
-    x: Float!
-    y: Float!
-    z: Float!
-  }
+    enum Team {
+        BLUE,
+        RED,
+        NONE,
+    }
 
-  input LocationInput {
-    x: Float!
-    y: Float!
-    z: Float!
-  }
+    enum PlayerState {
+        WAITING,
+        READY,
+        ALIVE,
+        IN_BUILDING,
+        DEAD,
+    }
 
-  type PlayerLocation {
-    location: Location!
-    heading: Float!
-  }
+    type Location {
+        x: Float!
+        y: Float!
+        z: Float!
+    }
+
+    input LocationInput {
+        x: Float!
+        y: Float!
+        z: Float!
+    }
+
+    type PlayerLocation {
+        location: Location!
+        heading: Float!
+    }
 `;

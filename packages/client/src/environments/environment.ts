@@ -9,5 +9,6 @@ export const environment = {
   movement: {
     runningSpeed: 0.3,
     walkingSpeed: 0.15,
-  }
+  },
+  createPathMode: false,
 };

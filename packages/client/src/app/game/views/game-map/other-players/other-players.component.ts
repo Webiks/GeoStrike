@@ -3,7 +3,7 @@ import { AcNotification } from 'angular-cesium';
 import { Observable } from 'rxjs/Observable';
 import { UtilsService } from '../../../services/utils.service';
 import { InterpolationService, InterpolationType } from '../../../services/interpolation.service';
-import { PlayerState } from "../../../../types";
+import { PlayerFields } from '../../../../types';
 
 @Component({
   selector: 'other-players',
@@ -13,7 +13,8 @@ export class OtherPlayersComponent {
   @Input() private playersPositions: Observable<AcNotification>;
   playersPositionMap = new Map<string, any>();
 
-  constructor(public utils: UtilsService) {}
+  constructor(public utils: UtilsService) {
+  }
 
   interpolatePlayerPosition(playerId, playerPosition) {
     const positionProperty = this.playersPositionMap.get(playerId);
@@ -32,12 +33,37 @@ export class OtherPlayersComponent {
     }
   }
 
-  getOrientation(location,heading: number, state: PlayerState) {
-    if (state === 'DEAD'){
-      return this.utils.getOrientation(location, heading,0,90);
-    }else{
-      return this.utils.getOrientation(location, heading);
+  getOrientation(location, heading: number, player: PlayerFields.Fragment) {
+    if (player.state === 'DEAD') {
+      return this.utils.getOrientation(location, heading, 0, 90);
+    } else {
+      const playerHeading = player.type === 'PLAYER' ? heading : heading + 90;
+      return this.utils.getOrientation(location, playerHeading);
     }
 
   }
+
+  getModel(player: PlayerFields.Fragment) {
+    if (player.type === 'PLAYER') {
+      return '/assets/models/soldier.gltf';
+
+    } else {
+      return '/assets/models/Cesium_Man.gltf';
+    }
+  }
+
+  getModelScale(player: PlayerFields.Fragment) {
+    if (player.type === 'PLAYER') {
+      return 0.01;
+
+    } else {
+      return 1.5;
+    }
+  }
+
+  runAnimation(player: PlayerFields.Fragment) {
+    return player.state === 'DEAD';
+  }
+
+
 }
