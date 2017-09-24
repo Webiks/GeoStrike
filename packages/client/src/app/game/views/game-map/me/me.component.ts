@@ -81,4 +81,8 @@ export class MeComponent implements OnInit, OnDestroy {
     this.isMuzzleFlashShown = true;
     setTimeout(() => this.isMuzzleFlashShown = false, 20);
   }
+
+  canvasPropagation(){
+    this.cesiumService.getViewer().canvas.click();
+  }
 }
