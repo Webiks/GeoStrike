@@ -24,6 +24,13 @@ export enum CharacterType {
   ADMIN_OVERVIEW = 'ADMIN_OVERVIEW',
 }
 
+export interface IViewer {
+  token: string;
+  id: string;
+  username: string;
+
+}
+
 export interface IPlayer {
   playerId: string;
   token: string;
@@ -42,6 +49,7 @@ export interface IGameObject {
   gameId: string;
   gameCode: string;
   playersMap: Map<string, IPlayer>;
+  viewers: IViewer[];
   state: GameState;
   clientsUpdater?: any;
   bgCharactersManager: BackgroundCharacterManager;
@@ -82,6 +90,24 @@ export class GamesManager {
     game.playersMap.set(player.playerId, playerToAdd);
 
     return player;
+  }
+
+  addViewerToGame(gameId: string, username: string): IViewer {
+    const game = this.getGameById(gameId);
+    const playerId = v4();
+    const playerToken = sign({
+      gameId: game.gameId,
+      playerId,
+      username,
+    }, TOKENS_SECRET);
+
+    const viewer = {
+      token: playerToken,
+      id: playerId,
+      username
+    };
+    game.viewers.push(viewer);
+    return viewer;
   }
 
   addRealPlayerToGame(gameId: string, character: string, username: string, team: Team): IPlayer {
@@ -125,6 +151,7 @@ export class GamesManager {
       playersMap: new Map<string, IPlayer>(),
       state: 'WAITING',
       bgCharactersManager,
+      viewers: []
     };
     startClientsUpdater(gameObject);
     this.activeGames.set(gameId, gameObject);

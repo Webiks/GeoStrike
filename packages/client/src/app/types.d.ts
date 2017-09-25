@@ -38,6 +38,7 @@ export interface Location {
 export interface Mutation {
   createNewGame: CreateOrJoinResult | null; 
   joinGame: CreateOrJoinResult | null; 
+  joinAsViewer: ViewerJoinResult | null; 
   updatePosition: Player | null; 
   ready: Game | null; 
   notifyKill: Player | null; 
@@ -46,6 +47,11 @@ export interface Mutation {
 export interface CreateOrJoinResult {
   game: Game; 
   player: Player; 
+  playerToken: string; 
+}
+
+export interface ViewerJoinResult {
+  game: Game; 
   playerToken: string; 
 }
 
@@ -68,6 +74,10 @@ export interface JoinGameMutationArgs {
   character: string; 
   username: string; 
   team: Team; 
+}
+export interface JoinAsViewerMutationArgs {
+  gameCode: string | null; 
+  username: string | null; 
 }
 export interface UpdatePositionMutationArgs {
   position: LocationInput; 
@@ -131,6 +141,21 @@ export namespace GameData {
 
   export type GameData = {
   } & GameFields.Fragment
+}
+export namespace JoinAsViewer {
+  export type Variables = {
+    gameCode: string | null;
+    username: string | null;
+  }
+
+  export type Mutation = {
+    joinAsViewer: JoinAsViewer | null; 
+  }
+
+  export type JoinAsViewer = {
+    playerToken: string; 
+    game: Game; 
+  }
 }
 export namespace JoinGame {
   export type Variables = {

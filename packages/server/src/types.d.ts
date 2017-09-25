@@ -14,13 +14,14 @@ export interface Game {
 
 export interface Player {
   id: string; 
-  username: string; 
+  username: string | null; 
   character: string; 
   state: PlayerState; 
   isMe: boolean; 
   currentLocation: PlayerLocation; 
   team: Team; 
   syncState: PlayerSyncState; 
+  type: CharacterType; 
 }
 
 export interface PlayerLocation {
@@ -37,6 +38,7 @@ export interface Location {
 export interface Mutation {
   createNewGame: CreateOrJoinResult | null; 
   joinGame: CreateOrJoinResult | null; 
+  joinAsViewer: ViewerJoinResult | null; 
   updatePosition: Player | null; 
   ready: Game | null; 
   notifyKill: Player | null; 
@@ -45,6 +47,11 @@ export interface Mutation {
 export interface CreateOrJoinResult {
   game: Game; 
   player: Player; 
+  playerToken: string; 
+}
+
+export interface ViewerJoinResult {
+  game: Game; 
   playerToken: string; 
 }
 
@@ -68,6 +75,10 @@ export interface JoinGameMutationArgs {
   username: string; 
   team: Team; 
 }
+export interface JoinAsViewerMutationArgs {
+  gameCode: string | null; 
+  username: string | null; 
+}
 export interface UpdatePositionMutationArgs {
   position: LocationInput; 
   heading: number; 
@@ -79,10 +90,13 @@ export interface NotifyKillMutationArgs {
 export type PlayerState = "WAITING" | "READY" | "ALIVE" | "IN_BUILDING" | "DEAD";
 
 
-export type Team = "BLUE" | "RED";
+export type Team = "BLUE" | "RED" | "NONE";
 
 
 export type PlayerSyncState = "VALID" | "INVALID";
+
+
+export type CharacterType = "PLAYER" | "BACKGROUND_CHARACTER" | "ADMIN_OVERVIEW";
 
 
 export type GameState = "WAITING" | "ACTIVE" | "DONE";

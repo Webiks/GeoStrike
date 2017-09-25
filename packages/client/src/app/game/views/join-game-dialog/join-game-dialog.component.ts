@@ -28,7 +28,7 @@ export class JoinGameDialogComponent implements OnInit {
   }
 
 
-  characterChanged({ name, team }) {
+  characterChanged({name, team}) {
     this.characterName = name;
     this.team = team;
   }
@@ -37,18 +37,33 @@ export class JoinGameDialogComponent implements OnInit {
     this.loading = true;
     this.error = '';
 
-    this.gameService.joinGame(this.gameCode, this.characterName, this.username, this.team)
-      .subscribe((result: ApolloQueryResult<JoinGame.Mutation>) => {
-        this.loading = result.loading;
+    if (this.characterName === 'viewer') {
+      this.gameService.joinAsViewer(this.gameCode, this.username)
+        .subscribe(result => {
+          this.loading = result.loading;
 
-        if (!result.loading && result.data) {
-          AuthorizationMiddleware.setToken(result.data.joinGame.playerToken);
-          this.goToGame();
-        }
-      }, (error) => {
-        this.loading = false;
-        this.error = error.message;
-      });
+          if (!result.loading && result.data) {
+            AuthorizationMiddleware.setToken(result.data.joinAsViewer.playerToken);
+            this.goToGame();
+          }
+        }, (error) => {
+          this.loading = false;
+          this.error = error.message;
+        });
+    } else {
+      this.gameService.joinGame(this.gameCode, this.characterName, this.username, this.team)
+        .subscribe((result: ApolloQueryResult<JoinGame.Mutation>) => {
+          this.loading = result.loading;
+
+          if (!result.loading && result.data) {
+            AuthorizationMiddleware.setToken(result.data.joinGame.playerToken);
+            this.goToGame();
+          }
+        }, (error) => {
+          this.loading = false;
+          this.error = error.message;
+        });
+    }
   }
 
   goToGame() {

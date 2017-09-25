@@ -12,4 +12,13 @@
     text-align: center;
     height: 30px;
   }
+
+  .viewer-btn{
+    cursor: pointer;
+    text-align: center;
+    &:hover {
+      color: var(--light-green);
+    }
+
+  }
 }
