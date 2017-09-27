@@ -49,18 +49,22 @@ export class GameMapComponent implements OnInit, OnDestroy {
     };
 
     this.onMousemove = this.onMousemove.bind(this);
+    this.preRenderHandler = this.preRenderHandler.bind(this);
   }
 
   ngOnInit() {
     if (this.createPathMode) {
       return;
     }
+    this.character.viewState$.subscribe((viewState)=>{
+       if (viewState === ViewState.OVERVIEW){
+         this.changeToOverview();
+       }
+    });
     this.gameData.first().subscribe(game => {
-
       const overviewMode = game.me['__typename'] === 'Viewer' || game.me.type === 'OVERVIEW';
       if (overviewMode) {
-        this.viewerOptions.setFreeCameraOptions(this.viewer);
-        this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_START_LOCATION});
+        this.overviewSettings();
         return;
       }
 
@@ -69,11 +73,11 @@ export class GameMapComponent implements OnInit, OnDestroy {
         location: this.utils.getPosition(game.me.currentLocation.location),
         heading: game.me.currentLocation.heading,
         pitch: GameMapComponent.DEFAULT_PITCH,
-        state: MeModelState.WALKING,
+        state: game.me.state === 'DEAD' ? MeModelState.DEAD :MeModelState.WALKING,
       });
       this.gameService.startServerUpdatingLoop();
 
-      this.viewer.scene.preRender.addEventListener(this.preRenderHandler.bind(this));
+      this.viewer.scene.preRender.addEventListener(this.preRenderHandler);
 
       this.ngZone.runOutsideAngular(() => {
         this.elementRef.nativeElement.addEventListener('mousemove', this.onMousemove);
@@ -81,6 +85,18 @@ export class GameMapComponent implements OnInit, OnDestroy {
 
       this.cd.detectChanges();
     });
+  }
+
+  private changeToOverview() {
+    this.overviewSettings();
+    this.gameService.stopServerUpdatingLoop();
+    this.elementRef.nativeElement.removeEventListener('mousemove', this.onMousemove);
+    this.viewer.scene.preRender.removeEventListener(this.preRenderHandler);
+  }
+
+  private overviewSettings() {
+    this.viewerOptions.setFreeCameraOptions(this.viewer);
+    this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_START_LOCATION});
   }
 
   onMousemove(event: MouseEvent) {

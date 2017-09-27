@@ -10,7 +10,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import { EndGameDialogComponent } from '../end-game-dialog/end-game-dialog.component';
 import { MdDialog } from '@angular/material';
-import { CharacterService } from '../../services/character.service';
+import { CharacterService, MeModelState, ViewState } from '../../services/character.service';
 import { HowToPlayDialogComponent } from '../how-to-play-dialog/how-to-play-dialog.component';
 
 @Component({
@@ -66,7 +66,14 @@ export class GameContainerComponent implements OnInit, OnDestroy {
                 width: '60%',
                 disableClose: true,
                 panelClass: 'general-dialog',
+              }).afterClosed().subscribe((toOverView) => {
+                if (toOverView) {
+                  this.character.viewState = ViewState.OVERVIEW;
+                }
               });
+              if (this.character.initialized){
+                this.character.state = MeModelState.DEAD;
+              }
             }
           }
 

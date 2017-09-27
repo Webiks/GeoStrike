@@ -101,6 +101,10 @@ export class GameService {
       setInterval(() => this.updateServerOnPosition(), GameSettingsService.serverUpdatingRate);
   }
 
+  stopServerUpdatingLoop(){
+    clearInterval(this.serverPositionUpdateInterval);
+  }
+
 
   updateServerOnPosition() {
     const state = this.createState();

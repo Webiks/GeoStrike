@@ -15,6 +15,7 @@ export enum MeModelState {
 export enum ViewState {
   FPV,
   SEMI_FPV,
+  OVERVIEW,
 }
 
 export interface CharacterState {

@@ -41,7 +41,6 @@ export class OtherPlayersComponent {
       const playerHeading = player.type === 'PLAYER' ? heading : heading + 90;
       return this.utils.getOrientation(location, playerHeading);
     }
-
   }
 
   getModel(player: PlayerFields.Fragment) {
