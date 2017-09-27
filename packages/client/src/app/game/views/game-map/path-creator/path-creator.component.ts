@@ -9,6 +9,7 @@ import {
   PickOptions
 } from 'angular-cesium';
 import { Subject } from 'rxjs/Subject';
+import { GameMapComponent } from '../game-map.component';
 
 interface PathNode {
   location: Cartesian3;
@@ -23,7 +24,6 @@ interface PathNode {
   providers: [CoordinateConverter]
 })
 export class PathCreatorComponent implements OnInit {
-  defaultStartLocation = Cesium.Cartesian3.fromDegrees(-74.0150259073203,40.70489562994595,1000);
   showJsonPanel = false;
   points$: Subject<AcNotification>;
   pointsPathMap: Map<string, PathNode> = new Map();
@@ -35,8 +35,7 @@ export class PathCreatorComponent implements OnInit {
 
   constructor(private mapEventManager: MapEventsManagerService,
               private geoConverter: CoordinateConverter,
-              private cameraService: CameraService,
-              private cd: ChangeDetectorRef) {
+              private cameraService: CameraService) {
     this.points$ = new Subject<AcNotification>();
   }
 
@@ -45,7 +44,7 @@ export class PathCreatorComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.cameraService.cameraFlyTo({destination: this.defaultStartLocation});
+    this.cameraService.cameraFlyTo({destination: GameMapComponent.DEFAULT_START_LOCATION});
     this.mapEventManager
       .register({event: CesiumEvent.LEFT_CLICK, pick: PickOptions.PICK_FIRST})
       .subscribe((result) => {

@@ -23,4 +23,19 @@ export class UtilsService {
 
     return new Cesium.Cartesian3(x, y, z);
   }
+
+  getModelDisplayCondition(){
+    return  new Cesium.DistanceDisplayCondition(0.0, 125.5);
+  }
+
+  getIconDisplayCondition(){
+    return  new Cesium.DistanceDisplayCondition(125.5);
+  }
+
+  toFixedHeight(cartesian){
+    const cart = Cesium.Cartographic.fromCartesian(cartesian);
+    cart.height = 10;
+    return Cesium.Cartesian3.fromRadians(cart.longitude, cart.latitude, cart.height);
+
+  }
 }

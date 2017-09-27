@@ -5,6 +5,7 @@ import { ApolloQueryResult } from 'apollo-client';
 import { AuthorizationMiddleware } from '../../../core/configured-apollo/network/authorization-middleware';
 import { Router } from '@angular/router';
 import { MdDialogRef } from '@angular/material';
+import { VIEWER } from '../character-picker/character-picker.component';
 
 @Component({
   selector: 'create-new-game-dialog',
@@ -18,13 +19,12 @@ export class CreateNewGameDialogComponent {
   private characterName: string = null;
   private team: Team = 'BLUE';
 
-  constructor(
-    private dialogRef: MdDialogRef<any>,
-    private router: Router,
-    private gameService: GameService
-  ) {}
+  constructor(private dialogRef: MdDialogRef<any>,
+              private router: Router,
+              private gameService: GameService) {
+  }
 
-  characterChanged({ name, team }) {
+  characterChanged({name, team}) {
     this.characterName = name;
     this.team = team;
   }
@@ -32,8 +32,9 @@ export class CreateNewGameDialogComponent {
   createGame() {
     this.loading = true;
 
+    const isViewer = this.characterName === VIEWER.name;
     this.gameService
-      .createNewGame(this.characterName, this.username, this.team)
+      .createNewGame(this.characterName, this.username, this.team, isViewer)
       .subscribe((result: ApolloQueryResult<CreateNewGame.Mutation>) => {
         this.loading = result.loading;
 

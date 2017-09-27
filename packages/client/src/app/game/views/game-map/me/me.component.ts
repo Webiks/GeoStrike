@@ -85,4 +85,8 @@ export class MeComponent implements OnInit, OnDestroy {
   canvasPropagation(){
     this.cesiumService.getViewer().canvas.click();
   }
+
+  getIconPic(player){
+    return player.team === 'BLUE' ? '/assets/icons/blue-mark.png' : '/assets/icons/red-mark.png';
+  }
 }

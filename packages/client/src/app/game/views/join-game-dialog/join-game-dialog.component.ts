@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { GameService } from '../../services/game.service';
 import { AuthorizationMiddleware } from '../../../core/configured-apollo/network/authorization-middleware';
 import { ApolloQueryResult } from 'apollo-client';
-import { JoinGame, Team } from '../../../types';
+import { Team } from '../../../types';
 import { MdDialogRef } from '@angular/material';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
+import { VIEWER } from '../character-picker/character-picker.component';
 
 @Component({
   selector: 'join-game-dialog',
@@ -33,37 +35,31 @@ export class JoinGameDialogComponent implements OnInit {
     this.team = team;
   }
 
+
+  getViewerOrPlayerJoin(): Observable<ApolloQueryResult<any>> {
+    if (this.characterName === VIEWER.name) {
+      return this.gameService.joinAsViewer(this.gameCode, this.username);
+    } else {
+      return this.gameService.joinGame(this.gameCode, this.characterName, this.username, this.team);
+    }
+  }
+
   joinGame() {
     this.loading = true;
     this.error = '';
 
-    if (this.characterName === 'viewer') {
-      this.gameService.joinAsViewer(this.gameCode, this.username)
-        .subscribe(result => {
-          this.loading = result.loading;
+    this.getViewerOrPlayerJoin()
+      .subscribe(result => {
+        this.loading = result.loading;
 
-          if (!result.loading && result.data) {
-            AuthorizationMiddleware.setToken(result.data.joinAsViewer.playerToken);
-            this.goToGame();
-          }
-        }, (error) => {
-          this.loading = false;
-          this.error = error.message;
-        });
-    } else {
-      this.gameService.joinGame(this.gameCode, this.characterName, this.username, this.team)
-        .subscribe((result: ApolloQueryResult<JoinGame.Mutation>) => {
-          this.loading = result.loading;
-
-          if (!result.loading && result.data) {
-            AuthorizationMiddleware.setToken(result.data.joinGame.playerToken);
-            this.goToGame();
-          }
-        }, (error) => {
-          this.loading = false;
-          this.error = error.message;
-        });
-    }
+        if (!result.loading && result.data) {
+          AuthorizationMiddleware.setToken(result.data.joinAsViewer.playerToken);
+          this.goToGame();
+        }
+      }, (error) => {
+        this.loading = false;
+        this.error = error.message;
+      });
   }
 
   goToGame() {

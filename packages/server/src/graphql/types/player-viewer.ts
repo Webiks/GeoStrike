@@ -28,7 +28,7 @@ export const schema = gql`
     enum CharacterType {
         PLAYER,
         BACKGROUND_CHARACTER,
-        ADMIN_OVERVIEW,
+        OVERVIEW,
     }
 
     enum PlayerSyncState {

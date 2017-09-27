@@ -8,6 +8,7 @@ export const joinAsViewer = (rootValue, {gameCode, username}: JoinAsViewerMutati
   const viewer = games.addViewerToGame(game.gameId, username);
   pubsub.publish(ESubscriptionTopics.GAME_STATE_CHANGED, {gameData: game});
 
+  console.log('sdsds',viewer.token);
   return {
     game,
     playerToken: viewer.token,

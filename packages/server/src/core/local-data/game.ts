@@ -21,7 +21,7 @@ export enum Team {
 export enum CharacterType {
   PLAYER = 'PLAYER',
   BACKGROUND_CHARACTER = 'BACKGROUND_CHARACTER',
-  ADMIN_OVERVIEW = 'ADMIN_OVERVIEW',
+  OVERVIEW = 'OVERVIEW',
 }
 
 export interface IViewer {

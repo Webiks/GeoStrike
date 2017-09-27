@@ -6,8 +6,15 @@
 										position: me.location,
 										orientation: utils.getOrientation(me.location, me.heading),
 										show: character.viewState === semiFPVViewState
+										distanceDisplayCondition : utils.getModelDisplayCondition()
                   }">
   </ac-model-desc>
+  <ac-billboard-desc props="{
+                      position: me.location,
+                      image: getIconPic(me),
+                      distanceDisplayCondition : utils.getIconDisplayCondition()
+                    }">
+  </ac-billboard-desc>
 </ac-layer>
 <img *ngIf="showWeapon$ | async" src="assets/gun1.png" class="gun" alt="" (click)="canvasPropagation()">
 <img *ngIf="isMuzzleFlashShown" src="assets/muzzle-flash.png" class="gun-flare" alt="">
