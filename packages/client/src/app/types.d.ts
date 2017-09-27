@@ -1,5 +1,10 @@
 /* tslint:disable */
 
+export interface User {
+  id: string; 
+  username: string | null; 
+}
+
 export interface Query {
   currentGame: Game | null; 
 }
@@ -9,10 +14,10 @@ export interface Game {
   players: Player[]; 
   gameCode: string; 
   state: GameState; 
-  me: Player | null; 
+  me: User | null; 
 }
 
-export interface Player {
+export interface Player extends User {
   id: string; 
   username: string | null; 
   character: string; 
@@ -38,6 +43,7 @@ export interface Location {
 export interface Mutation {
   createNewGame: CreateOrJoinResult | null; 
   joinGame: CreateOrJoinResult | null; 
+  joinAsViewer: CreateOrJoinResult | null; 
   updatePosition: Player | null; 
   ready: Game | null; 
   notifyKill: Player | null; 
@@ -45,12 +51,17 @@ export interface Mutation {
 
 export interface CreateOrJoinResult {
   game: Game; 
-  player: Player; 
+  player: User; 
   playerToken: string; 
 }
 
 export interface Subscription {
   gameData: Game | null; 
+}
+
+export interface Viewer extends User {
+  id: string; 
+  username: string | null; 
 }
 
 export interface LocationInput {
@@ -59,15 +70,20 @@ export interface LocationInput {
   z: number; 
 }
 export interface CreateNewGameMutationArgs {
-  character: string; 
+  character: string | null; 
   username: string; 
   team: Team; 
+  isViewer: boolean; 
 }
 export interface JoinGameMutationArgs {
   gameCode: string; 
   character: string; 
   username: string; 
   team: Team; 
+}
+export interface JoinAsViewerMutationArgs {
+  gameCode: string | null; 
+  username: string | null; 
 }
 export interface UpdatePositionMutationArgs {
   position: LocationInput; 
@@ -86,7 +102,7 @@ export type Team = "BLUE" | "RED" | "NONE";
 export type PlayerSyncState = "VALID" | "INVALID";
 
 
-export type CharacterType = "PLAYER" | "BACKGROUND_CHARACTER" | "ADMIN_OVERVIEW";
+export type CharacterType = "PLAYER" | "BACKGROUND_CHARACTER" | "OVERVIEW";
 
 
 export type GameState = "WAITING" | "ACTIVE" | "DONE";
@@ -96,6 +112,7 @@ export namespace CreateNewGame {
     character: string;
     username: string;
     team: Team;
+    isViewer: boolean;
   }
 
   export type Mutation = {
@@ -131,6 +148,21 @@ export namespace GameData {
 
   export type GameData = {
   } & GameFields.Fragment
+}
+export namespace JoinAsViewer {
+  export type Variables = {
+    gameCode: string | null;
+    username: string | null;
+  }
+
+  export type Mutation = {
+    joinAsViewer: JoinAsViewer | null; 
+  }
+
+  export type JoinAsViewer = {
+    playerToken: string; 
+    game: Game; 
+  }
 }
 export namespace JoinGame {
   export type Variables = {
@@ -199,10 +231,12 @@ export namespace GameFields {
   }
 
   export type Players = {
+    id: string; 
+    username: string | null; 
   } & PlayerFields.Fragment
 
   export type Me = {
-  } & PlayerFields.Fragment
+  } & PlayerFields.Fragment & ViewerFields.Fragment
 }
 
 export namespace PlayerFields {
@@ -232,5 +266,12 @@ export namespace LocationFields {
     x: number; 
     y: number; 
     z: number; 
+  }
+}
+
+export namespace ViewerFields {
+  export type Fragment = {
+    username: string | null; 
+    id: string; 
   }
 }

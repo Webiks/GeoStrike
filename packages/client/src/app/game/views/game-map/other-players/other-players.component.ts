@@ -12,6 +12,7 @@ import { PlayerFields } from '../../../../types';
 export class OtherPlayersComponent {
   @Input() private playersPositions: Observable<AcNotification>;
   playersPositionMap = new Map<string, any>();
+  Cesium = Cesium;
 
   constructor(public utils: UtilsService) {
   }
@@ -40,7 +41,6 @@ export class OtherPlayersComponent {
       const playerHeading = player.type === 'PLAYER' ? heading : heading + 90;
       return this.utils.getOrientation(location, playerHeading);
     }
-
   }
 
   getModel(player: PlayerFields.Fragment) {
@@ -64,6 +64,12 @@ export class OtherPlayersComponent {
   runAnimation(player: PlayerFields.Fragment) {
     return player.state === 'DEAD';
   }
+
+  getIconPic(player: PlayerFields.Fragment){
+    return player.team === 'BLUE' ? '/assets/icons/blue-mark.png' : '/assets/icons/red-mark.png';
+  }
+
+
 
 
 }

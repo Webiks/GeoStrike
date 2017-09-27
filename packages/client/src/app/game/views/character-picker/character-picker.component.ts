@@ -27,6 +27,10 @@ export const AVAILABLE_CHARACTERS = [
   },
 ];
 
+export const VIEWER = {
+  name: 'viewer',
+  team: 'NONE',
+};
 @Component({
   selector: 'character-picker',
   templateUrl: './character-picker.component.html',
@@ -37,6 +41,7 @@ export class CharacterPickerComponent implements OnInit {
   @Output() select: EventEmitter<any> = new EventEmitter();
 
   private availableCharacters = AVAILABLE_CHARACTERS;
+  private viewer = VIEWER;
 
   constructor() {
   }

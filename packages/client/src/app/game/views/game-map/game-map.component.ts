@@ -1,21 +1,24 @@
 import { ChangeDetectorRef, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { AcMapComponent, AcNotification, ViewerConfiguration } from 'angular-cesium';
+import { AcMapComponent, AcNotification, CameraService, ViewerConfiguration } from 'angular-cesium';
 import { GameFields } from '../../../types';
 import { CharacterService, MeModelState, ViewState } from '../../services/character.service';
 import { UtilsService } from '../../services/utils.service';
 import { GameService } from '../../services/game.service';
 import { environment } from '../../../../environments/environment';
+import { CesiumViewerOptionsService } from './viewer-options/cesium-viewer-options.service';
 
 @Component({
   selector: 'game-map',
   templateUrl: './game-map.component.html',
   providers: [
     ViewerConfiguration,
+    CesiumViewerOptionsService
   ],
-  styleUrls: ['./game-map.component.scss']
+  styleUrls: ['./game-map.component.scss'],
 })
 export class GameMapComponent implements OnInit, OnDestroy {
+  public static readonly DEFAULT_START_LOCATION = Cesium.Cartesian3.fromDegrees(-74.0150259073203,40.70489562994595,1000);
   public static readonly DEFAULT_PITCH = -5;
 
   @Input() private playersPositions: Observable<AcNotification>;
@@ -33,54 +36,48 @@ export class GameMapComponent implements OnInit, OnDestroy {
               private utils: UtilsService,
               private elementRef: ElementRef,
               private ngZone: NgZone,
-              private cd: ChangeDetectorRef) {
-    viewerConf.viewerOptions = {
-      selectionIndicator: false,
-      timeline: false,
-      infoBox: false,
-      fullscreenButton: false,
-      baseLayerPicker: false,
-      animation: false,
-      homeButton: false,
-      geocoder: false,
-      navigationHelpButton: false,
-      navigationInstructionsInitiallyVisible: false,
-      terrainProviderViewModels: [],
-    };
+              private cd: ChangeDetectorRef,
+              private viewerOptions: CesiumViewerOptionsService) {
+    viewerConf.viewerOptions = viewerOptions.getViewerOption();
 
     viewerConf.viewerModifier = (viewer) => {
       this.viewer = viewer;
-      viewer.scene.globe.depthTestAgainstTerrain = true;
-      viewer.bottomContainer.remove();
-      const screenSpaceCameraController = viewer.scene.screenSpaceCameraController;
-      viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
+      this.viewerOptions.setInitialConfiguration(viewer);
       if (!this.createPathMode) {
-        screenSpaceCameraController.enableTilt = false;
-        screenSpaceCameraController.enableRotate = false;
-        screenSpaceCameraController.enableZoom = false;
-        const canvas = viewer.canvas;
-        canvas.onclick = () => canvas.requestPointerLock();
+        this.viewerOptions.setFpvCameraOptions(viewer);
       }
     };
 
     this.onMousemove = this.onMousemove.bind(this);
+    this.preRenderHandler = this.preRenderHandler.bind(this);
   }
 
   ngOnInit() {
-    if (this.createPathMode){
+    if (this.createPathMode) {
       return;
     }
-    this.gameData.first().subscribe(value => {
+    this.character.viewState$.subscribe((viewState)=>{
+       if (viewState === ViewState.OVERVIEW){
+         this.changeToOverview();
+       }
+    });
+    this.gameData.first().subscribe(game => {
+      const overviewMode = game.me['__typename'] === 'Viewer' || game.me.type === 'OVERVIEW';
+      if (overviewMode) {
+        this.overviewSettings();
+        return;
+      }
+
       this.character.initCharacter({
         id: 'me',
-        location: this.utils.getPosition(value.me.currentLocation.location),
-        heading: value.me.currentLocation.heading,
+        location: this.utils.getPosition(game.me.currentLocation.location),
+        heading: game.me.currentLocation.heading,
         pitch: GameMapComponent.DEFAULT_PITCH,
-        state: MeModelState.WALKING,
+        state: game.me.state === 'DEAD' ? MeModelState.DEAD :MeModelState.WALKING,
       });
       this.gameService.startServerUpdatingLoop();
 
-      this.viewer.scene.preRender.addEventListener(this.preRenderHandler.bind(this));
+      this.viewer.scene.preRender.addEventListener(this.preRenderHandler);
 
       this.ngZone.runOutsideAngular(() => {
         this.elementRef.nativeElement.addEventListener('mousemove', this.onMousemove);
@@ -88,6 +85,18 @@ export class GameMapComponent implements OnInit, OnDestroy {
 
       this.cd.detectChanges();
     });
+  }
+
+  private changeToOverview() {
+    this.overviewSettings();
+    this.gameService.stopServerUpdatingLoop();
+    this.elementRef.nativeElement.removeEventListener('mousemove', this.onMousemove);
+    this.viewer.scene.preRender.removeEventListener(this.preRenderHandler);
+  }
+
+  private overviewSettings() {
+    this.viewerOptions.setFreeCameraOptions(this.viewer);
+    this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_START_LOCATION});
   }
 
   onMousemove(event: MouseEvent) {

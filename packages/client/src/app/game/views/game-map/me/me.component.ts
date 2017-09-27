@@ -1,12 +1,13 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActionType, CesiumService } from 'angular-cesium';
-import { CharacterService, MeModelState, ViewState } from '../../../services/character.service';
+import { CharacterService, MeModelState, ViewState, CharacterState } from '../../../services/character.service';
 import { UtilsService } from '../../../services/utils.service';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
 import 'rxjs/add/observable/fromEvent';
 import { Subscription } from 'rxjs/Subscription';
 import { GameService } from '../../../services/game.service';
+import { PlayerFields } from '../../../../types';
 
 @Component({
   selector: 'me',
@@ -84,5 +85,17 @@ export class MeComponent implements OnInit, OnDestroy {
 
   canvasPropagation(){
     this.cesiumService.getViewer().canvas.click();
+  }
+
+  getIconPic(player){
+    return player.team === 'BLUE' ? '/assets/icons/blue-mark.png' : '/assets/icons/red-mark.png';
+  }
+
+  getOrientation(location, heading: number, player: CharacterState) {
+    if (player.state === MeModelState.DEAD) {
+      return this.utils.getOrientation(location, heading, 0, 90);
+    } else {
+      return this.utils.getOrientation(location, heading);
+    }
   }
 }

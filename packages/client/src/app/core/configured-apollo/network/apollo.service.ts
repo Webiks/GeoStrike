@@ -3,12 +3,14 @@ import { Injectable , NgZone } from '@angular/core';
 import { AuthorizationMiddleware } from './authorization-middleware';
 import ApolloClient from 'apollo-client/ApolloClient';
 import { environment } from '../../../../environments/environment';
+import { IntrospectionFragmentMatcher } from 'apollo-client';
 
 @Injectable()
 export class ApolloService {
 
   private _subscriptionClient: SubscriptionClient;
   private _apolloClient: ApolloClient;
+
 
   constructor (ngZone: NgZone) {
     ngZone.runOutsideAngular(() => {
@@ -29,9 +31,26 @@ export class ApolloService {
         })
       });
 
+      const fragmentMatcher =new IntrospectionFragmentMatcher({
+        introspectionQueryResultData: {
+          __schema: {
+            types: [
+              {
+                "kind": "INTERFACE",
+                "name": "User",
+                "possibleTypes": [
+                  {"name": "Player"},
+                  {"name": "Viewer"}
+                ]
+              },
+            ],
+          },
+        }
+      });
 
       this._apolloClient = new ApolloClient({
         networkInterface: this._subscriptionClient ,
+        fragmentMatcher: fragmentMatcher,
       });
     });
   }

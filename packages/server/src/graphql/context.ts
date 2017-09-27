@@ -1,4 +1,4 @@
-import { GamesManager, IGameObject, IPlayer } from '../core/local-data/game';
+import { GamesManager, IGameObject, IPlayer, IViewer } from '../core/local-data/game';
 import { decode } from 'jsonwebtoken';
 
 export interface IGraphQLContext {
@@ -13,7 +13,7 @@ export const createContext = (): IGraphQLContext => {
   };
 };
 
-export const resolveGameAndPlayer = (headerValue: string, games: GamesManager): { game?: IGameObject, player?: IPlayer } => {
+export const resolveGameAndPlayer = (headerValue: string, games: GamesManager): { game?: IGameObject, player?: IPlayer| IViewer } => {
   if (headerValue) {
     const decodedPlayerToken: { gameId: string, playerId: string } = decode(headerValue) as any;
 
@@ -21,7 +21,7 @@ export const resolveGameAndPlayer = (headerValue: string, games: GamesManager): 
       const game = games.getGameById(decodedPlayerToken.gameId);
 
       if (game) {
-        const player = game.playersMap.get(decodedPlayerToken.playerId);
+        const player = game.playersMap.get(decodedPlayerToken.playerId) || game.viewers.find(v => v.id === decodedPlayerToken.playerId);
 
         if (player) {
           return {

@@ -1,7 +1,13 @@
 import gql from 'graphql-tag';
 
 export const schema = gql`
-    type Player {
+
+    interface User {
+        id: String!
+        username: String
+    }
+    
+    type Player implements User {
         id: String!
         username: String
         character: String!
@@ -12,11 +18,17 @@ export const schema = gql`
         syncState: PlayerSyncState!
         type: CharacterType!
     }
+    
+    type Viewer implements User {
+        id: String!
+        username: String 
+    }
+    
 
     enum CharacterType {
         PLAYER,
         BACKGROUND_CHARACTER,
-        ADMIN_OVERVIEW,
+        OVERVIEW,
     }
 
     enum PlayerSyncState {

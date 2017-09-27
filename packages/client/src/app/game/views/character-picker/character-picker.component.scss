@@ -12,4 +12,23 @@
     text-align: center;
     height: 30px;
   }
+
+  .viewer-row {
+    display: flex;
+    justify-content: center;
+    .viewer-btn {
+      cursor: pointer;
+      text-align: center;
+      &:hover {
+        color: var(--light-green);
+      }
+      transition: all 0.5s;
+    }
+
+    .selected-viewer {
+      padding: 5px 10px;
+      border: solid 2px var(--light-green);
+      border-radius: 10px;
+    }
+  }
 }

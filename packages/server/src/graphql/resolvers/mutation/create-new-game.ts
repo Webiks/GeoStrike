@@ -1,8 +1,14 @@
 import { IGraphQLContext } from '../../context';
 
-export const createNewGame = (rootValue, { character, username, team }, { games }: IGraphQLContext) => {
+export const createNewGame = (rootValue, {character, username, team, isViewer}, {games}: IGraphQLContext) => {
   const game = games.createNewGame();
-  const player = games.addRealPlayerToGame(game.gameId, character, username, team);
+  let player = null;
+  if (isViewer) {
+    player = games.addViewerToGame(game.gameId, username);
+  }
+  else {
+    player = games.addRealPlayerToGame(game.gameId, character, username, team);
+  }
 
   return {
     game,
