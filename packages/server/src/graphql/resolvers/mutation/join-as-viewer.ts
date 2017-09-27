@@ -1,6 +1,7 @@
 import { ESubscriptionTopics, pubsub } from '../../pubsub';
 import { IGraphQLContext } from '../../context';
 import { JoinAsViewerMutationArgs } from '../../../types';
+import { JoinAsViewer } from '../../../../../client/src/app/types';
 
 export const joinAsViewer = (rootValue, {gameCode, username}: JoinAsViewerMutationArgs, {games}: IGraphQLContext) => {
   const game = games.getGameByCode(gameCode);
@@ -11,6 +12,6 @@ export const joinAsViewer = (rootValue, {gameCode, username}: JoinAsViewerMutati
   console.log('sdsds',viewer.token);
   return {
     game,
-    playerToken: viewer.token,
+    player: viewer,
   };
 };

@@ -53,7 +53,9 @@ export class JoinGameDialogComponent implements OnInit {
         this.loading = result.loading;
 
         if (!result.loading && result.data) {
-          AuthorizationMiddleware.setToken(result.data.joinAsViewer.playerToken);
+          console.log(result.data);
+          const token = result.data.joinAsViewer ? result.data.joinAsViewer.playerToken : result.data.joinGame.playerToken;
+          AuthorizationMiddleware.setToken(token);
           this.goToGame();
         }
       }, (error) => {

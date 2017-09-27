@@ -27,7 +27,7 @@ export class GameRoomComponent implements OnInit, OnDestroy {
         AuthorizationMiddleware.setToken(params.playerToken);
         this.gameService.refreshConnection();
         this.gameData$ = this.gameService.getCurrentGameData();
-        this.gameDataSubscription = this.gameData$.subscribe(({ data: { currentGame } }) => {
+        this.gameDataSubscription = this.gameData$.subscribe(({data: {currentGame}}) => {
           this.game = currentGame;
 
           if (this.game && this.game.state === 'ACTIVE') {
@@ -42,11 +42,10 @@ export class GameRoomComponent implements OnInit, OnDestroy {
   }
 
   getPlayers() {
-    const players = this.game.players.filter(p=> p.type === 'PLAYER');
-    return [
-      ...players,
-      this.game.me,
-    ];
+    const players = this.game.players.filter(p => p.type === 'PLAYER');
+    const me = this.game.me['__typename'] !== 'Viewer' ? this.game.me : undefined;
+
+    return me ? [...players, me] : [...players];
   }
 
   ngOnDestroy() {
