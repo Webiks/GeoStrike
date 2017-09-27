@@ -17,12 +17,7 @@ export const schema = gql`
 
   type CreateOrJoinResult {
     game: Game!
-    player: Player!
+    player: User!
     playerToken: String!
-  }
-  
-  type ViewerJoinResult {
-      game: Game!
-      playerToken: String!
   }
 `;
