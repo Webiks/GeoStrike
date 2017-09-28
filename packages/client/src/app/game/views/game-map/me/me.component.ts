@@ -39,7 +39,7 @@ export class MeComponent implements OnInit, OnDestroy {
     }));
   }
 
-  setShotEvent() {
+  setShootEvent() {
     this.clickSub$ = Observable.fromEvent(document.body, 'click')
       .filter(() => this.character.state === MeModelState.SHOOTING)
       .subscribe((e: MouseEvent) => {
@@ -65,7 +65,7 @@ export class MeComponent implements OnInit, OnDestroy {
       .map((result => result[0] || result[1]));
     this.showCross$ = this.character.state$.map(meState => meState && meState.state === MeModelState.SHOOTING);
 
-    this.setShotEvent();
+    this.setShootEvent();
   }
 
   ngOnDestroy(): void {
@@ -83,11 +83,11 @@ export class MeComponent implements OnInit, OnDestroy {
     setTimeout(() => this.isMuzzleFlashShown = false, 20);
   }
 
-  canvasPropagation(){
+  canvasPropagation() {
     this.cesiumService.getViewer().canvas.click();
   }
 
-  getIconPic(player){
+  getIconPic(player) {
     return player.team === 'BLUE' ? '/assets/icons/blue-mark.png' : '/assets/icons/red-mark.png';
   }
 
