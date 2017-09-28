@@ -60,9 +60,9 @@ export class KeyboardControlComponent implements OnInit {
     // if the center is a tile or a model
     if (pickedFeature) {
       return (
-        this.getDepthDistance(fromLocation, centerWindowPosition) < this.COLLIDE_FACTOR_METER ||
-        this.getDepthDistance(fromLocation, leftWindowPosition) < this.COLLIDE_FACTOR_METER ||
-        this.getDepthDistance(fromLocation, rightWindowPosition) < this.COLLIDE_FACTOR_METER
+        this.getDepthDistance(fromLocation, centerWindowPosition) < this.COLLIDE_FACTOR_METER
+        // this.getDepthDistance(fromLocation, leftWindowPosition) < this.COLLIDE_FACTOR_METER ||
+        // this.getDepthDistance(fromLocation, rightWindowPosition) < this.COLLIDE_FACTOR_METER
       );
     } else {
       return false;

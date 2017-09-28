@@ -48,7 +48,7 @@ export class OtherPlayersComponent {
       return '/assets/models/soldier.gltf';
 
     } else {
-      return '/assets/models/Cesium_Man.gltf';
+      return '/assets/models/Grandpa.gltf';
     }
   }
 
