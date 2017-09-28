@@ -57,7 +57,7 @@ export class OtherPlayersComponent {
       return 0.01;
 
     } else {
-      return 1.5;
+      return 0.035;
     }
   }
 
