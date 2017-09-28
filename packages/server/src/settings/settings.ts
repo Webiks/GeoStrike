@@ -5,5 +5,5 @@ export const Settings = {
     numberOfBgCharacters: 5,
     updateIntervalMs: 300,
     updateDistanceMeters: 0.5,
-  }
+  },
 };
