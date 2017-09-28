@@ -18,7 +18,8 @@ import { CesiumViewerOptionsService } from './viewer-options/cesium-viewer-optio
   styleUrls: ['./game-map.component.scss'],
 })
 export class GameMapComponent implements OnInit, OnDestroy {
-  public static readonly DEFAULT_START_LOCATION = Cesium.Cartesian3.fromDegrees(-74.0150259073203,40.70489562994595,1000);
+  public static readonly DEFAULT_START_LOCATION =
+    Cesium.Cartesian3.fromDegrees(-73.985187, 40.758857, 1000);
   public static readonly DEFAULT_PITCH = -5;
 
   @Input() private playersPositions: Observable<AcNotification>;

@@ -28,7 +28,6 @@ export interface IViewer {
   token: string;
   id: string;
   username: string;
-
 }
 
 export interface IPlayer {
@@ -58,14 +57,17 @@ export interface IGameObject {
 const TOKENS_SECRET = 'sdf43tSWDG#%Tsdfw4';
 
 const DEFAULT_PLAYERS_LOCATION = [
-  {x: 1333422.9356770117, y: -4654805.289160995, z: 4137634.8619940765},
-  {x: 1333372.2794363261, y: -4654805.238712306, z: 4137651.1335756676},
-  {x: 1333427.435864061, y: -4654696.156980868, z: 4137755.369174167},
-  {x: 1333425.271653392, y: -4654860.0793055175, z: 4137572.887568583},
+  { x: 1334783.4002701144, y: -4650320.207361281, z: 4142206.104919172 },
+  { x: 1334734.4041850453, y: -4650448.021286272, z: 4142079.251574431 },
+  { x: 1334743.0138112511, y: -4650448.206585243, z: 4142076.289141699 },
+  { x: 1334812.4342012317, y: -4650321.075155178, z: 4142195.8438288164 },
 ];
 
 export class GamesManager {
-  private activeGames: Map<string, IGameObject> = new Map<string, IGameObject>();
+  private activeGames: Map<string, IGameObject> = new Map<
+    string,
+    IGameObject
+  >();
 
   private generateGameCode(): string {
     const min = 1000;
@@ -78,7 +80,6 @@ export class GamesManager {
 
     return gameCode;
   }
-
 
   addPlayerToGame(gameId: string, player: IPlayer) {
     const game = this.getGameById(gameId);
@@ -95,32 +96,44 @@ export class GamesManager {
   addViewerToGame(gameId: string, username: string): IViewer {
     const game = this.getGameById(gameId);
     const playerId = v4();
-    const playerToken = sign({
-      gameId: game.gameId,
-      playerId,
-      username,
-    }, TOKENS_SECRET);
+    const playerToken = sign(
+      {
+        gameId: game.gameId,
+        playerId,
+        username,
+      },
+      TOKENS_SECRET
+    );
 
     const viewer = {
       token: playerToken,
       id: playerId,
-      username
+      username,
     };
     game.viewers.push(viewer);
     return viewer;
   }
 
-  addRealPlayerToGame(gameId: string, character: string, username: string, team: Team): IPlayer {
+  addRealPlayerToGame(
+    gameId: string,
+    character: string,
+    username: string,
+    team: Team
+  ): IPlayer {
     const game = this.getGameById(gameId);
     const playerId = v4();
-    const playerToken = sign({
-      gameId: game.gameId,
-      playerId,
-      username,
-    }, TOKENS_SECRET);
+    const playerToken = sign(
+      {
+        gameId: game.gameId,
+        playerId,
+        username,
+      },
+      TOKENS_SECRET
+    );
 
-    const realPlayerCount = Array.from(game.playersMap.values())
-      .filter(player => player.type === CharacterType.PLAYER).length;
+    const realPlayerCount = Array.from(game.playersMap.values()).filter(
+      player => player.type === CharacterType.PLAYER
+    ).length;
     const player: IPlayer = {
       playerId,
       character,
@@ -151,7 +164,7 @@ export class GamesManager {
       playersMap: new Map<string, IPlayer>(),
       state: 'WAITING',
       bgCharactersManager,
-      viewers: []
+      viewers: [],
     };
     startClientsUpdater(gameObject);
     this.activeGames.set(gameId, gameObject);
@@ -189,16 +202,24 @@ export class GamesManager {
     }
   }
 
-  updatePlayerPosition(gameId: string, playerId: string, position: ICartesian3Location, heading: number, skipValidation = false) {
+  updatePlayerPosition(
+    gameId: string,
+    playerId: string,
+    position: ICartesian3Location,
+    heading: number,
+    skipValidation = false
+  ) {
     const game = this.getGameById(gameId);
     const player = game.playersMap.get(playerId);
     if (player && position) {
-      if (skipValidation || this.validatePlayerPosition(player.currentLocation, position)) {
+      if (
+        skipValidation ||
+        this.validatePlayerPosition(player.currentLocation, position)
+      ) {
         player.syncState = 'VALID';
         player.currentLocation = position;
         player.heading = heading;
-      }
-      else {
+      } else {
         player.syncState = 'INVALID';
       }
     }
@@ -212,9 +233,20 @@ export class GamesManager {
     }
   }
 
-  validatePlayerPosition(currentLocation: ICartesian3Location, newLocation: ICartesian3Location): boolean {
-    const currentPosition = new Cesium.Cartesian3(currentLocation.x, currentLocation.y, currentLocation.z);
-    const newPosition = new Cesium.Cartesian3(newLocation.x, newLocation.y, newLocation.z);
+  validatePlayerPosition(
+    currentLocation: ICartesian3Location,
+    newLocation: ICartesian3Location
+  ): boolean {
+    const currentPosition = new Cesium.Cartesian3(
+      currentLocation.x,
+      currentLocation.y,
+      currentLocation.z
+    );
+    const newPosition = new Cesium.Cartesian3(
+      newLocation.x,
+      newLocation.y,
+      newLocation.z
+    );
     const distance = Cesium.Cartesian3.distance(currentPosition, newPosition);
     return distance < Settings.serverClientDistanceThreshold;
   }
