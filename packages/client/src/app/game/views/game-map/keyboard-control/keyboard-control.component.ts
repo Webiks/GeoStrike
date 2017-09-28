@@ -31,14 +31,14 @@ export class KeyboardControlComponent implements OnInit {
               private keyboardControlService: KeyboardControlService,
               private cesiumService: CesiumService,
               private keyboardKeysService: KeyboardKeysService,
-              private ngZone: NgZone,) {
+              private ngZone: NgZone) {
     this.viewer = cesiumService.getViewer();
   }
 
 
   private getDepthDistance(fromLocation: Cartesian3, toWindowPosition: Cartesian2) {
     const toLocation = this.viewer.scene.pickPosition(toWindowPosition);
-    if (!toLocation){
+    if (!toLocation) {
       return Number.MAX_SAFE_INTEGER;
     }
     const distance = Cesium.Cartesian3.distance(fromLocation, toLocation);
@@ -57,8 +57,8 @@ export class KeyboardControlComponent implements OnInit {
 
     const pickedFeature = this.viewer.scene.pick(centerWindowPosition, 300, 300);
 
-    // if the center is a tile or a model
-    if (pickedFeature) {
+    // if the center is a tile or a model but not ground
+    if (pickedFeature && !pickedFeature.mesh) {
       return (
         this.getDepthDistance(fromLocation, centerWindowPosition) < this.COLLIDE_FACTOR_METER
         // this.getDepthDistance(fromLocation, leftWindowPosition) < this.COLLIDE_FACTOR_METER ||
@@ -137,8 +137,8 @@ export class KeyboardControlComponent implements OnInit {
       {
         [Direction.Forward]: this.buildMovementConfig(Direction.Forward),
         [Direction.Backward]: this.buildMovementConfig(Direction.Backward),
-        // [Direction.Left]: this.buildMovementConfig(Direction.Left),
-        // [Direction.Right]: this.buildMovementConfig(Direction.Right),
+        [Direction.Left]: this.buildMovementConfig(Direction.Left),
+        [Direction.Right]: this.buildMovementConfig(Direction.Right),
       },
       (keyEvent: KeyboardEvent) => {
         if (keyEvent.code === 'KeyW' || keyEvent.code === 'ArrowUp') {
@@ -151,10 +151,10 @@ export class KeyboardControlComponent implements OnInit {
           return Direction.Forward;
         } else if (keyEvent.code === 'KeyS' || keyEvent.code === 'ArrowDown') {
           return Direction.Backward;
-          // } else if (keyEvent.code === 'KeyA' || keyEvent.code === 'ArrowLeft') {
-          //   return Direction.Left;
-          // } else if (keyEvent.code === 'KeyD' || keyEvent.code === 'ArrowRight') {
-          //   return Direction.Right;
+          } else if (keyEvent.code === 'KeyA' || keyEvent.code === 'ArrowLeft') {
+            return Direction.Left;
+          } else if (keyEvent.code === 'KeyD' || keyEvent.code === 'ArrowRight') {
+            return Direction.Right;
         } else {
           return String.fromCharCode(keyEvent.keyCode);
         }
