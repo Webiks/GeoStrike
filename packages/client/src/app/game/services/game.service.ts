@@ -98,7 +98,7 @@ export class GameService {
 
   startServerUpdatingLoop() {
     this.serverPositionUpdateInterval =
-      setInterval(() => this.updateServerOnPosition(), GameSettingsService.serverUpdatingRate);
+      setInterval(() => this.updateServerOnPosition(), GameSettingsService.serverUpdatingInterval);
   }
 
   stopServerUpdatingLoop(){
