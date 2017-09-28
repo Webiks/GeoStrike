@@ -15,7 +15,7 @@ export class BackgroundCharacterManager {
   private NUMBER_OF_BG_CHARACTERS;
   private UPDATE_INTERVAL_MS;
   private UPDATE_DISTANCE;
-  private availablePathNodes: [PathNode];
+  private availablePathNodes: PathNode[];
   private intervalId;
   private game: IGameObject;
   private bgCharacterToNextLocation: Map<string, PathNode> = new Map();
@@ -25,17 +25,17 @@ export class BackgroundCharacterManager {
       Settings.backgroundCharacters.numberOfBgCharacters;
     this.UPDATE_INTERVAL_MS = Settings.backgroundCharacters.updateIntervalMs;
     this.UPDATE_DISTANCE = Settings.backgroundCharacters.updateDistanceMeters;
-    this.availablePathNodes = pathsGraph;
+    this.availablePathNodes = [...pathsGraph];
   }
 
-  private getRandomLocation(pathNodes: [PathNode]) {
+  private getRandomLocation(pathNodes: PathNode[]) {
     return pathNodes[Math.round(Math.random() * (pathNodes.length - 1))];
   }
 
   initBgCharacters() {
     this.game = this.gameManager.getGameById(this.gameId);
     for (let i = 0; i < this.NUMBER_OF_BG_CHARACTERS; i++) {
-      const currentPath = this.availablePathNodes[i];
+      const currentPath = this.getRandomLocation(this.availablePathNodes);
       const bgPlayer = {
         playerId: v4(),
         character: 'old_lady',
