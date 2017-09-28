@@ -832,10 +832,6 @@ jschardet@^1.4.2:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/jschardet/-/jschardet-1.5.1.tgz#c519f629f86b3a5bedba58a88d311309eec097f9"
 
-json-string-mapper@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/json-string-mapper/-/json-string-mapper-1.0.0.tgz#3b5bef182c412e937ee7ee320554c2f451b6a763"
-
 json-stringify-safe@^5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/json-stringify-safe/-/json-stringify-safe-5.0.1.tgz#1296a2d58fd45f19a0f6ce01d65701e2c735b6eb"
@@ -1174,10 +1170,6 @@ pinkie-promise@^2.0.0:
 pinkie@^2.0.0:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/pinkie/-/pinkie-2.0.4.tgz#72556b80cfa0d48a974e80e77248e80ed4f7f870"
-
-primitive-primitives@0.0.6:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/primitive-primitives/-/primitive-primitives-0.0.6.tgz#573deb4aa31d08a1d53a1d34ed8599f105b88d08"
 
 process-nextick-args@~1.0.6:
   version "1.0.7"
