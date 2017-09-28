@@ -9,7 +9,6 @@ import {
 } from '../local-data/game';
 import { PathNode, pathsGraph } from './path-node';
 import * as Cesium from 'cesium';
-import { LatLonSpherical } from 'geodesy';
 import v4 = require('uuid/v4');
 
 export class BackgroundCharacterManager {
