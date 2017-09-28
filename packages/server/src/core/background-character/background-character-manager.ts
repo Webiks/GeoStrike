@@ -1,5 +1,12 @@
 import { Settings } from '../../settings/settings';
-import { CharacterType, GamesManager, ICartesian3Location, IGameObject, IPlayer, Team } from '../local-data/game';
+import {
+  CharacterType,
+  GamesManager,
+  ICartesian3Location,
+  IGameObject,
+  IPlayer,
+  Team,
+} from '../local-data/game';
 import { PathNode, pathsGraph } from './path-node';
 import * as Cesium from 'cesium';
 import { LatLonSpherical } from 'geodesy';
@@ -14,9 +21,9 @@ export class BackgroundCharacterManager {
   private game: IGameObject;
   private bgCharacterToNextLocation: Map<string, PathNode> = new Map();
 
-  constructor(private gameId: string,
-              private gameManager: GamesManager) {
-    this.NUMBER_OF_BG_CHARACTERS = Settings.backgroundCharacters.numberOfBgCharacters;
+  constructor(private gameId: string, private gameManager: GamesManager) {
+    this.NUMBER_OF_BG_CHARACTERS =
+      Settings.backgroundCharacters.numberOfBgCharacters;
     this.UPDATE_INTERVAL_MS = Settings.backgroundCharacters.updateIntervalMs;
     this.UPDATE_DISTANCE = Settings.backgroundCharacters.updateDistanceMeters;
     this.availablePathNodes = pathsGraph;
@@ -57,19 +64,36 @@ export class BackgroundCharacterManager {
           // update location
           const currentPos = character.currentLocation;
           const nextNodePos = this.bgCharacterToNextLocation.get(characterId);
-          const {heading, nextLocation} = this.calcNextLocation(currentPos, nextNodePos, characterId);
+          const { heading, nextLocation } = this.calcNextLocation(
+            currentPos,
+            nextNodePos,
+            characterId
+          );
 
-          this.gameManager.updatePlayerPosition(this.gameId, characterId, nextLocation, heading, true);
+          this.gameManager.updatePlayerPosition(
+            this.gameId,
+            characterId,
+            nextLocation,
+            heading,
+            true
+          );
         }
-      })
+      });
     }, this.UPDATE_INTERVAL_MS);
   }
 
-
-  private calcNextLocation(from: ICartesian3Location, destinationNode: PathNode, characterId) {
+  private calcNextLocation(
+    from: ICartesian3Location,
+    destinationNode: PathNode,
+    characterId
+  ) {
     const currentPosition = new Cesium.Cartesian3(from.x, from.y, from.z);
     const destPosition = destinationNode.location;
-    const finalPosition = new Cesium.Cartesian3(destPosition.x, destPosition.y, destPosition.z);
+    const finalPosition = new Cesium.Cartesian3(
+      destPosition.x,
+      destPosition.y,
+      destPosition.z
+    );
 
     const distance = Cesium.Cartesian3.distance(currentPosition, finalPosition);
 
@@ -81,28 +105,38 @@ export class BackgroundCharacterManager {
       return this.calcNextLocation(from, newDestinationPath, characterId);
     }
 
-    let interpolate = (this.UPDATE_DISTANCE) / distance;
+    let interpolate = this.UPDATE_DISTANCE / distance;
     interpolate = parseFloat(interpolate.toFixed(2));
     let nextLocation = new Cesium.Cartesian3();
-    nextLocation = Cesium.Cartesian3.lerp(currentPosition, finalPosition, interpolate, nextLocation);
+    nextLocation = Cesium.Cartesian3.lerp(
+      currentPosition,
+      finalPosition,
+      interpolate,
+      nextLocation
+    );
 
-    const bearing = this.calculateBearing(currentPosition,nextLocation);
+    const bearing = this.calculateBearing(currentPosition, nextLocation);
     return {
       heading: bearing,
-      nextLocation: nextLocation,
-    }
+      nextLocation,
+    };
   }
 
-  calculateBearing(firtst: ICartesian3Location, second: ICartesian3Location){
+  calculateBearing(firtst: ICartesian3Location, second: ICartesian3Location) {
     const firtstCart = Cesium.Cartographic.fromCartesian(firtst);
     const secondCart = Cesium.Cartographic.fromCartesian(second);
 
-    const y = Math.sin(secondCart.longitude - firtstCart.longitude) * Math.cos(secondCart.latitude);
-    const x = Math.cos(firtstCart.latitude)*Math.sin(secondCart.latitude) -
-      Math.sin(firtstCart.latitude)*Math.cos(secondCart.latitude)*Math.cos(secondCart.longitude-secondCart.longitude);
+    const y =
+      Math.sin(secondCart.longitude - firtstCart.longitude) *
+      Math.cos(secondCart.latitude);
+    const x =
+      Math.cos(firtstCart.latitude) * Math.sin(secondCart.latitude) -
+      Math.sin(firtstCart.latitude) *
+        Math.cos(secondCart.latitude) *
+        Math.cos(secondCart.longitude - secondCart.longitude);
     const brng = Cesium.Math.toDegrees(Math.atan2(y, x));
 
-    return (brng +180 )% 360;
+    return (brng + 180) % 360;
   }
 
   stop() {
