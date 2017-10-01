@@ -22,7 +22,7 @@ export class MeComponent implements OnInit, OnDestroy {
   showWeapon$: Observable<boolean>;
   showCross$: Observable<boolean>;
   clickSub$: Subscription;
-  semiFPVViewState = ViewState.SEMI_FPV;
+  ViewState = ViewState;
   isMuzzleFlashShown = false;
 
   constructor(private character: CharacterService,
