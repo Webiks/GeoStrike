@@ -5,7 +5,7 @@
 										uri: '/assets/models/soldier.gltf',
 										position: me.location,
 										orientation: getOrientation(me.location, me.heading,me),
-										show: character.viewState === semiFPVViewState
+										show: character.viewState !== ViewState.FPV,
 										distanceDisplayCondition : utils.getModelDisplayCondition()
                   }">
   </ac-model-desc>
