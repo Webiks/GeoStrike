@@ -17,6 +17,7 @@ export class CesiumViewerOptionsService {
       homeButton: false,
       geocoder: false,
       navigationHelpButton: false,
+      sceneModePicker: false,
       navigationInstructionsInitiallyVisible: false,
       terrainProviderViewModels: [],
     };

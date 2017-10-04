@@ -4,6 +4,8 @@ import { Observable } from 'rxjs/Observable';
 import { UtilsService } from '../../../services/utils.service';
 import { InterpolationService, InterpolationType } from '../../../services/interpolation.service';
 import { PlayerFields } from '../../../../types';
+import { BG_CHARACHTERS_MAP } from '../../../../shared/characters.const';
+import { CharacterService } from '../../../services/character.service';
 
 @Component({
   selector: 'other-players',
@@ -14,7 +16,7 @@ export class OtherPlayersComponent {
   playersPositionMap = new Map<string, any>();
   Cesium = Cesium;
 
-  constructor(public utils: UtilsService) {
+  constructor(public utils: UtilsService, public character: CharacterService) {
   }
 
   interpolatePlayerPosition(playerId, playerPosition) {
@@ -48,16 +50,15 @@ export class OtherPlayersComponent {
       return '/assets/models/soldier.gltf';
 
     } else {
-      return '/assets/models/Grandpa.gltf';
+      return BG_CHARACHTERS_MAP.get(player.character).model;
     }
   }
 
   getModelScale(player: PlayerFields.Fragment) {
     if (player.type === 'PLAYER') {
       return 0.01;
-
     } else {
-      return 0.035;
+      return BG_CHARACHTERS_MAP.get(player.character).scale;
     }
   }
 

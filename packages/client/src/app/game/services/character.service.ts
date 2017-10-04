@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { GameFields } from '../../types';
-import { UtilsService } from './utils.service';
-import { GameSettingsService } from './game-settings.service';
 
 export enum MeModelState {
   WALKING,
@@ -31,7 +29,7 @@ export class CharacterService {
   private _character= new BehaviorSubject<CharacterState>(null);
   private _viewState = new BehaviorSubject<ViewState>(ViewState.SEMI_FPV);
 
-  constructor(private utils: UtilsService) {
+  constructor() {
   }
 
   get initialized() {

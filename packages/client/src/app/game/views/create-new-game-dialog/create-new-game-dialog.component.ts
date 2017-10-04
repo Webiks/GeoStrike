@@ -5,7 +5,7 @@ import { ApolloQueryResult } from 'apollo-client';
 import { AuthorizationMiddleware } from '../../../core/configured-apollo/network/authorization-middleware';
 import { Router } from '@angular/router';
 import { MdDialogRef } from '@angular/material';
-import { VIEWER } from '../character-picker/character-picker.component';
+import { VIEWER } from '../../../shared/characters.const';
 
 @Component({
   selector: 'create-new-game-dialog',

@@ -6,7 +6,7 @@ import { Team } from '../../../types';
 import { MdDialogRef } from '@angular/material';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import { VIEWER } from '../character-picker/character-picker.component';
+import { VIEWER } from '../../../shared/characters.const';
 
 @Component({
   selector: 'join-game-dialog',

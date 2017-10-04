@@ -4,6 +4,5 @@ export const Settings = {
   backgroundCharacters: {
     numberOfBgCharacters: 10,
     updateIntervalMs: 300,
-    updateDistanceMeters: 0.5,
   },
 };
