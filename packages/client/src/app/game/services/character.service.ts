@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { GameFields } from '../../types';
+import { CharacterData, GameFields } from '../../types';
 
 export enum MeModelState {
   WALKING,
@@ -22,6 +22,7 @@ export interface CharacterState {
   heading: number;
   pitch: number;
   state: MeModelState;
+  characterInfo: CharacterData
 }
 
 @Injectable()

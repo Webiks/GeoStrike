@@ -4,7 +4,6 @@ import { Observable } from 'rxjs/Observable';
 import { UtilsService } from '../../../services/utils.service';
 import { InterpolationService, InterpolationType } from '../../../services/interpolation.service';
 import { PlayerFields } from '../../../../types';
-import { BG_CHARACHTERS_MAP } from '../../../../shared/characters.const';
 import { CharacterService } from '../../../services/character.service';
 
 @Component({
@@ -46,31 +45,20 @@ export class OtherPlayersComponent {
   }
 
   getModel(player: PlayerFields.Fragment) {
-    if (player.type === 'PLAYER') {
-      return '/assets/models/soldier.gltf';
-
-    } else {
-      return BG_CHARACHTERS_MAP.get(player.character).model;
-    }
+    return player.character.model;
   }
 
   getModelScale(player: PlayerFields.Fragment) {
-    if (player.type === 'PLAYER') {
-      return 0.01;
-    } else {
-      return BG_CHARACHTERS_MAP.get(player.character).scale;
-    }
+    return player.character.scale
   }
 
   runAnimation(player: PlayerFields.Fragment) {
     return player.state === 'DEAD';
   }
 
-  getIconPic(player: PlayerFields.Fragment){
+  getIconPic(player: PlayerFields.Fragment) {
     return player.team === 'BLUE' ? '/assets/icons/blue-mark.png' : '/assets/icons/red-mark.png';
   }
-
-
 
 
 }

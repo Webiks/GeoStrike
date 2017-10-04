@@ -30,16 +30,3 @@ export const VIEWER = {
   description: '',
   imageUrl: '',
 };
-
-export const BG_CHARACHTERS_MAP = new Map([
-  ['car',
-    {
-      model: '/assets/models/car.gltf',
-      scale: 1
-    }],
-  ['grandpa',
-    {
-      model: '/assets/models/grandpa.gltf',
-      scale: 0.035
-    }]
-]);

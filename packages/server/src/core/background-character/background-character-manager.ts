@@ -3,8 +3,9 @@ import { CharacterType, GamesManager, ICartesian3Location, IGameObject, IPlayer,
 import { PathNode, PATHS_GRAPHS } from './path-node';
 import * as Cesium from 'cesium';
 import v4 = require('uuid/v4');
+import { PLAYER_CHARACTERS } from '../local-data/characters';
 
-const CHARACTER_TYPES = [
+const BG_CHARACTER_TYPES = [
   {
     characterName: 'grandpa',
     paths: PATHS_GRAPHS.PEOPLE,
@@ -30,7 +31,7 @@ export class BackgroundCharacterManager {
       Settings.backgroundCharacters.numberOfBgCharacters;
     this.UPDATE_INTERVAL_MS = Settings.backgroundCharacters.updateIntervalMs;
 
-    CHARACTER_TYPES.forEach(c => this.initialLocationId.set(c.characterName, []));
+    BG_CHARACTER_TYPES.forEach(c => this.initialLocationId.set(c.characterName, []));
   }
 
   private getRandomLocation(pathNodes: PathNode[]) {
@@ -41,8 +42,8 @@ export class BackgroundCharacterManager {
   initBgCharacters() {
     this.game = this.gameManager.getGameById(this.gameId);
     for (let i = 0; i < this.NUMBER_OF_BG_CHARACTERS; i++) {
-      const randomTypeIndex = Math.round(Math.random() * (CHARACTER_TYPES.length - 1));
-      const characterType = CHARACTER_TYPES[randomTypeIndex];
+      const randomTypeIndex = Math.round(Math.random() * (BG_CHARACTER_TYPES.length - 1));
+      const characterType = BG_CHARACTER_TYPES[randomTypeIndex];
       this.createBgPlayer(characterType.characterName, characterType.paths);
     }
   }
@@ -62,9 +63,10 @@ export class BackgroundCharacterManager {
   private createBgPlayer(characterTypeName: string, paths: PathNode[]) {
     const currentPath = this.getInitialLocation(characterTypeName, paths);
 
+    const character = PLAYER_CHARACTERS.find(p=> p.name === characterTypeName);
     const bgPlayer = {
       playerId: v4(),
-      character: characterTypeName,
+      character,
       state: 'ALIVE',
       game: this.game,
       currentLocation: currentPath.location,
@@ -88,7 +90,7 @@ export class BackgroundCharacterManager {
           // update location
           const currentPos = character.currentLocation;
           const nextNodePos = this.bgCharacterToNextLocation.get(characterId);
-          const {updateDistanceMeters} = CHARACTER_TYPES.find(c => c.characterName === character.character);
+          const {updateDistanceMeters} = BG_CHARACTER_TYPES.find(c => c.characterName === character.character.name);
           const {heading, nextLocation} = this.calcNextLocation(
             currentPos,
             nextNodePos,
