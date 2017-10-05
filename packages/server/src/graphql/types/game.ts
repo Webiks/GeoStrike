@@ -12,12 +12,12 @@ export const schema = gql`
     players: [Player!]
     gameCode: String!
     state: GameState!
-    me: Player
+    me: User
   }
 
   type CreateOrJoinResult {
     game: Game!
-    player: Player!
+    player: User!
     playerToken: String!
   }
 `;

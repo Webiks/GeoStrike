@@ -3,7 +3,8 @@ import { AcNotification } from 'angular-cesium';
 import { Observable } from 'rxjs/Observable';
 import { UtilsService } from '../../../services/utils.service';
 import { InterpolationService, InterpolationType } from '../../../services/interpolation.service';
-import { PlayerState } from "../../../../types";
+import { PlayerFields } from '../../../../types';
+import { CharacterService } from '../../../services/character.service';
 
 @Component({
   selector: 'other-players',
@@ -12,8 +13,10 @@ import { PlayerState } from "../../../../types";
 export class OtherPlayersComponent {
   @Input() private playersPositions: Observable<AcNotification>;
   playersPositionMap = new Map<string, any>();
+  Cesium = Cesium;
 
-  constructor(public utils: UtilsService) {}
+  constructor(public utils: UtilsService, public character: CharacterService) {
+  }
 
   interpolatePlayerPosition(playerId, playerPosition) {
     const positionProperty = this.playersPositionMap.get(playerId);
@@ -32,12 +35,30 @@ export class OtherPlayersComponent {
     }
   }
 
-  getOrientation(location,heading: number, state: PlayerState) {
-    if (state === 'DEAD'){
-      return this.utils.getOrientation(location, heading,0,90);
-    }else{
-      return this.utils.getOrientation(location, heading);
+  getOrientation(location, heading: number, player: PlayerFields.Fragment) {
+    if (player.state === 'DEAD') {
+      return this.utils.getOrientation(location, heading, 0, 90);
+    } else {
+      const playerHeading = player.type === 'PLAYER' ? heading : heading + 90;
+      return this.utils.getOrientation(location, playerHeading);
     }
-
   }
+
+  getModel(player: PlayerFields.Fragment) {
+    return player.character.model;
+  }
+
+  getModelScale(player: PlayerFields.Fragment) {
+    return player.character.scale
+  }
+
+  runAnimation(player: PlayerFields.Fragment) {
+    return player.state === 'DEAD';
+  }
+
+  getIconPic(player: PlayerFields.Fragment) {
+    return player.team === 'BLUE' ? '/assets/icons/blue-mark.png' : '/assets/icons/red-mark.png';
+  }
+
+
 }

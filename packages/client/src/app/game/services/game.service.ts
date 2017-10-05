@@ -3,7 +3,10 @@ import { Apollo, ApolloQueryObservable } from 'apollo-angular';
 import { createNewGameMutation } from '../../graphql/create-new-game.mutation';
 import { ApolloQueryResult } from 'apollo-client';
 import { Observable } from 'rxjs/Observable';
-import { CreateNewGame, CurrentGame, JoinGame, NotifyKill, Ready, Team, UpdatePosition } from '../../types';
+import {
+  CreateNewGame, CurrentGame, JoinAsViewer, JoinGame, NotifyKill, Ready, Team,
+  UpdatePosition
+} from '../../types';
 import { joinGameMutation } from '../../graphql/join-game.mutation';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 import { gameDataSubscription } from '../../graphql/game-data.subscription';
@@ -15,6 +18,7 @@ import { ApolloService } from '../../core/configured-apollo/network/apollo.servi
 import { notifyKillMutation } from '../../graphql/notify-kill.mutation';
 import { GameSettingsService } from './game-settings.service';
 import { CharacterService } from './character.service';
+import { joinAsViewer } from '../../graphql/join-as-viewer.mutation';
 
 @Injectable()
 export class GameService {
@@ -52,13 +56,14 @@ export class GameService {
     return queryRes;
   }
 
-  createNewGame(character: string, username: string, team: Team): Observable<ApolloQueryResult<CreateNewGame.Mutation>> {
+  createNewGame(character: string, username: string, team: Team, isViewer: boolean): Observable<ApolloQueryResult<CreateNewGame.Mutation>> {
     return this.apollo.mutate<CreateNewGame.Mutation>({
       mutation: createNewGameMutation,
       variables: {
         character,
         username,
         team,
+        isViewer
       },
     });
   }
@@ -75,6 +80,16 @@ export class GameService {
     });
   }
 
+  joinAsViewer(gameCode:string, username: string) :Observable<ApolloQueryResult<JoinAsViewer.Mutation>>{
+    return this.apollo.mutate<JoinAsViewer.Mutation>({
+      mutation: joinAsViewer,
+      variables: {
+        gameCode,
+        username,
+      }
+    })
+  }
+
   readyToPlay(): Observable<ApolloQueryResult<Ready.Mutation>> {
     return this.apollo.mutate<Ready.Mutation>({
       mutation: readyMutation,
@@ -83,7 +98,11 @@ export class GameService {
 
   startServerUpdatingLoop() {
     this.serverPositionUpdateInterval =
-      setInterval(() => this.updateServerOnPosition(), GameSettingsService.serverUpdatingRate);
+      setInterval(() => this.updateServerOnPosition(), GameSettingsService.serverUpdatingInterval);
+  }
+
+  stopServerUpdatingLoop(){
+    clearInterval(this.serverPositionUpdateInterval);
   }
 
 

@@ -2,10 +2,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { GameService } from '../../services/game.service';
 import { CurrentGame } from '../../../types';
 import { ApolloQueryObservable } from 'apollo-angular';
-import { AVAILABLE_CHARACTERS } from '../character-picker/character-picker.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { AuthorizationMiddleware } from '../../../core/configured-apollo/network/authorization-middleware';
+import { AVAILABLE_CHARACTERS } from '../../../shared/characters.const';
 
 @Component({
   selector: 'game-room',
@@ -27,11 +27,13 @@ export class GameRoomComponent implements OnInit, OnDestroy {
         AuthorizationMiddleware.setToken(params.playerToken);
         this.gameService.refreshConnection();
         this.gameData$ = this.gameService.getCurrentGameData();
-        this.gameDataSubscription = this.gameData$.subscribe(({ data: { currentGame } }) => {
+        this.gameDataSubscription = this.gameData$.subscribe(({data: {currentGame}}) => {
           this.game = currentGame;
 
           if (this.game && this.game.state === 'ACTIVE') {
             this.gameStarted = true;
+            this.startGame();
+
             this.gameDataSubscription.unsubscribe();
           }
         });
@@ -42,20 +44,16 @@ export class GameRoomComponent implements OnInit, OnDestroy {
   }
 
   getPlayers() {
-    return [
-      ...this.game.players,
-      this.game.me,
-    ];
+    const players = this.game.players.filter(p => p.type === 'PLAYER');
+    const me = this.game.me['__typename'] !== 'Viewer' ? this.game.me : undefined;
+
+    return me ? [...players, me] : [...players];
   }
 
   ngOnDestroy() {
     if (this.gameDataSubscription) {
       this.gameDataSubscription.unsubscribe();
     }
-  }
-
-  onCountdownDown() {
-    this.startGame();
   }
 
   startGame() {

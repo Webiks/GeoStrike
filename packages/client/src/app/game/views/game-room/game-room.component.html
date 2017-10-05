@@ -8,7 +8,7 @@
             [selected]="true"
             [name]="player.isMe ? 'Me (' + player.username + ')' : player.username"
             [description]="player.state"
-            [image]="getCharacter(player.character).imageUrl"
+            [image]="getCharacter(player.character.name).imageUrl"
             [team]="player.team">
         </character-item>
         <div *ngIf="player.isMe" class="ready">
@@ -16,8 +16,5 @@
         </div>
       </div>
     </div>
-  </div>
-  <div *ngIf="gameStarted">
-    <game-countdown [count]="3" (done)="onCountdownDown()"></game-countdown>
   </div>
 </div>

@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { GameService } from '../../services/game.service';
 import { AuthorizationMiddleware } from '../../../core/configured-apollo/network/authorization-middleware';
 import { ApolloQueryResult } from 'apollo-client';
-import { JoinGame, Team } from '../../../types';
+import { Team } from '../../../types';
 import { MdDialogRef } from '@angular/material';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
+import { VIEWER } from '../../../shared/characters.const';
 
 @Component({
   selector: 'join-game-dialog',
@@ -28,21 +30,32 @@ export class JoinGameDialogComponent implements OnInit {
   }
 
 
-  characterChanged({ name, team }) {
+  characterChanged({name, team}) {
     this.characterName = name;
     this.team = team;
+  }
+
+
+  getViewerOrPlayerJoin(): Observable<ApolloQueryResult<any>> {
+    if (this.characterName === VIEWER.name) {
+      return this.gameService.joinAsViewer(this.gameCode, this.username);
+    } else {
+      return this.gameService.joinGame(this.gameCode, this.characterName, this.username, this.team);
+    }
   }
 
   joinGame() {
     this.loading = true;
     this.error = '';
 
-    this.gameService.joinGame(this.gameCode, this.characterName, this.username, this.team)
-      .subscribe((result: ApolloQueryResult<JoinGame.Mutation>) => {
+    this.getViewerOrPlayerJoin()
+      .subscribe(result => {
         this.loading = result.loading;
 
         if (!result.loading && result.data) {
-          AuthorizationMiddleware.setToken(result.data.joinGame.playerToken);
+          console.log(result.data);
+          const token = result.data.joinAsViewer ? result.data.joinAsViewer.playerToken : result.data.joinGame.playerToken;
+          AuthorizationMiddleware.setToken(token);
           this.goToGame();
         }
       }, (error) => {

@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
+import { CharacterService, ViewState } from './character.service';
 
 @Injectable()
 export class UtilsService {
 
-  constructor() { }
+  constructor(private character: CharacterService) {
+  }
 
   getClampedToGroundHeightReference() {
     return Cesium.HeightReference.CLAMP_TO_GROUND;
@@ -19,8 +21,32 @@ export class UtilsService {
   }
 
   getPosition(location) {
-    const { x, y, z } = location;
+    const {x, y, z} = location;
 
     return new Cesium.Cartesian3(x, y, z);
+  }
+
+  getModelDisplayCondition() {
+    if (this.character.viewState === ViewState.OVERVIEW) {
+      return new Cesium.DistanceDisplayCondition(0.0, 125.5);
+    } else {
+
+      return new Cesium.DistanceDisplayCondition();
+    }
+  }
+
+  getIconDisplayCondition() {
+    if (this.character.viewState === ViewState.OVERVIEW) {
+      return new Cesium.DistanceDisplayCondition(125.5);
+    } else {
+      return new Cesium.DistanceDisplayCondition(Number.MAX_VALUE);
+    }
+  }
+
+  toFixedHeight(cartesian) {
+    const cart = Cesium.Cartographic.fromCartesian(cartesian);
+    cart.height = 10;
+    return Cesium.Cartesian3.fromRadians(cart.longitude, cart.latitude, cart.height);
+
   }
 }

@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { GameFields } from '../../types';
-import { UtilsService } from './utils.service';
-import { GameSettingsService } from './game-settings.service';
+import { CharacterData, GameFields } from '../../types';
 
 export enum MeModelState {
   WALKING,
@@ -15,6 +13,7 @@ export enum MeModelState {
 export enum ViewState {
   FPV,
   SEMI_FPV,
+  OVERVIEW,
 }
 
 export interface CharacterState {
@@ -23,6 +22,7 @@ export interface CharacterState {
   heading: number;
   pitch: number;
   state: MeModelState;
+  characterInfo: CharacterData
 }
 
 @Injectable()
@@ -31,7 +31,7 @@ export class CharacterService {
   private _viewState = new BehaviorSubject<ViewState>(ViewState.SEMI_FPV);
   private _entity;
 
-  constructor(private utils: UtilsService) {
+  constructor() {
   }
 
   get entity() {

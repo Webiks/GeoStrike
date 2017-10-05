@@ -1,31 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-
-export const AVAILABLE_CHARACTERS = [
-  {
-    name: 'Steve Rogers',
-    description: 'Blue Team',
-    team: 'BLUE',
-    imageUrl: '/assets/characters/soldier_temp.png',
-  },
-  {
-    name: 'Anthony Stark',
-    description: 'Blue Team',
-    team: 'BLUE',
-    imageUrl: '/assets/characters/soldier_temp.png',
-  },
-  {
-    name: 'Peter Parker',
-    description: 'Red Team',
-    team: 'RED',
-    imageUrl: '/assets/characters/soldier_temp.png',
-  },
-  {
-    name: 'Bruce Wayne',
-    description: 'Red Team',
-    team: 'RED',
-    imageUrl: '/assets/characters/soldier_temp.png',
-  },
-];
+import { AVAILABLE_CHARACTERS, VIEWER } from '../../../shared/characters.const';
 
 @Component({
   selector: 'character-picker',
@@ -37,6 +11,7 @@ export class CharacterPickerComponent implements OnInit {
   @Output() select: EventEmitter<any> = new EventEmitter();
 
   private availableCharacters = AVAILABLE_CHARACTERS;
+  private viewer = VIEWER;
 
   constructor() {
   }

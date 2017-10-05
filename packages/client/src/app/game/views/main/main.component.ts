@@ -19,6 +19,7 @@ export class MainComponent {
       position: {
         left: '10%',
       },
+       panelClass: 'general-dialog'
     });
   }
 
@@ -29,6 +30,7 @@ export class MainComponent {
       position: {
         left: '10%',
       },
+      panelClass: 'general-dialog'
     });
   }
 }

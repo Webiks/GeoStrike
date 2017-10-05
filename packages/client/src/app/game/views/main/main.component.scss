@@ -6,14 +6,30 @@
   flex-direction: column;
   align-items: center;
 
-
   .header {
-    font-size: 60pt;
+    font-size: 100pt;
+    color: white;
+    line-height: 90pt;
+
+    margin-top: 40px;
+  }
+
+  .sub-header {
+    padding-left: 271pt;
+    font-size: 20pt;
     color: white;
   }
 
-  button {
-    margin: 10px;
+  .row {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  big-button {
+    margin: 15px;
     color: white
   }
 }

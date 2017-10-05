@@ -1,10 +1,19 @@
 <ac-layer acFor="let player of playersPositions" [context]="this">
   <ac-model-desc props="{
                     heightReference: utils.getClampedToGroundHeightReference(),
-                    scale: 0.01,
-										uri: '/assets/soldier.gltf',
+										uri: getModel(player),
+										scale: getModelScale(player),
 										position: interpolatePlayerPosition(player.id, utils.getPosition(player.currentLocation.location)),
-										orientation: getOrientation(player.currentLocation.location, player.currentLocation.heading, player.state)
+										orientation: getOrientation(player.currentLocation.location, player.currentLocation.heading, player),
+										runAnimations: player.state !== 'DEAD',
+										distanceDisplayCondition : utils.getModelDisplayCondition()
                   }">
   </ac-model-desc>
+  <ac-billboard-primitive-desc props="{
+                      show: player.type !== 'BACKGROUND_CHARACTER',
+                      position: utils.toFixedHeight(player.currentLocation.location),
+                      image: '/assets/icons/blue-mark.png',
+                      distanceDisplayCondition : utils.getIconDisplayCondition(),
+                    }">
+  </ac-billboard-primitive-desc>
 </ac-layer>

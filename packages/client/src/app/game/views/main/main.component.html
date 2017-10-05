@@ -1,5 +1,8 @@
 <div class="main-container">
-    <h1 class="header">Cesium FPS</h1>
-    <button md-raised-button (click)="openCreateGameDialog()">Create new game</button>
-    <button md-raised-button (click)="openJoinGameDialog()">Join game</button>
+  <div class="header">Cesium FPS</div>
+  <div class="sub-header"> First Person Shooter</div>
+  <div class="row">
+    <big-button text="Join game" (click)="openJoinGameDialog()"></big-button>
+    <big-button text="Create new game" (click)="openCreateGameDialog()"></big-button>
+  </div>
 </div>

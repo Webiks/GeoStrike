@@ -2,5 +2,5 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class GameSettingsService {
-  static serverUpdatingRate = 50;
+  static serverUpdatingInterval = 200;
 }
