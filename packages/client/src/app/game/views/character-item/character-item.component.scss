@@ -7,7 +7,17 @@
   border-top-right-radius: 10px;
   height: 200px;
   width: 200px;
+  min-width: 100px;
   transition: all 0.5s;
+
+  @media screen and (max-width: 1300px) {
+    height: 120px;
+    width: 120px;
+
+    img {
+      height: 100px !important;
+    }
+  }
 
 
   .description {
