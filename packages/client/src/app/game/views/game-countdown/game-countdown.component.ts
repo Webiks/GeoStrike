@@ -6,9 +6,10 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
   styleUrls: ['./game-countdown.component.scss']
 })
 export class GameCountdownComponent implements OnInit {
-  @Input() private count = 3;
-  @Output() private done: EventEmitter<any> = new EventEmitter<any>();
-  private currentCount = 0;
+  @Input() count = 3;
+  @Output() done: EventEmitter<any> = new EventEmitter<any>();
+  currentCount = 0;
+  showCountdown = true;
 
   constructor() {
   }
@@ -20,6 +21,7 @@ export class GameCountdownComponent implements OnInit {
       this.currentCount--;
 
       if (this.currentCount === 0) {
+        this.showCountdown = false;
         this.done.emit();
         clearInterval(intervalHandler);
       }

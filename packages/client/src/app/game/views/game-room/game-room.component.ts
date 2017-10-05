@@ -32,6 +32,8 @@ export class GameRoomComponent implements OnInit, OnDestroy {
 
           if (this.game && this.game.state === 'ACTIVE') {
             this.gameStarted = true;
+            this.onCountdownDown();
+
             this.gameDataSubscription.unsubscribe();
           }
         });
