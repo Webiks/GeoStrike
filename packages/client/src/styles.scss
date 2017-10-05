@@ -6,6 +6,12 @@
   src: local('/assets/fonts/AGENCYR'), url('/assets/fonts/AGENCYR.woff') format('woff'), url('/assets/fonts/AGENCYR.ttf') format('truetype');
 }
 
+@font-face {
+  font-family: 'Orena';
+  src: url('/assets/fonts/Orena.ttf');
+}
+
+
 html,
 body {
   width: 100%;
@@ -14,7 +20,7 @@ body {
   padding: 0;
   overflow: hidden;
   font-family: AGENCYR, sans-serif !important;
-  background-image: url('/assets/menu/background.jpg');
+  background-image: url('/assets/menu/background.png');
   background-size: cover;
 }
 

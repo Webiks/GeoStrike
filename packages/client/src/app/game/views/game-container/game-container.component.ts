@@ -71,7 +71,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
                   this.character.viewState = ViewState.OVERVIEW;
                 }
               });
-              if (this.character.initialized){
+              if (this.character.initialized) {
                 this.character.state = MeModelState.DEAD;
               }
             }
@@ -106,4 +106,5 @@ export class GameContainerComponent implements OnInit, OnDestroy {
       this.gameDataSubscription.unsubscribe();
     }
   }
+
 }
