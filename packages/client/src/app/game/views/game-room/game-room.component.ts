@@ -32,7 +32,7 @@ export class GameRoomComponent implements OnInit, OnDestroy {
 
           if (this.game && this.game.state === 'ACTIVE') {
             this.gameStarted = true;
-            this.onCountdownDown();
+            this.startGame();
 
             this.gameDataSubscription.unsubscribe();
           }
@@ -54,10 +54,6 @@ export class GameRoomComponent implements OnInit, OnDestroy {
     if (this.gameDataSubscription) {
       this.gameDataSubscription.unsubscribe();
     }
-  }
-
-  onCountdownDown() {
-    this.startGame();
   }
 
   startGame() {

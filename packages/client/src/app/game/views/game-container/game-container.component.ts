@@ -25,7 +25,6 @@ export class GameContainerComponent implements OnInit, OnDestroy {
   private gameDataSubscription: Subscription;
   private players$: Subject<AcNotification> = new Subject<AcNotification>();
   private killedDialogOpen = false;
-  public showCountdown = true;
 
   constructor(private gameService: GameService,
               private character: CharacterService,
@@ -108,7 +107,4 @@ export class GameContainerComponent implements OnInit, OnDestroy {
     }
   }
 
-  onCountdownDone() {
-    this.showCountdown = false
-  }
 }
