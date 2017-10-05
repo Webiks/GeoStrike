@@ -74,8 +74,8 @@ import { PathCreatorComponent } from './views/game-map/path-creator/path-creator
   ],
   providers: [
     GameService,
-    UtilsService,
     CharacterService,
+    UtilsService,
   ],
   entryComponents: [
     CreateNewGameDialogComponent,

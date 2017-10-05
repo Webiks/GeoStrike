@@ -7,7 +7,8 @@ import 'rxjs/add/observable/combineLatest';
 import 'rxjs/add/observable/fromEvent';
 import { Subscription } from 'rxjs/Subscription';
 import { GameService } from '../../../services/game.service';
-import { PlayerFields } from '../../../../types';
+import { CharacterData} from '../../../../types';
+
 
 @Component({
   selector: 'me',
@@ -29,6 +30,7 @@ export class MeComponent implements OnInit, OnDestroy {
               public utils: UtilsService,
               private cesiumService: CesiumService,
               private gameService: GameService) {
+    character.currentStateValue
   }
 
   get notifications$() {
@@ -97,5 +99,9 @@ export class MeComponent implements OnInit, OnDestroy {
     } else {
       return this.utils.getOrientation(location, heading);
     }
+  }
+
+  get characterInfo() : CharacterData{
+    return this.character.currentStateValue.characterInfo;
   }
 }

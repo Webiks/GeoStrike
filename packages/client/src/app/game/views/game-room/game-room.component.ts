@@ -2,10 +2,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { GameService } from '../../services/game.service';
 import { CurrentGame } from '../../../types';
 import { ApolloQueryObservable } from 'apollo-angular';
-import { AVAILABLE_CHARACTERS } from '../character-picker/character-picker.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { AuthorizationMiddleware } from '../../../core/configured-apollo/network/authorization-middleware';
+import { AVAILABLE_CHARACTERS } from '../../../shared/characters.const';
 
 @Component({
   selector: 'game-room',

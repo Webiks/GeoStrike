@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { UtilsService } from '../../../services/utils.service';
 import { InterpolationService, InterpolationType } from '../../../services/interpolation.service';
 import { PlayerFields } from '../../../../types';
+import { CharacterService } from '../../../services/character.service';
 
 @Component({
   selector: 'other-players',
@@ -14,7 +15,7 @@ export class OtherPlayersComponent {
   playersPositionMap = new Map<string, any>();
   Cesium = Cesium;
 
-  constructor(public utils: UtilsService) {
+  constructor(public utils: UtilsService, public character: CharacterService) {
   }
 
   interpolatePlayerPosition(playerId, playerPosition) {
@@ -44,32 +45,20 @@ export class OtherPlayersComponent {
   }
 
   getModel(player: PlayerFields.Fragment) {
-    if (player.type === 'PLAYER') {
-      return '/assets/models/soldier.gltf';
-
-    } else {
-      return '/assets/models/Grandpa.gltf';
-    }
+    return player.character.model;
   }
 
   getModelScale(player: PlayerFields.Fragment) {
-    if (player.type === 'PLAYER') {
-      return 0.01;
-
-    } else {
-      return 0.035;
-    }
+    return player.character.scale
   }
 
   runAnimation(player: PlayerFields.Fragment) {
     return player.state === 'DEAD';
   }
 
-  getIconPic(player: PlayerFields.Fragment){
+  getIconPic(player: PlayerFields.Fragment) {
     return player.team === 'BLUE' ? '/assets/icons/blue-mark.png' : '/assets/icons/red-mark.png';
   }
-
-
 
 
 }

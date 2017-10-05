@@ -20,13 +20,19 @@ export interface Game {
 export interface Player extends User {
   id: string; 
   username: string | null; 
-  character: string; 
+  character: CharacterData; 
   state: PlayerState; 
   isMe: boolean; 
   currentLocation: PlayerLocation; 
   team: Team; 
   syncState: PlayerSyncState; 
   type: CharacterType; 
+}
+
+export interface CharacterData {
+  name: string; 
+  model: string | null; 
+  scale: number | null; 
 }
 
 export interface PlayerLocation {
@@ -163,6 +169,9 @@ export namespace JoinAsViewer {
     playerToken: string; 
     game: Game; 
   }
+
+  export type Game = {
+  } & GameFields.Fragment
 }
 export namespace JoinGame {
   export type Variables = {
@@ -244,12 +253,18 @@ export namespace PlayerFields {
     team: Team; 
     syncState: PlayerSyncState; 
     username: string | null; 
-    character: string; 
+    character: Character; 
     state: PlayerState; 
     isMe: boolean; 
     id: string; 
     type: CharacterType; 
     currentLocation: CurrentLocation; 
+  }
+
+  export type Character = {
+    name: string; 
+    model: string | null; 
+    scale: number | null; 
   }
 
   export type CurrentLocation = {

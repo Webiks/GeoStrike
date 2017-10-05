@@ -5,7 +5,11 @@ export const playerFragment = gql`
     team
     syncState
     username
-    character
+    character {
+      name
+      model
+      scale
+    }
     state
     isMe
     id

@@ -10,13 +10,19 @@ export const schema = gql`
     type Player implements User {
         id: String!
         username: String
-        character: String!
+        character: CharacterData!
         state: PlayerState!
         isMe: Boolean!
         currentLocation: PlayerLocation!
         team: Team!
         syncState: PlayerSyncState!
         type: CharacterType!
+    }
+    
+    type CharacterData {
+        name: String!
+        model: String
+        scale: Float
     }
     
     type Viewer implements User {

@@ -1,10 +1,11 @@
 import { v4 } from 'uuid';
 import { sign } from 'jsonwebtoken';
-import { GameState, PlayerState, PlayerSyncState } from '../../types';
+import { GameState, PlayerState, PlayerSyncState, CharacterData } from '../../types';
 import * as Cesium from 'cesium';
 import { Settings } from '../../settings/settings';
 import { startClientsUpdater } from '../clients-updater/clients-updater';
 import { BackgroundCharacterManager } from '../background-character/background-character-manager';
+import { PLAYER_CHARACTERS } from './characters';
 
 export interface ICartesian3Location {
   x: number;
@@ -33,7 +34,7 @@ export interface IViewer {
 export interface IPlayer {
   playerId: string;
   token: string;
-  character: string;
+  character: CharacterData;
   username: string;
   state: PlayerState;
   game: IGameObject;
@@ -57,17 +58,14 @@ export interface IGameObject {
 const TOKENS_SECRET = 'sdf43tSWDG#%Tsdfw4';
 
 const DEFAULT_PLAYERS_LOCATION = [
-  { x: 1334783.4002701144, y: -4650320.207361281, z: 4142206.104919172 },
-  { x: 1334734.4041850453, y: -4650448.021286272, z: 4142079.251574431 },
-  { x: 1334743.0138112511, y: -4650448.206585243, z: 4142076.289141699 },
-  { x: 1334812.4342012317, y: -4650321.075155178, z: 4142195.8438288164 },
+  {x: 1334783.4002701144, y: -4650320.207361281, z: 4142206.104919172},
+  {x: 1334734.4041850453, y: -4650448.021286272, z: 4142079.251574431},
+  {x: 1334743.0138112511, y: -4650448.206585243, z: 4142076.289141699},
+  {x: 1334812.4342012317, y: -4650321.075155178, z: 4142195.8438288164},
 ];
 
 export class GamesManager {
-  private activeGames: Map<string, IGameObject> = new Map<
-    string,
-    IGameObject
-  >();
+  private activeGames: Map<string, IGameObject> = new Map<string, IGameObject>();
 
   private generateGameCode(): string {
     const min = 1000;
@@ -114,12 +112,10 @@ export class GamesManager {
     return viewer;
   }
 
-  addRealPlayerToGame(
-    gameId: string,
-    character: string,
-    username: string,
-    team: Team
-  ): IPlayer {
+  addRealPlayerToGame(gameId: string,
+                      characterName: string,
+                      username: string,
+                      team: Team): IPlayer {
     const game = this.getGameById(gameId);
     const playerId = v4();
     const playerToken = sign(
@@ -134,6 +130,8 @@ export class GamesManager {
     const realPlayerCount = Array.from(game.playersMap.values()).filter(
       player => player.type === CharacterType.PLAYER
     ).length;
+
+    const character = PLAYER_CHARACTERS.find(p => p.name === characterName);
     const player: IPlayer = {
       playerId,
       character,
@@ -202,13 +200,11 @@ export class GamesManager {
     }
   }
 
-  updatePlayerPosition(
-    gameId: string,
-    playerId: string,
-    position: ICartesian3Location,
-    heading: number,
-    skipValidation = false
-  ) {
+  updatePlayerPosition(gameId: string,
+                       playerId: string,
+                       position: ICartesian3Location,
+                       heading: number,
+                       skipValidation = false) {
     const game = this.getGameById(gameId);
     const player = game.playersMap.get(playerId);
     if (player && position) {
@@ -233,10 +229,8 @@ export class GamesManager {
     }
   }
 
-  validatePlayerPosition(
-    currentLocation: ICartesian3Location,
-    newLocation: ICartesian3Location
-  ): boolean {
+  validatePlayerPosition(currentLocation: ICartesian3Location,
+                         newLocation: ICartesian3Location): boolean {
     const currentPosition = new Cesium.Cartesian3(
       currentLocation.x,
       currentLocation.y,
