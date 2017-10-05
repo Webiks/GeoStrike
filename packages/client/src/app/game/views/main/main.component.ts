@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MdDialog } from '@angular/material';
+import { MdDialog, MdSnackBar } from '@angular/material';
 import { JoinGameDialogComponent } from '../join-game-dialog/join-game-dialog.component';
 import { CreateNewGameDialogComponent } from '../create-new-game-dialog/create-new-game-dialog.component';
 
@@ -10,17 +10,20 @@ import { CreateNewGameDialogComponent } from '../create-new-game-dialog/create-n
 })
 export class MainComponent {
   characterName;
-  username = 'Anonymous'
-  constructor(private dialog: MdDialog) {
+  username = 'Anonymous User';
+  constructor(private dialog: MdDialog,
+              private snackBar: MdSnackBar) {
   }
 
 
   openCreateGameDialog() {
-    this.dialog.open(CreateNewGameDialogComponent, {
-      height: '100%',
-      width: '100%',
-       panelClass: 'general-dialog'
-    });
+    if (this.validateInput()){
+      this.dialog.open(CreateNewGameDialogComponent, {
+        height: '100%',
+        width: '100%',
+         panelClass: 'general-dialog'
+      });
+    }
   }
 
   openJoinGameDialog() {
@@ -34,5 +37,14 @@ export class MainComponent {
 
   characterChanged({name, team}) {
     this.characterName = name;
+  }
+
+  validateInput(){
+    if (!this.characterName || !this.username){
+      this.snackBar.open('Please pick a Character and Username','OK', {duration: 3000});
+      return false;
+    }
+    return true;
+
   }
 }

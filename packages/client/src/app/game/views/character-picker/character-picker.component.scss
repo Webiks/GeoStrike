@@ -14,6 +14,7 @@
   }
 
   .viewer-row {
+    position: relative;
     display: flex;
     justify-content: center;
     .viewer-btn {
@@ -31,5 +32,13 @@
       border: solid 2px var(--light-green);
       border-radius: 10px;
     }
+  }
+
+  .username-input {
+    position: absolute;
+    top: 0;
+    left: 25px;
+    color: white;
+    font-size: 22px;
   }
 }

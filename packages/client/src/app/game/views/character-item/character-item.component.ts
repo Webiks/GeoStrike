@@ -12,7 +12,7 @@ export class CharacterItemComponent implements OnInit {
   @Input() description: string;
   @Input() image: string;
   @Input() selected: boolean;
-  @Input() disabled: boolean;
+  @Input() disabled = false;
 
   constructor() { }
 

@@ -8,7 +8,7 @@ import {
   MdDialogModule,
   MdGridListModule, MdIconModule,
   MdInputModule,
-  MdProgressSpinnerModule
+  MdProgressSpinnerModule, MdSnackBar, MdSnackBarModule
 } from '@angular/material';
 
 import { MainComponent } from './views/main/main.component';
@@ -65,6 +65,7 @@ import { PathCreatorComponent } from './views/game-map/path-creator/path-creator
     MdProgressSpinnerModule,
     MdInputModule,
     MdIconModule,
+    MdSnackBarModule,
     FormsModule,
     ConfiguredApolloModule,
   ],

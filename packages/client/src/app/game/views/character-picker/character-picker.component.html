@@ -14,6 +14,9 @@
     </md-grid-tile>
   </md-grid-list>
   <div class="viewer-row">
+    <md-input-container class="username-input">
+      <input mdInput placeholder="Username" required [(ngModel)]="username">
+    </md-input-container>
     <h2 class="viewer-btn" [class.selected-viewer]="selectedCharacter === viewer.name" (click)="select.emit(viewer)" >Continue as Viewer</h2>
   </div>
 </div>
