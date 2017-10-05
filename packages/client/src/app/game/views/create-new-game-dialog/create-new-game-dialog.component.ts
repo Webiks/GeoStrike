@@ -42,7 +42,7 @@ export class CreateNewGameDialogComponent {
           AuthorizationMiddleware.setToken(result.data.createNewGame.playerToken);
           this.gameCode = result.data.createNewGame.game.gameCode;
         }
-      });
+      },);
   }
 
   goToGame() {

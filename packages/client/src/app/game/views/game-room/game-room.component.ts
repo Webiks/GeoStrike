@@ -1,11 +1,12 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { GameService } from '../../services/game.service';
-import { CurrentGame } from '../../../types';
-import { ApolloQueryObservable } from 'apollo-angular';
+import { GameData } from '../../../types';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { AuthorizationMiddleware } from '../../../core/configured-apollo/network/authorization-middleware';
 import { AVAILABLE_CHARACTERS } from '../../../shared/characters.const';
+import { Observable } from 'rxjs/Observable';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'game-room',
@@ -13,41 +14,51 @@ import { AVAILABLE_CHARACTERS } from '../../../shared/characters.const';
   styleUrls: ['./game-room.component.scss']
 })
 export class GameRoomComponent implements OnInit, OnDestroy {
-  private gameData$: ApolloQueryObservable<CurrentGame.Query>;
-  private game: CurrentGame.CurrentGame;
+  private gameData$: Observable<GameData.Subscription>;
+  private game: GameData.GameData;
   private gameDataSubscription: Subscription;
   private gameStarted = false;
+  private gameCode;
+  private players;
 
-  constructor(private activatedRoute: ActivatedRoute, private gameService: GameService, private router: Router) {
+  constructor(private activatedRoute: ActivatedRoute, private gameService: GameService, private router: Router, private ngZone: NgZone) {
   }
 
   ngOnInit() {
-    this.activatedRoute.params.subscribe(params => {
-      if (params.playerToken) {
-        AuthorizationMiddleware.setToken(params.playerToken);
-        this.gameService.refreshConnection();
-        this.gameData$ = this.gameService.getCurrentGameData();
-        this.gameDataSubscription = this.gameData$.subscribe(({data: {currentGame}}) => {
-          this.game = currentGame;
+    this.ngZone.runOutsideAngular(() => {
+      this.activatedRoute.params.subscribe(params => {
+        if (params.playerToken) {
 
-          if (this.game && this.game.state === 'ACTIVE') {
-            this.gameStarted = true;
-            this.startGame();
+          AuthorizationMiddleware.setToken(params.playerToken);
+          this.gameCode = params.gameCode;
+          this.gameService.refreshConnection();
+          this.gameData$ = this.gameService.getCurrentGameData();
+          this.gameDataSubscription = this.gameData$.subscribe(({gameData}) => {
+            this.game = gameData;
+            this.players = this.getPlayers(this.game);
 
-            this.gameDataSubscription.unsubscribe();
-          }
-        });
-      } else {
-        this.router.navigate(['/']);
-      }
+            if (this.game && this.game.state === 'ACTIVE') {
+              this.gameStarted = true;
+              this.startGame();
+
+              this.gameDataSubscription.unsubscribe();
+            }
+
+          });
+        } else {
+          this.router.navigate(['/']);
+        }
+      });
     });
   }
 
-  getPlayers() {
-    const players = this.game.players.filter(p => p.type === 'PLAYER');
-    const me = this.game.me['__typename'] !== 'Viewer' ? this.game.me : undefined;
+  getPlayers(game: GameData.GameData) {
+    const players = game.players.filter(p => p.type === 'PLAYER');
+    const me = game.me['__typename'] !== 'Viewer' ? this.game.me : undefined;
+    const playerFromServer = me ? [...players, me] : [...players];
 
-    return me ? [...players, me] : [...players];
+    const changed = !_.isEqual(this.players, playerFromServer);
+    return changed ? playerFromServer: this.players;
   }
 
   ngOnDestroy() {
@@ -65,6 +76,7 @@ export class GameRoomComponent implements OnInit, OnDestroy {
   }
 
   ready() {
+    console.log('ready');
     this.gameService.readyToPlay();
   }
 }

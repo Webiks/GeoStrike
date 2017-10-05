@@ -1,18 +1,19 @@
 
 <div *ngIf="game" class="game-room">
   <div *ngIf="!gameStarted">
+    <h1 class="header">Game Code: {{gameCode}}</h1>
     <h1 class="header">Waiting for all player to be ready to play...</h1>
     <div class="players">
-      <div class="player-container" *ngFor="let player of getPlayers()">
+      <div class="player-container" *ngFor="let player of players; trackBy:player?.id">
         <character-item
-            [selected]="true"
+            [disabled]="!player.isMe"
             [name]="player.isMe ? 'Me (' + player.username + ')' : player.username"
             [description]="player.state"
             [image]="getCharacter(player.character.name).imageUrl"
             [team]="player.team">
         </character-item>
         <div *ngIf="player.isMe" class="ready">
-          <button md-raised-button (click)="ready()">READY</button>
+          <big-button text="READY" (click)="ready()"></big-button>
         </div>
       </div>
     </div>

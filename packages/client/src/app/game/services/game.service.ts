@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { Apollo, ApolloQueryObservable } from 'apollo-angular';
 import { createNewGameMutation } from '../../graphql/create-new-game.mutation';
 import { ApolloQueryResult } from 'apollo-client';
 import { Observable } from 'rxjs/Observable';
 import {
-  CreateNewGame, CurrentGame, JoinAsViewer, JoinGame, NotifyKill, Ready, Team,
+  CreateNewGame, CurrentGame, GameData, JoinAsViewer, JoinGame, NotifyKill, Ready, Team,
   UpdatePosition
 } from '../../types';
 import { joinGameMutation } from '../../graphql/join-game.mutation';
@@ -13,6 +13,7 @@ import { gameDataSubscription } from '../../graphql/game-data.subscription';
 import { readyMutation } from '../../graphql/ready.mutation';
 import { currentGameQuery } from '../../graphql/current-game.query';
 import 'rxjs/add/operator/first';
+import 'rxjs/add/operator/share';
 import { updatePositionMutation } from '../../graphql/update-position.mutation';
 import { ApolloService } from '../../core/configured-apollo/network/apollo.service';
 import { notifyKillMutation } from '../../graphql/notify-kill.mutation';
@@ -28,32 +29,22 @@ export class GameService {
 
   constructor(private apollo: Apollo,
               subscriptionClientService: ApolloService,
-              private character: CharacterService,) {
+              private character: CharacterService) {
     this.socket = subscriptionClientService.subscriptionClient;
   }
 
   refreshConnection() {
+    console.log('status',this.socket.status);
     this.socket.close(true, true);
     this.socket['connect']();
   }
 
-  getCurrentGameData(): ApolloQueryObservable<CurrentGame.Query> {
-    const queryRes = this.apollo.watchQuery<CurrentGame.Query>({
-      query: currentGameQuery,
+  getCurrentGameData(): Observable<GameData.Subscription> {
+    const queryRes = this.apollo.subscribe({
+      query: gameDataSubscription,
     });
 
-    (queryRes as any).first().subscribe(() => {
-      queryRes.subscribeToMore({
-        document: gameDataSubscription,
-        updateQuery: (prev, { subscriptionData: { data: { gameData } } }) => {
-          return {
-            currentGame: gameData
-          };
-        }
-      });
-    });
-
-    return queryRes;
+    return queryRes as Observable<GameData.Subscription>;
   }
 
   createNewGame(character: string, username: string, team: Team, isViewer: boolean): Observable<ApolloQueryResult<CreateNewGame.Mutation>> {
