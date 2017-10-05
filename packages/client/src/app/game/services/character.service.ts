@@ -22,7 +22,7 @@ export interface CharacterState {
   heading: number;
   pitch: number;
   state: MeModelState;
-  characterInfo: CharacterData
+  characterInfo: CharacterData;
 }
 
 @Injectable()

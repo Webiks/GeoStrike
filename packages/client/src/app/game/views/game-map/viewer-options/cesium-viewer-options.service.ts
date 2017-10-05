@@ -20,6 +20,7 @@ export class CesiumViewerOptionsService {
       sceneModePicker: false,
       navigationInstructionsInitiallyVisible: false,
       terrainProviderViewModels: [],
+      // terrainShadows : Cesium.ShadowMode.ENABLED,
     };
   }
 
@@ -27,9 +28,11 @@ export class CesiumViewerOptionsService {
     viewer.scene.globe.depthTestAgainstTerrain = true;
     viewer.bottomContainer.remove();
     viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
+    // viewer.scene.globe.enableLighting = true;
+    // viewer.scene.fog.enabled = true;
   }
 
-  setFpvCameraOptions(viewer){
+  setFpvCameraOptions(viewer) {
     const screenSpaceCameraController = viewer.scene.screenSpaceCameraController;
     screenSpaceCameraController.enableTilt = false;
     screenSpaceCameraController.enableRotate = false;
@@ -38,7 +41,7 @@ export class CesiumViewerOptionsService {
     canvas.onclick = () => canvas.requestPointerLock();
   }
 
-  setFreeCameraOptions(viewer){
+  setFreeCameraOptions(viewer) {
     const screenSpaceCameraController = viewer.scene.screenSpaceCameraController;
     screenSpaceCameraController.enableTilt = true;
     screenSpaceCameraController.enableRotate = true;

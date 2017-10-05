@@ -146,6 +146,6 @@ export class GameMapComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.elementRef.nativeElement.removeEventListener('mousemove', this.onMousemove)
+    this.elementRef.nativeElement.removeEventListener('mousemove', this.onMousemove);
   }
 }
