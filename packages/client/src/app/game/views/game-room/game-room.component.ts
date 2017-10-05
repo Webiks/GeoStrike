@@ -1,4 +1,4 @@
-import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { GameService } from '../../services/game.service';
 import { GameData } from '../../../types';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -14,26 +14,32 @@ import * as _ from 'lodash';
   styleUrls: ['./game-room.component.scss']
 })
 export class GameRoomComponent implements OnInit, OnDestroy {
-  private gameData$: Observable<GameData.Subscription>;
+  private gameData$: Observable<GameData.GameData>;
   private game: GameData.GameData;
   private gameDataSubscription: Subscription;
   private gameStarted = false;
   private gameCode;
   private players;
+  private paramsSubscription;
 
-  constructor(private activatedRoute: ActivatedRoute, private gameService: GameService, private router: Router, private ngZone: NgZone) {
+  constructor(private activatedRoute: ActivatedRoute,
+              private gameService: GameService,
+              private router: Router,
+              private ngZone: NgZone,
+              private cd: ChangeDetectorRef) {
   }
 
   ngOnInit() {
-    this.ngZone.runOutsideAngular(() => {
-      this.activatedRoute.params.subscribe(params => {
+
+    this.paramsSubscription = this.activatedRoute.params.subscribe(params => {
+      this.ngZone.runOutsideAngular(() => {
         if (params.playerToken) {
 
           AuthorizationMiddleware.setToken(params.playerToken);
           this.gameCode = params.gameCode;
           this.gameService.refreshConnection();
-          this.gameData$ = this.gameService.getCurrentGameData();
-          this.gameDataSubscription = this.gameData$.subscribe(({gameData}) => {
+          this.gameData$ = this.gameService.getCurrentGameData().map(({gameData}) => gameData);
+          this.gameDataSubscription = this.gameData$.subscribe((gameData) => {
             this.game = gameData;
             this.players = this.getPlayers(this.game);
 
@@ -58,10 +64,13 @@ export class GameRoomComponent implements OnInit, OnDestroy {
     const playerFromServer = me ? [...players, me] : [...players];
 
     const changed = !_.isEqual(this.players, playerFromServer);
-    return changed ? playerFromServer: this.players;
+    return changed ? playerFromServer : this.players;
   }
 
   ngOnDestroy() {
+    if ( this.paramsSubscription){
+      this.paramsSubscription.unsubscribe();
+    }
     if (this.gameDataSubscription) {
       this.gameDataSubscription.unsubscribe();
     }

@@ -34,7 +34,6 @@ export class GameService {
   }
 
   refreshConnection() {
-    console.log('status',this.socket.status);
     this.socket.close(true, true);
     this.socket['connect']();
   }

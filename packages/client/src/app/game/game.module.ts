@@ -28,7 +28,6 @@ import { CharacterService } from './services/character.service';
 import { WorldComponent } from './views/game-map/world/world.component';
 import { OtherPlayersComponent } from './views/game-map/other-players/other-players.component';
 import { UtilsService } from './services/utils.service';
-import { ConfiguredApolloModule } from '../core/configured-apollo/configured-apollo.module';
 import { EndGameDialogComponent } from './views/end-game-dialog/end-game-dialog.component';
 import { HowToPlayDialogComponent } from './views/how-to-play-dialog/how-to-play-dialog.component';
 import { SharedModule } from '../shared/shared.module';
@@ -67,7 +66,7 @@ import { PathCreatorComponent } from './views/game-map/path-creator/path-creator
     MdIconModule,
     MdSnackBarModule,
     FormsModule,
-    ConfiguredApolloModule,
+
   ],
   exports: [
     MainComponent,
