@@ -23,13 +23,24 @@
   .row {
     margin-top: 40px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
+  }
+
+  .character-picker-container {
+    width: 80%;
+    max-width: 1300px;
+    margin-top: 20px;
   }
 
   big-button {
     margin: 15px;
     color: white
+  }
+
+  .username-input{
+    color: white;
+    font-size: 28px;
   }
 }

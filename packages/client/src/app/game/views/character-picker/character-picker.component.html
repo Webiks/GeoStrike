@@ -3,12 +3,13 @@
   <md-grid-list gutterSize="20" cols="4">
     <md-grid-tile *ngFor="let character of availableCharacters">
       <character-item
-          (click)="select.emit(character)"
+          (onClick)="select.emit(character)"
           [description]="character.description"
           [team]="character.team"
           [name]="character.name"
           [selected]="character.name === selectedCharacter"
-          [image]="character.imageUrl">
+          [image]="character.imageUrl"
+          [disabled]="false">
       </character-item>
     </md-grid-tile>
   </md-grid-list>

@@ -3,8 +3,8 @@
   align-items: center;
   padding: 10px;
   border: 1px white solid;
-  border-bottom-left-radius: 10px;
-  border-top-right-radius: 10px;
+  border-bottom-left-radius: 20px;
+  border-top-right-radius: 20px;
 
   .header {
     font-size: 40pt;
@@ -17,6 +17,7 @@
     display: flex;
     justify-content: center;
     .viewer-btn {
+      color: white;
       cursor: pointer;
       text-align: center;
       &:hover {

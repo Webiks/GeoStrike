@@ -1,8 +1,18 @@
 <div class="main-container">
   <div class="header">Cesium FPS</div>
   <div class="sub-header"> First Person Shooter</div>
-  <div class="row">
-    <big-button text="Join game" (click)="openJoinGameDialog()"></big-button>
-    <big-button text="Create new game" (click)="openCreateGameDialog()"></big-button>
+  <div class="character-picker-container">
+    <character-picker [selectedCharacter]="characterName" (select)="characterChanged($event)"></character-picker>
   </div>
+  <div>
+
+  </div>
+  <div class="row">
+    <md-input-container class="username-input">
+      <input mdInput placeholder="Username" required [(ngModel)]="username">
+    </md-input-container>
+    <big-button text="Create new game" (click)="openCreateGameDialog()"></big-button>
+    <big-button text="Join game" (click)="openJoinGameDialog()"></big-button>
+  </div>
+
 </div>

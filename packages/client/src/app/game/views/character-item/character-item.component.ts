@@ -6,16 +6,23 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
   styleUrls: ['./character-item.component.scss']
 })
 export class CharacterItemComponent implements OnInit {
-  @Output() click: EventEmitter<any> = new EventEmitter();
+  @Output() onClick: EventEmitter<any> = new EventEmitter();
   @Input() name: string;
   @Input() team: string;
   @Input() description: string;
   @Input() image: string;
   @Input() selected: boolean;
+  @Input() disabled: boolean;
 
   constructor() { }
 
   ngOnInit() {
+  }
+
+  onItemClick(){
+    if (!this.disabled){
+      this.onClick.emit({name: this.name, team: this.team})
+    }
   }
 
 }

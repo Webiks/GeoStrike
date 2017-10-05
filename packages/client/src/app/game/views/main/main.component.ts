@@ -9,28 +9,30 @@ import { CreateNewGameDialogComponent } from '../create-new-game-dialog/create-n
   styleUrls: ['./main.component.scss'],
 })
 export class MainComponent {
+  characterName;
+  username = 'Anonymous'
   constructor(private dialog: MdDialog) {
   }
 
+
   openCreateGameDialog() {
     this.dialog.open(CreateNewGameDialogComponent, {
-      height: '85%',
-      width: '90%',
-      position: {
-        left: '10%',
-      },
+      height: '100%',
+      width: '100%',
        panelClass: 'general-dialog'
     });
   }
 
   openJoinGameDialog() {
     this.dialog.open(JoinGameDialogComponent, {
-      height: '85%',
-      width: '90%',
-      position: {
-        left: '10%',
-      },
+      height: '100%',
+      width: '100%',
       panelClass: 'general-dialog'
     });
+  }
+
+
+  characterChanged({name, team}) {
+    this.characterName = name;
   }
 }

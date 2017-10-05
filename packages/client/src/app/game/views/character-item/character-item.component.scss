@@ -5,22 +5,33 @@
   border: 1px white solid;
   border-bottom-left-radius: 10px;
   border-top-right-radius: 10px;
-  opacity: 0.4;
-  height: 170px;
-  width: 170px;
+  height: 200px;
+  width: 200px;
+  transition: all 0.5s;
 
+
+  .description {
+    font-size: 23px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 99%;
+  }
   img {
-    max-height: 110px;
-    width: 170px;
-    object-fit: cover;
-    object-position: 50% 0%;
+    height: 170px;
   }
 
   cursor: pointer;
 }
 
 .selected {
-  opacity: 1;
+  border: 1px solid var(--light-green);
+  box-shadow: 0 0 0 5px var(--light-green);
+}
+
+.disabled{
+  opacity: 0.4;
+  cursor: auto;
 }
 
 .blue {
