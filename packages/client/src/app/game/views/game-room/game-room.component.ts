@@ -43,12 +43,14 @@ export class GameRoomComponent implements OnInit, OnDestroy {
             this.game = gameData;
             this.players = this.getPlayers(this.game);
 
+            console.log(gameData);
             if (this.game && this.game.state === 'ACTIVE') {
               this.gameStarted = true;
               this.startGame();
 
               this.gameDataSubscription.unsubscribe();
             }
+            this.cd.detectChanges();
 
           });
         } else {
@@ -61,6 +63,7 @@ export class GameRoomComponent implements OnInit, OnDestroy {
   getPlayers(game: GameData.GameData) {
     const players = game.players.filter(p => p.type === 'PLAYER');
     const me = game.me['__typename'] !== 'Viewer' ? this.game.me : undefined;
+
     const playerFromServer = me ? [...players, me] : [...players];
 
     const changed = !_.isEqual(this.players, playerFromServer);
@@ -85,7 +88,6 @@ export class GameRoomComponent implements OnInit, OnDestroy {
   }
 
   ready() {
-    console.log('ready');
     this.gameService.readyToPlay();
   }
 }

@@ -1,7 +1,10 @@
 .join-game-dialog {
+  height: 80vh;
+  width: 75vw;
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  justify-content: center;
   background-color: transparent;
 
   .content {
@@ -10,11 +13,17 @@
     align-items: stretch;
 
     .actions {
+      position: relative;
       display: flex;
       flex-direction: row;
-      align-items: stretch;
+      align-items: center;
       margin: 20px;
-      align-self: center;
+      justify-content: flex-start;
+    }
+
+    .game-code-input{
+      font-size: 35px;
+      color: white;
     }
   }
 }

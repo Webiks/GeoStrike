@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 @Component({
   selector: 'big-button',
   template: `
-   <button class="btn-container">
+   <button class="btn-container" [class.highlight]="highlight">
        <span class="btn-text">{{text}}</span>
    </button>
   `,
@@ -13,6 +13,9 @@ export class BigButtonComponent implements OnInit {
 
   @Input()
   text: string;
+
+  @Input()
+  highlight = false;
 
   constructor() { }
 

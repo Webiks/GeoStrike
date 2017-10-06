@@ -6,14 +6,14 @@
     <div class="players">
       <div class="player-container" *ngFor="let player of players; trackBy:player?.id">
         <character-item
-            [disabled]="!player.isMe"
+            [disabled]="player.state !=='READY'"
             [name]="player.isMe ? 'Me (' + player.username + ')' : player.username"
             [description]="player.state"
             [image]="getCharacter(player.character.name).imageUrl"
             [team]="player.team">
         </character-item>
-        <div *ngIf="player.isMe" class="ready">
-          <big-button text="READY" (click)="ready()"></big-button>
+        <div *ngIf="player.isMe" class="ready" >
+          <big-button text="READY" (click)="ready()" [highlight]="player.state ==='READY'"></big-button>
         </div>
       </div>
     </div>

@@ -20,3 +20,9 @@
   }
 
 }
+
+.highlight {
+  color: var(--light-green);
+  border: 1px solid var(--light-green);
+  box-shadow: 0 0 0 2px var(--light-green);
+}
