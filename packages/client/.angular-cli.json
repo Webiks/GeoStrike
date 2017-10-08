@@ -10,6 +10,7 @@
       "assets": [
         {"glob": "**/*", "input": "../node_modules/cesium/Build/Cesium", "output": "./assets/cesium"},
         "assets",
+        {"glob": "**/*", "input": "assets/models/captain-america", "output": "./game/assets/models/captain-america"},
         "favicon.ico"
       ],
       "index": "index.html",
