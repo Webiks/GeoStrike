@@ -3,6 +3,8 @@ import { CesiumService, GeoUtilsService, KeyboardControlParams, KeyboardControlS
 import { CharacterService, MeModelState, ViewState, } from '../../../services/character.service';
 import { environment } from '../../../../../environments/environment';
 import { KeyboardKeysService } from '../../../../core/services/keyboard-keys.service';
+import { GameSettingsService } from '../../../services/game-settings.service';
+import { GameService } from '../../../services/game.service';
 
 const Direction = {
   Forward: 'Forward',
@@ -31,6 +33,7 @@ export class KeyboardControlComponent implements OnInit {
               private keyboardControlService: KeyboardControlService,
               private cesiumService: CesiumService,
               private keyboardKeysService: KeyboardKeysService,
+              private gameService: GameService,
               private ngZone: NgZone) {
     this.viewer = cesiumService.getViewer();
   }
@@ -46,6 +49,7 @@ export class KeyboardControlComponent implements OnInit {
   }
 
   private detectCollision(fromLocation): boolean {
+    this.character.nearbyBuildingPosition = undefined;
     const centerWindowPosition = new Cesium.Cartesian2(
       document.body.clientWidth / 2,
       document.body.clientHeight / 2
@@ -58,12 +62,23 @@ export class KeyboardControlComponent implements OnInit {
     const pickedFeature = this.viewer.scene.pick(centerWindowPosition, 300, 300);
 
     // if the center is a tile or a model but not ground
-    if (pickedFeature && !pickedFeature.mesh) {
-      return (
-        this.getDepthDistance(fromLocation, centerWindowPosition) < this.COLLIDE_FACTOR_METER
-        // this.getDepthDistance(fromLocation, leftWindowPosition) < this.COLLIDE_FACTOR_METER ||
-        // this.getDepthDistance(fromLocation, rightWindowPosition) < this.COLLIDE_FACTOR_METER
-      );
+
+    if (pickedFeature && !pickedFeature.mesh && pickedFeature._batchId) {
+      const collision = this.getDepthDistance(fromLocation, centerWindowPosition) < this.COLLIDE_FACTOR_METER;
+      if (collision && !this.character.isInsideBuilding) {
+        const id = pickedFeature._batchId;
+        const batchTableJson = pickedFeature._content._batchTable.batchTableJson;
+        const latitude = batchTableJson.latitude[id];
+        const longitude = batchTableJson.longitude[id];
+        const area = batchTableJson.area[id];
+        if (area <= GameSettingsService.maxEnterableBuildingSize) {
+          this.character.nearbyBuildingPosition = Cesium.Cartesian3.fromRadians(longitude, latitude, 0);
+          this.character.building = pickedFeature;
+        }
+      }
+      // this.getDepthDistance(fromLocation, leftWindowPosition) < this.COLLIDE_FACTOR_METER ||
+      // this.getDepthDistance(fromLocation, rightWindowPosition) < this.COLLIDE_FACTOR_METER
+      return collision;
     } else {
       return false;
     }
@@ -151,10 +166,10 @@ export class KeyboardControlComponent implements OnInit {
           return Direction.Forward;
         } else if (keyEvent.code === 'KeyS' || keyEvent.code === 'ArrowDown') {
           return Direction.Backward;
-          } else if (keyEvent.code === 'KeyA' || keyEvent.code === 'ArrowLeft') {
-            return Direction.Left;
-          } else if (keyEvent.code === 'KeyD' || keyEvent.code === 'ArrowRight') {
-            return Direction.Right;
+        } else if (keyEvent.code === 'KeyA' || keyEvent.code === 'ArrowLeft') {
+          return Direction.Left;
+        } else if (keyEvent.code === 'KeyD' || keyEvent.code === 'ArrowRight') {
+          return Direction.Right;
         } else {
           return String.fromCharCode(keyEvent.keyCode);
         }
@@ -176,6 +191,26 @@ export class KeyboardControlComponent implements OnInit {
           keyEvent.preventDefault();
           this.changeViewMove();
         });
+      });
+    this.keyboardKeysService.registerKeyBoardEvent('KeyE', 'Enter Nearby Building',
+      (keyEvent: KeyboardEvent) => {
+        if (this.character.isInsideBuilding) {
+          this.character.building.show = true;
+          this.character.location = this.character.enteringBuildingPosition;
+          this.character.isInsideBuilding = false;
+          this.character.building = undefined;
+          this.character.enteringBuildingPosition = undefined;
+          this.character.nearbyBuildingPosition = undefined;
+          this.gameService.updateServerOnPosition(true);
+
+        } else if (this.character.nearbyBuildingPosition) {
+          this.character.building.show = false;
+          this.character.enteringBuildingPosition = this.character.location;
+          this.character.location = this.character.nearbyBuildingPosition;
+          this.character.isInsideBuilding = true;
+          this.character.nearbyBuildingPosition = undefined;
+          this.gameService.updateServerOnPosition(true);
+        }
       });
     this.keyboardKeysService.registerKeyBoardEventDescription('Shift', 'Run');
     this.keyboardKeysService.registerKeyBoardEvent('Space', 'Switch Shooting Mode',

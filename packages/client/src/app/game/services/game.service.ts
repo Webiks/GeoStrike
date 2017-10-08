@@ -28,7 +28,7 @@ export class GameService {
 
   constructor(private apollo: Apollo,
               subscriptionClientService: ApolloService,
-              private character: CharacterService,) {
+              private character: CharacterService) {
     this.socket = subscriptionClientService.subscriptionClient;
   }
 
@@ -80,14 +80,14 @@ export class GameService {
     });
   }
 
-  joinAsViewer(gameCode:string, username: string) :Observable<ApolloQueryResult<JoinAsViewer.Mutation>>{
+  joinAsViewer(gameCode: string, username: string): Observable<ApolloQueryResult<JoinAsViewer.Mutation>> {
     return this.apollo.mutate<JoinAsViewer.Mutation>({
       mutation: joinAsViewer,
       variables: {
         gameCode,
         username,
       }
-    })
+    });
   }
 
   readyToPlay(): Observable<ApolloQueryResult<Ready.Mutation>> {
@@ -101,21 +101,21 @@ export class GameService {
       setInterval(() => this.updateServerOnPosition(), GameSettingsService.serverUpdatingInterval);
   }
 
-  stopServerUpdatingLoop(){
+  stopServerUpdatingLoop() {
     clearInterval(this.serverPositionUpdateInterval);
   }
 
 
-  updateServerOnPosition() {
+  updateServerOnPosition(skipValidation = false) {
     const state = this.createState();
-    if(!state || !this.isDifferentFromLastState(state)){
+    if (!state || !this.isDifferentFromLastState(state)) {
       return;
     }
 
     this.lastStateSentToServer = state;
     this.apollo.mutate<UpdatePosition.Mutation>({
       mutation: updatePositionMutation,
-      variables: {...state},
+      variables: { ...state, skipValidation},
     });
   }
 

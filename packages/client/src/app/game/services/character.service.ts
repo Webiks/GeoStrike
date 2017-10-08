@@ -22,12 +22,16 @@ export interface CharacterState {
   heading: number;
   pitch: number;
   state: MeModelState;
-  characterInfo: CharacterData
+  characterInfo: CharacterData;
+  building: any;
+  nearbyBuildingPosition: Cartesian3;
+  enteringBuildingPosition: Cartesian3;
+  isInsideBuilding: boolean;
 }
 
 @Injectable()
 export class CharacterService {
-  private _character= new BehaviorSubject<CharacterState>(null);
+  private _character = new BehaviorSubject<CharacterState>(null);
   private _viewState = new BehaviorSubject<ViewState>(ViewState.SEMI_FPV);
 
   constructor() {
@@ -71,7 +75,23 @@ export class CharacterService {
     return this._character && this._character.getValue() && this._character.getValue().pitch;
   }
 
-  get state() : MeModelState {
+  get building() {
+    return this._character && this._character.getValue() && this._character.getValue().building;
+  }
+
+  get nearbyBuildingPosition() {
+    return this._character && this._character.getValue() && this._character.getValue().nearbyBuildingPosition;
+  }
+
+  get enteringBuildingPosition() {
+    return this._character && this._character.getValue() && this._character.getValue().enteringBuildingPosition;
+  }
+
+  get isInsideBuilding() {
+    return this._character && this._character.getValue() && this._character.getValue().isInsideBuilding;
+  }
+
+  get state(): MeModelState {
     return this._character && this._character.getValue() && this._character.getValue().state;
   }
 
@@ -104,6 +124,30 @@ export class CharacterService {
     });
   }
 
+  set building(value: any) {
+    this.modifyCurrentStateValue({
+      building: value,
+    });
+  }
+
+  set nearbyBuildingPosition(value: any) {
+    this.modifyCurrentStateValue({
+      nearbyBuildingPosition: value,
+    });
+  }
+
+  set enteringBuildingPosition(value: any) {
+    this.modifyCurrentStateValue({
+      enteringBuildingPosition: value,
+    });
+  }
+
+  set isInsideBuilding(value: boolean) {
+    this.modifyCurrentStateValue({
+      isInsideBuilding: value,
+    });
+  }
+
   set state(value: MeModelState) {
     this.modifyCurrentStateValue({
       state: value,
@@ -114,8 +158,8 @@ export class CharacterService {
     this.state = this.state;
   }
 
-  public syncState(player: GameFields.Players){
-    if(this.initialized && player.syncState === 'INVALID'){
+  public syncState(player: GameFields.Players) {
+    if (this.initialized && player.syncState === 'INVALID') {
       this.location = player.currentLocation.location;
       this.heading = player.currentLocation.heading;
     }

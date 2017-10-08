@@ -7,7 +7,7 @@ import 'rxjs/add/observable/combineLatest';
 import 'rxjs/add/observable/fromEvent';
 import { Subscription } from 'rxjs/Subscription';
 import { GameService } from '../../../services/game.service';
-import { CharacterData} from '../../../../types';
+import { CharacterData } from '../../../../types';
 
 
 @Component({
@@ -19,18 +19,18 @@ export class MeComponent implements OnInit, OnDestroy {
 
   @ViewChild('cross') crossElement: ElementRef;
   @ViewChild('gunShotSound') gunShotSound: ElementRef;
+  @ViewChild('muzzleFlash') muzzleFlash: ElementRef;
 
   showWeapon$: Observable<boolean>;
   showCross$: Observable<boolean>;
   clickSub$: Subscription;
   ViewState = ViewState;
-  isMuzzleFlashShown = false;
 
   constructor(private character: CharacterService,
               public utils: UtilsService,
               private cesiumService: CesiumService,
               private gameService: GameService) {
-    character.currentStateValue
+    character.currentStateValue;
   }
 
   get notifications$() {
@@ -81,8 +81,8 @@ export class MeComponent implements OnInit, OnDestroy {
   }
 
   private showGunMuzzleFlash() {
-    this.isMuzzleFlashShown = true;
-    setTimeout(() => this.isMuzzleFlashShown = false, 20);
+    this.muzzleFlash.nativeElement.style.visibility = 'visible';
+    setTimeout(() => this.muzzleFlash.nativeElement.style.visibility = 'hidden', 20);
   }
 
   canvasPropagation() {
@@ -101,7 +101,7 @@ export class MeComponent implements OnInit, OnDestroy {
     }
   }
 
-  get characterInfo() : CharacterData{
+  get characterInfo(): CharacterData {
     return this.character.currentStateValue.characterInfo;
   }
 }

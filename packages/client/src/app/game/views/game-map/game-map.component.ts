@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { AcMapComponent, AcNotification, CameraService, ViewerConfiguration } from 'angular-cesium';
+import { AcMapComponent, AcNotification, ViewerConfiguration } from 'angular-cesium';
 import { GameFields } from '../../../types';
 import { CharacterService, MeModelState, ViewState } from '../../services/character.service';
 import { UtilsService } from '../../services/utils.service';
@@ -57,10 +57,10 @@ export class GameMapComponent implements OnInit, OnDestroy {
     if (this.createPathMode) {
       return;
     }
-    this.character.viewState$.subscribe((viewState)=>{
-       if (viewState === ViewState.OVERVIEW){
-         this.changeToOverview();
-       }
+    this.character.viewState$.subscribe((viewState) => {
+      if (viewState === ViewState.OVERVIEW) {
+        this.changeToOverview();
+      }
     });
     this.gameData.first().subscribe(game => {
       const overviewMode = game.me['__typename'] === 'Viewer' || game.me.type === 'OVERVIEW';
@@ -74,8 +74,8 @@ export class GameMapComponent implements OnInit, OnDestroy {
         location: this.utils.getPosition(game.me.currentLocation.location),
         heading: game.me.currentLocation.heading,
         pitch: GameMapComponent.DEFAULT_PITCH,
-        state: game.me.state === 'DEAD' ? MeModelState.DEAD :MeModelState.WALKING,
-        characterInfo:  game.me.character
+        state: game.me.state === 'DEAD' ? MeModelState.DEAD : MeModelState.WALKING,
+        characterInfo: game.me.character
       });
       this.gameService.startServerUpdatingLoop();
 
@@ -98,7 +98,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
 
   private overviewSettings() {
     this.viewerOptions.setFreeCameraOptions(this.viewer);
-    this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_START_LOCATION});
+    this.viewer.camera.flyTo({ destination: GameMapComponent.DEFAULT_START_LOCATION });
   }
 
   onMousemove(event: MouseEvent) {
@@ -137,10 +137,10 @@ export class GameMapComponent implements OnInit, OnDestroy {
 
     this.viewer.camera.lookAt(playerHead, new Cesium.HeadingPitchRange(heading, pitch, range));
     this.lastPlayerLocation = this.character.location;
-    this.lastPlayerHPR = {heading: this.character.heading, pitch: this.character.pitch, range};
+    this.lastPlayerHPR = { heading: this.character.heading, pitch: this.character.pitch, range };
   }
 
   ngOnDestroy(): void {
-    this.elementRef.nativeElement.removeEventListener('mousemove', this.onMousemove)
+    this.elementRef.nativeElement.removeEventListener('mousemove', this.onMousemove);
   }
 }
