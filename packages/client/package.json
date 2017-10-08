@@ -27,7 +27,7 @@
     "angular-cesium": "^0.0.25",
     "apollo-angular": "^0.13.0",
     "apollo-client": "^1.9.1",
-    "cesium": "^1.37.0",
+    "cesium": "^1.38.0",
     "core-js": "^2.4.1",
     "graphql-code-generator": "^0.8.10",
     "graphql-tag": "^2.4.2",
