@@ -47,7 +47,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
 
         AuthorizationMiddleware.setToken(params.playerToken);
         this.gameService.refreshConnection();
-        this.gameData$ = (this.gameService.getCurrentGameData() as Observable<any>).map(({data: {currentGame}}) => currentGame);
+        this.gameData$ = (this.gameService.getCurrentGameData()).map(({gameData}) => gameData);
         this.gameDataSubscription = this.gameData$.subscribe(currentGame => {
           this.game = currentGame;
           this.me = currentGame.me;
