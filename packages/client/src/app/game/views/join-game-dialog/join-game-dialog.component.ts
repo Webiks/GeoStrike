@@ -41,7 +41,6 @@ export class JoinGameDialogComponent implements OnInit {
       this.snackBar.open('Please enter a valid Game Code', 'OK', {duration: 3000});
       return false;
     }
-    console.log(this.username,this.characterName);
     if (!this.characterName || !this.username) {
       this.snackBar.open('Please choose a Character and Username', 'OK', {duration: 3000});
       return false;
