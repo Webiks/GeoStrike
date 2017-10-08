@@ -3,8 +3,8 @@ import {CharacterData} from '../../types';
 export const PLAYER_CHARACTERS: CharacterData[] = [
   {
     name: 'Steve Rogers',
-    scale: 3.01,
-    model: '/assets/models/CaptainAmerica.gltf',
+    scale: 0.011,
+    model: '/assets/models/captain-america/scene.gltf',
   },
   {
     name: 'Anthony Stark',
@@ -13,8 +13,8 @@ export const PLAYER_CHARACTERS: CharacterData[] = [
   },
   {
     name: 'Peter Parker',
-    scale: 3.01,
-    model: '/assets/models/SpiderMan.gltf',
+    scale: 1.01,
+    model: '/assets/models/spiderman.gltf',
   },
   {
     name: 'Bruce Wayne',
