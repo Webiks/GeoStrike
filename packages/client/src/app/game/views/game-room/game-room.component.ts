@@ -43,7 +43,6 @@ export class GameRoomComponent implements OnInit, OnDestroy {
             this.game = gameData;
             this.players = this.getPlayers(this.game);
 
-            console.log(gameData);
             if (this.game && this.game.state === 'ACTIVE') {
               this.gameStarted = true;
               this.startGame();
