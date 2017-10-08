@@ -3,23 +3,23 @@ import {CharacterData} from '../../types';
 export const PLAYER_CHARACTERS: CharacterData[] = [
   {
     name: 'Steve Rogers',
-    scale: 0.01,
-    model: '/assets/models/soldier.gltf',
+    scale: 1.01,
+    model: '/assets/models/CaptainAmerica.gltf',
   },
   {
     name: 'Anthony Stark',
     scale: 0.01,
-    model: '/assets/models/soldier.gltf',
+    model: '/assets/models/ironman/scene.gltf',
   },
   {
     name: 'Peter Parker',
     scale: 0.01,
-    model: '/assets/models/soldier.gltf',
+    model: '/assets/models/SpiderMan.gltf',
   },
   {
     name: 'Bruce Wayne',
     scale: 0.01,
-    model: '/assets/models/soldier.gltf',
+    model: '/assets/models/Batman.gltf',
   },
   {
     name: 'car',
