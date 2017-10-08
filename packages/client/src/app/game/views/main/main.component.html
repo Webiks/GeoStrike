@@ -1,8 +1,13 @@
 <div class="main-container">
   <div class="header">Cesium FPS</div>
   <div class="sub-header"> First Person Shooter</div>
-  <div class="row">
-    <big-button text="Join game" (click)="openJoinGameDialog()"></big-button>
-    <big-button text="Create new game" (click)="openCreateGameDialog()"></big-button>
+  <div class="character-picker-container">
+    <character-picker [selectedCharacter]="characterName" [(username)]="username" (select)="characterChanged($event)"></character-picker>
   </div>
+  <div class="row">
+    <big-button text="Create new game" (click)="createGame()"></big-button>
+    <big-button text="Join game" (click)="openJoinGameDialog()"></big-button>
+  </div>
+  <md-spinner *ngIf="loading"></md-spinner>
+  <div>{{error}}</div>
 </div>

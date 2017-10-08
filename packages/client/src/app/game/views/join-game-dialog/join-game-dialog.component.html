@@ -1,16 +1,13 @@
 <div class="join-game-dialog">
-  <div>{{ error }}</div>
-  <md-spinner *ngIf="loading"></md-spinner>
   <div *ngIf="!loading" class="content">
-    <character-picker [selectedCharacter]="characterName" (select)="characterChanged($event)"></character-picker>
+    <character-picker [selectedCharacter]="characterName" [(username)]="username"  (select)="characterChanged($event)"></character-picker>
     <div class="actions">
-      <md-input-container>
-        <input mdInput placeholder="Game Code" required [(ngModel)]="gameCode">
+      <md-input-container class="game-code-input">
+        <input mdInput placeholder="Enter Game Code" type="number" required [(ngModel)]="gameCode" >
       </md-input-container>
-      <md-input-container>
-        <input mdInput placeholder="Username" required [(ngModel)]="username">
-      </md-input-container>
-      <button md-raised-button (click)="joinGame()">Join Game</button>
+      <big-button (click)="joinGame()" [text]="'Join Game'"></big-button>
     </div>
   </div>
+  <md-spinner *ngIf="loading"></md-spinner>
+  <div>{{ error }}</div>
 </div>
