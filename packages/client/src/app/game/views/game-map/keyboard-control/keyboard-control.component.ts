@@ -5,6 +5,7 @@ import { environment } from '../../../../../environments/environment';
 import { KeyboardKeysService } from '../../../../core/services/keyboard-keys.service';
 import { GameSettingsService } from '../../../services/game-settings.service';
 import { GameService } from '../../../services/game.service';
+import { BuildingsService } from '../../../services/buildings.service';
 
 const Direction = {
   Forward: 'Forward',
@@ -34,6 +35,7 @@ export class KeyboardControlComponent implements OnInit {
               private cesiumService: CesiumService,
               private keyboardKeysService: KeyboardKeysService,
               private gameService: GameService,
+              private buildingsService: BuildingsService,
               private ngZone: NgZone) {
     this.viewer = cesiumService.getViewer();
   }
@@ -65,7 +67,7 @@ export class KeyboardControlComponent implements OnInit {
 
     if (pickedFeature && !pickedFeature.mesh && pickedFeature._batchId) {
       const collision = this.getDepthDistance(fromLocation, centerWindowPosition) < this.COLLIDE_FACTOR_METER;
-      if (collision && !this.character.isInsideBuilding) {
+      if (collision && !this.character.roomId) {
         const id = pickedFeature._batchId;
         const batchTableJson = pickedFeature._content._batchTable.batchTableJson;
         const latitude = batchTableJson.latitude[id];
@@ -194,10 +196,11 @@ export class KeyboardControlComponent implements OnInit {
       });
     this.keyboardKeysService.registerKeyBoardEvent('KeyE', 'Enter Nearby Building',
       (keyEvent: KeyboardEvent) => {
-        if (this.character.isInsideBuilding) {
+        if (this.character.roomId) {
           this.character.building.show = true;
           this.character.location = this.character.enteringBuildingPosition;
-          this.character.isInsideBuilding = false;
+          this.buildingsService.removeBuilding(this.character.roomId);
+          this.character.roomId = undefined;
           this.character.building = undefined;
           this.character.enteringBuildingPosition = undefined;
           this.character.nearbyBuildingPosition = undefined;
@@ -205,9 +208,9 @@ export class KeyboardControlComponent implements OnInit {
 
         } else if (this.character.nearbyBuildingPosition) {
           this.character.building.show = false;
+          this.character.roomId = this.buildingsService.createBuilding(this.character.nearbyBuildingPosition);
           this.character.enteringBuildingPosition = this.character.location;
           this.character.location = this.character.nearbyBuildingPosition;
-          this.character.isInsideBuilding = true;
           this.character.nearbyBuildingPosition = undefined;
           this.gameService.updateServerOnPosition(true);
         }

@@ -10,7 +10,7 @@ export class WorldComponent implements OnInit {
   public tilesStyle = {
     color: {
       conditions: [
-        ['${area} <= ' + GameSettingsService.maxEnterableBuildingSize + ' && ${area} > ' + GameSettingsService.minEnterableBuildingSize, 'rgb(244, 166, 66)'],
+        ['${area} <= ' + GameSettingsService.maxEnterableBuildingSize + ' && ${area} > ' + GameSettingsService.minEnterableBuildingSize, GameSettingsService.enterableBuildinColor],
         ['true', 'rgb(255, 255, 255)'],
       ]
     }

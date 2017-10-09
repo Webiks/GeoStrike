@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { AngularCesiumModule, CoordinateConverter } from 'angular-cesium';
+import { AngularCesiumModule } from 'angular-cesium';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   MdButtonModule,
@@ -33,6 +33,8 @@ import { EndGameDialogComponent } from './views/end-game-dialog/end-game-dialog.
 import { HowToPlayDialogComponent } from './views/how-to-play-dialog/how-to-play-dialog.component';
 import { SharedModule } from '../shared/shared.module';
 import { PathCreatorComponent } from './views/game-map/path-creator/path-creator.component';
+import { BuildingsComponent } from './views/buildings/buildings.component';
+import { BuildingsService } from './services/buildings.service';
 
 @NgModule({
   declarations: [
@@ -52,6 +54,7 @@ import { PathCreatorComponent } from './views/game-map/path-creator/path-creator
     EndGameDialogComponent,
     PathCreatorComponent,
     HowToPlayDialogComponent,
+    BuildingsComponent,
   ],
   imports: [
     BrowserModule,
@@ -76,6 +79,7 @@ import { PathCreatorComponent } from './views/game-map/path-creator/path-creator
     GameService,
     CharacterService,
     UtilsService,
+    BuildingsService
   ],
   entryComponents: [
     CreateNewGameDialogComponent,

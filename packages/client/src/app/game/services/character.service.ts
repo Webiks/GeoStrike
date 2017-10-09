@@ -26,7 +26,7 @@ export interface CharacterState {
   building: any;
   nearbyBuildingPosition: Cartesian3;
   enteringBuildingPosition: Cartesian3;
-  isInsideBuilding: boolean;
+  roomId: string;
 }
 
 @Injectable()
@@ -87,8 +87,8 @@ export class CharacterService {
     return this._character && this._character.getValue() && this._character.getValue().enteringBuildingPosition;
   }
 
-  get isInsideBuilding() {
-    return this._character && this._character.getValue() && this._character.getValue().isInsideBuilding;
+  get roomId() {
+    return this._character && this._character.getValue() && this._character.getValue().roomId;
   }
 
   get state(): MeModelState {
@@ -142,9 +142,9 @@ export class CharacterService {
     });
   }
 
-  set isInsideBuilding(value: boolean) {
+  set roomId(value: string) {
     this.modifyCurrentStateValue({
-      isInsideBuilding: value,
+      roomId: value,
     });
   }
 
