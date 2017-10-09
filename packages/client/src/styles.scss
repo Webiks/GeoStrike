@@ -31,8 +31,11 @@ body {
 .mat-dialog-container {
   border-radius: 10px !important;
   background-color: transparent;
+  padding: 0;
 }
-
+md-dialog-container{
+  padding: 0 !important;
+}
 
 .general-dialog {
   background-color: rgba(0, 0, 0, 0.99);

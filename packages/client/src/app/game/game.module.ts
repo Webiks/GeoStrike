@@ -36,6 +36,7 @@ import { PathCreatorComponent } from './views/game-map/path-creator/path-creator
 import { GameToolbarComponent } from './views/game-container/game-toolbar/game-toolbar.component';
 import { TeamInfoBarComponent } from './views/game-container/team-info-bar/team-info-bar.component';
 import { PlayerDetailsComponent } from './views/game-container/player-details/player-details.component';
+import { YouWinDialogComponent } from './views/you-win-dialog/you-win-dialog.component';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { PlayerDetailsComponent } from './views/game-container/player-details/pl
     GameToolbarComponent,
     TeamInfoBarComponent,
     PlayerDetailsComponent,
+    YouWinDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -86,6 +88,7 @@ import { PlayerDetailsComponent } from './views/game-container/player-details/pl
     JoinGameDialogComponent,
     EndGameDialogComponent,
     HowToPlayDialogComponent,
+    YouWinDialogComponent,
   ],
 })
 export class GameModule {

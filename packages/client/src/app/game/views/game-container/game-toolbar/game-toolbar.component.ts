@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { HowToPlayDialogComponent } from '../../how-to-play-dialog/how-to-play-dialog.component';
-import { MapsManagerService } from 'angular-cesium';
 import { MdDialog } from '@angular/material';
 
 @Component({
@@ -24,7 +23,8 @@ export class GameToolbarComponent implements OnInit {
 
   private mute = false;
 
-  constructor(private  dialog: MdDialog) { }
+  constructor(private  dialog: MdDialog) {
+  }
 
   ngOnInit() {
   }
@@ -37,17 +37,17 @@ export class GameToolbarComponent implements OnInit {
     })
   }
 
-  fullScreen(){
-    if ('requestFullScreen' in  document.body) {
+  fullScreen() {
+    if ('requestFullScreen' in document.body) {
       document.body.requestFullscreen();
-    }else if ('webkitRequestFullscreen' in  document.body){
+    } else if ('webkitRequestFullscreen' in document.body) {
       document.body.webkitRequestFullscreen();
     }
   }
 
-  toggleMute(){
+  toggleMute() {
     const audios = document.getElementsByTagName('audio');
-    for (let i =0 ; i < audios.length; i++){
+    for (let i = 0; i < audios.length; i++) {
       const audio = audios[i];
       audio.muted = !audio.muted;
     }

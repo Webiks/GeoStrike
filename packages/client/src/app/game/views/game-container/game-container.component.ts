@@ -12,7 +12,8 @@ import { MdDialog } from '@angular/material';
 import { CharacterService, MeModelState, ViewState } from '../../services/character.service';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/map';
-import * as _  from 'lodash';
+import * as _ from 'lodash';
+import { YouWinDialogComponent } from '../you-win-dialog/you-win-dialog.component';
 
 @Component({
   selector: 'game-container',
@@ -27,6 +28,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
   private otherPlayers$: Subject<AcNotification> = new Subject<AcNotification>();
   private allPlayers$: Subject<PlayerFields.Fragment[]> = new Subject<PlayerFields.Fragment[]>();
   private killedDialogOpen = false;
+  private wonDialogOpen = false;
 
   constructor(private gameService: GameService,
               private character: CharacterService,
@@ -37,7 +39,6 @@ export class GameContainerComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
     const paramsSubscription = this.activatedRoute.params.subscribe(params => {
       this.ngZone.runOutsideAngular(() => {
         if (!params.playerToken) {
@@ -53,6 +54,16 @@ export class GameContainerComponent implements OnInit, OnDestroy {
         this.gameDataSubscription = this.gameData$.subscribe(currentGame => {
           this.game = currentGame;
           this.me = currentGame.me;
+
+          if (currentGame.gameResult !== 'NONE' && !this.wonDialogOpen) {
+            const loseTeam: Team = currentGame.gameResult === 'RED_WON' ? 'RED' : 'BLUE';
+            if (loseTeam === this.me.team) {
+              // lose dialog
+              console.log('lose dialog');
+            } else {
+              this.openWinDialog(loseTeam);
+            }
+          }
 
           const allPlayers = [...this.game.players];
           if (this.me) {
@@ -86,6 +97,17 @@ export class GameContainerComponent implements OnInit, OnDestroy {
     });
   }
 
+
+  private openWinDialog(losingTeam: Team) {
+    this.wonDialogOpen = true;
+    this.dialog.open(YouWinDialogComponent, {
+      height: '80%',
+      width: '80%',
+      disableClose: true,
+      data: {losingTeam},
+    });
+  }
+
   private openKilledDialog() {
     this.killedDialogOpen = true;
     this.dialog.open(EndGameDialogComponent, {
@@ -106,8 +128,8 @@ export class GameContainerComponent implements OnInit, OnDestroy {
     }
   }
 
-  getPlayers(team: Team) : Observable<PlayerFields.Fragment[]>{
-     return this.allPlayers$.map((players)=>players.filter(p => p.team === team)).distinctUntilChanged((a,b)=> _.isEqual(a,b));
+  getPlayers(team: Team): Observable<PlayerFields.Fragment[]> {
+    return this.allPlayers$.map((players) => players.filter(p => p.team === team)).distinctUntilChanged((a, b) => _.isEqual(a, b));
   }
 
 }

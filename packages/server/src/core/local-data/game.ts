@@ -1,11 +1,12 @@
 import { v4 } from 'uuid';
 import { sign } from 'jsonwebtoken';
-import { GameState, PlayerState, PlayerSyncState, CharacterData } from '../../types';
+import { CharacterData, GameState, PlayerState, PlayerSyncState } from '../../types';
 import * as Cesium from 'cesium';
 import { Settings } from '../../settings/settings';
-import { startClientsUpdater } from '../clients-updater/clients-updater';
+import { startClientsUpdater, stopClientsUpdater } from '../clients-updater/clients-updater';
 import { BackgroundCharacterManager } from '../background-character/background-character-manager';
 import { PLAYER_CHARACTERS } from './characters';
+import Timer = NodeJS.Timer;
 
 export interface ICartesian3Location {
   x: number;
@@ -23,6 +24,12 @@ export enum CharacterType {
   PLAYER = 'PLAYER',
   BACKGROUND_CHARACTER = 'BACKGROUND_CHARACTER',
   OVERVIEW = 'OVERVIEW',
+}
+
+export enum GameResult {
+  RED_WON = 'RED_WON',
+  BlUE_WON = 'BlUE_WON',
+  NONE = 'NONE',
 }
 
 export interface IViewer {
@@ -51,8 +58,9 @@ export interface IGameObject {
   playersMap: Map<string, IPlayer>;
   viewers: IViewer[];
   state: GameState;
-  clientsUpdater?: any;
+  clientsUpdaterId?: Timer;
   bgCharactersManager: BackgroundCharacterManager;
+  gameResult: GameResult,
 }
 
 const TOKENS_SECRET = 'sdf43tSWDG#%Tsdfw4';
@@ -163,6 +171,7 @@ export class GamesManager {
       state: 'WAITING',
       bgCharactersManager,
       viewers: [],
+      gameResult: GameResult.NONE
     };
     startClientsUpdater(gameObject);
     this.activeGames.set(gameId, gameObject);
@@ -227,6 +236,28 @@ export class GamesManager {
     if (player) {
       player.state = newState;
     }
+
+    this.checkGameResult(game);
+
+  }
+
+  private checkGameResult(game: IGameObject) {
+    const players = Array.from(game.playersMap.values());
+
+    const bluePlayers = players.filter(p => p.team === Team.BLUE);
+    const deadBlues = bluePlayers.filter(p => p.state === 'DEAD').length;
+
+    const redPlayers = players.filter(p => p.team === Team.BLUE);
+    const deadReds = bluePlayers.filter(p => p.state === 'DEAD').length;
+
+    if (deadBlues === bluePlayers.length) {
+      game.gameResult = GameResult.RED_WON;;
+    } else if (deadReds === redPlayers.length) {
+      game.gameResult = GameResult.BlUE_WON;
+    }
+
+    console.log(game.gameResult);
+
   }
 
   validatePlayerPosition(currentLocation: ICartesian3Location,
@@ -248,7 +279,7 @@ export class GamesManager {
   endGame(gameId: string) {
     const game = this.getGameById(gameId);
     game.bgCharactersManager.stop();
-
-    // TODO other end game logic...
+    stopClientsUpdater(game);
+    this.activeGames.delete(gameId);
   }
 }

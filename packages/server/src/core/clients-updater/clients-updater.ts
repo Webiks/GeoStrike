@@ -7,11 +7,15 @@ function updateClientsLoop(gameObject: IGameObject) {
     gameData: gameObject
   });
 
-  gameObject.clientsUpdater = setTimeout(() => {
+  gameObject.clientsUpdaterId = setTimeout(() => {
     updateClientsLoop(gameObject);
   }, Settings.clientsUpdateRate);
 }
 
 export const startClientsUpdater = (gameObject: IGameObject) => {
   updateClientsLoop(gameObject);
+};
+
+export const stopClientsUpdater = (gameObject: IGameObject)=> {
+  clearTimeout(gameObject.clientsUpdaterId);
 };

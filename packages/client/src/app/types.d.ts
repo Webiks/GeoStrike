@@ -15,6 +15,7 @@ export interface Game {
   gameCode: string; 
   state: GameState; 
   me: User | null; 
+  gameResult: GameResult | null; 
 }
 
 export interface Player extends User {
@@ -116,6 +117,9 @@ export type CharacterType = "PLAYER" | "BACKGROUND_CHARACTER" | "OVERVIEW";
 
 
 export type GameState = "WAITING" | "ACTIVE" | "DONE";
+
+
+export type GameResult = "RED_WON" | "BlUE_WON" | "NONE";
 
 export namespace CreateNewGame {
   export type Variables = {
@@ -239,6 +243,7 @@ export namespace GameFields {
     id: string; 
     gameCode: string; 
     state: GameState; 
+    gameResult: GameResult | null; 
     players: Players[]; 
     me: Me | null; 
   }
