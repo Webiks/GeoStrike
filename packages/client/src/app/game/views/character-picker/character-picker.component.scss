@@ -3,20 +3,23 @@
   align-items: center;
   padding: 10px;
   border: 1px white solid;
-  border-bottom-left-radius: 10px;
-  border-top-right-radius: 10px;
+  border-bottom-left-radius: 20px;
+  border-top-right-radius: 20px;
 
   .header {
     font-size: 40pt;
     color: white;
     text-align: center;
     height: 30px;
+    margin-top: 10px;
   }
 
   .viewer-row {
+    position: relative;
     display: flex;
     justify-content: center;
     .viewer-btn {
+      color: white;
       cursor: pointer;
       text-align: center;
       &:hover {
@@ -30,5 +33,13 @@
       border: solid 2px var(--light-green);
       border-radius: 10px;
     }
+  }
+
+  .username-input {
+    position: absolute;
+    top: 0;
+    left: 25px;
+    color: white;
+    font-size: 22px;
   }
 }

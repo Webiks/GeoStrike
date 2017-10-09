@@ -10,6 +10,9 @@ export class CharacterPickerComponent implements OnInit {
   @Input() private selectedCharacter: string = null;
   @Output() select: EventEmitter<any> = new EventEmitter();
 
+  @Input() username = 'Anonymous User';
+  @Output() usernameChange = new EventEmitter<string>();
+
   private availableCharacters = AVAILABLE_CHARACTERS;
   private viewer = VIEWER;
 
