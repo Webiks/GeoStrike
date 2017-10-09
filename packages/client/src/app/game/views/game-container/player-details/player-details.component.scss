@@ -1,0 +1,43 @@
+.details-container {
+  background: rgba(0,0,0,0.7);
+  border-top-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+  color: white;
+  border: 1px solid white;
+  height: 65px;
+  font-size: 34px;
+  display: flex;
+  position: fixed;
+  align-items: center;
+  bottom: 10px;
+  left: 10px;
+}
+
+.img-container {
+  width: 64px;
+  height: 64px;
+  border: 1px solid white;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  border-top-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+
+.image {
+  height: 95%;
+  width: 95%;
+}
+
+.blue {
+  background: var(--blue-gradient);
+}
+
+.red {
+  background: var(--red-gradient);
+}
+
+.text {
+  padding: 0 10px;
+}

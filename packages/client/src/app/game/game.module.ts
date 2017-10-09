@@ -33,6 +33,9 @@ import { EndGameDialogComponent } from './views/end-game-dialog/end-game-dialog.
 import { HowToPlayDialogComponent } from './views/how-to-play-dialog/how-to-play-dialog.component';
 import { SharedModule } from '../shared/shared.module';
 import { PathCreatorComponent } from './views/game-map/path-creator/path-creator.component';
+import { GameToolbarComponent } from './views/game-container/game-toolbar/game-toolbar.component';
+import { TeamInfoBarComponent } from './views/game-container/team-info-bar/team-info-bar.component';
+import { PlayerDetailsComponent } from './views/game-container/player-details/player-details.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +54,9 @@ import { PathCreatorComponent } from './views/game-map/path-creator/path-creator
     EndGameDialogComponent,
     PathCreatorComponent,
     HowToPlayDialogComponent,
+    GameToolbarComponent,
+    TeamInfoBarComponent,
+    PlayerDetailsComponent,
   ],
   imports: [
     BrowserModule,

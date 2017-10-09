@@ -33,6 +33,10 @@ export interface CharacterData {
   name: string; 
   model: string | null; 
   scale: number | null; 
+  team: Team | null; 
+  imageUrl: string | null; 
+  description: string | null; 
+  portraitUrl: string | null; 
 }
 
 export interface PlayerLocation {
@@ -99,10 +103,10 @@ export interface NotifyKillMutationArgs {
   playerId: string; 
 }
 
-export type PlayerState = "WAITING" | "READY" | "ALIVE" | "IN_BUILDING" | "DEAD";
-
-
 export type Team = "BLUE" | "RED" | "NONE";
+
+
+export type PlayerState = "WAITING" | "READY" | "ALIVE" | "IN_BUILDING" | "DEAD";
 
 
 export type PlayerSyncState = "VALID" | "INVALID";
@@ -265,6 +269,7 @@ export namespace PlayerFields {
     name: string; 
     model: string | null; 
     scale: number | null; 
+    portraitUrl: string | null; 
   }
 
   export type CurrentLocation = {
