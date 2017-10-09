@@ -8,7 +8,7 @@ export class GameSettingsService {
 
   // Building settings
   static innerBuildingColor = new Cesium.Color(244.0 / 255.0, 166.0 / 255.0, 66.0 / 255.0, 1);
-  static enterableBuildinColor = 'rgb(244, 166, 66)';
+  static enterableBuildingColor = 'rgb(244, 166, 66)';
   static buildingHeight = 10;
   static wallSize = 0.00005;
   static windowWidth = GameSettingsService.wallSize / 2;
