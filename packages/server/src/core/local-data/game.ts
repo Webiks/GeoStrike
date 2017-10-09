@@ -26,12 +26,6 @@ export enum CharacterType {
   OVERVIEW = 'OVERVIEW',
 }
 
-export enum GameResult {
-  RED_WON = 'RED_WON',
-  BlUE_WON = 'BlUE_WON',
-  NONE = 'NONE',
-}
-
 export interface IViewer {
   token: string;
   id: string;
@@ -60,7 +54,7 @@ export interface IGameObject {
   state: GameState;
   clientsUpdaterId?: Timer;
   bgCharactersManager: BackgroundCharacterManager;
-  gameResult: GameResult,
+  winingTeam: Team,
 }
 
 const TOKENS_SECRET = 'sdf43tSWDG#%Tsdfw4';
@@ -171,7 +165,7 @@ export class GamesManager {
       state: 'WAITING',
       bgCharactersManager,
       viewers: [],
-      gameResult: GameResult.NONE
+      winingTeam: Team.NONE,
     };
     startClientsUpdater(gameObject);
     this.activeGames.set(gameId, gameObject);
@@ -251,13 +245,10 @@ export class GamesManager {
     const deadReds = bluePlayers.filter(p => p.state === 'DEAD').length;
 
     if (deadBlues === bluePlayers.length) {
-      game.gameResult = GameResult.RED_WON;;
+      game.winingTeam = Team.RED;
     } else if (deadReds === redPlayers.length) {
-      game.gameResult = GameResult.BlUE_WON;
+      game.winingTeam = Team.BLUE;
     }
-
-    console.log(game.gameResult);
-
   }
 
   validatePlayerPosition(currentLocation: ICartesian3Location,
