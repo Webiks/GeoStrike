@@ -34,6 +34,7 @@ import { HowToPlayDialogComponent } from './views/how-to-play-dialog/how-to-play
 import { SharedModule } from '../shared/shared.module';
 import { PathCreatorComponent } from './views/game-map/path-creator/path-creator.component';
 import { GameToolbarComponent } from './views/game-container/game-toolbar/game-toolbar.component';
+import { TeamInfoBarComponent } from './views/game-container/team-info-bar/team-info-bar.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { GameToolbarComponent } from './views/game-container/game-toolbar/game-t
     PathCreatorComponent,
     HowToPlayDialogComponent,
     GameToolbarComponent,
+    TeamInfoBarComponent,
   ],
   imports: [
     BrowserModule,
