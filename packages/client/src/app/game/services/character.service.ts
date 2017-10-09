@@ -23,10 +23,10 @@ export interface CharacterState {
   pitch: number;
   state: MeModelState;
   characterInfo: CharacterData;
-  building: any;
+  tileBuilding: any;
   nearbyBuildingPosition: Cartesian3;
   enteringBuildingPosition: Cartesian3;
-  roomId: string;
+  enternedBuilding: any;
 }
 
 @Injectable()
@@ -75,8 +75,8 @@ export class CharacterService {
     return this._character && this._character.getValue() && this._character.getValue().pitch;
   }
 
-  get building() {
-    return this._character && this._character.getValue() && this._character.getValue().building;
+  get tileBuilding() {
+    return this._character && this._character.getValue() && this._character.getValue().tileBuilding;
   }
 
   get nearbyBuildingPosition() {
@@ -87,8 +87,8 @@ export class CharacterService {
     return this._character && this._character.getValue() && this._character.getValue().enteringBuildingPosition;
   }
 
-  get roomId() {
-    return this._character && this._character.getValue() && this._character.getValue().roomId;
+  get enternedBuilding() {
+    return this._character && this._character.getValue() && this._character.getValue().enternedBuilding;
   }
 
   get state(): MeModelState {
@@ -124,9 +124,9 @@ export class CharacterService {
     });
   }
 
-  set building(value: any) {
+  set tileBuilding(value: any) {
     this.modifyCurrentStateValue({
-      building: value,
+      tileBuilding: value,
     });
   }
 
@@ -142,9 +142,9 @@ export class CharacterService {
     });
   }
 
-  set roomId(value: string) {
+  set enternedBuilding(value: any) {
     this.modifyCurrentStateValue({
-      roomId: value,
+      enternedBuilding: value,
     });
   }
 

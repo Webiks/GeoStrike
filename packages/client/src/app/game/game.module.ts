@@ -35,6 +35,7 @@ import { SharedModule } from '../shared/shared.module';
 import { PathCreatorComponent } from './views/game-map/path-creator/path-creator.component';
 import { BuildingsComponent } from './views/buildings/buildings.component';
 import { BuildingsService } from './services/buildings.service';
+import { CollisionDetectorService } from './services/collision-detector.service';
 
 @NgModule({
   declarations: [
@@ -79,7 +80,8 @@ import { BuildingsService } from './services/buildings.service';
     GameService,
     CharacterService,
     UtilsService,
-    BuildingsService
+    BuildingsService,
+    CollisionDetectorService,
   ],
   entryComponents: [
     CreateNewGameDialogComponent,

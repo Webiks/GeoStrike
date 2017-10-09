@@ -3,9 +3,9 @@ import { CesiumService, GeoUtilsService, KeyboardControlParams, KeyboardControlS
 import { CharacterService, MeModelState, ViewState, } from '../../../services/character.service';
 import { environment } from '../../../../../environments/environment';
 import { KeyboardKeysService } from '../../../../core/services/keyboard-keys.service';
-import { GameSettingsService } from '../../../services/game-settings.service';
 import { GameService } from '../../../services/game.service';
 import { BuildingsService } from '../../../services/buildings.service';
+import { CollisionDetectorService } from '../../../services/collision-detector.service';
 
 const Direction = {
   Forward: 'Forward',
@@ -26,7 +26,6 @@ const DirectionsDelta = {
   template: '',
 })
 export class KeyboardControlComponent implements OnInit {
-  private COLLIDE_FACTOR_METER = 3;
   private inspector = false;
   private viewer;
 
@@ -36,54 +35,9 @@ export class KeyboardControlComponent implements OnInit {
               private keyboardKeysService: KeyboardKeysService,
               private gameService: GameService,
               private buildingsService: BuildingsService,
+              private collisionDetector: CollisionDetectorService,
               private ngZone: NgZone) {
     this.viewer = cesiumService.getViewer();
-  }
-
-
-  private getDepthDistance(fromLocation: Cartesian3, toWindowPosition: Cartesian2) {
-    const toLocation = this.viewer.scene.pickPosition(toWindowPosition);
-    if (!toLocation) {
-      return Number.MAX_SAFE_INTEGER;
-    }
-    const distance = Cesium.Cartesian3.distance(fromLocation, toLocation);
-    return distance ? distance : Number.MAX_SAFE_INTEGER;
-  }
-
-  private detectCollision(fromLocation): boolean {
-    this.character.nearbyBuildingPosition = undefined;
-    const centerWindowPosition = new Cesium.Cartesian2(
-      document.body.clientWidth / 2,
-      document.body.clientHeight / 2
-    );
-    const leftWindowPosition = centerWindowPosition.clone();
-    leftWindowPosition.x -= 150;
-    const rightWindowPosition = centerWindowPosition.clone();
-    rightWindowPosition.x += 150;
-
-    const pickedFeature = this.viewer.scene.pick(centerWindowPosition, 300, 300);
-
-    // if the center is a tile or a model but not ground
-
-    if (pickedFeature && !pickedFeature.mesh && pickedFeature._batchId) {
-      const collision = this.getDepthDistance(fromLocation, centerWindowPosition) < this.COLLIDE_FACTOR_METER;
-      if (collision && !this.character.roomId) {
-        const id = pickedFeature._batchId;
-        const batchTableJson = pickedFeature._content._batchTable.batchTableJson;
-        const latitude = batchTableJson.latitude[id];
-        const longitude = batchTableJson.longitude[id];
-        const area = batchTableJson.area[id];
-        if (area <= GameSettingsService.maxEnterableBuildingSize) {
-          this.character.nearbyBuildingPosition = Cesium.Cartesian3.fromRadians(longitude, latitude, 0);
-          this.character.building = pickedFeature;
-        }
-      }
-      // this.getDepthDistance(fromLocation, leftWindowPosition) < this.COLLIDE_FACTOR_METER ||
-      // this.getDepthDistance(fromLocation, rightWindowPosition) < this.COLLIDE_FACTOR_METER
-      return collision;
-    } else {
-      return false;
-    }
   }
 
   buildMovementConfig(direction: string) {
@@ -112,7 +66,13 @@ export class KeyboardControlComponent implements OnInit {
           Cesium.Math.toRadians(this.character.heading + delta),
           true
         );
-        if (direction !== Direction.Forward || !this.detectCollision(nextLocation)) {
+        if (direction !== Direction.Forward) {
+          this.character.location = nextLocation;
+          if (this.collisionDetector.collision) {
+            this.collisionDetector.detectCollision(nextLocation, true);
+          }
+        }
+        else if (!this.collisionDetector.detectCollision(nextLocation)) {
           this.character.location = nextLocation;
         }
 
@@ -196,19 +156,19 @@ export class KeyboardControlComponent implements OnInit {
       });
     this.keyboardKeysService.registerKeyBoardEvent('KeyE', 'Enter Nearby Building',
       (keyEvent: KeyboardEvent) => {
-        if (this.character.roomId) {
-          this.character.building.show = true;
+        if (this.character.enternedBuilding) {
+          this.character.tileBuilding.show = true;
           this.character.location = this.character.enteringBuildingPosition;
-          this.buildingsService.removeBuilding(this.character.roomId);
-          this.character.roomId = undefined;
-          this.character.building = undefined;
+          this.buildingsService.removeBuilding(this.character.enternedBuilding);
+          this.character.enternedBuilding = undefined;
+          this.character.tileBuilding = undefined;
           this.character.enteringBuildingPosition = undefined;
           this.character.nearbyBuildingPosition = undefined;
           this.gameService.updateServerOnPosition(true);
 
         } else if (this.character.nearbyBuildingPosition) {
-          this.character.building.show = false;
-          this.character.roomId = this.buildingsService.createBuilding(this.character.nearbyBuildingPosition);
+          this.character.tileBuilding.show = false;
+          this.character.enternedBuilding = this.buildingsService.createBuilding(this.character.nearbyBuildingPosition);
           this.character.enteringBuildingPosition = this.character.location;
           this.character.location = this.character.nearbyBuildingPosition;
           this.character.nearbyBuildingPosition = undefined;

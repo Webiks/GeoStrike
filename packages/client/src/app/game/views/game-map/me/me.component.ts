@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActionType, CesiumService } from 'angular-cesium';
 import { CharacterService, MeModelState, ViewState, CharacterState } from '../../../services/character.service';
 import { UtilsService } from '../../../services/utils.service';
@@ -25,11 +25,14 @@ export class MeComponent implements OnInit, OnDestroy {
   showCross$: Observable<boolean>;
   clickSub$: Subscription;
   ViewState = ViewState;
+  buildingNearby = false;
+  insideBuilding = false;
 
   constructor(private character: CharacterService,
               public utils: UtilsService,
               private cesiumService: CesiumService,
-              private gameService: GameService) {
+              private gameService: GameService,
+              private cd: ChangeDetectorRef) {
     character.currentStateValue;
   }
 
@@ -66,8 +69,17 @@ export class MeComponent implements OnInit, OnDestroy {
       this.character.state$.map(meState => meState && meState.state === MeModelState.SHOOTING))
       .map((result => result[0] || result[1]));
     this.showCross$ = this.character.state$.map(meState => meState && meState.state === MeModelState.SHOOTING);
-
     this.setShootEvent();
+    this.character.state$.subscribe(state => {
+      if (state && this.buildingNearby !== !!state.nearbyBuildingPosition) {
+        this.buildingNearby = !!state.nearbyBuildingPosition;
+        this.cd.detectChanges();
+      }
+      if (state && this.insideBuilding !== !!state.enternedBuilding) {
+        this.insideBuilding = !!state.enternedBuilding;
+        this.cd.detectChanges();
+      }
+    });
   }
 
   ngOnDestroy(): void {

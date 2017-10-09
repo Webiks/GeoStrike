@@ -13,14 +13,14 @@ export class BuildingsService {
   }
 
   private generateId(): string {
-    return 'building-' + this.counter++;
+    return 'tileBuilding-' + this.counter++;
   }
 
   getBuildings(): Subject<AcNotification> {
     return this.buildings$;
   }
 
-  createBuilding(position: Cartesian3): string {
+  createBuilding(position: Cartesian3): any {
     const center: any = Cesium.Cartographic.fromCartesian(position);
     center.latitude = Cesium.Math.toDegrees(center.latitude);
     center.longitude = Cesium.Math.toDegrees(center.longitude);
@@ -32,6 +32,7 @@ export class BuildingsService {
     const windowHeight = GameSettingsService.windowHeight;
     const roomOffset = wallSize / 2;
     const building = {
+      id,
       wallsPositions: Cesium.Cartesian3.fromDegreesArrayHeights([
         center.longitude - roomOffset, center.latitude - roomOffset, buildingHeight,
         center.longitude - roomOffset, center.latitude + roomOffset, buildingHeight,
@@ -81,7 +82,7 @@ export class BuildingsService {
       ]),
     };
     this.buildings$.next({ id, entity: building, actionType: ActionType.ADD_UPDATE });
-    return id;
+    return building;
   }
 
   removeBuilding(id) {
