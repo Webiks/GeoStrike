@@ -11,12 +11,18 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class AppComponent implements DoCheck{
   ngDoCheck (): void {
   }
-  constructor(iconRegistry: MdIconRegistry, sanitizer: DomSanitizer) {
-    iconRegistry.addSvgIcon(
-      'help',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/help.svg'));
-    iconRegistry.addSvgIcon(
-      'left-mouse',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/left-mouse.svg'));
+  constructor(private iconRegistry: MdIconRegistry,private sanitizer: DomSanitizer) {
+
+    this.addIcon('help');
+    this.addIcon('left-mouse');
+    this.addIcon('full-screen');
+    this.addIcon('volume');
+    this.addIcon('volume-off');
+  }
+
+  addIcon(iconName: string){
+    this.iconRegistry.addSvgIcon(
+      iconName,
+      this.sanitizer.bypassSecurityTrustResourceUrl(`assets/icons/${iconName}.svg`));
   }
 }

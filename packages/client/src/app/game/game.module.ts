@@ -33,6 +33,7 @@ import { EndGameDialogComponent } from './views/end-game-dialog/end-game-dialog.
 import { HowToPlayDialogComponent } from './views/how-to-play-dialog/how-to-play-dialog.component';
 import { SharedModule } from '../shared/shared.module';
 import { PathCreatorComponent } from './views/game-map/path-creator/path-creator.component';
+import { GameToolbarComponent } from './views/game-container/game-toolbar/game-toolbar.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { PathCreatorComponent } from './views/game-map/path-creator/path-creator
     EndGameDialogComponent,
     PathCreatorComponent,
     HowToPlayDialogComponent,
+    GameToolbarComponent,
   ],
   imports: [
     BrowserModule,

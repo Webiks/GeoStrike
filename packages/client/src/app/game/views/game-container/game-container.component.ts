@@ -5,7 +5,7 @@ import { AuthorizationMiddleware } from '../../../core/configured-apollo/network
 import { CurrentGame, GameFields } from '../../../types';
 import { Subscription } from 'rxjs/Subscription';
 import { Subject } from 'rxjs/Subject';
-import { AcEntity, AcNotification, ActionType } from 'angular-cesium';
+import { AcEntity, AcNotification, ActionType, MapsManagerService } from 'angular-cesium';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import { EndGameDialogComponent } from '../end-game-dialog/end-game-dialog.component';
@@ -91,14 +91,6 @@ export class GameContainerComponent implements OnInit, OnDestroy {
       });
     });
 
-  }
-
-  openHelp(event: Event) {
-    this.dialog.open(HowToPlayDialogComponent, {
-      height: '80%',
-      width: '85%',
-      panelClass: 'container-how-to-play'
-    })
   }
 
   ngOnDestroy() {
