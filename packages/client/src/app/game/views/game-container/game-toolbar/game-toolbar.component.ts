@@ -24,8 +24,7 @@ export class GameToolbarComponent implements OnInit {
 
   private mute = false;
 
-  constructor(private  dialog: MdDialog,
-              private mapsManager: MapsManagerService) { }
+  constructor(private  dialog: MdDialog) { }
 
   ngOnInit() {
   }
@@ -39,14 +38,10 @@ export class GameToolbarComponent implements OnInit {
   }
 
   fullScreen(){
-    const viewer = this.mapsManager.getMap().getCesiumViewer();
-    const canvas = viewer.canvas;
-    if ('requestFullScreen' in canvas) {
-      canvas.requestFullscreen();
-    }else if ('webkitRequestFullscreen' in canvas){
-      canvas.webkitRequestFullscreen();
-    } else if ('mozRequestFullScreen' in canvas){
-      canvas.mozRequestFullScreen();
+    if ('requestFullScreen' in  document.body) {
+      document.body.requestFullscreen();
+    }else if ('webkitRequestFullscreen' in  document.body){
+      document.body.webkitRequestFullscreen();
     }
   }
 

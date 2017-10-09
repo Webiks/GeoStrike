@@ -7,11 +7,11 @@ import { Subscription } from 'rxjs/Subscription';
 import { Subject } from 'rxjs/Subject';
 import { AcEntity, AcNotification, ActionType } from 'angular-cesium';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/distinctUntilChanged';
 import { EndGameDialogComponent } from '../end-game-dialog/end-game-dialog.component';
 import { MdDialog } from '@angular/material';
 import { CharacterService, MeModelState, ViewState } from '../../services/character.service';
+import 'rxjs/add/operator/distinctUntilChanged';
+import 'rxjs/add/operator/map';
 import * as _  from 'lodash';
 
 @Component({
