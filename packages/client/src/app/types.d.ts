@@ -2,11 +2,11 @@
 
 export interface User {
   id: string; 
-  username: string | null; 
+  username?: string; 
 }
 
 export interface Query {
-  currentGame: Game | null; 
+  currentGame?: Game; 
 }
 
 export interface Game {
@@ -14,12 +14,13 @@ export interface Game {
   players: Player[]; 
   gameCode: string; 
   state: GameState; 
-  me: User | null; 
+  me?: User; 
+  winingTeam?: Team; 
 }
 
 export interface Player extends User {
   id: string; 
-  username: string | null; 
+  username?: string; 
   character: CharacterData; 
   state: PlayerState; 
   isMe: boolean; 
@@ -31,8 +32,12 @@ export interface Player extends User {
 
 export interface CharacterData {
   name: string; 
-  model: string | null; 
-  scale: number | null; 
+  model?: string; 
+  scale?: number; 
+  team?: Team; 
+  imageUrl?: string; 
+  description?: string; 
+  portraitUrl?: string; 
 }
 
 export interface PlayerLocation {
@@ -47,12 +52,12 @@ export interface Location {
 }
 
 export interface Mutation {
-  createNewGame: CreateOrJoinResult | null; 
-  joinGame: CreateOrJoinResult | null; 
-  joinAsViewer: CreateOrJoinResult | null; 
-  updatePosition: Player | null; 
-  ready: Game | null; 
-  notifyKill: Player | null; 
+  createNewGame?: CreateOrJoinResult; 
+  joinGame?: CreateOrJoinResult; 
+  joinAsViewer?: CreateOrJoinResult; 
+  updatePosition?: Player; 
+  ready?: Game; 
+  notifyKill?: Player; 
 }
 
 export interface CreateOrJoinResult {
@@ -62,12 +67,12 @@ export interface CreateOrJoinResult {
 }
 
 export interface Subscription {
-  gameData: Game | null; 
+  gameData?: Game; 
 }
 
 export interface Viewer extends User {
   id: string; 
-  username: string | null; 
+  username?: string; 
 }
 
 export interface LocationInput {
@@ -76,7 +81,7 @@ export interface LocationInput {
   z: number; 
 }
 export interface CreateNewGameMutationArgs {
-  character: string | null; 
+  character?: string; 
   username: string; 
   team: Team; 
   isViewer: boolean; 
@@ -88,8 +93,8 @@ export interface JoinGameMutationArgs {
   team: Team; 
 }
 export interface JoinAsViewerMutationArgs {
-  gameCode: string | null; 
-  username: string | null; 
+  gameCode?: string; 
+  username?: string; 
 }
 export interface UpdatePositionMutationArgs {
   position: LocationInput; 
@@ -99,10 +104,10 @@ export interface NotifyKillMutationArgs {
   playerId: string; 
 }
 
-export type PlayerState = "WAITING" | "READY" | "ALIVE" | "IN_BUILDING" | "DEAD";
-
-
 export type Team = "BLUE" | "RED" | "NONE";
+
+
+export type PlayerState = "WAITING" | "READY" | "ALIVE" | "IN_BUILDING" | "DEAD";
 
 
 export type PlayerSyncState = "VALID" | "INVALID";
@@ -122,56 +127,52 @@ export namespace CreateNewGame {
   }
 
   export type Mutation = {
-    createNewGame: CreateNewGame | null; 
-  }
+    createNewGame?: CreateNewGame; 
+  } 
 
   export type CreateNewGame = {
     game: Game; 
     playerToken: string; 
-  }
+  } 
 
-  export type Game = {
-  } & GameFields.Fragment
+  export type Game = GameFields.Fragment
 }
 export namespace CurrentGame {
   export type Variables = {
   }
 
   export type Query = {
-    currentGame: CurrentGame | null; 
-  }
+    currentGame?: CurrentGame; 
+  } 
 
-  export type CurrentGame = {
-  } & GameFields.Fragment
+  export type CurrentGame = GameFields.Fragment
 }
 export namespace GameData {
   export type Variables = {
   }
 
   export type Subscription = {
-    gameData: GameData | null; 
-  }
+    gameData?: GameData; 
+  } 
 
-  export type GameData = {
-  } & GameFields.Fragment
+  export type GameData = GameFields.Fragment
 }
 export namespace JoinAsViewer {
   export type Variables = {
-    gameCode: string | null;
-    username: string | null;
+    gameCode?: string;
+    username?: string;
   }
 
   export type Mutation = {
-    joinAsViewer: JoinAsViewer | null; 
-  }
+    joinAsViewer?: JoinAsViewer; 
+  } 
 
   export type JoinAsViewer = {
     playerToken: string; 
     game: Game; 
-  }
+  } 
 
-  export type Game = {
-  } & GameFields.Fragment
+  export type Game = GameFields.Fragment
 }
 export namespace JoinGame {
   export type Variables = {
@@ -182,16 +183,15 @@ export namespace JoinGame {
   }
 
   export type Mutation = {
-    joinGame: JoinGame | null; 
-  }
+    joinGame?: JoinGame; 
+  } 
 
   export type JoinGame = {
     game: Game; 
     playerToken: string; 
-  }
+  } 
 
-  export type Game = {
-  } & GameFields.Fragment
+  export type Game = GameFields.Fragment
 }
 export namespace NotifyKill {
   export type Variables = {
@@ -199,22 +199,20 @@ export namespace NotifyKill {
   }
 
   export type Mutation = {
-    notifyKill: NotifyKill | null; 
-  }
+    notifyKill?: NotifyKill; 
+  } 
 
-  export type NotifyKill = {
-  } & PlayerFields.Fragment
+  export type NotifyKill = PlayerFields.Fragment
 }
 export namespace Ready {
   export type Variables = {
   }
 
   export type Mutation = {
-    ready: Ready | null; 
-  }
+    ready?: Ready; 
+  } 
 
-  export type Ready = {
-  } & GameFields.Fragment
+  export type Ready = GameFields.Fragment
 }
 export namespace UpdatePosition {
   export type Variables = {
@@ -223,11 +221,10 @@ export namespace UpdatePosition {
   }
 
   export type Mutation = {
-    updatePosition: UpdatePosition | null; 
-  }
+    updatePosition?: UpdatePosition; 
+  } 
 
-  export type UpdatePosition = {
-  } & PlayerFields.Fragment
+  export type UpdatePosition = PlayerFields.Fragment
 }
 
 export namespace GameFields {
@@ -235,58 +232,58 @@ export namespace GameFields {
     id: string; 
     gameCode: string; 
     state: GameState; 
+    winingTeam?: Team; 
     players: Players[]; 
-    me: Me | null; 
-  }
+    me?: Me; 
+  } 
 
   export type Players = {
     id: string; 
-    username: string | null; 
+    username?: string; 
   } & PlayerFields.Fragment
 
-  export type Me = {
-  } & PlayerFields.Fragment & ViewerFields.Fragment
+  export type Me = PlayerFields.Fragment & ViewerFields.Fragment
 }
 
 export namespace PlayerFields {
   export type Fragment = {
     team: Team; 
     syncState: PlayerSyncState; 
-    username: string | null; 
+    username?: string; 
     character: Character; 
     state: PlayerState; 
     isMe: boolean; 
     id: string; 
     type: CharacterType; 
     currentLocation: CurrentLocation; 
-  }
+  } 
 
   export type Character = {
     name: string; 
-    model: string | null; 
-    scale: number | null; 
-  }
+    model?: string; 
+    scale?: number; 
+    portraitUrl?: string; 
+  } 
 
-  export type CurrentLocation = {
-  } & LocationFields.Fragment
+  export type CurrentLocation = LocationFields.Fragment
 }
 
 export namespace LocationFields {
   export type Fragment = {
     location: Location; 
     heading: number; 
-  }
+  } 
 
   export type Location = {
     x: number; 
     y: number; 
     z: number; 
-  }
+  } 
 }
 
 export namespace ViewerFields {
   export type Fragment = {
-    username: string | null; 
+    username?: string; 
     id: string; 
-  }
+  } 
 }

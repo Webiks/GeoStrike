@@ -1,18 +1,19 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { AngularCesiumModule, CoordinateConverter } from 'angular-cesium';
+import { AngularCesiumModule } from 'angular-cesium';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
-  MdButtonModule,
-  MdCardModule,
-  MdDialogModule,
-  MdGridListModule, MdIconModule,
-  MdInputModule,
-  MdProgressSpinnerModule
+  MatButtonModule,
+  MatCardModule,
+  MatDialogModule,
+  MatGridListModule,
+  MatIconModule,
+  MatInputModule,
+  MatProgressSpinnerModule,
+  MatSnackBarModule,
 } from '@angular/material';
 
 import { MainComponent } from './views/main/main.component';
-import { CreateNewGameDialogComponent } from './views/create-new-game-dialog/create-new-game-dialog.component';
 import { JoinGameDialogComponent } from './views/join-game-dialog/join-game-dialog.component';
 import { CharacterPickerComponent } from './views/character-picker/character-picker.component';
 import { GameService } from './services/game.service';
@@ -28,16 +29,21 @@ import { CharacterService } from './services/character.service';
 import { WorldComponent } from './views/game-map/world/world.component';
 import { OtherPlayersComponent } from './views/game-map/other-players/other-players.component';
 import { UtilsService } from './services/utils.service';
-import { ConfiguredApolloModule } from '../core/configured-apollo/configured-apollo.module';
 import { EndGameDialogComponent } from './views/end-game-dialog/end-game-dialog.component';
 import { HowToPlayDialogComponent } from './views/how-to-play-dialog/how-to-play-dialog.component';
 import { SharedModule } from '../shared/shared.module';
 import { PathCreatorComponent } from './views/game-map/path-creator/path-creator.component';
+import { GameToolbarComponent } from './views/game-container/game-toolbar/game-toolbar.component';
+import { TeamInfoBarComponent } from './views/game-container/team-info-bar/team-info-bar.component';
+import { PlayerDetailsComponent } from './views/game-container/player-details/player-details.component';
+import { YouWinDialogComponent } from './views/you-win-dialog/you-win-dialog.component';
+import { BuildingsComponent } from './views/buildings/buildings.component';
+import { BuildingsService } from './services/buildings.service';
+import { CollisionDetectorService } from './services/collision-detector.service';
 
 @NgModule({
   declarations: [
     MainComponent,
-    CreateNewGameDialogComponent,
     JoinGameDialogComponent,
     CharacterPickerComponent,
     GameRoomComponent,
@@ -52,21 +58,26 @@ import { PathCreatorComponent } from './views/game-map/path-creator/path-creator
     EndGameDialogComponent,
     PathCreatorComponent,
     HowToPlayDialogComponent,
+    GameToolbarComponent,
+    TeamInfoBarComponent,
+    PlayerDetailsComponent,
+    YouWinDialogComponent,
+    BuildingsComponent,
   ],
   imports: [
     BrowserModule,
     AngularCesiumModule,
     SharedModule,
     BrowserAnimationsModule,
-    MdButtonModule,
-    MdCardModule,
-    MdDialogModule,
-    MdGridListModule,
-    MdProgressSpinnerModule,
-    MdInputModule,
-    MdIconModule,
     FormsModule,
-    ConfiguredApolloModule,
+    MatButtonModule,
+    MatCardModule,
+    MatDialogModule,
+    MatIconModule,
+    MatSnackBarModule,
+    MatGridListModule,
+    MatProgressSpinnerModule,
+    MatInputModule,
   ],
   exports: [
     MainComponent,
@@ -76,12 +87,14 @@ import { PathCreatorComponent } from './views/game-map/path-creator/path-creator
     GameService,
     CharacterService,
     UtilsService,
+    BuildingsService,
+    CollisionDetectorService,
   ],
   entryComponents: [
-    CreateNewGameDialogComponent,
     JoinGameDialogComponent,
     EndGameDialogComponent,
     HowToPlayDialogComponent,
+    YouWinDialogComponent,
   ],
 })
 export class GameModule {

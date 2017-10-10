@@ -1,6 +1,6 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActionType, CesiumService } from 'angular-cesium';
-import { CharacterService, MeModelState, ViewState, CharacterState } from '../../../services/character.service';
+import { CharacterService, CharacterState, MeModelState, ViewState } from '../../../services/character.service';
 import { UtilsService } from '../../../services/utils.service';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
@@ -17,23 +17,27 @@ import { BasicDesc } from 'angular-cesium/src/services/basic-desc/basic-desc.ser
 })
 export class MeComponent implements OnInit, OnDestroy {
 
+  private meModelDrawSubscription: Subscription;
+
   @ViewChild('cross') crossElement: ElementRef;
   @ViewChild('gunShotSound') gunShotSound: ElementRef;
+  @ViewChild('muzzleFlash') muzzleFlash: ElementRef;
   @ViewChild('meModel') meModel: BasicDesc;
 
   showWeapon$: Observable<boolean>;
   showCross$: Observable<boolean>;
   clickSub$: Subscription;
   ViewState = ViewState;
-  isMuzzleFlashShown = false;
+  buildingNearby = false;
+  insideBuilding = false;
   transparentColor = new Cesium.Color(0, 0, 0, 0.01);
   normalColor = new Cesium.Color(1, 1, 1, 1);
 
   constructor(private character: CharacterService,
               public utils: UtilsService,
               private cesiumService: CesiumService,
-              private gameService: GameService) {
-    character.currentStateValue;
+              private gameService: GameService,
+              private cd: ChangeDetectorRef) {
   }
 
   get notifications$() {
@@ -57,8 +61,9 @@ export class MeComponent implements OnInit, OnDestroy {
         };
         const picked = this.cesiumService.getScene().pick(crossLocation);
         if (picked && picked.id && picked.id.acEntity) {
-          const shootedEntity = picked.id.acEntity;
-          this.gameService.notifyKill(shootedEntity.id);
+          const shotedEntity = picked.id.acEntity;
+          const killSubscription = this.gameService.notifyKill(shotedEntity.id)
+            .subscribe(() => killSubscription.unsubscribe());
         }
       });
   }
@@ -69,15 +74,26 @@ export class MeComponent implements OnInit, OnDestroy {
       this.character.state$.map(meState => meState && meState.state === MeModelState.SHOOTING))
       .map((result => result[0] || result[1]));
     this.showCross$ = this.character.state$.map(meState => meState && meState.state === MeModelState.SHOOTING);
-    this.meModel.onDraw.subscribe(entity => {
+    this.meModelDrawSubscription = this.meModel.onDraw.subscribe(entity => {
       this.character.entity = entity.cesiumEntity;
     });
 
     this.setShootEvent();
+    this.character.state$.subscribe(state => {
+      if (state && this.buildingNearby !== !!state.nearbyBuildingPosition) {
+        this.buildingNearby = !!state.nearbyBuildingPosition;
+        this.cd.detectChanges();
+      }
+      if (state && this.insideBuilding !== !!state.enternedBuilding) {
+        this.insideBuilding = !!state.enternedBuilding;
+        this.cd.detectChanges();
+      }
+    });
   }
 
   ngOnDestroy(): void {
     this.clickSub$.unsubscribe();
+    this.meModelDrawSubscription.unsubscribe();
   }
 
   private soundGunFire() {
@@ -87,8 +103,8 @@ export class MeComponent implements OnInit, OnDestroy {
   }
 
   private showGunMuzzleFlash() {
-    this.isMuzzleFlashShown = true;
-    setTimeout(() => this.isMuzzleFlashShown = false, 20);
+    this.muzzleFlash.nativeElement.style.visibility = 'visible';
+    setTimeout(() => this.muzzleFlash.nativeElement.style.visibility = 'hidden', 20);
   }
 
   canvasPropagation() {

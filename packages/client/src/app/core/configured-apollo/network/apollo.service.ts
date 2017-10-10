@@ -1,5 +1,5 @@
 import { SubscriptionClient } from 'subscriptions-transport-ws';
-import { Injectable , NgZone } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { AuthorizationMiddleware } from './authorization-middleware';
 import ApolloClient from 'apollo-client/ApolloClient';
 import { environment } from '../../../../environments/environment';
@@ -12,17 +12,17 @@ export class ApolloService {
   private _apolloClient: ApolloClient;
 
 
-  constructor (ngZone: NgZone) {
+  constructor(ngZone: NgZone) {
     ngZone.runOutsideAngular(() => {
-      this._subscriptionClient = new SubscriptionClient(`ws://${environment.serverUrl}/subscriptions` , {
-        reconnect: true ,
+      this._subscriptionClient = new SubscriptionClient(`ws://${environment.serverUrl}/subscriptions`, {
+        reconnect: true,
         connectionParams: () => {
           if (!AuthorizationMiddleware.token || AuthorizationMiddleware.token === '') {
             return {};
           }
 
           return {'player-token': AuthorizationMiddleware.token};
-        } ,
+        },
         connectionCallback: (error => {
           if (error) {
             AuthorizationMiddleware.setToken('');
@@ -31,16 +31,16 @@ export class ApolloService {
         })
       });
 
-      const fragmentMatcher =new IntrospectionFragmentMatcher({
+      const fragmentMatcher = new IntrospectionFragmentMatcher({
         introspectionQueryResultData: {
           __schema: {
             types: [
               {
-                "kind": "INTERFACE",
-                "name": "User",
-                "possibleTypes": [
-                  {"name": "Player"},
-                  {"name": "Viewer"}
+                'kind': 'INTERFACE',
+                'name': 'User',
+                'possibleTypes': [
+                  {'name': 'Player'},
+                  {'name': 'Viewer'}
                 ]
               },
             ],
@@ -48,18 +48,19 @@ export class ApolloService {
         }
       });
 
+
       this._apolloClient = new ApolloClient({
-        networkInterface: this._subscriptionClient ,
+        networkInterface: this._subscriptionClient,
         fragmentMatcher: fragmentMatcher,
       });
     });
   }
 
-  get subscriptionClient (): SubscriptionClient {
+  get subscriptionClient(): SubscriptionClient {
     return this._subscriptionClient;
   }
 
-  get apolloClient (): ApolloClient {
+  get apolloClient(): ApolloClient {
     return this._apolloClient;
   }
 }

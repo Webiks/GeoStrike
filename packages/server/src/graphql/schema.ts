@@ -1,4 +1,3 @@
-import { GraphQLSchema } from 'graphql';
 import { makeExecutableSchema } from 'graphql-tools';
 import { map } from 'lodash';
 import sourceResolvers from './resolvers';
@@ -9,7 +8,7 @@ const resolvers = Object.keys(sourceResolvers)
   .map(key => sourceResolvers[key])
   .reduce((prev, item) => ({ ...prev, ...item }), {});
 
-export const schema: GraphQLSchema = makeExecutableSchema({
+export const schema: any = makeExecutableSchema({
   typeDefs,
   resolvers,
 });

@@ -3,6 +3,6 @@ export const Settings = {
   clientsUpdateRate: 100,
   backgroundCharacters: {
     numberOfBgCharacters: 10,
-    updateIntervalMs: 300,
+    updateIntervalMs: 1000,
   },
 };

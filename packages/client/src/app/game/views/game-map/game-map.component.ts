@@ -7,6 +7,7 @@ import { UtilsService } from '../../services/utils.service';
 import { GameService } from '../../services/game.service';
 import { environment } from '../../../../environments/environment';
 import { CesiumViewerOptionsService } from './viewer-options/cesium-viewer-options.service';
+import { CollisionDetectorService } from '../../services/collision-detector.service';
 
 @Component({
   selector: 'game-map',
@@ -38,7 +39,8 @@ export class GameMapComponent implements OnInit, OnDestroy {
               private elementRef: ElementRef,
               private ngZone: NgZone,
               private cd: ChangeDetectorRef,
-              private viewerOptions: CesiumViewerOptionsService) {
+              private viewerOptions: CesiumViewerOptionsService,
+              private collisionDetector: CollisionDetectorService) {
     viewerConf.viewerOptions = viewerOptions.getViewerOption();
 
     viewerConf.viewerModifier = (viewer) => {
@@ -54,6 +56,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.collisionDetector.init(this.mapInstance.getCesiumSerivce());
     if (this.createPathMode) {
       return;
     }

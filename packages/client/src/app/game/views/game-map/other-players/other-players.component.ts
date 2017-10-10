@@ -22,7 +22,7 @@ export class OtherPlayersComponent {
     const positionProperty = this.playersPositionMap.get(playerId);
     if (!positionProperty) {
       const result = InterpolationService.interpolate({
-        data: playerPosition
+        data: playerPosition,
       }, InterpolationType.POSITION);
       this.playersPositionMap.set(playerId, result);
       return result;
@@ -31,7 +31,7 @@ export class OtherPlayersComponent {
       return InterpolationService.interpolate({
         data: playerPosition,
         cesiumSampledProperty: positionProperty,
-      }, InterpolationType.POSITION);
+      });
     }
   }
 
@@ -49,7 +49,7 @@ export class OtherPlayersComponent {
   }
 
   getModelScale(player: PlayerFields.Fragment) {
-    return player.character.scale
+    return player.character.scale;
   }
 
   runAnimation(player: PlayerFields.Fragment) {
