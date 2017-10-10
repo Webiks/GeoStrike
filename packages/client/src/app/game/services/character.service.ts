@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { CharacterData, GameFields,Team } from '../../types';
+import { GameFields, PlayerFields, Team } from '../../types';
 import { BuildingsService } from './buildings.service';
 
 export enum MeModelState {
@@ -28,7 +28,7 @@ export interface CharacterState {
   tileBuilding: any;
   nearbyBuildingPosition: Cartesian3;
   enteringBuildingPosition: Cartesian3;
-  enternedBuilding: any;
+  enteredBuilding: any;
 }
 
 @Injectable()
@@ -90,7 +90,7 @@ export class CharacterService {
   }
 
   get enternedBuilding() {
-    return this._character && this._character.getValue() && this._character.getValue().enternedBuilding;
+    return this._character && this._character.getValue() && this._character.getValue().enteredBuilding;
   }
 
   get state(): MeModelState {
