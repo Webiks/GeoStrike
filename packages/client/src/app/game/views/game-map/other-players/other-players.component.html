@@ -10,10 +10,10 @@
                   }">
   </ac-model-desc>
   <ac-billboard-primitive-desc props="{
-                      show: player.type !== 'BACKGROUND_CHARACTER',
                       position: utils.toFixedHeight(player.currentLocation.location),
-                      image: '/assets/icons/blue-mark.png',
+                      image: getPlayerIcon(player),
                       distanceDisplayCondition : utils.getIconDisplayCondition(),
+                      eyeOffset: new Cesium.Cartesian3(0.0, 0.0, -800000.0)
                     }">
   </ac-billboard-primitive-desc>
 </ac-layer>

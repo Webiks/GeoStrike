@@ -68,6 +68,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
     this.gameData.first().subscribe(game => {
       const overviewMode = game.me['__typename'] === 'Viewer' || game.me.type === 'OVERVIEW';
       if (overviewMode) {
+        this.character.viewState = ViewState.OVERVIEW;
         this.overviewSettings();
         return;
       }
@@ -94,6 +95,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
   }
 
   private changeToOverview() {
+    console.log('overview settings');
     this.overviewSettings();
     this.gameService.stopServerUpdatingLoop();
     this.elementRef.nativeElement.removeEventListener('mousemove', this.onMousemove);

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GameSettingsService } from '../../../services/game-settings.service';
+import { CharacterService, ViewState } from '../../../services/character.service';
 
 @Component({
   selector: 'world',
@@ -15,11 +16,16 @@ export class WorldComponent implements OnInit {
       ]
     }
   };
+  public showTiles = true;
 
-  constructor() {
+  constructor(public character: CharacterService) {
   }
 
   ngOnInit() {
+
+    this.character.viewState$.subscribe(viewState=> {
+      this.showTiles = viewState !== ViewState.OVERVIEW;
+    })
   }
 
   getTilesMatrix() {

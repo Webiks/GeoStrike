@@ -2,11 +2,11 @@
 
 export interface User {
   id: string; 
-  username: string | null; 
+  username?: string; 
 }
 
 export interface Query {
-  currentGame: Game | null; 
+  currentGame?: Game; 
 }
 
 export interface Game {
@@ -14,13 +14,13 @@ export interface Game {
   players: Player[]; 
   gameCode: string; 
   state: GameState; 
-  me: User | null; 
-  winingTeam: Team | null; 
+  me?: User; 
+  winingTeam?: Team; 
 }
 
 export interface Player extends User {
   id: string; 
-  username: string | null; 
+  username?: string; 
   character: CharacterData; 
   state: PlayerState; 
   isMe: boolean; 
@@ -32,12 +32,13 @@ export interface Player extends User {
 
 export interface CharacterData {
   name: string; 
-  model: string | null; 
-  scale: number | null; 
-  team: Team | null; 
-  imageUrl: string | null; 
-  description: string | null; 
-  portraitUrl: string | null; 
+  model?: string; 
+  scale?: number; 
+  team?: Team; 
+  imageUrl?: string; 
+  description?: string; 
+  portraitUrl?: string; 
+  iconUrl?: string; 
 }
 
 export interface PlayerLocation {
@@ -52,12 +53,12 @@ export interface Location {
 }
 
 export interface Mutation {
-  createNewGame: CreateOrJoinResult | null; 
-  joinGame: CreateOrJoinResult | null; 
-  joinAsViewer: CreateOrJoinResult | null; 
-  updatePosition: Player | null; 
-  ready: Game | null; 
-  notifyKill: Player | null; 
+  createNewGame?: CreateOrJoinResult; 
+  joinGame?: CreateOrJoinResult; 
+  joinAsViewer?: CreateOrJoinResult; 
+  updatePosition?: Player; 
+  ready?: Game; 
+  notifyKill?: Player; 
 }
 
 export interface CreateOrJoinResult {
@@ -67,12 +68,12 @@ export interface CreateOrJoinResult {
 }
 
 export interface Subscription {
-  gameData: Game | null; 
+  gameData?: Game; 
 }
 
 export interface Viewer extends User {
   id: string; 
-  username: string | null; 
+  username?: string; 
 }
 
 export interface LocationInput {
@@ -81,7 +82,7 @@ export interface LocationInput {
   z: number; 
 }
 export interface CreateNewGameMutationArgs {
-  character: string | null; 
+  character?: string; 
   username: string; 
   team: Team; 
   isViewer: boolean; 
@@ -93,12 +94,13 @@ export interface JoinGameMutationArgs {
   team: Team; 
 }
 export interface JoinAsViewerMutationArgs {
-  gameCode: string | null; 
-  username: string | null; 
+  gameCode?: string; 
+  username?: string; 
 }
 export interface UpdatePositionMutationArgs {
   position: LocationInput; 
   heading: number; 
+  skipValidation?: boolean; 
 }
 export interface NotifyKillMutationArgs {
   playerId: string; 

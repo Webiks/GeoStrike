@@ -38,6 +38,7 @@ export interface CharacterData {
   imageUrl?: string; 
   description?: string; 
   portraitUrl?: string; 
+  iconUrl?: string; 
 }
 
 export interface PlayerLocation {
@@ -99,6 +100,7 @@ export interface JoinAsViewerMutationArgs {
 export interface UpdatePositionMutationArgs {
   position: LocationInput; 
   heading: number; 
+  skipValidation?: boolean; 
 }
 export interface NotifyKillMutationArgs {
   playerId: string; 
@@ -218,6 +220,7 @@ export namespace UpdatePosition {
   export type Variables = {
     position: LocationInput;
     heading: number;
+    skipValidation?: boolean;
   }
 
   export type Mutation = {
@@ -263,6 +266,7 @@ export namespace PlayerFields {
     model?: string; 
     scale?: number; 
     portraitUrl?: string; 
+    iconUrl?: string; 
   } 
 
   export type CurrentLocation = LocationFields.Fragment

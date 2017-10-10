@@ -45,10 +45,11 @@ export class KeyboardControlComponent implements OnInit {
     return {
       validation: () => {
         return (
-          this.character.state === MeModelState.RUNNING ||
+          this.character.viewState !== ViewState.OVERVIEW &&
+          (this.character.state === MeModelState.RUNNING ||
           this.character.state === MeModelState.WALKING ||
           this.character.state === MeModelState.SHOOTING ||
-          this.character.state === MeModelState.CRAWLING
+          this.character.state === MeModelState.CRAWLING)
         );
       },
       action: () => {
@@ -86,6 +87,9 @@ export class KeyboardControlComponent implements OnInit {
   }
 
   changeViewMove() {
+    if (this.character.viewState === ViewState.OVERVIEW){
+      return;
+    }
     let newState = ViewState.SEMI_FPV;
     if (this.character.viewState === ViewState.SEMI_FPV) {
       newState = ViewState.FPV;
@@ -95,6 +99,9 @@ export class KeyboardControlComponent implements OnInit {
   }
 
   changeMeShootState() {
+    if (this.character.viewState === ViewState.OVERVIEW){
+      return;
+    }
     let newState = MeModelState.WALKING;
     if (this.character.state !== MeModelState.SHOOTING) {
       newState = MeModelState.SHOOTING;

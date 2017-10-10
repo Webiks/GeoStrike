@@ -1,4 +1,4 @@
-import {CharacterData} from '../../types';
+import { CharacterData } from '../../types';
 
 export const PLAYER_CHARACTERS: CharacterData[] = [
   {
@@ -9,6 +9,7 @@ export const PLAYER_CHARACTERS: CharacterData[] = [
     team: 'BLUE',
     imageUrl: '/assets/characters/captain-america.png',
     portraitUrl: '/assets/characters/captain_america_portrait.png',
+    iconUrl: '/assets/icons/captain-america-mark.png',
   },
   {
     name: 'Anthony Stark',
@@ -18,6 +19,7 @@ export const PLAYER_CHARACTERS: CharacterData[] = [
     team: 'BLUE',
     imageUrl: '/assets/characters/ironman.png',
     portraitUrl: '/assets/characters/ironman_portrait.png',
+    iconUrl: '/assets/icons/ironman-mark.png',
   },
   {
     name: 'Peter Parker',
@@ -27,6 +29,7 @@ export const PLAYER_CHARACTERS: CharacterData[] = [
     team: 'RED',
     imageUrl: '/assets/characters/spiderman.png',
     portraitUrl: '/assets/characters/spiderman_portrait.png',
+    iconUrl: '/assets/icons/spiderman-mark.png',
   },
   {
     name: 'Bruce Wayne',
@@ -36,6 +39,7 @@ export const PLAYER_CHARACTERS: CharacterData[] = [
     team: 'RED',
     imageUrl: '/assets/characters/batman.png',
     portraitUrl: '/assets/characters/batman_portrait.png',
+    iconUrl: '/assets/icons/batman-mark.png',
   },
   {
     name: 'car',

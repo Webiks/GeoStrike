@@ -52,6 +52,13 @@ export class OtherPlayersComponent {
     return player.character.scale;
   }
 
+  getPlayerIcon(player: PlayerFields.Fragment){
+    if (player.character.iconUrl){
+      return player.character.iconUrl;
+    }
+    return '/assets/icons/grey-mark.png';
+  }
+
   runAnimation(player: PlayerFields.Fragment) {
     return player.state === 'DEAD';
   }

@@ -22,12 +22,12 @@ export const schema = gql`
     type CharacterData {
         name: String!
         model: String
-        scale: Float,
-        team: Team,
-        imageUrl: String,
-        description: String,
+        scale: Float
+        team: Team
+        imageUrl: String
+        description: String
         portraitUrl: String
-        
+        iconUrl: String
     }
     
     type Viewer implements User {
