@@ -38,7 +38,7 @@ export class GameRoomComponent implements OnInit, OnDestroy {
           AuthorizationMiddleware.setToken(params.playerToken);
           this.gameCode = params.gameCode;
           this.gameService.refreshConnection();
-          this.gameData$ = this.gameService.getCurrentGameData().map(({gameData}) => gameData);
+          this.gameData$ = this.gameService.getCurrentGameData().map(({ gameData }) => gameData);
           this.gameDataSubscription = this.gameData$.subscribe((gameData) => {
             this.game = gameData;
             this.players = this.getPlayers(this.game);
@@ -70,7 +70,7 @@ export class GameRoomComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if ( this.paramsSubscription){
+    if (this.paramsSubscription) {
       this.paramsSubscription.unsubscribe();
     }
     if (this.gameDataSubscription) {
@@ -79,7 +79,9 @@ export class GameRoomComponent implements OnInit, OnDestroy {
   }
 
   startGame() {
-    this.router.navigate(['/game', AuthorizationMiddleware.token]);
+    this.ngZone.run(() => {
+      this.router.navigate(['/game', AuthorizationMiddleware.token]);
+    });
   }
 
   getCharacter(characterName: string) {
