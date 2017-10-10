@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActionType, CesiumService } from 'angular-cesium';
-import { CharacterService, MeModelState, ViewState, CharacterState } from '../../../services/character.service';
+import { CharacterService, CharacterState, MeModelState, ViewState } from '../../../services/character.service';
 import { UtilsService } from '../../../services/utils.service';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
@@ -33,7 +33,6 @@ export class MeComponent implements OnInit, OnDestroy {
               private cesiumService: CesiumService,
               private gameService: GameService,
               private cd: ChangeDetectorRef) {
-    character.currentStateValue;
   }
 
   get notifications$() {
@@ -57,8 +56,9 @@ export class MeComponent implements OnInit, OnDestroy {
         };
         const picked = this.cesiumService.getScene().pick(crossLocation);
         if (picked && picked.id && picked.id.acEntity) {
-          const shootedEntity = picked.id.acEntity;
-          this.gameService.notifyKill(shootedEntity.id);
+          const shotedEntity = picked.id.acEntity;
+          const killSubscription = this.gameService.notifyKill(shotedEntity.id)
+            .subscribe(() => killSubscription.unsubscribe());
         }
       });
   }

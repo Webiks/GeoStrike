@@ -45,9 +45,9 @@
 }
 
 .blue {
-  background: linear-gradient(#1B476B, #000000);
+  background: var(--blue-gradient);
 }
 
 .red {
-  background: linear-gradient(#6B1B1B, #000000);
+  background: var(--red-gradient);
 }
