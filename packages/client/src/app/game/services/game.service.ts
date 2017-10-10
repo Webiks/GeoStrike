@@ -1,17 +1,13 @@
-import { Injectable, NgZone } from '@angular/core';
-import { Apollo, ApolloQueryObservable } from 'apollo-angular';
+import { Injectable } from '@angular/core';
+import { Apollo } from 'apollo-angular';
 import { createNewGameMutation } from '../../graphql/create-new-game.mutation';
-import { ApolloExecutionResult, ApolloQueryResult } from 'apollo-client';
+import { ApolloExecutionResult } from 'apollo-client';
 import { Observable } from 'rxjs/Observable';
-import {
-  CreateNewGame, CurrentGame, GameData, JoinAsViewer, JoinGame, NotifyKill, Ready, Team,
-  UpdatePosition
-} from '../../types';
+import { CreateNewGame, GameData, JoinAsViewer, JoinGame, NotifyKill, Ready, Team, UpdatePosition } from '../../types';
 import { joinGameMutation } from '../../graphql/join-game.mutation';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 import { gameDataSubscription } from '../../graphql/game-data.subscription';
 import { readyMutation } from '../../graphql/ready.mutation';
-import { currentGameQuery } from '../../graphql/current-game.query';
 import 'rxjs/add/operator/first';
 import 'rxjs/add/operator/share';
 import { updatePositionMutation } from '../../graphql/update-position.mutation';
@@ -70,7 +66,7 @@ export class GameService {
     });
   }
 
-  joinAsViewer(gameCode:string, username: string) :Observable<ApolloExecutionResult<JoinAsViewer.Mutation>>{
+  joinAsViewer(gameCode: string, username: string): Observable<ApolloExecutionResult<JoinAsViewer.Mutation>> {
     return this.apollo.mutate<JoinAsViewer.Mutation>({
       mutation: joinAsViewer,
       variables: {
@@ -91,14 +87,14 @@ export class GameService {
       setInterval(() => this.updateServerOnPosition(), GameSettingsService.serverUpdatingInterval);
   }
 
-  stopServerUpdatingLoop(){
+  stopServerUpdatingLoop() {
     clearInterval(this.serverPositionUpdateInterval);
   }
 
 
   updateServerOnPosition() {
     const state = this.createState();
-    if(!state || !this.isDifferentFromLastState(state)){
+    if (!state || !this.isDifferentFromLastState(state)) {
       return;
     }
 
@@ -142,7 +138,7 @@ export class GameService {
     );
   }
 
-  notifyKill(killedPlayerId) {
+  notifyKill(killedPlayerId): Observable<ApolloExecutionResult<NotifyKill.Mutation>> {
     return this.apollo.mutate<NotifyKill.Mutation>({
       mutation: notifyKillMutation,
       variables: {
