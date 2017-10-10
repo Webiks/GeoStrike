@@ -1,19 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { HowToPlayDialogComponent } from '../../how-to-play-dialog/how-to-play-dialog.component';
-import { MdDialog } from '@angular/material';
+import { MatDialog } from '@angular/material';
 
 @Component({
   selector: 'game-toolbar',
   template: `
     <div class="right-btn-panel">
-      <button md-icon-button class="help-btn" (click)="toggleMute($event)">
-        <md-icon [svgIcon]="mute ? 'volume-off' : 'volume'"></md-icon>
+      <button mat-icon-button class="help-btn" (click)="toggleMute($event)">
+        <mat-icon [svgIcon]="mute ? 'volume-off' : 'volume'"></mat-icon>
       </button>
-      <button md-icon-button class="help-btn" (click)="fullScreen($event)">
-        <md-icon svgIcon="full-screen"></md-icon>
+      <button mat-icon-button class="help-btn" (click)="fullScreen($event)">
+        <mat-icon svgIcon="full-screen"></mat-icon>
       </button>
-      <button md-icon-button class="help-btn" (click)="openHelp($event)">
-        <md-icon svgIcon="help"></md-icon>
+      <button mat-icon-button class="help-btn" (click)="openHelp($event)">
+        <mat-icon svgIcon="help" ></mat-icon>
       </button>
     </div>
   `,
@@ -23,7 +23,7 @@ export class GameToolbarComponent implements OnInit {
 
   private mute = false;
 
-  constructor(private  dialog: MdDialog) {
+  constructor(private  dialog: MatDialog) {
   }
 
   ngOnInit() {

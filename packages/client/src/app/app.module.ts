@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app.module.routing';
 import { KeyboardKeysService } from './core/services/keyboard-keys.service';
 import { HttpModule } from '@angular/http';
 import { ConfiguredApolloModule } from './core/configured-apollo/configured-apollo.module';
+import {MATERIAL_COMPATIBILITY_MODE} from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,10 @@ import { ConfiguredApolloModule } from './core/configured-apollo/configured-apol
     AppRoutingModule,
     ConfiguredApolloModule,
   ],
-  providers: [KeyboardKeysService],
+  providers: [
+    KeyboardKeysService,
+    {provide: MATERIAL_COMPATIBILITY_MODE, useValue: true},
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

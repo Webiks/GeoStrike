@@ -1,6 +1,6 @@
 import { Component , DoCheck } from '@angular/core';
 import {ViewerConfiguration} from 'angular-cesium';
-import { MdIconRegistry } from '@angular/material';
+import { MatIconRegistry } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
@@ -11,7 +11,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class AppComponent implements DoCheck{
   ngDoCheck (): void {
   }
-  constructor(private iconRegistry: MdIconRegistry,private sanitizer: DomSanitizer) {
+  constructor(private iconRegistry: MatIconRegistry,private sanitizer: DomSanitizer) {
 
     this.addIcon('help');
     this.addIcon('left-mouse');

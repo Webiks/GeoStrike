@@ -3,7 +3,7 @@ import { GameService } from '../../services/game.service';
 import { AuthorizationMiddleware } from '../../../core/configured-apollo/network/authorization-middleware';
 import { ApolloQueryResult } from 'apollo-client';
 import { Team } from '../../../types';
-import { MdDialogRef, MdSnackBar } from '@angular/material';
+import { MatDialogRef, MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { VIEWER } from '../../../shared/characters.const';
@@ -22,8 +22,8 @@ export class JoinGameDialogComponent implements OnInit {
   team: Team = 'BLUE';
 
   constructor(private router: Router,
-              private dialogRef: MdDialogRef<any>,
-              private snackBar: MdSnackBar,
+              private dialogRef: MatDialogRef<any>,
+              private snackBar: MatSnackBar,
               private gameService: GameService) {
   }
 

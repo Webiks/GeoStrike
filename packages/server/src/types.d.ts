@@ -15,6 +15,7 @@ export interface Game {
   gameCode: string; 
   state: GameState; 
   me: User | null; 
+  winingTeam: Team | null; 
 }
 
 export interface Player extends User {

@@ -6,11 +6,6 @@ export const schema = gql`
         ACTIVE,
         DONE,
     }
-    enum GameResult {
-        RED_WON,
-        BlUE_WON,
-        NONE,
-    }
 
     type Game {
         id: String!
@@ -18,7 +13,7 @@ export const schema = gql`
         gameCode: String!
         state: GameState!
         me: User
-        gameResult: GameResult
+        winingTeam: Team
     }
 
     type CreateOrJoinResult {

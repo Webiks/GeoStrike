@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { MdDialog } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { KeyboardKeysService } from '../../../core/services/keyboard-keys.service';
 
 @Component({
@@ -11,7 +11,7 @@ import { KeyboardKeysService } from '../../../core/services/keyboard-keys.servic
 export class HowToPlayDialogComponent implements OnInit {
 
   keys: {keyName: string,description: string}[];
-  constructor(public dialog: MdDialog,private keyboardKeysService: KeyboardKeysService) { }
+  constructor(public dialog: MatDialog,private keyboardKeysService: KeyboardKeysService) { }
 
   ngOnInit() {
     this.keys = Array.from(this.keyboardKeysService.getRegisteredKey()
