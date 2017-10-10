@@ -66,7 +66,12 @@ export class KeyboardControlComponent implements OnInit {
           Cesium.Math.toRadians(this.character.heading + delta),
           true
         );
-        if (direction !== Direction.Forward) {
+        if (this.character.enternedBuilding) {
+          if (!this.collisionDetector.detectCollision(nextLocation, true)) {
+            this.character.location = nextLocation;
+          }
+        }
+        else if (direction !== Direction.Forward) {
           this.character.location = nextLocation;
           if (this.collisionDetector.collision) {
             this.collisionDetector.detectCollision(nextLocation, true);

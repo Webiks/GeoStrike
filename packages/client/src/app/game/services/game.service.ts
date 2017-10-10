@@ -92,17 +92,17 @@ export class GameService {
   }
 
 
-  updateServerOnPosition(skipValidation = false) {
+  updateServerOnPosition(skipValidation = true) {
     const state = this.createState();
     if (!state || !this.isDifferentFromLastState(state)) {
       return;
     }
 
     this.lastStateSentToServer = state;
-    this.apollo.mutate<UpdatePosition.Mutation>({
+    const subscription = this.apollo.mutate<UpdatePosition.Mutation>({
       mutation: updatePositionMutation,
       variables: { ...state, skipValidation},
-    });
+    }).subscribe(() => subscription.unsubscribe());
   }
 
   createState() {
