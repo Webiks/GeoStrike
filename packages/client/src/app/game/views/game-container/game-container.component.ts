@@ -29,6 +29,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
   private allPlayers$: Subject<PlayerFields.Fragment[]> = new Subject<PlayerFields.Fragment[]>();
   private killedDialogOpen = false;
   private wonDialogOpen = false;
+  private paramsSubscription: Subscription;
 
   constructor(private gameService: GameService,
               private character: CharacterService,
@@ -39,11 +40,11 @@ export class GameContainerComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const paramsSubscription = this.activatedRoute.params.subscribe(params => {
+    this.paramsSubscription = this.activatedRoute.params.subscribe(params => {
       this.ngZone.runOutsideAngular(() => {
         if (!params.playerToken) {
           this.router.navigate(['/']);
-          paramsSubscription.unsubscribe();
+          this.paramsSubscription.unsubscribe();
 
           return;
         }
@@ -125,6 +126,10 @@ export class GameContainerComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if (this.gameDataSubscription) {
       this.gameDataSubscription.unsubscribe();
+    }
+
+    if (this.paramsSubscription){
+      this.paramsSubscription.unsubscribe();
     }
   }
 

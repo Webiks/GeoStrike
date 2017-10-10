@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { AcMapComponent, AcNotification, CameraService, ViewerConfiguration } from 'angular-cesium';
+import { AcMapComponent, AcNotification, ViewerConfiguration } from 'angular-cesium';
 import { GameFields } from '../../../types';
 import { CharacterService, MeModelState, ViewState } from '../../services/character.service';
 import { UtilsService } from '../../services/utils.service';
