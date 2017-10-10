@@ -8,7 +8,7 @@ import { Subject } from 'rxjs/Subject';
 import { AcEntity, AcNotification, ActionType } from 'angular-cesium';
 import { Observable } from 'rxjs/Observable';
 import { EndGameDialogComponent } from '../end-game-dialog/end-game-dialog.component';
-import { MatDialog} from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { CharacterService, MeModelState, ViewState } from '../../services/character.service';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/map';
@@ -57,11 +57,11 @@ export class GameContainerComponent implements OnInit, OnDestroy {
 
           if (currentGame.winingTeam !== 'NONE' && !this.wonDialogOpen) {
             const loseTeam: Team = currentGame.winingTeam === 'RED' ? 'BLUE' : 'RED';
-            if (loseTeam === this.me.team) {
+            if (currentGame.winingTeam === this.me.team) {
+              this.openWinDialog(loseTeam);
+            } else {
               // lose dialog
               console.log('lose dialog');
-            } else {
-              this.openWinDialog(loseTeam);
             }
           }
 

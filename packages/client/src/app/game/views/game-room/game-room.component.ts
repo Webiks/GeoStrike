@@ -87,6 +87,6 @@ export class GameRoomComponent implements OnInit, OnDestroy {
   }
 
   ready() {
-    this.gameService.readyToPlay();
+    this.gameService.readyToPlay().subscribe();
   }
 }

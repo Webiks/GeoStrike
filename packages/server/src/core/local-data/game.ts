@@ -241,7 +241,7 @@ export class GamesManager {
     const bluePlayers = players.filter(p => p.team === Team.BLUE);
     const deadBlues = bluePlayers.filter(p => p.state === 'DEAD').length;
 
-    const redPlayers = players.filter(p => p.team === Team.BLUE);
+    const redPlayers = players.filter(p => p.team === Team.RED);
     const deadReds = bluePlayers.filter(p => p.state === 'DEAD').length;
 
     if (deadBlues === bluePlayers.length) {
