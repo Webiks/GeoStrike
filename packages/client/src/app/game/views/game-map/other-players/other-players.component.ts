@@ -52,12 +52,26 @@ export class OtherPlayersComponent {
     return player.character.scale;
   }
 
+  getPlayerIcon(player: PlayerFields.Fragment){
+    if (player.character.iconUrl){
+      return player.character.iconUrl;
+    }
+    return '/assets/icons/grey-mark.png';
+  }
+
   runAnimation(player: PlayerFields.Fragment) {
     return player.state === 'DEAD';
   }
 
   getIconPic(player: PlayerFields.Fragment) {
     return player.team === 'BLUE' ? '/assets/icons/blue-mark.png' : '/assets/icons/red-mark.png';
+  }
+
+  getLabelPixelOffset(player: PlayerFields.Fragment){
+    let xOffset = -10;
+    xOffset -= player.character.name.length * 2.5;
+
+    return [xOffset, 45];
   }
 
 

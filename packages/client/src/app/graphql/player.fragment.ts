@@ -10,6 +10,7 @@ export const playerFragment = gql`
       model
       scale
       portraitUrl
+      iconUrl
     }
     state
     isMe

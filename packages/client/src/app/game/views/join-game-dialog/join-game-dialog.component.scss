@@ -6,7 +6,8 @@
   flex-direction: column;
   align-items: stretch;
   justify-content: center;
-  background-color: transparent;
+  background-image: url('/assets/menu/background.png');
+  background-size: cover;
 
   .content {
     display: flex;
