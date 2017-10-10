@@ -3,6 +3,9 @@ import { CesiumService, GeoUtilsService, KeyboardControlParams, KeyboardControlS
 import { CharacterService, MeModelState, ViewState, } from '../../../services/character.service';
 import { environment } from '../../../../../environments/environment';
 import { KeyboardKeysService } from '../../../../core/services/keyboard-keys.service';
+import { GameService } from '../../../services/game.service';
+import { BuildingsService } from '../../../services/buildings.service';
+import { CollisionDetectorService } from '../../../services/collision-detector.service';
 
 const Direction = {
   Forward: 'Forward',
@@ -23,7 +26,6 @@ const DirectionsDelta = {
   template: '',
 })
 export class KeyboardControlComponent implements OnInit {
-  private COLLIDE_FACTOR_METER = 3;
   private inspector = false;
   private viewer;
 
@@ -31,42 +33,11 @@ export class KeyboardControlComponent implements OnInit {
               private keyboardControlService: KeyboardControlService,
               private cesiumService: CesiumService,
               private keyboardKeysService: KeyboardKeysService,
+              private gameService: GameService,
+              private buildingsService: BuildingsService,
+              private collisionDetector: CollisionDetectorService,
               private ngZone: NgZone) {
     this.viewer = cesiumService.getViewer();
-  }
-
-
-  private getDepthDistance(fromLocation: Cartesian3, toWindowPosition: Cartesian2) {
-    const toLocation = this.viewer.scene.pickPosition(toWindowPosition);
-    if (!toLocation) {
-      return Number.MAX_SAFE_INTEGER;
-    }
-    const distance = Cesium.Cartesian3.distance(fromLocation, toLocation);
-    return distance ? distance : Number.MAX_SAFE_INTEGER;
-  }
-
-  private detectCollision(fromLocation): boolean {
-    const centerWindowPosition = new Cesium.Cartesian2(
-      document.body.clientWidth / 2,
-      document.body.clientHeight / 2
-    );
-    const leftWindowPosition = centerWindowPosition.clone();
-    leftWindowPosition.x -= 150;
-    const rightWindowPosition = centerWindowPosition.clone();
-    rightWindowPosition.x += 150;
-
-    const pickedFeature = this.viewer.scene.pick(centerWindowPosition, 300, 300);
-
-    // if the center is a tile or a model but not ground
-    if (pickedFeature && !pickedFeature.mesh) {
-      return (
-        this.getDepthDistance(fromLocation, centerWindowPosition) < this.COLLIDE_FACTOR_METER
-        // this.getDepthDistance(fromLocation, leftWindowPosition) < this.COLLIDE_FACTOR_METER ||
-        // this.getDepthDistance(fromLocation, rightWindowPosition) < this.COLLIDE_FACTOR_METER
-      );
-    } else {
-      return false;
-    }
   }
 
   buildMovementConfig(direction: string) {
@@ -95,7 +66,18 @@ export class KeyboardControlComponent implements OnInit {
           Cesium.Math.toRadians(this.character.heading + delta),
           true
         );
-        if (direction !== Direction.Forward || !this.detectCollision(nextLocation)) {
+        if (this.character.enternedBuilding) {
+          if (!this.collisionDetector.detectCollision(nextLocation, true)) {
+            this.character.location = nextLocation;
+          }
+        }
+        else if (direction !== Direction.Forward) {
+          this.character.location = nextLocation;
+          if (this.collisionDetector.collision) {
+            this.collisionDetector.detectCollision(nextLocation, true);
+          }
+        }
+        else if (!this.collisionDetector.detectCollision(nextLocation)) {
           this.character.location = nextLocation;
         }
 
@@ -151,10 +133,10 @@ export class KeyboardControlComponent implements OnInit {
           return Direction.Forward;
         } else if (keyEvent.code === 'KeyS' || keyEvent.code === 'ArrowDown') {
           return Direction.Backward;
-          } else if (keyEvent.code === 'KeyA' || keyEvent.code === 'ArrowLeft') {
-            return Direction.Left;
-          } else if (keyEvent.code === 'KeyD' || keyEvent.code === 'ArrowRight') {
-            return Direction.Right;
+        } else if (keyEvent.code === 'KeyA' || keyEvent.code === 'ArrowLeft') {
+          return Direction.Left;
+        } else if (keyEvent.code === 'KeyD' || keyEvent.code === 'ArrowRight') {
+          return Direction.Right;
         } else {
           return String.fromCharCode(keyEvent.keyCode);
         }
@@ -176,6 +158,17 @@ export class KeyboardControlComponent implements OnInit {
           keyEvent.preventDefault();
           this.changeViewMove();
         });
+      });
+    this.keyboardKeysService.registerKeyBoardEvent('KeyE', 'Enter Nearby Building',
+      (keyEvent: KeyboardEvent) => {
+        if (this.character.enternedBuilding) {
+          this.character.exitBuilding();
+          this.gameService.updateServerOnPosition(true);
+
+        } else if (this.character.nearbyBuildingPosition) {
+          this.character.enterBuilding();
+          this.gameService.updateServerOnPosition(true);
+        }
       });
     this.keyboardKeysService.registerKeyBoardEventDescription('Shift', 'Run');
     this.keyboardKeysService.registerKeyBoardEvent('Space', 'Switch Shooting Mode',

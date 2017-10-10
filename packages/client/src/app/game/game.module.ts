@@ -38,6 +38,9 @@ import { TeamInfoBarComponent } from './views/game-container/team-info-bar/team-
 import { PlayerDetailsComponent } from './views/game-container/player-details/player-details.component';
 import { YouWinDialogComponent } from './views/you-win-dialog/you-win-dialog.component';
 import { GameDialogsComponent } from './views/game-container/game-dialogs/game-dialogs.component';
+import { BuildingsComponent } from './views/buildings/buildings.component';
+import { BuildingsService } from './services/buildings.service';
+import { CollisionDetectorService } from './services/collision-detector.service';
 
 @NgModule({
   declarations: [
@@ -60,6 +63,7 @@ import { GameDialogsComponent } from './views/game-container/game-dialogs/game-d
     TeamInfoBarComponent,
     PlayerDetailsComponent,
     YouWinDialogComponent,
+    BuildingsComponent,
     GameDialogsComponent,
   ],
   imports: [
@@ -85,6 +89,8 @@ import { GameDialogsComponent } from './views/game-container/game-dialogs/game-d
     GameService,
     CharacterService,
     UtilsService,
+    BuildingsService,
+    CollisionDetectorService,
   ],
   entryComponents: [
     JoinGameDialogComponent,

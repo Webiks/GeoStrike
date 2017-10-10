@@ -29,7 +29,7 @@ export class CesiumViewerOptionsService {
     viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
   }
 
-  setFpvCameraOptions(viewer){
+  setFpvCameraOptions(viewer) {
     const screenSpaceCameraController = viewer.scene.screenSpaceCameraController;
     screenSpaceCameraController.enableTilt = false;
     screenSpaceCameraController.enableRotate = false;
@@ -38,7 +38,7 @@ export class CesiumViewerOptionsService {
     canvas.onclick = () => canvas.requestPointerLock();
   }
 
-  setFreeCameraOptions(viewer){
+  setFreeCameraOptions(viewer) {
     const screenSpaceCameraController = viewer.scene.screenSpaceCameraController;
     screenSpaceCameraController.enableTilt = true;
     screenSpaceCameraController.enableRotate = true;

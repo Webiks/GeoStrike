@@ -73,7 +73,7 @@ export class GameService {
         gameCode,
         username,
       }
-    })
+    });
   }
 
   readyToPlay(): Observable<ApolloExecutionResult<Ready.Mutation>> {
@@ -92,17 +92,17 @@ export class GameService {
   }
 
 
-  updateServerOnPosition() {
+  updateServerOnPosition(skipValidation = true) {
     const state = this.createState();
     if (!state || !this.isDifferentFromLastState(state)) {
       return;
     }
 
     this.lastStateSentToServer = state;
-    this.apollo.mutate<UpdatePosition.Mutation>({
+    const subscription = this.apollo.mutate<UpdatePosition.Mutation>({
       mutation: updatePositionMutation,
-      variables: {...state},
-    });
+      variables: { ...state, skipValidation},
+    }).subscribe(() => subscription.unsubscribe());
   }
 
   createState() {
