@@ -1,6 +1,5 @@
-import { Component, Inject, Input, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { Team } from '../../../types';
-import { Router } from '@angular/router';
 import { AuthorizationMiddleware } from '../../../core/configured-apollo/network/authorization-middleware';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
@@ -13,8 +12,7 @@ export class YouWinDialogComponent implements OnInit {
 
   losingTeam: Team;
 
-  constructor(private router: Router,
-              private self : MatDialogRef<YouWinDialogComponent>,
+  constructor(private self : MatDialogRef<YouWinDialogComponent>,
               @Inject(MAT_DIALOG_DATA) data: {losingTeam: Team}) {
     this.losingTeam = data.losingTeam;
   }
@@ -27,6 +25,6 @@ export class YouWinDialogComponent implements OnInit {
   exitGame() {
     this.self.close();
     AuthorizationMiddleware.removeToken();
-    this.router.navigateByUrl('/');
+    location.href = '/';
   }
 }
