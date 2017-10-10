@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MdDialogRef } from '@angular/material';
+import { MatDialogRef } from '@angular/material';
 
 @Component({
   selector: 'end-game-dialog',
@@ -8,7 +8,7 @@ import { MdDialogRef } from '@angular/material';
 })
 export class EndGameDialogComponent implements OnInit {
 
-  constructor(private modal: MdDialogRef<EndGameDialogComponent>) { }
+  constructor(private modal: MatDialogRef<EndGameDialogComponent>) { }
 
   ngOnInit() {
     document.onclick = undefined;

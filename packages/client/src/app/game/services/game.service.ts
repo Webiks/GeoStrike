@@ -1,7 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Apollo, ApolloQueryObservable } from 'apollo-angular';
 import { createNewGameMutation } from '../../graphql/create-new-game.mutation';
-import { ApolloQueryResult } from 'apollo-client';
+import { ApolloExecutionResult, ApolloQueryResult } from 'apollo-client';
 import { Observable } from 'rxjs/Observable';
 import {
   CreateNewGame, CurrentGame, GameData, JoinAsViewer, JoinGame, NotifyKill, Ready, Team,
@@ -46,7 +46,7 @@ export class GameService {
     return queryRes as Observable<GameData.Subscription>;
   }
 
-  createNewGame(character: string, username: string, team: Team, isViewer: boolean): Observable<ApolloQueryResult<CreateNewGame.Mutation>> {
+  createNewGame(character: string, username: string, team: Team, isViewer: boolean): Observable<ApolloExecutionResult<CreateNewGame.Mutation>> {
     return this.apollo.mutate<CreateNewGame.Mutation>({
       mutation: createNewGameMutation,
       variables: {
@@ -58,7 +58,7 @@ export class GameService {
     });
   }
 
-  joinGame(gameCode: string, character: string, username: string, team: Team): Observable<ApolloQueryResult<JoinGame.Mutation>> {
+  joinGame(gameCode: string, character: string, username: string, team: Team): Observable<ApolloExecutionResult<JoinGame.Mutation>> {
     return this.apollo.mutate<JoinGame.Mutation>({
       mutation: joinGameMutation,
       variables: {
@@ -70,7 +70,7 @@ export class GameService {
     });
   }
 
-  joinAsViewer(gameCode:string, username: string) :Observable<ApolloQueryResult<JoinAsViewer.Mutation>>{
+  joinAsViewer(gameCode:string, username: string) :Observable<ApolloExecutionResult<JoinAsViewer.Mutation>>{
     return this.apollo.mutate<JoinAsViewer.Mutation>({
       mutation: joinAsViewer,
       variables: {
@@ -80,7 +80,7 @@ export class GameService {
     })
   }
 
-  readyToPlay(): Observable<ApolloQueryResult<Ready.Mutation>> {
+  readyToPlay(): Observable<ApolloExecutionResult<Ready.Mutation>> {
     return this.apollo.mutate<Ready.Mutation>({
       mutation: readyMutation,
     });

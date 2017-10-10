@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MdDialog, MdSnackBar } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
 import { JoinGameDialogComponent } from '../join-game-dialog/join-game-dialog.component';
 import { CreateNewGame, Team } from '../../../types';
 import { AuthorizationMiddleware } from '../../../core/configured-apollo/network/authorization-middleware';
@@ -20,8 +20,8 @@ export class MainComponent {
   team: Team = 'BLUE';
   error = '';
 
-  constructor(private dialog: MdDialog,
-              private snackBar: MdSnackBar,
+  constructor(private dialog: MatDialog,
+              private snackBar: MatSnackBar,
               private router: Router,
               private gameService: GameService) {
   }

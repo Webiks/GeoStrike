@@ -31,9 +31,15 @@ body {
 .mat-dialog-container {
   border-radius: 10px !important;
   background-color: transparent;
+  padding: 0;
+}
+mat-dialog-container{
+  padding: 0 !important;
 }
 
-
+mat-form-field {
+  font-family: AGENCYR, sans-serif !important;
+}
 .general-dialog {
   background-color: rgba(0, 0, 0, 0.99);
   border-top-right-radius: 20px;

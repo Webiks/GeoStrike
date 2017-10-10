@@ -1,7 +1,7 @@
 <div class="character-picker">
   <h1 class="header">Choose your character</h1>
-  <md-grid-list gutterSize="20" cols="4">
-    <md-grid-tile *ngFor="let character of availableCharacters">
+  <mat-grid-list gutterSize="20" cols="4">
+    <mat-grid-tile *ngFor="let character of availableCharacters">
       <character-item
           (onClick)="select.emit(character)"
           [description]="character.description"
@@ -11,12 +11,12 @@
           [image]="character.imageUrl"
           [disabled]="false">
       </character-item>
-    </md-grid-tile>
-  </md-grid-list>
+    </mat-grid-tile>
+  </mat-grid-list>
   <div class="viewer-row">
-    <md-input-container class="username-input">
-      <input mdInput placeholder="Username" required [(ngModel)]="username">
-    </md-input-container>
+    <mat-form-field class="username-input">
+      <input matInput placeholder="Username" required [(ngModel)]="username">
+    </mat-form-field>
     <h2 class="viewer-btn" [class.selected-viewer]="selectedCharacter === viewer.name" (click)="select.emit(viewer)" >Continue as Viewer</h2>
   </div>
 </div>

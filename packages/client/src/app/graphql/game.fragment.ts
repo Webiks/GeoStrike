@@ -7,6 +7,7 @@ export const gameFragment = gql`
     id
     gameCode
     state
+    winingTeam
     players {
       id
       username
