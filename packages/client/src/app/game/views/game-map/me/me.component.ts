@@ -30,7 +30,6 @@ export class MeComponent implements OnInit, OnDestroy {
               public utils: UtilsService,
               private cesiumService: CesiumService,
               private gameService: GameService) {
-    character.currentStateValue
   }
 
   get notifications$() {
