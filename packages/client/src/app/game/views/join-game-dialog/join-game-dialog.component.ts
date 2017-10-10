@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { GameService } from '../../services/game.service';
 import { AuthorizationMiddleware } from '../../../core/configured-apollo/network/authorization-middleware';
-import { ApolloQueryResult } from 'apollo-client';
+import { ApolloExecutionResult } from 'apollo-client';
 import { Team } from '../../../types';
 import { MatDialogRef, MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
@@ -49,7 +49,7 @@ export class JoinGameDialogComponent implements OnInit {
   }
 
 
-  getViewerOrPlayerJoin(): Observable<ApolloQueryResult<any>> {
+  getViewerOrPlayerJoin(): Observable<ApolloExecutionResult<any>> {
     if (this.characterName === VIEWER.name) {
       return this.gameService.joinAsViewer(this.gameCode, this.username);
     } else {
@@ -67,9 +67,9 @@ export class JoinGameDialogComponent implements OnInit {
 
     this.getViewerOrPlayerJoin()
       .subscribe(result => {
-        this.loading = result.loading;
+        this.loading = false;
 
-        if (!result.loading && result.data) {
+        if (result.data) {
           const token = result.data.joinAsViewer ? result.data.joinAsViewer.playerToken : result.data.joinGame.playerToken;
           AuthorizationMiddleware.setToken(token);
           this.goToGame();
