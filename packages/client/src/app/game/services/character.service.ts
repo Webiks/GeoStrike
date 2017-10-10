@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { CharacterData, GameFields } from '../../types';
+import { BuildingsService } from './buildings.service';
 
 export enum MeModelState {
   WALKING,
@@ -34,7 +35,7 @@ export class CharacterService {
   private _character = new BehaviorSubject<CharacterState>(null);
   private _viewState = new BehaviorSubject<ViewState>(ViewState.SEMI_FPV);
 
-  constructor() {
+  constructor(private buildingsService: BuildingsService) {
   }
 
   get initialized() {
@@ -163,5 +164,23 @@ export class CharacterService {
       this.location = player.currentLocation.location;
       this.heading = player.currentLocation.heading;
     }
+  }
+
+  public enterBuilding() {
+    this.tileBuilding.show = false;
+    this.enternedBuilding = this.buildingsService.createBuilding(this.nearbyBuildingPosition);
+    this.enteringBuildingPosition = this.location;
+    this.location = this.nearbyBuildingPosition;
+    this.nearbyBuildingPosition = undefined;
+  }
+
+  public exitBuilding() {
+    this.tileBuilding.show = true;
+    this.location = this.enteringBuildingPosition;
+    this.buildingsService.removeBuilding(this.enternedBuilding);
+    this.enternedBuilding = undefined;
+    this.tileBuilding = undefined;
+    this.enteringBuildingPosition = undefined;
+    this.nearbyBuildingPosition = undefined;
   }
 }

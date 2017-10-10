@@ -162,21 +162,11 @@ export class KeyboardControlComponent implements OnInit {
     this.keyboardKeysService.registerKeyBoardEvent('KeyE', 'Enter Nearby Building',
       (keyEvent: KeyboardEvent) => {
         if (this.character.enternedBuilding) {
-          this.character.tileBuilding.show = true;
-          this.character.location = this.character.enteringBuildingPosition;
-          this.buildingsService.removeBuilding(this.character.enternedBuilding);
-          this.character.enternedBuilding = undefined;
-          this.character.tileBuilding = undefined;
-          this.character.enteringBuildingPosition = undefined;
-          this.character.nearbyBuildingPosition = undefined;
+          this.character.exitBuilding();
           this.gameService.updateServerOnPosition(true);
 
         } else if (this.character.nearbyBuildingPosition) {
-          this.character.tileBuilding.show = false;
-          this.character.enternedBuilding = this.buildingsService.createBuilding(this.character.nearbyBuildingPosition);
-          this.character.enteringBuildingPosition = this.character.location;
-          this.character.location = this.character.nearbyBuildingPosition;
-          this.character.nearbyBuildingPosition = undefined;
+          this.character.enterBuilding();
           this.gameService.updateServerOnPosition(true);
         }
       });

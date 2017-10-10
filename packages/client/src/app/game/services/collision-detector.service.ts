@@ -73,7 +73,7 @@ export class CollisionDetectorService {
       this.characterHeadingWhenCollided = this.character.heading;
       if (!this.character.enternedBuilding) {
         const pickedFeature = this.viewer.scene.pick(this.windowCenter, 300, 300);
-        if (pickedFeature && !pickedFeature.mesh && pickedFeature._batchId) {
+        if (pickedFeature && pickedFeature._batchId) {
           const id = pickedFeature._batchId;
           const batchTableJson = pickedFeature._content._batchTable.batchTableJson;
           const latitude = batchTableJson.latitude[id];
