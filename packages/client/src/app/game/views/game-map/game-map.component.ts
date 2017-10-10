@@ -95,11 +95,10 @@ export class GameMapComponent implements OnInit, OnDestroy {
   }
 
   private changeToOverview() {
-    console.log('overview settings');
-    this.overviewSettings();
     this.gameService.stopServerUpdatingLoop();
     this.elementRef.nativeElement.removeEventListener('mousemove', this.onMousemove);
     this.viewer.scene.preRender.removeEventListener(this.preRenderHandler);
+    this.overviewSettings();
   }
 
   private overviewSettings() {
@@ -120,7 +119,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
   }
 
   preRenderHandler() {
-    if (!this.character.initialized) {
+    if (!this.character.initialized || this.character.viewState === ViewState.OVERVIEW) {
       return;
     }
     const isFPV = this.character.viewState === ViewState.FPV;

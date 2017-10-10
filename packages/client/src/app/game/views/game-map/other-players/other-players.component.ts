@@ -67,5 +67,12 @@ export class OtherPlayersComponent {
     return player.team === 'BLUE' ? '/assets/icons/blue-mark.png' : '/assets/icons/red-mark.png';
   }
 
+  getLabelPixelOffset(player: PlayerFields.Fragment){
+    let xOffset = -10;
+    xOffset -= player.character.name.length * 2.5;
+
+    return [xOffset, 45];
+  }
+
 
 }

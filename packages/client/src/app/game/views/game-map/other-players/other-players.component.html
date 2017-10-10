@@ -16,4 +16,15 @@
                       eyeOffset: new Cesium.Cartesian3(0.0, 0.0, -800000.0)
                     }">
   </ac-billboard-primitive-desc>
+  <ac-label-primitive-desc props="{
+                      position: utils.toFixedHeight(player.currentLocation.location),
+                      text: player.character.name,
+                      distanceDisplayCondition : utils.getIconDisplayCondition(),
+                      font: '15px sans-serif',
+                      scale: 0.9,
+                      pixelOffset: getLabelPixelOffset(player) | pixelOffset,
+                      showBackground: true,
+
+                    }">
+  </ac-label-primitive-desc>
 </ac-layer>

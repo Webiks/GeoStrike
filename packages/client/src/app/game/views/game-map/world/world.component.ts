@@ -16,7 +16,7 @@ export class WorldComponent implements OnInit {
       ]
     }
   };
-  public showTiles = true;
+  public hideTiles = false;
 
   constructor(public character: CharacterService) {
   }
@@ -24,7 +24,7 @@ export class WorldComponent implements OnInit {
   ngOnInit() {
 
     this.character.viewState$.subscribe(viewState=> {
-      this.showTiles = viewState !== ViewState.OVERVIEW;
+      this.hideTiles = viewState === ViewState.OVERVIEW;
     })
   }
 
