@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { CharacterData, GameFields } from '../../types';
+import { BuildingsService } from './buildings.service';
 
 export enum MeModelState {
   WALKING,
@@ -22,15 +23,19 @@ export interface CharacterState {
   heading: number;
   pitch: number;
   state: MeModelState;
-  characterInfo: CharacterData
+  characterInfo: CharacterData;
+  tileBuilding: any;
+  nearbyBuildingPosition: Cartesian3;
+  enteringBuildingPosition: Cartesian3;
+  enternedBuilding: any;
 }
 
 @Injectable()
 export class CharacterService {
-  private _character= new BehaviorSubject<CharacterState>(null);
+  private _character = new BehaviorSubject<CharacterState>(null);
   private _viewState = new BehaviorSubject<ViewState>(ViewState.SEMI_FPV);
 
-  constructor() {
+  constructor(private buildingsService: BuildingsService) {
   }
 
   get initialized() {
@@ -71,7 +76,23 @@ export class CharacterService {
     return this._character && this._character.getValue() && this._character.getValue().pitch;
   }
 
-  get state() : MeModelState {
+  get tileBuilding() {
+    return this._character && this._character.getValue() && this._character.getValue().tileBuilding;
+  }
+
+  get nearbyBuildingPosition() {
+    return this._character && this._character.getValue() && this._character.getValue().nearbyBuildingPosition;
+  }
+
+  get enteringBuildingPosition() {
+    return this._character && this._character.getValue() && this._character.getValue().enteringBuildingPosition;
+  }
+
+  get enternedBuilding() {
+    return this._character && this._character.getValue() && this._character.getValue().enternedBuilding;
+  }
+
+  get state(): MeModelState {
     return this._character && this._character.getValue() && this._character.getValue().state;
   }
 
@@ -104,6 +125,30 @@ export class CharacterService {
     });
   }
 
+  set tileBuilding(value: any) {
+    this.modifyCurrentStateValue({
+      tileBuilding: value,
+    });
+  }
+
+  set nearbyBuildingPosition(value: any) {
+    this.modifyCurrentStateValue({
+      nearbyBuildingPosition: value,
+    });
+  }
+
+  set enteringBuildingPosition(value: any) {
+    this.modifyCurrentStateValue({
+      enteringBuildingPosition: value,
+    });
+  }
+
+  set enternedBuilding(value: any) {
+    this.modifyCurrentStateValue({
+      enternedBuilding: value,
+    });
+  }
+
   set state(value: MeModelState) {
     this.modifyCurrentStateValue({
       state: value,
@@ -114,10 +159,28 @@ export class CharacterService {
     this.state = this.state;
   }
 
-  public syncState(player: GameFields.Players){
-    if(this.initialized && player.syncState === 'INVALID'){
+  public syncState(player: GameFields.Players) {
+    if (this.initialized && player.syncState === 'INVALID') {
       this.location = player.currentLocation.location;
       this.heading = player.currentLocation.heading;
     }
+  }
+
+  public enterBuilding() {
+    this.tileBuilding.show = false;
+    this.enternedBuilding = this.buildingsService.createBuilding(this.nearbyBuildingPosition);
+    this.enteringBuildingPosition = this.location;
+    this.location = this.nearbyBuildingPosition;
+    this.nearbyBuildingPosition = undefined;
+  }
+
+  public exitBuilding() {
+    this.tileBuilding.show = true;
+    this.location = this.enteringBuildingPosition;
+    this.buildingsService.removeBuilding(this.enternedBuilding);
+    this.enternedBuilding = undefined;
+    this.tileBuilding = undefined;
+    this.enteringBuildingPosition = undefined;
+    this.nearbyBuildingPosition = undefined;
   }
 }

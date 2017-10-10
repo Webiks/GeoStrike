@@ -7,6 +7,7 @@ import { UtilsService } from '../../services/utils.service';
 import { GameService } from '../../services/game.service';
 import { environment } from '../../../../environments/environment';
 import { CesiumViewerOptionsService } from './viewer-options/cesium-viewer-options.service';
+import { CollisionDetectorService } from '../../services/collision-detector.service';
 
 @Component({
   selector: 'game-map',
@@ -38,7 +39,8 @@ export class GameMapComponent implements OnInit, OnDestroy {
               private elementRef: ElementRef,
               private ngZone: NgZone,
               private cd: ChangeDetectorRef,
-              private viewerOptions: CesiumViewerOptionsService) {
+              private viewerOptions: CesiumViewerOptionsService,
+              private collisionDetector: CollisionDetectorService) {
     viewerConf.viewerOptions = viewerOptions.getViewerOption();
 
     viewerConf.viewerModifier = (viewer) => {
@@ -54,13 +56,14 @@ export class GameMapComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.collisionDetector.init(this.mapInstance.getCesiumSerivce());
     if (this.createPathMode) {
       return;
     }
-    this.character.viewState$.subscribe((viewState)=>{
-       if (viewState === ViewState.OVERVIEW){
-         this.changeToOverview();
-       }
+    this.character.viewState$.subscribe((viewState) => {
+      if (viewState === ViewState.OVERVIEW) {
+        this.changeToOverview();
+      }
     });
     this.gameData.first().subscribe(game => {
       const overviewMode = game.me['__typename'] === 'Viewer' || game.me.type === 'OVERVIEW';
@@ -74,8 +77,8 @@ export class GameMapComponent implements OnInit, OnDestroy {
         location: this.utils.getPosition(game.me.currentLocation.location),
         heading: game.me.currentLocation.heading,
         pitch: GameMapComponent.DEFAULT_PITCH,
-        state: game.me.state === 'DEAD' ? MeModelState.DEAD :MeModelState.WALKING,
-        characterInfo:  game.me.character
+        state: game.me.state === 'DEAD' ? MeModelState.DEAD : MeModelState.WALKING,
+        characterInfo: game.me.character
       });
       this.gameService.startServerUpdatingLoop();
 
@@ -98,7 +101,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
 
   private overviewSettings() {
     this.viewerOptions.setFreeCameraOptions(this.viewer);
-    this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_START_LOCATION});
+    this.viewer.camera.flyTo({ destination: GameMapComponent.DEFAULT_START_LOCATION });
   }
 
   onMousemove(event: MouseEvent) {
@@ -137,10 +140,10 @@ export class GameMapComponent implements OnInit, OnDestroy {
 
     this.viewer.camera.lookAt(playerHead, new Cesium.HeadingPitchRange(heading, pitch, range));
     this.lastPlayerLocation = this.character.location;
-    this.lastPlayerHPR = {heading: this.character.heading, pitch: this.character.pitch, range};
+    this.lastPlayerHPR = { heading: this.character.heading, pitch: this.character.pitch, range };
   }
 
   ngOnDestroy(): void {
-    this.elementRef.nativeElement.removeEventListener('mousemove', this.onMousemove)
+    this.elementRef.nativeElement.removeEventListener('mousemove', this.onMousemove);
   }
 }
