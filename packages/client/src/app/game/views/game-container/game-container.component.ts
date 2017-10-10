@@ -7,13 +7,11 @@ import { Subscription } from 'rxjs/Subscription';
 import { Subject } from 'rxjs/Subject';
 import { AcEntity, AcNotification, ActionType } from 'angular-cesium';
 import { Observable } from 'rxjs/Observable';
-import { EndGameDialogComponent } from '../end-game-dialog/end-game-dialog.component';
 import { MatDialog } from '@angular/material';
-import { CharacterService, MeModelState, ViewState } from '../../services/character.service';
+import { CharacterService, MeModelState } from '../../services/character.service';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/map';
 import * as _ from 'lodash';
-import { YouWinDialogComponent } from '../you-win-dialog/you-win-dialog.component';
 
 @Component({
   selector: 'game-container',
@@ -27,9 +25,9 @@ export class GameContainerComponent implements OnInit, OnDestroy {
   private gameDataSubscription: Subscription;
   private otherPlayers$: Subject<AcNotification> = new Subject<AcNotification>();
   private allPlayers$: Subject<PlayerFields.Fragment[]> = new Subject<PlayerFields.Fragment[]>();
-  private gameoverDialogOpen = false;
-  private wonDialogOpen = false;
+  private gameResult$: Subject<Team> = new Subject();
   private paramsSubscription: Subscription;
+
 
   constructor(private gameService: GameService,
               private character: CharacterService,
@@ -55,16 +53,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
         this.gameDataSubscription = this.gameData$.subscribe(currentGame => {
           this.game = currentGame;
           this.me = currentGame.me;
-
-          if (currentGame.winingTeam !== 'NONE' && (!this.wonDialogOpen && !this.gameoverDialogOpen)) {
-            const loseTeam: Team = currentGame.winingTeam === 'RED' ? 'BLUE' : 'RED';
-            if (currentGame.winingTeam === this.me.team) {
-              this.openWinDialog(loseTeam);
-            } else {
-              // lose dialog
-              this.openGameOverDialog(true, loseTeam);
-            }
-          }
+          this.gameResult$.next(currentGame.winingTeam);
 
           const allPlayers = [...this.game.players];
           if (this.me) {
@@ -75,8 +64,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
               allPlayers.push(this.me);
             }
 
-            if (this.me.state === 'DEAD' && !this.gameoverDialogOpen) {
-              this.openGameOverDialog(false);
+            if (this.me.state === 'DEAD') {
               if (this.character.initialized) {
                 this.character.state = MeModelState.DEAD;
               }
@@ -98,40 +86,12 @@ export class GameContainerComponent implements OnInit, OnDestroy {
     });
   }
 
-
-  private openWinDialog(losingTeam: Team) {
-    this.wonDialogOpen = true;
-    this.dialog.open(YouWinDialogComponent, {
-      height: '80%',
-      width: '80%',
-      disableClose: true,
-      data: {losingTeam},
-    });
-  }
-
-  private openGameOverDialog(gameOver: boolean, losingTeam?: Team) {
-    this.gameoverDialogOpen = true;
-    this.dialog.open(EndGameDialogComponent, {
-      height: '80%',
-      width: '80%',
-      disableClose: true,
-      data: {
-        gameOver,
-        losingTeam
-      }
-    }).afterClosed().subscribe((toOverView) => {
-      if (toOverView) {
-        this.character.viewState = ViewState.OVERVIEW;
-      }
-    });
-  }
-
   ngOnDestroy() {
     if (this.gameDataSubscription) {
       this.gameDataSubscription.unsubscribe();
     }
 
-    if (this.paramsSubscription){
+    if (this.paramsSubscription) {
       this.paramsSubscription.unsubscribe();
     }
   }
