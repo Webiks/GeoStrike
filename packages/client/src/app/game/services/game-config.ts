@@ -1,4 +1,4 @@
-export class GameSettingsService {
+export class GameConfig {
   static serverUpdatingInterval = 200;
   static maxEnterableBuildingSize = 1400;
   static minEnterableBuildingSize = 800;
@@ -8,8 +8,8 @@ export class GameSettingsService {
   static enterableBuildingColor = 'rgb(244, 166, 66)';
   static buildingHeight = 10;
   static wallSize = 0.00010;
-  static windowWidth = GameSettingsService.wallSize / 3;
+  static windowWidth = GameConfig.wallSize / 3;
   static windowHeight = 1.5;
-  static wallOnWindowSides = (GameSettingsService.wallSize - GameSettingsService.windowWidth) / 2;
+  static wallOnWindowSides = (GameConfig.wallSize - GameConfig.windowWidth) / 2;
   static windowHeightFromGround = 1.25;
 }

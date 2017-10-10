@@ -2,7 +2,7 @@ import { v4 } from 'uuid';
 import { sign } from 'jsonwebtoken';
 import { CharacterData, GameState, PlayerState, PlayerSyncState } from '../../types';
 import * as Cesium from 'cesium';
-import { Settings } from '../../settings/settings';
+import { config } from '../../settings/config';
 import { startClientsUpdater, stopClientsUpdater } from '../clients-updater/clients-updater';
 import { BackgroundCharacterManager } from '../background-character/background-character-manager';
 import { PLAYER_CHARACTERS } from './characters';
@@ -58,22 +58,6 @@ export interface IGameObject {
 }
 
 const TOKENS_SECRET = 'sdf43tSWDG#%Tsdfw4';
-
-const DEFAULT_PLAYERS_LOCATION = [
-  { x: 1334783.4002701144, y: -4650320.207361281, z: 4142206.104919172 },
-  { x: 1334734.4041850453, y: -4650448.021286272, z: 4142079.251574431 },
-  { x: 1334743.0138112511, y: -4650448.206585243, z: 4142076.289141699 },
-  { x: 1334812.4342012317, y: -4650321.075155178, z: 4142195.8438288164 },
-];
-
-const DEFAULT_PLAYERS_TERRAIN_LOCATION = [
-  { x: -1371108.6511167218, y: -5508684.080096612, z: 2901825.449865087 },
-  // {x: 968815.8877312046, y: -4760208.079454847, z: 4120764.6170923957},
-  // { x: 1333422.9356770117, y: -4654805.289160995, z: 4137634.8619940765 },
-  { x: 1333372.2794363261, y: -4654805.238712306, z: 4137651.1335756676 },
-  { x: 1333427.435864061, y: -4654696.156980868, z: 4137755.369174167 },
-  { x: 1333425.271653392, y: -4654860.0793055175, z: 4137572.887568583 },
-];
 
 export class GamesManager {
   private activeGames: Map<string, IGameObject> = new Map<string, IGameObject>();
@@ -139,7 +123,7 @@ export class GamesManager {
     );
 
     const realPlayerCount = Array.from(game.playersMap.values()).filter(
-      player => player.type === CharacterType.PLAYER
+      p => p.type === CharacterType.PLAYER
     ).length;
 
     const character = PLAYER_CHARACTERS.find(p => p.name === characterName);
@@ -150,7 +134,7 @@ export class GamesManager {
       username,
       state: 'WAITING',
       game,
-      currentLocation: DEFAULT_PLAYERS_LOCATION[realPlayerCount],
+      currentLocation: config.PLAYERS_SPAWN_POSITIONS[realPlayerCount],
       heading: 0,
       team,
       type: CharacterType.PLAYER,
@@ -275,7 +259,7 @@ export class GamesManager {
       newLocation.z
     );
     const distance = Cesium.Cartesian3.distance(currentPosition, newPosition);
-    return distance < Settings.serverClientDistanceThreshold;
+    return distance < config.serverClientDistanceThreshold;
   }
 
   endGame(gameId: string) {

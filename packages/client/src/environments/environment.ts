@@ -11,4 +11,11 @@ export const environment = {
     walkingSpeed: 0.15,
   },
   createPathMode: false,
+  loadTerrain: false,
+  terrain: {
+    url: 'https://assets.agi.com/stk-terrain/v1/tilesets/world/tiles',
+    // url : 'https://assets.agi.com/stk-terrain/v1/tilesets/PAMAP/tiles',
+    requestWaterMask: true,
+    requestVertexNormals: true
+  }
 };

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CesiumService } from 'angular-cesium';
 import { CharacterService } from './character.service';
-import { GameSettingsService } from './game-settings.service';
+import { GameConfig } from './game-config';
 
 @Injectable()
 export class CollisionDetectorService {
@@ -79,7 +79,8 @@ export class CollisionDetectorService {
           const latitude = batchTableJson.latitude[id];
           const longitude = batchTableJson.longitude[id];
           const area = batchTableJson.area[id];
-          if (area <= GameSettingsService.maxEnterableBuildingSize) {
+          if (area <= GameConfig.maxEnterableBuildingSize &&
+            area >= GameConfig.minEnterableBuildingSize) {
             this.character.nearbyBuildingPosition = Cesium.Cartesian3.fromRadians(longitude, latitude, 0);
             this.character.tileBuilding = pickedFeature;
           }

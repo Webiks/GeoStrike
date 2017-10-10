@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { GameSettingsService } from '../../../services/game-settings.service';
+import { GameConfig } from '../../../services/game-config';
 import { CesiumService } from 'angular-cesium';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'world',
@@ -11,7 +12,7 @@ export class WorldComponent implements OnInit {
   public tilesStyle = {
     color: {
       conditions: [
-        ['${area} <= ' + GameSettingsService.maxEnterableBuildingSize + ' && ${area} > ' + GameSettingsService.minEnterableBuildingSize, GameSettingsService.enterableBuildingColor],
+        ['${area} <= ' + GameConfig.maxEnterableBuildingSize + ' && ${area} > ' + GameConfig.minEnterableBuildingSize, GameConfig.enterableBuildingColor],
         ['true', 'rgb(255, 255, 255)'],
       ]
     }
@@ -21,15 +22,13 @@ export class WorldComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (environment.loadTerrain) {
+      this.loadTerrain();
+    }
   }
 
   loadTerrain() {
-    this.cesiumService.getViewer().terrainProvider = new Cesium.CesiumTerrainProvider({
-      url: 'https://assets.agi.com/stk-terrain/v1/tilesets/world/tiles',
-      // url : 'https://assets.agi.com/stk-terrain/v1/tilesets/PAMAP/tiles',
-      requestWaterMask: true,
-      requestVertexNormals: true
-    });
+    this.cesiumService.getViewer().terrainProvider = new Cesium.CesiumTerrainProvider(environment.terrain);
   }
 
   getTilesMatrix() {

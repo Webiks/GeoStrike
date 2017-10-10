@@ -34,7 +34,6 @@ export class KeyboardControlComponent implements OnInit {
               private cesiumService: CesiumService,
               private keyboardKeysService: KeyboardKeysService,
               private gameService: GameService,
-              private buildingsService: BuildingsService,
               private collisionDetector: CollisionDetectorService,
               private ngZone: NgZone) {
     this.viewer = cesiumService.getViewer();

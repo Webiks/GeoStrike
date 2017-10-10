@@ -8,7 +8,7 @@ import 'rxjs/add/observable/fromEvent';
 import { Subscription } from 'rxjs/Subscription';
 import { GameService } from '../../../services/game.service';
 import { CharacterData } from '../../../../types';
-import { BasicDesc } from 'angular-cesium/src/services/basic-desc/basic-desc.service';
+import { BasicDesc } from 'angular-cesium/src/angular-cesium/services/basic-desc/basic-desc.service';
 
 @Component({
   selector: 'me',

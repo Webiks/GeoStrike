@@ -13,7 +13,7 @@ import 'rxjs/add/operator/share';
 import { updatePositionMutation } from '../../graphql/update-position.mutation';
 import { ApolloService } from '../../core/configured-apollo/network/apollo.service';
 import { notifyKillMutation } from '../../graphql/notify-kill.mutation';
-import { GameSettingsService } from './game-settings.service';
+import { GameConfig } from './game-config';
 import { CharacterService } from './character.service';
 import { joinAsViewer } from '../../graphql/join-as-viewer.mutation';
 
@@ -84,7 +84,7 @@ export class GameService {
 
   startServerUpdatingLoop() {
     this.serverPositionUpdateInterval =
-      setInterval(() => this.updateServerOnPosition(), GameSettingsService.serverUpdatingInterval);
+      setInterval(() => this.updateServerOnPosition(), GameConfig.serverUpdatingInterval);
   }
 
   stopServerUpdatingLoop() {
