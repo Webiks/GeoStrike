@@ -27,7 +27,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
   private gameDataSubscription: Subscription;
   private otherPlayers$: Subject<AcNotification> = new Subject<AcNotification>();
   private allPlayers$: Subject<PlayerFields.Fragment[]> = new Subject<PlayerFields.Fragment[]>();
-  private killedDialogOpen = false;
+  private gameoverDialogOpen = false;
   private wonDialogOpen = false;
   private paramsSubscription: Subscription;
 
@@ -56,13 +56,13 @@ export class GameContainerComponent implements OnInit, OnDestroy {
           this.game = currentGame;
           this.me = currentGame.me;
 
-          if (currentGame.winingTeam !== 'NONE' && !this.wonDialogOpen) {
+          if (currentGame.winingTeam !== 'NONE' && (!this.wonDialogOpen && !this.gameoverDialogOpen)) {
             const loseTeam: Team = currentGame.winingTeam === 'RED' ? 'BLUE' : 'RED';
             if (currentGame.winingTeam === this.me.team) {
               this.openWinDialog(loseTeam);
             } else {
               // lose dialog
-              console.log('lose dialog');
+              this.openGameOverDialog(true, loseTeam);
             }
           }
 
@@ -75,8 +75,8 @@ export class GameContainerComponent implements OnInit, OnDestroy {
               allPlayers.push(this.me);
             }
 
-            if (this.me.state === 'DEAD' && !this.killedDialogOpen) {
-              this.openKilledDialog();
+            if (this.me.state === 'DEAD' && !this.gameoverDialogOpen) {
+              this.openGameOverDialog(false);
               if (this.character.initialized) {
                 this.character.state = MeModelState.DEAD;
               }
@@ -109,13 +109,16 @@ export class GameContainerComponent implements OnInit, OnDestroy {
     });
   }
 
-  private openKilledDialog() {
-    this.killedDialogOpen = true;
+  private openGameOverDialog(gameOver: boolean, losingTeam?: Team) {
+    this.gameoverDialogOpen = true;
     this.dialog.open(EndGameDialogComponent, {
-      height: '30%',
-      width: '60%',
+      height: '80%',
+      width: '80%',
       disableClose: true,
-      panelClass: 'general-dialog',
+      data: {
+        gameOver,
+        losingTeam
+      }
     }).afterClosed().subscribe((toOverView) => {
       if (toOverView) {
         this.character.viewState = ViewState.OVERVIEW;
