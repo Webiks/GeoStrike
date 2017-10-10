@@ -240,13 +240,15 @@ export class GamesManager {
 
     const bluePlayers = players.filter(p => p.team === Team.BLUE);
     const deadBlues = bluePlayers.filter(p => p.state === 'DEAD').length;
+    const bluePlayersCount = bluePlayers.length;
 
     const redPlayers = players.filter(p => p.team === Team.RED);
     const deadReds = bluePlayers.filter(p => p.state === 'DEAD').length;
+    const redPlayersCount = redPlayers.length;
 
-    if (deadBlues === bluePlayers.length) {
+    if (bluePlayersCount && deadBlues === bluePlayersCount) {
       game.winingTeam = Team.RED;
-    } else if (deadReds === redPlayers.length) {
+    } else if (redPlayersCount && deadReds === redPlayersCount) {
       game.winingTeam = Team.BLUE;
     }
   }
