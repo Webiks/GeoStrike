@@ -111,13 +111,6 @@ export class MeComponent implements OnInit, OnDestroy {
     this.cesiumService.getViewer().canvas.click();
   }
 
-  getPlayerIcon(player: CharacterState) {
-    if (player.characterInfo.iconUrl) {
-      return player.characterInfo.iconUrl;
-    }
-    return '/assets/icons/grey-mark.png';
-  }
-
   getOrientation(location, heading: number, player: CharacterState) {
     if (player.state === MeModelState.DEAD) {
       return this.utils.getOrientation(location, heading, 0, 90);
