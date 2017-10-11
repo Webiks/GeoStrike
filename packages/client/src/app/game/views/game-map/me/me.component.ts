@@ -30,7 +30,7 @@ export class MeComponent implements OnInit, OnDestroy {
   ViewState = ViewState;
   buildingNearby = false;
   insideBuilding = false;
-  transparentColor = new Cesium.Color(0, 0, 0, 0.01);
+  transparentColor = new Cesium.Color(0, 0, 0, 0.0001);
   normalColor = new Cesium.Color(1, 1, 1, 1);
 
   constructor(private character: CharacterService,
