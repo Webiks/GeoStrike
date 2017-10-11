@@ -40,7 +40,8 @@ export class OtherPlayersComponent {
 
   getOrientation(location, heading: number, player: PlayerFields.Fragment) {
     if (player.state === 'DEAD') {
-      return this.utils.getOrientation(location, heading, 0, 90);
+      const roll = player.character.name !== 'car' ? 90 : 10;
+      return this.utils.getOrientation(location, heading, 0, roll);
     } else {
       const playerHeading = player.type === 'PLAYER' ? heading : heading + 90;
       return this.utils.getOrientation(location, playerHeading);
