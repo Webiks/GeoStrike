@@ -48,6 +48,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
       this.viewer = viewer;
       this.helperEntityPoint = this.viewer.entities.add({
         point : {
+          position: new Cesium.Cartesian3(),
           pixelSize : 1,
           color : Cesium.Color.TRANSPARENT,
           heightReference: Cesium.HeightReference.RELATIVE_TO_GROUND

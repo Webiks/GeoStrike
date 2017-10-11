@@ -3,8 +3,8 @@ import { AcNotification } from 'angular-cesium';
 import { Observable } from 'rxjs/Observable';
 import { UtilsService } from '../../../services/utils.service';
 import { InterpolationService, InterpolationType } from '../../../services/interpolation.service';
-import { PlayerFields } from '../../../../types';
-import { CharacterService } from '../../../services/character.service';
+import { PlayerFields, } from '../../../../types';
+import { CharacterService, ViewState } from '../../../services/character.service';
 
 @Component({
   selector: 'other-players',
@@ -15,7 +15,10 @@ export class OtherPlayersComponent {
   playersPositionMap = new Map<string, any>();
   Cesium = Cesium;
 
+  isOverview$: Observable<boolean>;
+
   constructor(public utils: UtilsService, public character: CharacterService) {
+    this.isOverview$ = character.viewState$.map(viewState => viewState === ViewState.OVERVIEW);
   }
 
   interpolatePlayerPosition(playerId, playerPosition) {

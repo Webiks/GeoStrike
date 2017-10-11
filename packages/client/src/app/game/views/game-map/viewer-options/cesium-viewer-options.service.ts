@@ -3,6 +3,8 @@ import { GameConfig } from '../../../services/game-config';
 
 @Injectable()
 export class CesiumViewerOptionsService {
+  static readonly MAX_ZOOM = 5000;
+  static readonly MIN_ZOOM = 80;
 
   constructor() {
   }
@@ -40,6 +42,9 @@ export class CesiumViewerOptionsService {
     screenSpaceCameraController.enableZoom = false;
     const canvas = viewer.canvas;
     canvas.onclick = () => canvas.requestPointerLock();
+
+    viewer.scene.screenSpaceCameraController.minimumZoomDistance = 1.0;
+    viewer.scene.screenSpaceCameraController.maximumZoomDistance = Number.POSITIVE_INFINITY;
   }
 
   setFreeCameraOptions(viewer) {
@@ -50,6 +55,9 @@ export class CesiumViewerOptionsService {
     document.exitPointerLock();
     const canvas = viewer.canvas;
     canvas.onclick = () => null;
+
+    viewer.scene.screenSpaceCameraController.minimumZoomDistance = CesiumViewerOptionsService.MIN_ZOOM;
+    viewer.scene.screenSpaceCameraController.maximumZoomDistance = CesiumViewerOptionsService.MAX_ZOOM;
   }
 
 }
