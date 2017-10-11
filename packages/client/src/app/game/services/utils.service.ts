@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CharacterService, ViewState } from './character.service';
+import { CharacterService } from './character.service';
 
 @Injectable()
 export class UtilsService {
@@ -26,22 +26,6 @@ export class UtilsService {
     return new Cesium.Cartesian3(x, y, z);
   }
 
-  getModelDisplayCondition() {
-    if (this.character.viewState === ViewState.OVERVIEW) {
-      return new Cesium.DistanceDisplayCondition(0.0, 125.5);
-    } else {
-
-      return new Cesium.DistanceDisplayCondition();
-    }
-  }
-
-  getIconDisplayCondition() {
-    if (this.character.viewState === ViewState.OVERVIEW) {
-      return new Cesium.DistanceDisplayCondition(50);
-    } else {
-      return new Cesium.DistanceDisplayCondition(Number.MAX_VALUE);
-    }
-  }
 
   toFixedHeight(cartesian, height = 0) {
     const cart = Cesium.Cartographic.fromCartesian(cartesian);
