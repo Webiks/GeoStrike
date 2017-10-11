@@ -37,15 +37,15 @@ export class UtilsService {
 
   getIconDisplayCondition() {
     if (this.character.viewState === ViewState.OVERVIEW) {
-      return new Cesium.DistanceDisplayCondition(125.5);
+      return new Cesium.DistanceDisplayCondition(50);
     } else {
       return new Cesium.DistanceDisplayCondition(Number.MAX_VALUE);
     }
   }
 
-  toFixedHeight(cartesian) {
+  toFixedHeight(cartesian, height = 0) {
     const cart = Cesium.Cartographic.fromCartesian(cartesian);
-    cart.height = 10;
+    cart.height = height;
     return Cesium.Cartesian3.fromRadians(cart.longitude, cart.latitude, cart.height);
 
   }
