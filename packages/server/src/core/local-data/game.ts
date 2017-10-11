@@ -28,7 +28,7 @@ export enum CharacterType {
 
 export interface IViewer {
   token: string;
-  id: string;
+  playerId: string;
   username: string;
 }
 
@@ -56,6 +56,7 @@ export interface IGameObject {
   clientsUpdaterId?: Timer;
   bgCharactersManager: BackgroundCharacterManager;
   winingTeam: Team,
+  controlledPlayersMap: Map<string, IPlayer>
 }
 
 const TOKENS_SECRET = 'sdf43tSWDG#%Tsdfw4';
@@ -101,7 +102,7 @@ export class GamesManager {
 
     const viewer = {
       token: playerToken,
-      id: playerId,
+      playerId,
       username,
     };
     game.viewers.push(viewer);
@@ -161,6 +162,7 @@ export class GamesManager {
       bgCharactersManager,
       viewers: [],
       winingTeam: Team.NONE,
+      controlledPlayersMap: new Map<string, IPlayer>(),
     };
     startClientsUpdater(gameObject);
     this.activeGames.set(gameId, gameObject);
@@ -205,7 +207,7 @@ export class GamesManager {
                        isCrawling: boolean,
                        skipValidation = false) {
     const game = this.getGameById(gameId);
-    const player = game.playersMap.get(playerId);
+    const player = game.controlledPlayersMap.get(playerId) || game.playersMap.get(playerId);
     if (player && position) {
       if (
         skipValidation ||
@@ -223,7 +225,7 @@ export class GamesManager {
 
   updatePlayerState(gameId: string, playerId: string, newState: PlayerState) {
     const game = this.getGameById(gameId);
-    const player = game.playersMap.get(playerId);
+    const player = game.controlledPlayersMap.get(playerId) || game.playersMap.get(playerId);
     if (player) {
       player.state = newState;
     }
@@ -278,4 +280,17 @@ export class GamesManager {
     stopClientsUpdater(game);
     this.activeGames.delete(gameId);
   }
+
+  takeControlOverPlayer(game, playerId: string, controlledPlayerId: string): IPlayer {
+    const controlledPlayer = game.playersMap.get(controlledPlayerId);
+    game.controlledPlayersMap.set(playerId, controlledPlayer);
+    return controlledPlayer;
+  }
+
+  removeControlOverPlayer(game, playerId: string): IPlayer {
+    const controlledPlayer = game.controlledPlayersMap.get(playerId);
+    game.controlledPlayersMap.delete(playerId);
+    return controlledPlayer;
+  }
+
 }

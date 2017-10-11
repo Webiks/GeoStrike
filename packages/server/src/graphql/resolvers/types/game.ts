@@ -8,8 +8,8 @@ const resolvers = {
     players: (game: IGameObject, args, { player }) => {
       const players = Array.from(game.playersMap.values());
       if (player) {
-
-        return players.filter((p: IPlayer) => p.playerId !== player.playerId);
+        const controlledPlayer = game.controlledPlayersMap.get(player.playerId);
+        return players.filter((p: IPlayer) => p !== player && p !== controlledPlayer);
       }
 
       return players || [];
