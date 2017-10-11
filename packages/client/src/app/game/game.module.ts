@@ -37,6 +37,7 @@ import { GameToolbarComponent } from './views/game-container/game-toolbar/game-t
 import { TeamInfoBarComponent } from './views/game-container/team-info-bar/team-info-bar.component';
 import { PlayerDetailsComponent } from './views/game-container/player-details/player-details.component';
 import { YouWinDialogComponent } from './views/you-win-dialog/you-win-dialog.component';
+import { GameDialogsComponent } from './views/game-container/game-dialogs/game-dialogs.component';
 import { BuildingsComponent } from './views/buildings/buildings.component';
 import { BuildingsService } from './services/buildings.service';
 import { CollisionDetectorService } from './services/collision-detector.service';
@@ -63,6 +64,7 @@ import { CollisionDetectorService } from './services/collision-detector.service'
     PlayerDetailsComponent,
     YouWinDialogComponent,
     BuildingsComponent,
+    GameDialogsComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { GameSettingsService } from '../../../services/game-settings.service';
+import { CharacterService, ViewState } from '../../../services/character.service';
 import { GameConfig } from '../../../services/game-config';
 import { CesiumService } from 'angular-cesium';
 import { environment } from '../../../../../environments/environment';
@@ -17,14 +19,19 @@ export class WorldComponent implements OnInit {
       ]
     }
   };
+  public hideTiles = false;
 
-  constructor(private cesiumService: CesiumService) {
+  constructor(private cesiumService: CesiumService, public character: CharacterService) {
   }
 
   ngOnInit() {
     if (environment.loadTerrain) {
       this.loadTerrain();
     }
+
+    this.character.viewState$.subscribe(viewState => {
+      this.hideTiles = viewState === ViewState.OVERVIEW;
+    });
   }
 
   loadTerrain() {

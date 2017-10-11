@@ -84,8 +84,8 @@ export class MeComponent implements OnInit, OnDestroy {
         this.buildingNearby = !!state.nearbyBuildingPosition;
         this.cd.detectChanges();
       }
-      if (state && this.insideBuilding !== !!state.enternedBuilding) {
-        this.insideBuilding = !!state.enternedBuilding;
+      if (state && this.insideBuilding !== !!state.enteredBuilding) {
+        this.insideBuilding = !!state.enteredBuilding;
         this.cd.detectChanges();
       }
     });

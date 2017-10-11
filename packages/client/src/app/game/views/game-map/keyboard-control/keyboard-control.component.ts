@@ -4,7 +4,6 @@ import { CharacterService, MeModelState, ViewState, } from '../../../services/ch
 import { environment } from '../../../../../environments/environment';
 import { KeyboardKeysService } from '../../../../core/services/keyboard-keys.service';
 import { GameService } from '../../../services/game.service';
-import { BuildingsService } from '../../../services/buildings.service';
 import { CollisionDetectorService } from '../../../services/collision-detector.service';
 
 const Direction = {
@@ -44,10 +43,11 @@ export class KeyboardControlComponent implements OnInit {
     return {
       validation: () => {
         return (
-          this.character.state === MeModelState.RUNNING ||
-          this.character.state === MeModelState.WALKING ||
-          this.character.state === MeModelState.SHOOTING ||
-          this.character.state === MeModelState.CRAWLING
+          this.character.viewState !== ViewState.OVERVIEW &&
+          (this.character.state === MeModelState.RUNNING ||
+            this.character.state === MeModelState.WALKING ||
+            this.character.state === MeModelState.SHOOTING ||
+            this.character.state === MeModelState.CRAWLING)
         );
       },
       action: () => {
@@ -85,6 +85,9 @@ export class KeyboardControlComponent implements OnInit {
   }
 
   changeViewMove() {
+    if (this.character.viewState === ViewState.OVERVIEW) {
+      return;
+    }
     this.character.state = MeModelState.WALKING;
     let newState = ViewState.SEMI_FPV;
     if (this.character.viewState === ViewState.SEMI_FPV) {
@@ -95,6 +98,9 @@ export class KeyboardControlComponent implements OnInit {
   }
 
   changeMeShootState() {
+    if (this.character.viewState === ViewState.OVERVIEW) {
+      return;
+    }
     let newState = MeModelState.WALKING;
     if (this.character.state !== MeModelState.SHOOTING) {
       newState = MeModelState.SHOOTING;

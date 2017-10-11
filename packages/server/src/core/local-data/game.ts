@@ -239,10 +239,16 @@ export class GamesManager {
     const deadReds = redPlayers.filter(p => p.state === 'DEAD').length;
     const redPlayersCount = redPlayers.length;
 
+    let winingTeam = null;
     if (bluePlayersCount && deadBlues === bluePlayersCount) {
-      game.winingTeam = Team.RED;
+      winingTeam = Team.RED;
     } else if (redPlayersCount && deadReds === redPlayersCount) {
-      game.winingTeam = Team.BLUE;
+      winingTeam = Team.BLUE;
+    }
+
+    if (winingTeam) {
+      game.winingTeam = winingTeam;
+      setTimeout(() => this.endGame(game.gameId), Settings.clientsUpdateRate * 10);
     }
   }
 

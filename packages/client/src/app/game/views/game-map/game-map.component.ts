@@ -76,6 +76,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
     this.gameData.first().subscribe(game => {
       const overviewMode = game.me['__typename'] === 'Viewer' || game.me.type === 'OVERVIEW';
       if (overviewMode) {
+        this.character.viewState = ViewState.OVERVIEW;
         this.overviewSettings();
         return;
       }
@@ -86,7 +87,8 @@ export class GameMapComponent implements OnInit, OnDestroy {
         heading: game.me.currentLocation.heading,
         pitch: GameMapComponent.DEFAULT_PITCH,
         state: game.me.state === 'DEAD' ? MeModelState.DEAD : MeModelState.WALKING,
-        characterInfo: game.me.character
+        team: game.me.team,
+        characterInfo:  game.me.character
       });
       this.gameService.startServerUpdatingLoop();
 
@@ -101,10 +103,10 @@ export class GameMapComponent implements OnInit, OnDestroy {
   }
 
   private changeToOverview() {
-    this.overviewSettings();
     this.gameService.stopServerUpdatingLoop();
     this.elementRef.nativeElement.removeEventListener('mousemove', this.onMousemove);
     this.viewer.scene.preRender.removeEventListener(this.preRenderHandler);
+    this.overviewSettings();
   }
 
   private overviewSettings() {
@@ -125,7 +127,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
   }
 
   preRenderHandler() {
-    if (!this.character.initialized) {
+    if (!this.character.initialized || this.character.viewState === ViewState.OVERVIEW) {
       return;
     }
     const isFPV = this.character.viewState === ViewState.FPV;

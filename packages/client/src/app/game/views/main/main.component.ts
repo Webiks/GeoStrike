@@ -29,8 +29,6 @@ export class MainComponent {
 
   openJoinGameDialog() {
     this.dialog.open(JoinGameDialogComponent, {
-      panelClass: 'general-dialog',
-
     });
   }
 
