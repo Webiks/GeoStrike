@@ -12,4 +12,9 @@ export class GameConfig {
   static windowHeight = 1.5;
   static wallOnWindowSides = (GameConfig.wallSize - GameConfig.windowWidth) / 2;
   static windowHeightFromGround = 1.25;
+
+  // Graphics
+  static terrainShadows = Cesium.ShadowMode.DISABLED;
+  static enableLighting = false;
+  static fog = false;
 }
