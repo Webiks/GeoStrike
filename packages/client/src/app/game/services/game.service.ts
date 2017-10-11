@@ -108,6 +108,7 @@ export class GameService {
   createState() {
     const location = this.character.location;
     const heading = this.character.heading;
+    const isCrawling = this.character.isCrawling;
     if (!location || !heading) {
       return;
     }
@@ -119,6 +120,7 @@ export class GameService {
         z: location.z,
       },
       heading,
+      isCrawling,
     };
   }
 
@@ -128,13 +130,16 @@ export class GameService {
     }
     const oldStatePosition = this.lastStateSentToServer.position;
     const oldStateHeading = this.lastStateSentToServer.heading;
+    const oldStateCrawling = this.lastStateSentToServer.isCrawling;
     const newStatePosition = state.position;
     const newStateHeading = state.heading;
+    const newStateCrawling = state.isCrawling;
     return (
       oldStatePosition.x !== newStatePosition.x ||
       oldStatePosition.y !== newStatePosition.y ||
       oldStatePosition.z !== newStatePosition.z ||
-      oldStateHeading !== newStateHeading
+      oldStateHeading !== newStateHeading ||
+      oldStateCrawling !== newStateCrawling
     );
   }
 

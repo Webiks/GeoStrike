@@ -2,8 +2,8 @@ import { config } from '../../settings/config';
 import { CharacterType, GamesManager, ICartesian3Location, IGameObject, IPlayer, Team, } from '../local-data/game';
 import { PathNode, PATHS_GRAPHS } from './path-node';
 import * as Cesium from 'cesium';
-import v4 = require('uuid/v4');
 import { PLAYER_CHARACTERS } from '../local-data/characters';
+import v4 = require('uuid/v4');
 
 const BG_CHARACTER_TYPES = [
   {
@@ -74,6 +74,7 @@ export class BackgroundCharacterManager {
       team: Team.NONE,
       type: CharacterType.BACKGROUND_CHARACTER,
       syncState: 'VALID',
+      isCrawling: false,
     } as IPlayer;
 
     const nextLocationNode = this.getRandomLocation(currentPath.points);
@@ -103,7 +104,8 @@ export class BackgroundCharacterManager {
             characterId,
             nextLocation,
             heading,
-            true
+            false,
+            true,
           );
         }
       });

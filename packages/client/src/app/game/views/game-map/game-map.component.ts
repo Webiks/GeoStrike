@@ -90,6 +90,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
         pitch: GameMapComponent.DEFAULT_PITCH,
         state: game.me.state === 'DEAD' ? MeModelState.DEAD : MeModelState.WALKING,
         team: game.me.team,
+        isCrawling: false,
         characterInfo: game.me.character
       });
       this.gameService.startServerUpdatingLoop();

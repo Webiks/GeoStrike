@@ -23,6 +23,7 @@ export interface Player extends User {
   username?: string; 
   character: CharacterData; 
   state: PlayerState; 
+  isCrawling: boolean; 
   isMe: boolean; 
   currentLocation: PlayerLocation; 
   team: Team; 
@@ -100,6 +101,7 @@ export interface JoinAsViewerMutationArgs {
 export interface UpdatePositionMutationArgs {
   position: LocationInput; 
   heading: number; 
+  isCrawling: boolean; 
   skipValidation?: boolean; 
 }
 export interface NotifyKillMutationArgs {

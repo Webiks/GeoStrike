@@ -38,6 +38,7 @@ export interface IPlayer {
   character: CharacterData;
   username: string;
   state: PlayerState;
+  isCrawling: boolean;
   game: IGameObject;
   currentLocation: ICartesian3Location;
   heading: number;
@@ -138,6 +139,7 @@ export class GamesManager {
       heading: 0,
       team,
       type: CharacterType.PLAYER,
+      isCrawling: false,
       syncState: 'VALID',
     };
 
@@ -200,6 +202,7 @@ export class GamesManager {
                        playerId: string,
                        position: ICartesian3Location,
                        heading: number,
+                       isCrawling: boolean,
                        skipValidation = false) {
     const game = this.getGameById(gameId);
     const player = game.playersMap.get(playerId);
@@ -211,6 +214,7 @@ export class GamesManager {
         player.syncState = 'VALID';
         player.currentLocation = position;
         player.heading = heading;
+        player.isCrawling = isCrawling;
       } else {
         player.syncState = 'INVALID';
       }

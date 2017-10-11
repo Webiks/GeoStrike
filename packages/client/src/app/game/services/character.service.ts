@@ -22,7 +22,7 @@ export interface CharacterState {
   heading: number;
   pitch: number;
   state: MeModelState;
-  crawling: boolean,
+  isCrawling: boolean,
   team: Team;
   characterInfo: PlayerFields.Character;
   tileBuilding: any;
@@ -53,12 +53,12 @@ export class CharacterService {
   }
 
   get isCrawling(){
-    return this._character.getValue().crawling;
+    return this._character.getValue().isCrawling;
   }
 
   set isCrawling(value: boolean){
     this.modifyCurrentStateValue({
-      crawling: value,
+      isCrawling: value,
     });
   }
 
