@@ -41,10 +41,12 @@ export class OtherPlayersComponent {
 
   getOrientation(location, heading: number, player: PlayerFields.Fragment) {
     if (player.state === 'DEAD') {
-      return this.utils.getOrientation(location, heading, 0, 90);
+      const roll = player.character.name !== 'car' ? 90 : 10;
+      return this.utils.getOrientation(location, heading, 0, roll);
     } else {
       const playerHeading = player.type === 'PLAYER' ? heading : heading + 90;
-      return this.utils.getOrientation(location, playerHeading);
+      const roll = player.isCrawling ? 85: 0;
+      return this.utils.getOrientation(location, playerHeading,0,roll);
     }
   }
 
@@ -65,10 +67,6 @@ export class OtherPlayersComponent {
 
   runAnimation(player: PlayerFields.Fragment) {
     return player.state === 'DEAD';
-  }
-
-  getIconPic(player: PlayerFields.Fragment) {
-    return player.team === 'BLUE' ? '/assets/icons/blue-mark.png' : '/assets/icons/red-mark.png';
   }
 
   getLabelPixelOffset(player: PlayerFields.Fragment) {

@@ -32,6 +32,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
   private viewer: any;
   private lastPlayerLocation;
   private lastPlayerHPR: { heading: number, pitch: number, range: number };
+  private lastPlayerHead;
   private helperEntityPoint;
 
   constructor(private gameService: GameService,
@@ -107,6 +108,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
       pitch: GameMapComponent.DEFAULT_PITCH,
       state: player.state === 'DEAD' ? MeModelState.DEAD : MeModelState.WALKING,
       team: player.team,
+      isCrawling: false,
       characterInfo: player.character
     });
     this.character.viewState = ViewState.SEMI_FPV;
@@ -151,23 +153,27 @@ export class GameMapComponent implements OnInit, OnDestroy {
     }
     const isFPV = this.character.viewState === ViewState.FPV;
     const isShooting = this.character.state === MeModelState.SHOOTING;
+    const isCrawling = this.character.isCrawling;
     const range = isFPV || isShooting ? 0.1 : 3;
+
+    const playerHeadCart = Cesium.Cartographic.fromCartesian(this.character.location);
+    playerHeadCart.height += isCrawling ? 2 : 4;
 
     if (this.lastPlayerLocation === this.character.location &&
       this.lastPlayerHPR.heading === this.character.heading &&
       this.lastPlayerHPR.pitch === this.character.pitch &&
-      this.lastPlayerHPR.range === range) {
+      this.lastPlayerHPR.range === range &&
+      this.lastPlayerHead === playerHeadCart) {
       return;
     }
 
     const pitchDeg = this.character.pitch;
     const pitch = Cesium.Math.toRadians(pitchDeg);
     const heading = Cesium.Math.toRadians(-180 + this.character.heading);
-    const playerHeadCart = Cesium.Cartographic.fromCartesian(this.character.location);
-    playerHeadCart.height += 4;
     this.helperEntityPoint.position = Cesium.Cartesian3.fromRadians(playerHeadCart.longitude, playerHeadCart.latitude, playerHeadCart.height);
     this.viewer.zoomTo([this.character.entity, this.helperEntityPoint], new Cesium.HeadingPitchRange(heading, pitch, range));
     this.lastPlayerLocation = this.character.location;
+    this.lastPlayerHead = playerHeadCart;
     this.lastPlayerHPR = {heading: this.character.heading, pitch: this.character.pitch, range};
   }
 

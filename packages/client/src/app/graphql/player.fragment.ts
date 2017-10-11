@@ -13,6 +13,7 @@ export const playerFragment = gql`
       iconUrl
     }
     state
+    isCrawling
     isMe
     id
     type 
