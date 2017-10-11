@@ -7,9 +7,9 @@ const resolvers = {
     gameCode: (game: IGameObject) => game.gameCode,
     players: (game: IGameObject, args, { player }) => {
       const players = Array.from(game.playersMap.values());
+      const controlledPlayer = game.controlledPlayersMap.get(player.playerId);
       if (player) {
-
-        return players.filter((p: IPlayer) => p.playerId !== player.playerId);
+        return players.filter((p: IPlayer) => p !== player && p !== controlledPlayer);
       }
 
       return players || [];
