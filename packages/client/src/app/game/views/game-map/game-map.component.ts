@@ -31,6 +31,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
   private viewer: any;
   private lastPlayerLocation;
   private lastPlayerHPR: { heading: number, pitch: number, range: number };
+  private lastPlayerState: MeModelState;
   private helperEntityPoint;
 
   constructor(private gameService: GameService,
@@ -47,10 +48,10 @@ export class GameMapComponent implements OnInit, OnDestroy {
     viewerConf.viewerModifier = (viewer) => {
       this.viewer = viewer;
       this.helperEntityPoint = this.viewer.entities.add({
-        point : {
+        point: {
           position: new Cesium.Cartesian3(),
-          pixelSize : 1,
-          color : Cesium.Color.TRANSPARENT,
+          pixelSize: 1,
+          color: Cesium.Color.TRANSPARENT,
           heightReference: Cesium.HeightReference.RELATIVE_TO_GROUND
         }
       });
@@ -89,7 +90,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
         pitch: GameMapComponent.DEFAULT_PITCH,
         state: game.me.state === 'DEAD' ? MeModelState.DEAD : MeModelState.WALKING,
         team: game.me.team,
-        characterInfo:  game.me.character
+        characterInfo: game.me.character
       });
       this.gameService.startServerUpdatingLoop();
 
@@ -112,7 +113,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
 
   private overviewSettings() {
     this.viewerOptions.setFreeCameraOptions(this.viewer);
-    this.viewer.camera.flyTo({ destination: GameMapComponent.DEFAULT_START_LOCATION });
+    this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_START_LOCATION});
   }
 
   onMousemove(event: MouseEvent) {
@@ -133,24 +134,27 @@ export class GameMapComponent implements OnInit, OnDestroy {
     }
     const isFPV = this.character.viewState === ViewState.FPV;
     const isShooting = this.character.state === MeModelState.SHOOTING;
+    const isCrawling = this.character.state === MeModelState.CRAWLING;
     const range = isFPV || isShooting ? 0.1 : 3;
 
-    if (this.lastPlayerLocation === this.character.location &&
-      this.lastPlayerHPR.heading === this.character.heading &&
-      this.lastPlayerHPR.pitch === this.character.pitch &&
-      this.lastPlayerHPR.range === range) {
-      return;
-    }
+    // if (this.lastPlayerLocation === this.character.location &&
+    //   this.lastPlayerHPR.heading === this.character.heading &&
+    //   this.lastPlayerHPR.pitch === this.character.pitch &&
+    //   this.lastPlayerHPR.range === range &&
+    //   this.lastPlayerState === this.character.state) {
+    //   return;
+    // }
 
     const pitchDeg = this.character.pitch;
     const pitch = Cesium.Math.toRadians(pitchDeg);
     const heading = Cesium.Math.toRadians(-180 + this.character.heading);
-    const playerHeadCart =  Cesium.Cartographic.fromCartesian(this.character.location);
-    playerHeadCart.height += 4;
+    const playerHeadCart = Cesium.Cartographic.fromCartesian(this.character.location);
+    playerHeadCart.height += isCrawling ? 3 : 4;
     this.helperEntityPoint.position = Cesium.Cartesian3.fromRadians(playerHeadCart.longitude, playerHeadCart.latitude, playerHeadCart.height);
     this.viewer.zoomTo([this.character.entity, this.helperEntityPoint], new Cesium.HeadingPitchRange(heading, pitch, range));
     this.lastPlayerLocation = this.character.location;
-    this.lastPlayerHPR = { heading: this.character.heading, pitch: this.character.pitch, range };
+    this.lastPlayerState = this.character.state;
+    this.lastPlayerHPR = {heading: this.character.heading, pitch: this.character.pitch, range};
   }
 
   ngOnDestroy(): void {
