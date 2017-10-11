@@ -46,8 +46,7 @@ export class KeyboardControlComponent implements OnInit {
           this.character.viewState !== ViewState.OVERVIEW &&
           (this.character.state === MeModelState.RUNNING ||
             this.character.state === MeModelState.WALKING ||
-            this.character.state === MeModelState.SHOOTING ||
-            this.character.state === MeModelState.CRAWLING)
+            this.character.state === MeModelState.SHOOTING)
         );
       },
       action: () => {
@@ -57,7 +56,9 @@ export class KeyboardControlComponent implements OnInit {
         if (this.character.state === MeModelState.RUNNING) {
           speed = environment.movement.runningSpeed;
         }
-
+        if (this.character.isCrawling) {
+          speed = environment.movement.crawlingSpeed;
+        }
 
         const nextLocation = GeoUtilsService.pointByLocationDistanceAndAzimuth(
           position,
@@ -89,6 +90,7 @@ export class KeyboardControlComponent implements OnInit {
       return;
     }
     this.character.state = MeModelState.WALKING;
+    this.character.isCrawling = false;
     let newState = ViewState.SEMI_FPV;
     if (this.character.viewState === ViewState.SEMI_FPV) {
       newState = ViewState.FPV;
@@ -107,6 +109,18 @@ export class KeyboardControlComponent implements OnInit {
       this.character.viewState = ViewState.FPV;
     }
     this.character.state = newState;
+  }
+
+  changeCrawlingState() {
+    if (this.character.viewState === ViewState.OVERVIEW) {
+      return;
+    }
+    let crawling = false;
+    if (!this.character.isCrawling) {
+      this.character.viewState = ViewState.FPV;
+      crawling = true;
+    }
+    this.character.isCrawling = crawling;
   }
 
   toggleInspector(inspectorClass, inspectorProp) {
@@ -134,7 +148,7 @@ export class KeyboardControlComponent implements OnInit {
           if (this.character.state !== MeModelState.SHOOTING) {
             this.character.state = keyEvent.shiftKey
               ? MeModelState.RUNNING
-              : MeModelState.WALKING;
+              : this.character.state;
           }
 
           return Direction.Forward;
@@ -159,6 +173,13 @@ export class KeyboardControlComponent implements OnInit {
     this.keyboardKeysService.registerKeyBoardEventDescription('LeftMouse', 'Shoot');
     this.keyboardKeysService.registerKeyBoardEventDescription('KeyW', 'Move Forward');
     this.keyboardKeysService.registerKeyBoardEventDescription('KeyS', 'Move Backward');
+    this.keyboardKeysService.registerKeyBoardEventDescription('KeyA', 'Move Left');
+    this.keyboardKeysService.registerKeyBoardEventDescription('KeyD', 'Move Right');
+    this.keyboardKeysService.registerKeyBoardEvent('KeyC', 'Switch Crawling', () => {
+      this.ngZone.run(() => {
+        this.changeCrawlingState();
+      })
+    });
     this.keyboardKeysService.registerKeyBoardEvent('Tab', 'Switch FPV/Semi FPV',
       (keyEvent: KeyboardEvent) => {
         this.ngZone.run(() => {

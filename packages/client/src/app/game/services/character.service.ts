@@ -6,7 +6,6 @@ import { BuildingsService } from './buildings.service';
 export enum MeModelState {
   WALKING,
   RUNNING,
-  CRAWLING,
   SHOOTING,
   DEAD,
 }
@@ -23,6 +22,7 @@ export interface CharacterState {
   heading: number;
   pitch: number;
   state: MeModelState;
+  isCrawling: boolean,
   team: Team;
   characterInfo: PlayerFields.Character;
   tileBuilding: any;
@@ -50,6 +50,16 @@ export class CharacterService {
 
   get viewState(): ViewState {
     return this._viewState.getValue();
+  }
+
+  get isCrawling(){
+    return this._character.getValue().isCrawling;
+  }
+
+  set isCrawling(value: boolean){
+    this.modifyCurrentStateValue({
+      isCrawling: value,
+    });
   }
 
   set viewState(value: ViewState) {

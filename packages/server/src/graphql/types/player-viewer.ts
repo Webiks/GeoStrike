@@ -12,6 +12,7 @@ export const schema = gql`
         username: String
         character: CharacterData!
         state: PlayerState!
+        isCrawling: Boolean!
         isMe: Boolean!
         currentLocation: PlayerLocation!
         team: Team!
