@@ -56,8 +56,9 @@ export class KeyboardControlComponent implements OnInit {
 
         if (this.character.state === MeModelState.RUNNING) {
           speed = environment.movement.runningSpeed;
+        } else if (this.character.state === MeModelState.CRAWLING) {
+          speed = environment.movement.crawlingSpeed;
         }
-
 
         const nextLocation = GeoUtilsService.pointByLocationDistanceAndAzimuth(
           position,
@@ -109,6 +110,17 @@ export class KeyboardControlComponent implements OnInit {
     this.character.state = newState;
   }
 
+  changeCrawlingState() {
+    if (this.character.viewState === ViewState.OVERVIEW) {
+      return;
+    }
+    let newState = MeModelState.WALKING;
+    if (this.character.state !== MeModelState.CRAWLING) {
+      newState = MeModelState.CRAWLING;
+    }
+    this.character.state = newState;
+  }
+
   toggleInspector(inspectorClass, inspectorProp) {
     if (!environment.production) {
       if (!this.inspector) {
@@ -134,7 +146,7 @@ export class KeyboardControlComponent implements OnInit {
           if (this.character.state !== MeModelState.SHOOTING) {
             this.character.state = keyEvent.shiftKey
               ? MeModelState.RUNNING
-              : MeModelState.WALKING;
+              : this.character.state;
           }
 
           return Direction.Forward;
@@ -159,6 +171,11 @@ export class KeyboardControlComponent implements OnInit {
     this.keyboardKeysService.registerKeyBoardEventDescription('LeftMouse', 'Shoot');
     this.keyboardKeysService.registerKeyBoardEventDescription('KeyW', 'Move Forward');
     this.keyboardKeysService.registerKeyBoardEventDescription('KeyS', 'Move Backward');
+    this.keyboardKeysService.registerKeyBoardEventDescription('KeyA', 'Move Left');
+    this.keyboardKeysService.registerKeyBoardEventDescription('KeyD', 'Move Right');
+    this.keyboardKeysService.registerKeyBoardEvent('KeyC', 'Switch Crawling', () => {
+      this.changeCrawlingState();
+    });
     this.keyboardKeysService.registerKeyBoardEvent('Tab', 'Switch FPV/Semi FPV',
       (keyEvent: KeyboardEvent) => {
         this.ngZone.run(() => {
