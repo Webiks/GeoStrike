@@ -27,11 +27,11 @@ export class MeComponent implements OnInit, OnDestroy {
   showWeapon$: Observable<boolean>;
   showCross$: Observable<boolean>;
   clickSub$: Subscription;
-  ViewState = ViewState;
   buildingNearby = false;
   insideBuilding = false;
   transparentColor = new Cesium.Color(0, 0, 0, 0.0001);
   normalColor = new Cesium.Color(1, 1, 1, 1);
+  ViewState= ViewState;
 
   constructor(private character: CharacterService,
               public utils: UtilsService,
@@ -109,10 +109,6 @@ export class MeComponent implements OnInit, OnDestroy {
 
   canvasPropagation() {
     this.cesiumService.getViewer().canvas.click();
-  }
-
-  getIconPic(player) {
-    return player.team === 'BLUE' ? '/assets/icons/blue-mark.png' : '/assets/icons/red-mark.png';
   }
 
   getOrientation(location, heading: number, player: CharacterState) {
