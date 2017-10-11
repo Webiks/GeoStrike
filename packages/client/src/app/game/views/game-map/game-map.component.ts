@@ -1,13 +1,14 @@
 import { ChangeDetectorRef, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { AcMapComponent, AcNotification, ViewerConfiguration } from 'angular-cesium';
-import { GameFields } from '../../../types';
+import { GameFields, PlayerFields } from '../../../types';
 import { CharacterService, MeModelState, ViewState } from '../../services/character.service';
 import { UtilsService } from '../../services/utils.service';
 import { GameService } from '../../services/game.service';
 import { environment } from '../../../../environments/environment';
 import { CesiumViewerOptionsService } from './viewer-options/cesium-viewer-options.service';
 import { CollisionDetectorService } from '../../services/collision-detector.service';
+import { TakeControlService } from '../../services/take-control.service';
 
 @Component({
   selector: 'game-map',
@@ -41,16 +42,17 @@ export class GameMapComponent implements OnInit, OnDestroy {
               private ngZone: NgZone,
               private cd: ChangeDetectorRef,
               private viewerOptions: CesiumViewerOptionsService,
-              private collisionDetector: CollisionDetectorService) {
+              private collisionDetector: CollisionDetectorService,
+              private takeControlService: TakeControlService) {
     viewerConf.viewerOptions = viewerOptions.getViewerOption();
 
     viewerConf.viewerModifier = (viewer) => {
       this.viewer = viewer;
       this.helperEntityPoint = this.viewer.entities.add({
-        point : {
+        point: {
           position: new Cesium.Cartesian3(),
-          pixelSize : 1,
-          color : Cesium.Color.TRANSPARENT,
+          pixelSize: 1,
+          color: Cesium.Color.TRANSPARENT,
           heightReference: Cesium.HeightReference.RELATIVE_TO_GROUND
         }
       });
@@ -69,11 +71,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
     if (this.createPathMode) {
       return;
     }
-    this.character.viewState$.subscribe((viewState) => {
-      if (viewState === ViewState.OVERVIEW) {
-        this.changeToOverview();
-      }
-    });
+
     this.gameData.first().subscribe(game => {
       const overviewMode = game.me['__typename'] === 'Viewer' || game.me.type === 'OVERVIEW';
       if (overviewMode) {
@@ -81,26 +79,46 @@ export class GameMapComponent implements OnInit, OnDestroy {
         this.overviewSettings();
         return;
       }
-
-      this.character.initCharacter({
-        id: 'me',
-        location: this.utils.getPosition(game.me.currentLocation.location),
-        heading: game.me.currentLocation.heading,
-        pitch: GameMapComponent.DEFAULT_PITCH,
-        state: game.me.state === 'DEAD' ? MeModelState.DEAD : MeModelState.WALKING,
-        team: game.me.team,
-        characterInfo:  game.me.character
-      });
-      this.gameService.startServerUpdatingLoop();
-
-      this.viewer.scene.preRender.addEventListener(this.preRenderHandler);
-
-      this.ngZone.runOutsideAngular(() => {
-        this.elementRef.nativeElement.addEventListener('mousemove', this.onMousemove);
-      });
-
-      this.cd.detectChanges();
+      this.startFirstPersonMode(game.me);
     });
+
+    this.character.viewState$.subscribe((viewState) => {
+      if (viewState === ViewState.OVERVIEW) {
+        this.changeToOverview();
+      }
+    });
+
+    this.takeControlService.controlledPlayer$.subscribe(controlledPlayer => {
+      if (controlledPlayer) {
+        this.viewerOptions.setFpvCameraOptions(this.viewer);
+        this.startFirstPersonMode(controlledPlayer);
+      } else if (controlledPlayer === null) {
+        this.character.viewState = ViewState.OVERVIEW;
+        this.overviewSettings();
+      }
+    })
+  }
+
+  private startFirstPersonMode(player: PlayerFields.Fragment) {
+    this.character.initCharacter({
+      id: 'me',
+      location: this.utils.getPosition(player.currentLocation.location),
+      heading: player.currentLocation.heading,
+      pitch: GameMapComponent.DEFAULT_PITCH,
+      state: player.state === 'DEAD' ? MeModelState.DEAD : MeModelState.WALKING,
+      team: player.team,
+      characterInfo: player.character
+    });
+    this.character.viewState = ViewState.SEMI_FPV;
+    this.gameService.startServerUpdatingLoop();
+
+    this.viewer.scene.preRender.addEventListener(this.preRenderHandler);
+
+    this.ngZone.runOutsideAngular(() => {
+      this.elementRef.nativeElement.addEventListener('mousemove', this.onMousemove);
+    });
+
+    this.cd.detectChanges();
   }
 
   private changeToOverview() {
@@ -112,7 +130,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
 
   private overviewSettings() {
     this.viewerOptions.setFreeCameraOptions(this.viewer);
-    this.viewer.camera.flyTo({ destination: GameMapComponent.DEFAULT_START_LOCATION });
+    this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_START_LOCATION});
   }
 
   onMousemove(event: MouseEvent) {
@@ -145,12 +163,12 @@ export class GameMapComponent implements OnInit, OnDestroy {
     const pitchDeg = this.character.pitch;
     const pitch = Cesium.Math.toRadians(pitchDeg);
     const heading = Cesium.Math.toRadians(-180 + this.character.heading);
-    const playerHeadCart =  Cesium.Cartographic.fromCartesian(this.character.location);
+    const playerHeadCart = Cesium.Cartographic.fromCartesian(this.character.location);
     playerHeadCart.height += 4;
     this.helperEntityPoint.position = Cesium.Cartesian3.fromRadians(playerHeadCart.longitude, playerHeadCart.latitude, playerHeadCart.height);
     this.viewer.zoomTo([this.character.entity, this.helperEntityPoint], new Cesium.HeadingPitchRange(heading, pitch, range));
     this.lastPlayerLocation = this.character.location;
-    this.lastPlayerHPR = { heading: this.character.heading, pitch: this.character.pitch, range };
+    this.lastPlayerHPR = {heading: this.character.heading, pitch: this.character.pitch, range};
   }
 
   ngOnDestroy(): void {

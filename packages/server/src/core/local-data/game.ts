@@ -204,7 +204,7 @@ export class GamesManager {
                        heading: number,
                        skipValidation = false) {
     const game = this.getGameById(gameId);
-    const player = game.controlledPlayersMap.get(playerId) || game.playersMap.get(playerId);
+    const player =  game.playersMap.get(playerId);
     if (player && position) {
       if (
         skipValidation ||
@@ -216,7 +216,11 @@ export class GamesManager {
       } else {
         player.syncState = 'INVALID';
       }
+
+      return player;
     }
+
+    return null;
   }
 
   updatePlayerState(gameId: string, playerId: string, newState: PlayerState) {

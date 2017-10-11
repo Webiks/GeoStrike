@@ -7,16 +7,17 @@ import { Subscription } from 'rxjs/Subscription';
 import { Subject } from 'rxjs/Subject';
 import { AcEntity, AcNotification, ActionType } from 'angular-cesium';
 import { Observable } from 'rxjs/Observable';
-import { MatDialog } from '@angular/material';
 import { CharacterService, MeModelState } from '../../services/character.service';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/map';
 import * as _ from 'lodash';
+import { TakeControlService } from '../../services/take-control.service';
 
 @Component({
   selector: 'game-container',
   templateUrl: './game-container.component.html',
   styleUrls: ['./game-container.component.scss'],
+  providers: [TakeControlService]
 })
 export class GameContainerComponent implements OnInit, OnDestroy {
   private gameData$: Observable<GameFields.Fragment>;
@@ -33,8 +34,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
               private character: CharacterService,
               private activatedRoute: ActivatedRoute,
               private router: Router,
-              private ngZone: NgZone,
-              private  dialog: MatDialog) {
+              private ngZone: NgZone) {
   }
 
   ngOnInit() {
@@ -75,7 +75,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
           this.game.players.map<AcNotification>(player => ({
             actionType: ActionType.ADD_UPDATE,
             id: player.id,
-            entity: new AcEntity(player),
+            entity: new AcEntity({...player, name: player.character.name}),
           })).forEach(notification => {
             this.otherPlayers$.next(notification);
           });

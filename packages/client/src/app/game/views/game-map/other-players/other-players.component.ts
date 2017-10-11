@@ -5,6 +5,7 @@ import { UtilsService } from '../../../services/utils.service';
 import { InterpolationService, InterpolationType } from '../../../services/interpolation.service';
 import { PlayerFields, } from '../../../../types';
 import { CharacterService, ViewState } from '../../../services/character.service';
+import { TakeControlService } from '../../../services/take-control.service';
 
 @Component({
   selector: 'other-players',
@@ -17,7 +18,7 @@ export class OtherPlayersComponent {
 
   isOverview$: Observable<boolean>;
 
-  constructor(public utils: UtilsService, public character: CharacterService) {
+  constructor(public utils: UtilsService, public character: CharacterService,private takeControlService: TakeControlService) {
     this.isOverview$ = character.viewState$.map(viewState => viewState === ViewState.OVERVIEW);
   }
 
@@ -75,6 +76,13 @@ export class OtherPlayersComponent {
     xOffset -= player.character.name.length * 2.5;
 
     return [xOffset, 45];
+  }
+
+  getIconColor(player){
+    if (this.takeControlService.selectedPlayerToControl){
+      return player.id === this.takeControlService.selectedPlayerToControl.id ? Cesium.Color.YELLOW:  Cesium.Color.WHITE;
+    }
+    return Cesium.Color.WHITE;
   }
 
 

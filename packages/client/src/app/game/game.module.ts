@@ -41,6 +41,7 @@ import { GameDialogsComponent } from './views/game-container/game-dialogs/game-d
 import { BuildingsComponent } from './views/buildings/buildings.component';
 import { BuildingsService } from './services/buildings.service';
 import { CollisionDetectorService } from './services/collision-detector.service';
+import { ViewerControlsComponent } from './views/game-container/viewer-controls/viewer-controls.component';
 
 @NgModule({
   declarations: [
@@ -65,6 +66,7 @@ import { CollisionDetectorService } from './services/collision-detector.service'
     YouWinDialogComponent,
     BuildingsComponent,
     GameDialogsComponent,
+    ViewerControlsComponent,
   ],
   imports: [
     BrowserModule,

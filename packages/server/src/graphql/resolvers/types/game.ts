@@ -9,9 +9,9 @@ const resolvers = {
       const players = Array.from(game.playersMap.values());
       if (player) {
         const controlledPlayer = game.controlledPlayersMap.get(player.playerId);
-        return players.filter((p: IPlayer) => p !== player && p !== controlledPlayer);
+        const playersToSend = players.filter((p: IPlayer) => p !== player && p !== controlledPlayer);
+        return playersToSend
       }
-
       return players || [];
     },
     state: (game: IGameObject) => {

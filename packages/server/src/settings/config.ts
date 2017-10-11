@@ -14,7 +14,7 @@ export const config = {
   serverClientDistanceThreshold: 10,
   clientsUpdateRate: 100,
   backgroundCharacters: {
-    numberOfBgCharacters: 10,
+    numberOfBgCharacters: 0,
     updateIntervalMs: 1000,
   },
   PLAYERS_SPAWN_POSITIONS: DEFAULT_PLAYERS_LOCATION
