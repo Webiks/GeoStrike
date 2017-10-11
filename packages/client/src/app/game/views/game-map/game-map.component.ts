@@ -31,6 +31,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
   private viewer: any;
   private lastPlayerLocation;
   private lastPlayerHPR: { heading: number, pitch: number, range: number };
+  private helperEntityPoint;
 
   constructor(private gameService: GameService,
               private character: CharacterService,
@@ -45,6 +46,13 @@ export class GameMapComponent implements OnInit, OnDestroy {
 
     viewerConf.viewerModifier = (viewer) => {
       this.viewer = viewer;
+      this.helperEntityPoint = this.viewer.entities.add({
+        point : {
+          pixelSize : 1,
+          color : Cesium.Color.TRANSPARENT,
+          heightReference: Cesium.HeightReference.RELATIVE_TO_GROUND
+        }
+      });
       this.viewerOptions.setInitialConfiguration(viewer);
       if (!this.createPathMode) {
         this.viewerOptions.setFpvCameraOptions(viewer);
@@ -136,11 +144,10 @@ export class GameMapComponent implements OnInit, OnDestroy {
     const pitchDeg = this.character.pitch;
     const pitch = Cesium.Math.toRadians(pitchDeg);
     const heading = Cesium.Math.toRadians(-180 + this.character.heading);
-
-    const playerHead = new Cesium.Cartesian3(0.4174665722530335, -1.4575908118858933, 1.3042816752567887);
-    Cesium.Cartesian3.add(this.character.location, playerHead, playerHead);
-
-    this.viewer.camera.lookAt(playerHead, new Cesium.HeadingPitchRange(heading, pitch, range));
+    const playerHeadCart =  Cesium.Cartographic.fromCartesian(this.character.location);
+    playerHeadCart.height += 4;
+    this.helperEntityPoint.position = Cesium.Cartesian3.fromRadians(playerHeadCart.longitude, playerHeadCart.latitude, playerHeadCart.height);
+    this.viewer.zoomTo([this.character.entity, this.helperEntityPoint], new Cesium.HeadingPitchRange(heading, pitch, range));
     this.lastPlayerLocation = this.character.location;
     this.lastPlayerHPR = { heading: this.character.heading, pitch: this.character.pitch, range };
   }

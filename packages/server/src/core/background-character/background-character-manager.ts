@@ -1,4 +1,4 @@
-import { Settings } from '../../settings/settings';
+import { config } from '../../settings/config';
 import { CharacterType, GamesManager, ICartesian3Location, IGameObject, IPlayer, Team, } from '../local-data/game';
 import { PathNode, PATHS_GRAPHS } from './path-node';
 import * as Cesium from 'cesium';
@@ -14,7 +14,7 @@ const BG_CHARACTER_TYPES = [
   {
     characterName: 'car',
     paths: PATHS_GRAPHS.CAR,
-    updateDistanceMeters: 1.0,
+    updateDistanceMeters: 10.0,
   },
 ];
 
@@ -28,8 +28,8 @@ export class BackgroundCharacterManager {
 
   constructor(private gameId: string, private gameManager: GamesManager) {
     this.NUMBER_OF_BG_CHARACTERS =
-      Settings.backgroundCharacters.numberOfBgCharacters;
-    this.UPDATE_INTERVAL_MS = Settings.backgroundCharacters.updateIntervalMs;
+      config.backgroundCharacters.numberOfBgCharacters;
+    this.UPDATE_INTERVAL_MS = config.backgroundCharacters.updateIntervalMs;
 
     BG_CHARACTER_TYPES.forEach(c => this.initialLocationId.set(c.characterName, []));
   }
@@ -63,7 +63,7 @@ export class BackgroundCharacterManager {
   private createBgPlayer(characterTypeName: string, paths: PathNode[]) {
     const currentPath = this.getInitialLocation(characterTypeName, paths);
 
-    const character = PLAYER_CHARACTERS.find(p=> p.name === characterTypeName);
+    const character = PLAYER_CHARACTERS.find(p => p.name === characterTypeName);
     const bgPlayer = {
       playerId: v4(),
       character,
@@ -90,8 +90,8 @@ export class BackgroundCharacterManager {
           // update location
           const currentPos = character.currentLocation;
           const nextNodePos = this.bgCharacterToNextLocation.get(characterId);
-          const {updateDistanceMeters} = BG_CHARACTER_TYPES.find(c => c.characterName === character.character.name);
-          const {heading, nextLocation} = this.calcNextLocation(
+          const { updateDistanceMeters } = BG_CHARACTER_TYPES.find(c => c.characterName === character.character.name);
+          const { heading, nextLocation } = this.calcNextLocation(
             currentPos,
             nextNodePos,
             characterId,

@@ -8,7 +8,7 @@ import 'rxjs/add/observable/fromEvent';
 import { Subscription } from 'rxjs/Subscription';
 import { GameService } from '../../../services/game.service';
 import { CharacterData } from '../../../../types';
-
+import { BasicDesc } from 'angular-cesium/src/angular-cesium/services/basic-desc/basic-desc.service';
 
 @Component({
   selector: 'me',
@@ -17,9 +17,12 @@ import { CharacterData } from '../../../../types';
 })
 export class MeComponent implements OnInit, OnDestroy {
 
+  private meModelDrawSubscription: Subscription;
+
   @ViewChild('cross') crossElement: ElementRef;
   @ViewChild('gunShotSound') gunShotSound: ElementRef;
   @ViewChild('muzzleFlash') muzzleFlash: ElementRef;
+  @ViewChild('meModel') meModel: BasicDesc;
 
   showWeapon$: Observable<boolean>;
   showCross$: Observable<boolean>;
@@ -27,6 +30,8 @@ export class MeComponent implements OnInit, OnDestroy {
   ViewState = ViewState;
   buildingNearby = false;
   insideBuilding = false;
+  transparentColor = new Cesium.Color(0, 0, 0, 0.0001);
+  normalColor = new Cesium.Color(1, 1, 1, 1);
 
   constructor(private character: CharacterService,
               public utils: UtilsService,
@@ -69,6 +74,10 @@ export class MeComponent implements OnInit, OnDestroy {
       this.character.state$.map(meState => meState && meState.state === MeModelState.SHOOTING))
       .map((result => result[0] || result[1]));
     this.showCross$ = this.character.state$.map(meState => meState && meState.state === MeModelState.SHOOTING);
+    this.meModelDrawSubscription = this.meModel.onDraw.subscribe(entity => {
+      this.character.entity = entity.cesiumEntity;
+    });
+
     this.setShootEvent();
     this.character.state$.subscribe(state => {
       if (state && this.buildingNearby !== !!state.nearbyBuildingPosition) {
@@ -84,6 +93,7 @@ export class MeComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.clickSub$.unsubscribe();
+    this.meModelDrawSubscription.unsubscribe();
   }
 
   private soundGunFire() {
@@ -115,5 +125,12 @@ export class MeComponent implements OnInit, OnDestroy {
 
   get characterInfo(): CharacterData {
     return this.character.currentStateValue.characterInfo;
+  }
+
+  getColor() {
+    if (this.character.viewState === ViewState.FPV) {
+      return this.transparentColor;
+    }
+    return this.normalColor;
   }
 }

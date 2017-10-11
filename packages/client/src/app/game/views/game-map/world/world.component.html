@@ -1,8 +1,8 @@
-<ac-3d-tile-layer [show]="!hideTiles"
+<ac-3d-tile-layer *ngIf="loadTiles" [show]="!hideTiles"
     [options]="{
       maximumMemoryUsage: 1024,
       modelMatrix: getTilesMatrix(),
-      url: newYorkTilesUrl,
+      url: tilesUrl,
       skipLevelOfDetail : true,
       baseScreenSpaceError : 1024,
       skipScreenSpaceErrorFactor : 16,

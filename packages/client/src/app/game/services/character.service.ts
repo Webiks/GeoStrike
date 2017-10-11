@@ -23,8 +23,8 @@ export interface CharacterState {
   heading: number;
   pitch: number;
   state: MeModelState;
-  team: Team,
-  characterInfo: PlayerFields.Character
+  team: Team;
+  characterInfo: PlayerFields.Character;
   tileBuilding: any;
   nearbyBuildingPosition: Cartesian3;
   enteringBuildingPosition: Cartesian3;
@@ -35,8 +35,13 @@ export interface CharacterState {
 export class CharacterService {
   private _character = new BehaviorSubject<CharacterState>(null);
   private _viewState = new BehaviorSubject<ViewState>(ViewState.SEMI_FPV);
+  private _entity;
 
   constructor(private buildingsService: BuildingsService) {
+  }
+
+  get entity() {
+    return this._entity;
   }
 
   get initialized() {
@@ -89,7 +94,7 @@ export class CharacterService {
     return this._character && this._character.getValue() && this._character.getValue().enteringBuildingPosition;
   }
 
-  get enternedBuilding() {
+  get enteredBuilding() {
     return this._character && this._character.getValue() && this._character.getValue().enteredBuilding;
   }
 
@@ -106,6 +111,10 @@ export class CharacterService {
       ...this.currentStateValue,
       ...changes,
     });
+  }
+
+  set entity(value) {
+    this._entity = value;
   }
 
   set heading(value: number) {
@@ -144,9 +153,9 @@ export class CharacterService {
     });
   }
 
-  set enternedBuilding(value: any) {
+  set enteredBuilding(value: any) {
     this.modifyCurrentStateValue({
-      enternedBuilding: value,
+      enteredBuilding: value,
     });
   }
 
@@ -169,7 +178,7 @@ export class CharacterService {
 
   public enterBuilding() {
     this.tileBuilding.show = false;
-    this.enternedBuilding = this.buildingsService.createBuilding(this.nearbyBuildingPosition);
+    this.enteredBuilding = this.buildingsService.createBuilding(this.nearbyBuildingPosition);
     this.enteringBuildingPosition = this.location;
     this.location = this.nearbyBuildingPosition;
     this.nearbyBuildingPosition = undefined;
@@ -178,8 +187,8 @@ export class CharacterService {
   public exitBuilding() {
     this.tileBuilding.show = true;
     this.location = this.enteringBuildingPosition;
-    this.buildingsService.removeBuilding(this.enternedBuilding);
-    this.enternedBuilding = undefined;
+    this.buildingsService.removeBuilding(this.enteredBuilding.id);
+    this.enteredBuilding = undefined;
     this.tileBuilding = undefined;
     this.enteringBuildingPosition = undefined;
     this.nearbyBuildingPosition = undefined;

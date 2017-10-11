@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { GameConfig } from '../../../services/game-config';
 
 @Injectable()
 export class CesiumViewerOptionsService {
@@ -20,6 +21,7 @@ export class CesiumViewerOptionsService {
       sceneModePicker: false,
       navigationInstructionsInitiallyVisible: false,
       terrainProviderViewModels: [],
+      terrainShadows : GameConfig.terrainShadows,
     };
   }
 
@@ -27,6 +29,8 @@ export class CesiumViewerOptionsService {
     viewer.scene.globe.depthTestAgainstTerrain = true;
     viewer.bottomContainer.remove();
     viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
+    viewer.scene.globe.enableLighting = GameConfig.enableLighting;
+    viewer.scene.fog.enabled = GameConfig.fog;
   }
 
   setFpvCameraOptions(viewer) {

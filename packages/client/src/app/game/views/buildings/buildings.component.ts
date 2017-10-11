@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { AcNotification } from 'angular-cesium';
 import { BuildingsService } from '../../services/buildings.service';
-import { GameSettingsService } from '../../services/game-settings.service';
+import { GameConfig } from '../../services/game-config';
 
 @Component({
   selector: 'buildings',
@@ -12,7 +12,7 @@ import { GameSettingsService } from '../../services/game-settings.service';
 export class BuildingsComponent implements OnInit {
 
   buildings$: Subject<AcNotification>;
-  wallMaterial = GameSettingsService.innerBuildingColor;
+  wallMaterial = GameConfig.innerBuildingColor;
   Cesium = Cesium;
 
   constructor(buildingsService: BuildingsService) {

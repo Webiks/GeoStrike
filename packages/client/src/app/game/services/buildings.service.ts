@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AcNotification, ActionType } from 'angular-cesium';
-import { GameSettingsService } from './game-settings.service';
+import { GameConfig } from './game-config';
 import { Subject } from 'rxjs/Subject';
 
 @Injectable()
@@ -25,11 +25,11 @@ export class BuildingsService {
     center.latitude = Cesium.Math.toDegrees(center.latitude);
     center.longitude = Cesium.Math.toDegrees(center.longitude);
     const id = this.generateId();
-    const buildingHeight = GameSettingsService.buildingHeight;
-    const wallSize = GameSettingsService.wallSize;
-    const wallOnWindowSides = GameSettingsService.wallOnWindowSides;
-    const windowHeightFromGround = GameSettingsService.windowHeightFromGround;
-    const windowHeight = GameSettingsService.windowHeight;
+    const buildingHeight = GameConfig.buildingHeight;
+    const wallSize = GameConfig.wallSize;
+    const wallOnWindowSides = GameConfig.wallOnWindowSides;
+    const windowHeightFromGround = GameConfig.windowHeightFromGround;
+    const windowHeight = GameConfig.windowHeight;
     const roomOffset = wallSize / 2;
     const building = {
       id,
