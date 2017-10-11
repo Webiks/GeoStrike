@@ -46,8 +46,7 @@ export class KeyboardControlComponent implements OnInit {
           this.character.viewState !== ViewState.OVERVIEW &&
           (this.character.state === MeModelState.RUNNING ||
             this.character.state === MeModelState.WALKING ||
-            this.character.state === MeModelState.SHOOTING ||
-            this.character.state === MeModelState.CRAWLING)
+            this.character.state === MeModelState.SHOOTING)
         );
       },
       action: () => {
@@ -56,7 +55,8 @@ export class KeyboardControlComponent implements OnInit {
 
         if (this.character.state === MeModelState.RUNNING) {
           speed = environment.movement.runningSpeed;
-        } else if (this.character.state === MeModelState.CRAWLING) {
+        }
+        if (this.character.isCrawling) {
           speed = environment.movement.crawlingSpeed;
         }
 
@@ -90,6 +90,7 @@ export class KeyboardControlComponent implements OnInit {
       return;
     }
     this.character.state = MeModelState.WALKING;
+    this.character.isCrawling = false;
     let newState = ViewState.SEMI_FPV;
     if (this.character.viewState === ViewState.SEMI_FPV) {
       newState = ViewState.FPV;
@@ -114,11 +115,12 @@ export class KeyboardControlComponent implements OnInit {
     if (this.character.viewState === ViewState.OVERVIEW) {
       return;
     }
-    let newState = MeModelState.WALKING;
-    if (this.character.state !== MeModelState.CRAWLING) {
-      newState = MeModelState.CRAWLING;
+    let crawling = false;
+    if (!this.character.isCrawling) {
+      this.character.viewState = ViewState.FPV;
+      crawling = true;
     }
-    this.character.state = newState;
+    this.character.isCrawling = crawling;
   }
 
   toggleInspector(inspectorClass, inspectorProp) {
@@ -174,7 +176,9 @@ export class KeyboardControlComponent implements OnInit {
     this.keyboardKeysService.registerKeyBoardEventDescription('KeyA', 'Move Left');
     this.keyboardKeysService.registerKeyBoardEventDescription('KeyD', 'Move Right');
     this.keyboardKeysService.registerKeyBoardEvent('KeyC', 'Switch Crawling', () => {
-      this.changeCrawlingState();
+      this.ngZone.run(() => {
+        this.changeCrawlingState();
+      })
     });
     this.keyboardKeysService.registerKeyBoardEvent('Tab', 'Switch FPV/Semi FPV',
       (keyEvent: KeyboardEvent) => {

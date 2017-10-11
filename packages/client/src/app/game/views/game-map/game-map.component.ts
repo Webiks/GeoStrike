@@ -134,7 +134,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
     }
     const isFPV = this.character.viewState === ViewState.FPV;
     const isShooting = this.character.state === MeModelState.SHOOTING;
-    const isCrawling = this.character.state === MeModelState.CRAWLING;
+    const isCrawling = this.character.isCrawling;
     const range = isFPV || isShooting ? 0.1 : 3;
 
     // if (this.lastPlayerLocation === this.character.location &&
@@ -149,7 +149,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
     const pitch = Cesium.Math.toRadians(pitchDeg);
     const heading = Cesium.Math.toRadians(-180 + this.character.heading);
     const playerHeadCart = Cesium.Cartographic.fromCartesian(this.character.location);
-    playerHeadCart.height += isCrawling ? 3 : 4;
+    playerHeadCart.height += isCrawling ? 2 : 4;
     this.helperEntityPoint.position = Cesium.Cartesian3.fromRadians(playerHeadCart.longitude, playerHeadCart.latitude, playerHeadCart.height);
     this.viewer.zoomTo([this.character.entity, this.helperEntityPoint], new Cesium.HeadingPitchRange(heading, pitch, range));
     this.lastPlayerLocation = this.character.location;
