@@ -38,7 +38,7 @@ export class CollisionDetectorService {
   }
 
   private checkCollisionInRoom(location): boolean {
-    const positions = this.character.enternedBuilding.ceiling.map(position => Cesium.Cartographic.fromCartesian(position));
+    const positions = this.character.enteredBuilding.ceiling.map(position => Cesium.Cartographic.fromCartesian(position));
     const characterPosition = Cesium.Cartographic.fromCartesian(location);
     const maxLongitude = positions.reduce((value, pos) => Math.max(value, pos.longitude), Number.MIN_SAFE_INTEGER);
     const maxLatitude = positions.reduce((value, pos) => Math.max(value, pos.latitude), Number.MIN_SAFE_INTEGER);
@@ -52,26 +52,26 @@ export class CollisionDetectorService {
   }
 
   public detectCollision(fromLocation, skipHeadingOptimization = false): boolean {
-    if (!this.character.enternedBuilding && !skipHeadingOptimization &&
+    if (!this.character.enteredBuilding && !skipHeadingOptimization &&
       this._collision &&
       this.characterHeadingWhenCollided &&
       this.characterHeadingWhenCollided === this.character.heading) {
       return true;
     }
     else if (this._collision) {
-      this._collision = this.character.enternedBuilding ?
+      this._collision = this.character.enteredBuilding ?
         this.checkCollisionInRoom(fromLocation) :
         this.getDepthDistance(fromLocation, this.windowCenter, true) < CollisionDetectorService.COLLIDE_FACTOR_METER;
     }
     else {
-      this._collision = this.character.enternedBuilding ?
+      this._collision = this.character.enteredBuilding ?
         this.checkCollisionInRoom(fromLocation) :
         this.getDepthDistance(fromLocation, this.windowCenter) < CollisionDetectorService.COLLIDE_FACTOR_METER;
     }
 
     if (this._collision) {
       this.characterHeadingWhenCollided = this.character.heading;
-      if (!this.character.enternedBuilding) {
+      if (!this.character.enteredBuilding) {
         const pickedFeature = this.viewer.scene.pick(this.windowCenter, 300, 300);
         if (pickedFeature && pickedFeature._batchId) {
           const id = pickedFeature._batchId;

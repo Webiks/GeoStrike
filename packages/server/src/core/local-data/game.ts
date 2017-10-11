@@ -248,7 +248,7 @@ export class GamesManager {
 
     if (winingTeam) {
       game.winingTeam = winingTeam;
-      setTimeout(() => this.endGame(game.gameId), Settings.clientsUpdateRate * 10);
+      setTimeout(() => this.endGame(game.gameId), config.clientsUpdateRate * 10);
     }
   }
 

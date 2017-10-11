@@ -65,7 +65,7 @@ export class KeyboardControlComponent implements OnInit {
           Cesium.Math.toRadians(this.character.heading + delta),
           true
         );
-        if (this.character.enternedBuilding) {
+        if (this.character.enteredBuilding) {
           if (!this.collisionDetector.detectCollision(nextLocation, true)) {
             this.character.location = nextLocation;
           }
@@ -168,7 +168,7 @@ export class KeyboardControlComponent implements OnInit {
       });
     this.keyboardKeysService.registerKeyBoardEvent('KeyE', 'Enter Nearby Building',
       (keyEvent: KeyboardEvent) => {
-        if (this.character.enternedBuilding) {
+        if (this.character.enteredBuilding) {
           this.character.exitBuilding();
           this.gameService.updateServerOnPosition(true);
 
