@@ -47,7 +47,9 @@ export class GameDialogsComponent implements OnInit {
     this.gameResult.subscribe(winingTeam=>{
       if (winingTeam !== 'NONE' && (!this.wonDialogOpen && !this.gameoverDialogOpen)) {
         const loseTeam: Team = winingTeam === 'RED' ? 'BLUE' : 'RED';
-        if (winingTeam === this.character.currentStateValue.team) {
+
+        const isViewer = this.character.meFromServer['__typename'] === 'Viewer';
+        if (isViewer || winingTeam === this.character.currentStateValue.team) {
           this.openWinDialog(loseTeam);
         } else {
           this.openGameOverDialog(true, loseTeam);
@@ -68,6 +70,7 @@ export class GameDialogsComponent implements OnInit {
     });
     this.benchedDialog.afterClosed().subscribe((toOverView) => {
       if (toOverView) {
+        this.benchedDialogOpen = false;
         this.character.viewState = ViewState.OVERVIEW;
       }
     });
@@ -95,6 +98,7 @@ export class GameDialogsComponent implements OnInit {
       }
     }).afterClosed().subscribe((toOverView) => {
       if (toOverView) {
+        this.gameoverDialogOpen = false;
         this.character.viewState = ViewState.OVERVIEW;
       }
     });

@@ -68,11 +68,13 @@ export class ViewerControlsComponent implements AfterViewInit, OnDestroy {
       .filter(result => result.entities && (result.entities[0] as PlayerFields.Fragment).type === 'PLAYER')
       .map(result => result.entities[0])
       .subscribe(selectedPlayer => {
-        const currentSelected = this.takeControlService.selectedPlayerToControl;
-        if (currentSelected) {
-          this.takeControlService.selectedPlayerToControl = currentSelected.id === selectedPlayer.id ? null : selectedPlayer;
-        } else {
-          this.takeControlService.selectedPlayerToControl = selectedPlayer;
+        if (selectedPlayer.state !== 'DEAD'){
+          const currentSelected = this.takeControlService.selectedPlayerToControl;
+          if (currentSelected) {
+            this.takeControlService.selectedPlayerToControl = currentSelected.id === selectedPlayer.id ? null : selectedPlayer;
+          } else {
+            this.takeControlService.selectedPlayerToControl = selectedPlayer;
+          }
         }
       })
   }

@@ -104,6 +104,14 @@ export class GameContainerComponent implements OnInit, OnDestroy {
         actionType: ActionType.DELETE,
       })
     }
+
+    // if controlling set state from controlled player
+    if (this.controlledService.controlledPlayer) {
+      const controlledPlayer = this.game.players.find(p => p.id === this.controlledService.controlledPlayer.id);
+      if (controlledPlayer && controlledPlayer.state === 'DEAD') {
+        this.character.state = MeModelState.DEAD;
+      }
+    }
   }
 
   ngOnDestroy() {
