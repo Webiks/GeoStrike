@@ -61,7 +61,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
           if (this.me) {
             this.viewerMode = this.me.type === 'OVERVIEW' || this.me['__typename'] === 'Viewer';
             this.character.meFromServer = this.me;
-            if (!this.viewerMode) {
+            if (!this.viewerMode && this.me.state !== 'CONTROLLED') {
               this.character.syncState(this.me);
               allPlayers.push(this.me);
             }
