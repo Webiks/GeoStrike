@@ -3,6 +3,7 @@ import { PlayerFields } from '../../types';
 import { Apollo } from 'apollo-angular';
 import { takeControlMutation } from '../../graphql/take-control.mutation';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { removeControlMutation } from '../../graphql/remove-player-control.mutation';
 
 @Injectable()
 export class TakeControlService {
@@ -40,8 +41,22 @@ export class TakeControlService {
       }
     }).subscribe(() => {
       this.controlledPlayer = player;
-      // take control
+
       sub.unsubscribe();
-    })
+    });
+  }
+
+  removePlayerControl(player: PlayerFields.Fragment){
+    const sub = this.apollo.mutate({
+      mutation: removeControlMutation,
+      variables: {
+        playerId: player.id,
+      }
+    }).subscribe(() => {
+      this.controlledPlayer = null;
+      this.selectedPlayerToControl = null;
+
+      sub.unsubscribe();
+    });
   }
 }

@@ -207,7 +207,7 @@ export class GamesManager {
                        isCrawling: boolean,
                        skipValidation = false) {
     const game = this.getGameById(gameId);
-    const player =  game.playersMap.get(playerId);
+    const player = game.playersMap.get(playerId);
     if (player && position) {
       if (
         skipValidation ||
@@ -297,4 +297,11 @@ export class GamesManager {
     return controlledPlayer;
   }
 
+  isControlled(game: IGameObject, playerId): boolean {
+    return !!Array.from(game.controlledPlayersMap.values()).find(p => p.playerId === playerId);
+  }
+
+  isController(game: IGameObject, playerId): boolean {
+    return game.controlledPlayersMap.has(playerId);
+  }
 }

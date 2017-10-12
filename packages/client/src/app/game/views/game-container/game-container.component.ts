@@ -34,7 +34,8 @@ export class GameContainerComponent implements OnInit, OnDestroy {
               private character: CharacterService,
               private activatedRoute: ActivatedRoute,
               private router: Router,
-              private ngZone: NgZone) {
+              private ngZone: NgZone,
+              private controlledService: TakeControlService) {
   }
 
   ngOnInit() {
@@ -62,6 +63,9 @@ export class GameContainerComponent implements OnInit, OnDestroy {
             if (!overviewMode) {
               this.character.syncState(this.me);
               allPlayers.push(this.me);
+            }
+            if (this.controlledService.controlledPlayer){
+              allPlayers.push(this.controlledService.controlledPlayer)
             }
 
             if (this.me.state === 'DEAD') {
