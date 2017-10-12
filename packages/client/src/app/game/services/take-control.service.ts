@@ -46,12 +46,9 @@ export class TakeControlService {
     });
   }
 
-  removePlayerControl(player: PlayerFields.Fragment){
+  removePlayerControl(){
     const sub = this.apollo.mutate({
       mutation: removeControlMutation,
-      variables: {
-        playerId: player.id,
-      }
     }).subscribe(() => {
       this.controlledPlayer = null;
       this.selectedPlayerToControl = null;

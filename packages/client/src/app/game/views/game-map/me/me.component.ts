@@ -129,4 +129,8 @@ export class MeComponent implements OnInit, OnDestroy {
     }
     return this.normalColor;
   }
+
+  showMeModel(){
+    return this.character.viewState !== ViewState.OVERVIEW && this.character.state !== MeModelState.CONTROLLED;
+  }
 }

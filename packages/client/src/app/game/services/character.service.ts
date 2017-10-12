@@ -8,6 +8,7 @@ export enum MeModelState {
   RUNNING,
   SHOOTING,
   DEAD,
+  CONTROLLED,
 }
 
 export enum ViewState {

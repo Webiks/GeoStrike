@@ -1,7 +1,6 @@
-import { AfterViewInit, Component, Input, OnDestroy } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import {
   AcEntity,
-  AcNotification,
   CesiumEvent,
   DisposableObservable,
   EventResult,
@@ -11,22 +10,22 @@ import {
 } from 'angular-cesium';
 import { MatSnackBar } from '@angular/material';
 import { PlayerFields } from '../../../../types';
-import { Subject } from 'rxjs/Subject';
 import { TakeControlService } from '../../../services/take-control.service';
 
 @Component({
   selector: 'viewer-controls',
   template: `
     <div class="control-container radius-border">
-      <div class="control-btn" [class.disable]="!takeControlService.controlledPlayer" (click)="removeControl()">VIEWER</div>
-      <div class="control-btn radius-border" [class.disable]="isInFpvMode()|| !takeControlService.selectedPlayerToControl " (click)="takeControl()">PLAYER</div>
+      <div class="control-btn" [class.disable]="!takeControlService.controlledPlayer" (click)="removeControl()">VIEWER
+      </div>
+      <div class="control-btn radius-border"
+           [class.disable]="isInFpvMode()|| !takeControlService.selectedPlayerToControl " (click)="takeControl()">PLAYER
+      </div>
     </div>
   `,
   styleUrls: ['./viewer-controls.component.scss']
 })
 export class ViewerControlsComponent implements AfterViewInit, OnDestroy {
-  @Input()
-  players: Subject<AcNotification>;
 
   private eventManager: MapEventsManagerService;
   private clickEvent: DisposableObservable<EventResult>;
@@ -38,15 +37,16 @@ export class ViewerControlsComponent implements AfterViewInit, OnDestroy {
 
   }
 
-  removeControl(){
-    if (this.isInFpvMode()){
-      this.takeControlService.removePlayerControl(this.takeControlService.controlledPlayer);
+  removeControl() {
+    if (this.isInFpvMode()) {
+      this.takeControlService.removePlayerControl();
     }
   }
 
-  isInFpvMode(): boolean{
+  isInFpvMode(): boolean {
     return !!this.takeControlService.controlledPlayer;
   }
+
   takeControl() {
     if (this.takeControlService.selectedPlayerToControl && !this.isInFpvMode()) {
       this.takeControlService.controlPlayer(this.takeControlService.selectedPlayerToControl);
@@ -70,7 +70,7 @@ export class ViewerControlsComponent implements AfterViewInit, OnDestroy {
       .subscribe(selectedPlayer => {
         const currentSelected = this.takeControlService.selectedPlayerToControl;
         if (currentSelected) {
-          this.takeControlService.selectedPlayerToControl = currentSelected.id === selectedPlayer.id? null : selectedPlayer;
+          this.takeControlService.selectedPlayerToControl = currentSelected.id === selectedPlayer.id ? null : selectedPlayer;
         } else {
           this.takeControlService.selectedPlayerToControl = selectedPlayer;
         }

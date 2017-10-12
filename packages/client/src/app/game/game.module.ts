@@ -42,6 +42,7 @@ import { BuildingsComponent } from './views/buildings/buildings.component';
 import { BuildingsService } from './services/buildings.service';
 import { CollisionDetectorService } from './services/collision-detector.service';
 import { ViewerControlsComponent } from './views/game-container/viewer-controls/viewer-controls.component';
+import { BanchedDialogComponent } from './views/banched-dialog/banched-dialog.component';
 
 @NgModule({
   declarations: [
@@ -67,6 +68,7 @@ import { ViewerControlsComponent } from './views/game-container/viewer-controls/
     BuildingsComponent,
     GameDialogsComponent,
     ViewerControlsComponent,
+    BanchedDialogComponent,
   ],
   imports: [
     BrowserModule,

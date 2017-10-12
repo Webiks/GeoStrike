@@ -60,6 +60,7 @@ export const schema = gql`
         ALIVE,
         IN_BUILDING,
         DEAD,
+        CONTROLLED,
     }
 
     type Location {

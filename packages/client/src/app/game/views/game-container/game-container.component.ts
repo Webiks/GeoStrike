@@ -20,6 +20,7 @@ import { TakeControlService } from '../../services/take-control.service';
   providers: [TakeControlService]
 })
 export class GameContainerComponent implements OnInit, OnDestroy {
+  public viewerMode: boolean;
   private gameData$: Observable<GameFields.Fragment>;
   private game: CurrentGame.CurrentGame;
   private me: GameFields.Me;
@@ -58,19 +59,21 @@ export class GameContainerComponent implements OnInit, OnDestroy {
 
           const allPlayers = [...this.game.players];
           if (this.me) {
-            const overviewMode = this.me.type === 'OVERVIEW' || this.me['__typename'] === 'Viewer';
+            this.viewerMode = this.me.type === 'OVERVIEW' || this.me['__typename'] === 'Viewer';
 
-            if (!overviewMode) {
+            if (!this.viewerMode) {
               this.character.syncState(this.me);
               allPlayers.push(this.me);
             }
-            if (this.controlledService.controlledPlayer){
+            if (this.controlledService.controlledPlayer) {
               allPlayers.push(this.controlledService.controlledPlayer)
             }
 
-            if (this.me.state === 'DEAD') {
-              if (this.character.initialized) {
+            if (this.character.initialized) {
+              if (this.me.state === 'DEAD') {
                 this.character.state = MeModelState.DEAD;
+              } else if (this.me.state === 'CONTROLLED') {
+                this.character.state = MeModelState.CONTROLLED;
               }
             }
           }

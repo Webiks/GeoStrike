@@ -95,7 +95,6 @@ export class GameMapComponent implements OnInit, OnDestroy {
         this.startFirstPersonMode(controlledPlayer);
       } else if (controlledPlayer === null) {
         this.character.viewState = ViewState.OVERVIEW;
-        this.overviewSettings();
       }
     })
   }
