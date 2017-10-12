@@ -34,6 +34,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
   private lastPlayerHPR: { heading: number, pitch: number, range: number };
   private lastPlayerHead;
   private helperEntityPoint;
+  private lastViewState: ViewState;
 
   constructor(private gameService: GameService,
               private character: CharacterService,
@@ -78,25 +79,27 @@ export class GameMapComponent implements OnInit, OnDestroy {
       if (overviewMode) {
         this.character.viewState = ViewState.OVERVIEW;
         this.overviewSettings();
-        return;
+      }else {
+        this.character.viewState = ViewState.SEMI_FPV;
+        this.startFirstPersonMode(game.me);
       }
-      this.startFirstPersonMode(game.me);
+
     });
 
-    this.character.viewState$.subscribe((viewState) => {
-      if (viewState === ViewState.OVERVIEW) {
+    this.character.viewState$.subscribe((newViewState) => {
+
+      if (this.lastViewState !== ViewState.OVERVIEW && newViewState === ViewState.OVERVIEW) {
         this.changeToOverview();
+      } else if (this.lastViewState === ViewState.OVERVIEW && newViewState !== ViewState.OVERVIEW) {
+        this.viewerOptions.setFpvCameraOptions(this.viewer);
+
+        const controlledPlayer = this.takeControlService.controlledPlayer || this.character.meFromServer;
+        this.startFirstPersonMode(controlledPlayer);
       }
+
+      this.lastViewState = newViewState;
     });
 
-    this.takeControlService.controlledPlayer$.subscribe(controlledPlayer => {
-      if (controlledPlayer) {
-        this.viewerOptions.setFpvCameraOptions(this.viewer);
-        this.startFirstPersonMode(controlledPlayer);
-      } else if (controlledPlayer === null) {
-        this.character.viewState = ViewState.OVERVIEW;
-      }
-    })
   }
 
   private startFirstPersonMode(player: PlayerFields.Fragment) {
@@ -110,7 +113,6 @@ export class GameMapComponent implements OnInit, OnDestroy {
       isCrawling: false,
       characterInfo: player.character
     });
-    this.character.viewState = ViewState.SEMI_FPV;
     this.gameService.startServerUpdatingLoop();
 
     this.viewer.scene.preRender.addEventListener(this.preRenderHandler);
@@ -118,8 +120,8 @@ export class GameMapComponent implements OnInit, OnDestroy {
     this.ngZone.runOutsideAngular(() => {
       this.elementRef.nativeElement.addEventListener('mousemove', this.onMousemove);
     });
-
     this.cd.detectChanges();
+    this.character.updateCharacter();
   }
 
   private changeToOverview() {

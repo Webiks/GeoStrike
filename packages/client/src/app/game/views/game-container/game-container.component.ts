@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { Subject } from 'rxjs/Subject';
 import { AcEntity, AcNotification, ActionType } from 'angular-cesium';
 import { Observable } from 'rxjs/Observable';
-import { CharacterService, MeModelState } from '../../services/character.service';
+import { CharacterService, MeModelState, ViewState } from '../../services/character.service';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/map';
 import * as _ from 'lodash';
@@ -60,7 +60,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
           const allPlayers = [...this.game.players];
           if (this.me) {
             this.viewerMode = this.me.type === 'OVERVIEW' || this.me['__typename'] === 'Viewer';
-
+            this.character.meFromServer = this.me;
             if (!this.viewerMode) {
               this.character.syncState(this.me);
               allPlayers.push(this.me);
@@ -70,11 +70,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
             }
 
             if (this.character.initialized) {
-              if (this.me.state === 'DEAD') {
-                this.character.state = MeModelState.DEAD;
-              } else if (this.me.state === 'CONTROLLED') {
-                this.character.state = MeModelState.CONTROLLED;
-              }
+              this.setCharacterStateFromServer();
             }
           }
 
@@ -91,6 +87,23 @@ export class GameContainerComponent implements OnInit, OnDestroy {
         });
       });
     });
+  }
+
+  private setCharacterStateFromServer() {
+    if (this.me.state === 'DEAD') {
+      this.character.state = MeModelState.DEAD;
+    } else if (this.me.state === 'CONTROLLED') {
+      this.character.state = MeModelState.CONTROLLED;
+      // from controlled to normal state
+    } else if (this.character.state === MeModelState.CONTROLLED && this.me.state === 'ALIVE') {
+      this.character.state = MeModelState.WALKING;
+      this.character.viewState = ViewState.SEMI_FPV;
+
+      this.otherPlayers$.next({
+        id: this.me.id,
+        actionType: ActionType.DELETE,
+      })
+    }
   }
 
   ngOnDestroy() {

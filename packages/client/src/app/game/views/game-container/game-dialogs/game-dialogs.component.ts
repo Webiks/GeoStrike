@@ -1,10 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { YouWinDialogComponent } from '../../you-win-dialog/you-win-dialog.component';
 import { Team } from '../../../../types';
 import { EndGameDialogComponent } from '../../end-game-dialog/end-game-dialog.component';
 import { CharacterService, MeModelState, ViewState } from '../../../services/character.service';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatDialogRef } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
+import { BenchedDialogComponent } from '../../benched-dialog/benched-dialog.component';
 
 @Component({
   selector: 'game-dialogs',
@@ -18,9 +19,13 @@ export class GameDialogsComponent implements OnInit {
 
   private gameoverDialogOpen = false;
   private wonDialogOpen = false;
+  private benchedDialogOpen = false;
+  private benchedDialog: MatDialogRef<BenchedDialogComponent>;
+
 
   constructor(private dialog: MatDialog,
-              private character: CharacterService) { }
+              private character: CharacterService,
+              private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.character.state$.subscribe(characterState=>{
@@ -29,7 +34,14 @@ export class GameDialogsComponent implements OnInit {
         if (this.character.initialized) {
           this.character.state = MeModelState.DEAD;
         }
+      } else  if (characterState && characterState.state === MeModelState.CONTROLLED && !this.benchedDialogOpen){
+        this.openBenchedDialog(characterState.characterInfo.name);
+      } else if (characterState && this.benchedDialogOpen && characterState.state !== MeModelState.CONTROLLED){
+        this.benchedDialog.close();
+        this.benchedDialogOpen = false;
       }
+
+      this.cd.detectChanges();
     });
 
     this.gameResult.subscribe(winingTeam=>{
@@ -40,11 +52,26 @@ export class GameDialogsComponent implements OnInit {
         } else {
           this.openGameOverDialog(true, loseTeam);
         }
+        this.cd.detectChanges();
       }
     })
   }
 
 
+  private openBenchedDialog(playerName){
+    this.benchedDialogOpen = true;
+    this.benchedDialog = this.dialog.open(BenchedDialogComponent,{
+      height: '80%',
+      width: '80%',
+      disableClose: true,
+      data: {playerName},
+    });
+    this.benchedDialog.afterClosed().subscribe((toOverView) => {
+      if (toOverView) {
+        this.character.viewState = ViewState.OVERVIEW;
+      }
+    });
+  }
 
   private openWinDialog(losingTeam: Team) {
     this.wonDialogOpen = true;
