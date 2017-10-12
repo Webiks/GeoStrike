@@ -98,7 +98,6 @@ export class GameDialogsComponent implements OnInit {
       }
     }).afterClosed().subscribe((toOverView) => {
       if (toOverView) {
-        this.gameoverDialogOpen = false;
         this.character.viewState = ViewState.OVERVIEW;
       }
     });

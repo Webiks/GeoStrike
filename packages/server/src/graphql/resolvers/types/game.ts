@@ -11,10 +11,7 @@ const resolvers = {
         if (games.isControlled(game, player.playerId)) {
           return players;
         }
-        else if (games.isController(game, player.playerId)) {
-          const controlledPlayer = game.controlledPlayersMap.get(player.playerId);
-          return players.filter((p: IPlayer) => p !== player && p !== controlledPlayer);
-        } else {
+        else {
           return players.filter((p: IPlayer) => p !== player);
         }
       }

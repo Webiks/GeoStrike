@@ -65,17 +65,17 @@ export class GameContainerComponent implements OnInit, OnDestroy {
               this.character.syncState(this.me);
               allPlayers.push(this.me);
             }
-            if (this.controlledService.controlledPlayer) {
-              allPlayers.push(this.controlledService.controlledPlayer)
-            }
 
             if (this.character.initialized) {
               this.setCharacterStateFromServer();
             }
           }
 
+          const controlledPlayer = this.controlledService.controlledPlayer;
           this.allPlayers$.next(allPlayers);
-          this.game.players.map<AcNotification>(player => ({
+          this.game.players
+            .filter(p => !controlledPlayer || controlledPlayer.id !== p.id)
+            .map<AcNotification>(player => ({
             actionType: ActionType.ADD_UPDATE,
             id: player.id,
             entity: new AcEntity({...player, name: player.character.name}),
