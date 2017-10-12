@@ -5,11 +5,12 @@ import { AppRoutingModule } from './app.module.routing';
 import { KeyboardKeysService } from './core/services/keyboard-keys.service';
 import { HttpModule } from '@angular/http';
 import { ConfiguredApolloModule } from './core/configured-apollo/configured-apollo.module';
-import {MATERIAL_COMPATIBILITY_MODE} from '@angular/material';
+import { MATERIAL_COMPATIBILITY_MODE } from '@angular/material';
+import { SnackBarContentComponent } from './shared/snack-bar-content/snack-bar-content.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     HttpModule,
@@ -21,6 +22,11 @@ import {MATERIAL_COMPATIBILITY_MODE} from '@angular/material';
     KeyboardKeysService,
     {provide: MATERIAL_COMPATIBILITY_MODE, useValue: true},
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [
+    AppComponent,
+  ],
+  entryComponents: [
+    SnackBarContentComponent,
+  ]
 })
 export class AppModule { }

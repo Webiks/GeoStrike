@@ -7,11 +7,14 @@ import { Subscription } from 'rxjs/Subscription';
 import { Subject } from 'rxjs/Subject';
 import { AcEntity, AcNotification, ActionType } from 'angular-cesium';
 import { Observable } from 'rxjs/Observable';
+import { MatDialog, MatSnackBar } from '@angular/material';
+import { CharacterService, MeModelState } from '../../services/character.service';
 import { CharacterService, MeModelState, ViewState } from '../../services/character.service';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/map';
 import * as _ from 'lodash';
 import { TakeControlService } from '../../services/take-control.service';
+import { SnackBarContentComponent } from '../../../shared/snack-bar-content/snack-bar-content.component';
 
 @Component({
   selector: 'game-container',
@@ -22,9 +25,12 @@ import { TakeControlService } from '../../services/take-control.service';
 export class GameContainerComponent implements OnInit, OnDestroy {
   public isViewer: boolean;
   private gameData$: Observable<GameFields.Fragment>;
+  public gameData$: Observable<GameFields.Fragment>;
+  public gameNotifications$: Observable<string>;
   private game: CurrentGame.CurrentGame;
   private me: GameFields.Me;
   private gameDataSubscription: Subscription;
+  private gameNotificationsSubscription: Subscription;
   private otherPlayers$: Subject<AcNotification> = new Subject<AcNotification>();
   private allPlayers$: Subject<PlayerFields.Fragment[]> = new Subject<PlayerFields.Fragment[]>();
   private gameResult$: Subject<Team> = new Subject();
@@ -36,7 +42,8 @@ export class GameContainerComponent implements OnInit, OnDestroy {
               private activatedRoute: ActivatedRoute,
               private router: Router,
               private ngZone: NgZone,
-              private controlledService: TakeControlService) {
+              private controlledService: TakeControlService,
+              private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
@@ -51,7 +58,10 @@ export class GameContainerComponent implements OnInit, OnDestroy {
 
         AuthorizationMiddleware.setToken(params.playerToken);
         this.gameService.refreshConnection();
-        this.gameData$ = (this.gameService.getCurrentGameData()).map(({gameData}) => gameData);
+        this.gameData$ = (this.gameService.getCurrentGameData()).map(({ gameData }) => gameData);
+        this.gameNotifications$ = (this.gameService.getCurrentGameNotifications()).map(notification => {
+          return notification.gameNotifications.message;
+        });
         this.gameDataSubscription = this.gameData$.subscribe(currentGame => {
           this.game = currentGame;
           this.me = currentGame.me;
@@ -123,6 +133,10 @@ export class GameContainerComponent implements OnInit, OnDestroy {
       this.gameDataSubscription.unsubscribe();
     }
 
+    if (this.gameNotificationsSubscription) {
+      this.gameNotificationsSubscription.unsubscribe();
+    }
+
     if (this.paramsSubscription) {
       this.paramsSubscription.unsubscribe();
     }
@@ -130,6 +144,18 @@ export class GameContainerComponent implements OnInit, OnDestroy {
 
   getPlayers(team: Team): Observable<PlayerFields.Fragment[]> {
     return this.allPlayers$.map((players) => players.filter(p => p.team === team)).distinctUntilChanged((a, b) => _.isEqual(a, b));
+  }
+
+  gameStarted() {
+    this.gameNotificationsSubscription = this.gameNotifications$
+      .subscribe(notification => {
+        this.ngZone.run(() => {
+          this.snackBar.openFromComponent(SnackBarContentComponent, {
+            data: notification,
+            duration: 5000,
+          });
+        });
+      });
   }
 
 }
