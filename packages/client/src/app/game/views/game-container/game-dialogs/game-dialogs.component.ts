@@ -36,7 +36,7 @@ export class GameDialogsComponent implements OnInit {
         if (this.character.initialized) {
           this.character.state = MeModelState.DEAD;
         }
-      } else if (characterState && characterState.state === MeModelState.CONTROLLED && !this.benchedDialogOpen) {
+      } else if (characterState && characterState.state === MeModelState.CONTROLLED && !this.benchedDialogOpen && !isOverview) {
         this.openBenchedDialog(characterState.characterInfo.name);
       } else if (characterState && this.benchedDialogOpen && characterState.state !== MeModelState.CONTROLLED) {
         this.benchedDialog.close();

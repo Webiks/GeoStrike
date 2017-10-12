@@ -90,22 +90,22 @@ export class GameContainerComponent implements OnInit, OnDestroy {
   }
 
   private setCharacterStateFromServer() {
-    if (this.me.state === 'DEAD') {
-      this.character.state = MeModelState.DEAD;
-    } else if (this.me.state === 'CONTROLLED') {
-      this.character.state = MeModelState.CONTROLLED;
-      // from controlled to normal state
-    } else if (this.character.state === MeModelState.CONTROLLED && this.me.state === 'ALIVE') {
-      this.character.state = MeModelState.WALKING;
-      this.character.viewState = ViewState.SEMI_FPV;
+    if (!this.isViewer) {
+      if (this.me.state === 'DEAD') {
+        this.character.state = MeModelState.DEAD;
+      } else if (this.me.state === 'CONTROLLED') {
+        this.character.state = MeModelState.CONTROLLED;
+        // from controlled to normal state
+      } else if (this.character.state === MeModelState.CONTROLLED && this.me.state === 'ALIVE') {
+        this.character.state = MeModelState.WALKING;
+        this.character.viewState = ViewState.SEMI_FPV;
 
-      this.otherPlayers$.next({
-        id: this.me.id,
-        actionType: ActionType.DELETE,
-      })
-    }
-
-    if (this.isViewer) {
+        this.otherPlayers$.next({
+          id: this.me.id,
+          actionType: ActionType.DELETE,
+        })
+      }
+    } else {
       // if controlling set state from controlled player
       if (this.controlledService.controlledPlayer) {
         const controlledPlayer = this.game.players.find(p => p.id === this.controlledService.controlledPlayer.id);
