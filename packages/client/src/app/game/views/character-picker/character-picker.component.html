@@ -15,7 +15,7 @@
   </mat-grid-list>
   <div class="viewer-row">
     <mat-form-field class="username-input">
-      <input matInput placeholder="Username" required [(ngModel)]="username">
+      <input matInput placeholder="Username" required [(ngModel)]="username" (ngModelChange)="usernameChange.emit($event)">
     </mat-form-field>
     <h2 class="viewer-btn" [class.selected-viewer]="selectedCharacter === viewer.name" (click)="select.emit(viewer)" >Continue as Viewer</h2>
   </div>

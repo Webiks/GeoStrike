@@ -60,6 +60,8 @@ export interface Mutation {
   updatePosition?: Player; 
   ready?: Game; 
   notifyKill?: Player; 
+  takeControlOverPlayer?: Player; 
+  removeControlOverPlayer?: Player; 
 }
 
 export interface CreateOrJoinResult {
@@ -70,6 +72,12 @@ export interface CreateOrJoinResult {
 
 export interface Subscription {
   gameData?: Game; 
+  gameNotifications?: Notification; 
+}
+
+export interface Notification {
+  gameId?: string; 
+  message?: string; 
 }
 
 export interface Viewer extends User {
@@ -107,11 +115,14 @@ export interface UpdatePositionMutationArgs {
 export interface NotifyKillMutationArgs {
   playerId: string; 
 }
+export interface TakeControlOverPlayerMutationArgs {
+  playerId: string; 
+}
 
 export type Team = "BLUE" | "RED" | "NONE";
 
 
-export type PlayerState = "WAITING" | "READY" | "ALIVE" | "IN_BUILDING" | "DEAD";
+export type PlayerState = "WAITING" | "READY" | "ALIVE" | "DEAD";
 
 
 export type PlayerSyncState = "VALID" | "INVALID";

@@ -136,10 +136,10 @@ export class GameMapComponent implements OnInit, OnDestroy {
     const isFPV = this.character.viewState === ViewState.FPV;
     const isShooting = this.character.state === MeModelState.SHOOTING;
     const isCrawling = this.character.isCrawling;
-    const range = isFPV || isShooting ? 0.1 : 3;
+    const range = isFPV || isShooting ? 0.1 : 4;
 
     const playerHeadCart = Cesium.Cartographic.fromCartesian(this.character.location);
-    playerHeadCart.height += isCrawling ? 2 : 4;
+    playerHeadCart.height += isCrawling ? 2 : 4.4;
 
     if (this.lastPlayerLocation === this.character.location &&
       this.lastPlayerHPR.heading === this.character.heading &&
