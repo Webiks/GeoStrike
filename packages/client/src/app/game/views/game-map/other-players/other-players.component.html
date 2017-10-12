@@ -12,6 +12,7 @@
     position: utils.toFixedHeight(player.currentLocation.location, 5),
     heightReference: utils.getClampedToGroundHeightReference(),
     image: getPlayerIcon(player),
+    color: getIconColor(player),
   }">
   </ac-billboard-primitive-desc>
   <ac-label-primitive-desc *ngIf="isOverview$ | async" props="{
@@ -21,7 +22,7 @@
     font: '15px sans-serif',
     scale: 0.9,
     pixelOffset: getLabelPixelOffset(player) | pixelOffset,
-    showBackground: true,
+    showBackground: true
   }">
   </ac-label-primitive-desc>
 </ac-layer>

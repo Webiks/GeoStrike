@@ -5,7 +5,16 @@ export const updatePosition = (rootValue, { position, heading,isCrawling, skipVa
     return null;
   }
 
-  games.updatePlayerPosition(game.gameId, player.playerId, position, heading,isCrawling, skipValidation);
+  const controlledPlayers = Array.from(game.controlledPlayersMap.values());
+  if (controlledPlayers.find(p => p.playerId === player.playerId)) {
+    return;
+  }
 
-  return player;
+  let playerId = player.playerId;
+  if (game.controlledPlayersMap.has(player.playerId)) {
+    playerId = game.controlledPlayersMap.get(player.playerId).playerId;
+  }
+  const updatedPlayer =games.updatePlayerPosition(game.gameId, playerId, position, heading,isCrawling, skipValidation);
+
+  return updatedPlayer;
 };

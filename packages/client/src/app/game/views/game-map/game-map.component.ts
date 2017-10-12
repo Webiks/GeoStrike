@@ -1,13 +1,14 @@
 import { ChangeDetectorRef, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { AcMapComponent, AcNotification, ViewerConfiguration } from 'angular-cesium';
-import { GameFields } from '../../../types';
+import { GameFields, PlayerFields } from '../../../types';
 import { CharacterService, MeModelState, ViewState } from '../../services/character.service';
 import { UtilsService } from '../../services/utils.service';
 import { GameService } from '../../services/game.service';
 import { environment } from '../../../../environments/environment';
 import { CesiumViewerOptionsService } from './viewer-options/cesium-viewer-options.service';
 import { CollisionDetectorService } from '../../services/collision-detector.service';
+import { TakeControlService } from '../../services/take-control.service';
 
 @Component({
   selector: 'game-map',
@@ -33,6 +34,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
   private lastPlayerHPR: { heading: number, pitch: number, range: number };
   private lastPlayerHead;
   private helperEntityPoint;
+  private lastViewState: ViewState;
 
   constructor(private gameService: GameService,
               private character: CharacterService,
@@ -42,7 +44,8 @@ export class GameMapComponent implements OnInit, OnDestroy {
               private ngZone: NgZone,
               private cd: ChangeDetectorRef,
               private viewerOptions: CesiumViewerOptionsService,
-              private collisionDetector: CollisionDetectorService) {
+              private collisionDetector: CollisionDetectorService,
+              private takeControlService: TakeControlService) {
     viewerConf.viewerOptions = viewerOptions.getViewerOption();
 
     viewerConf.viewerModifier = (viewer) => {
@@ -70,39 +73,55 @@ export class GameMapComponent implements OnInit, OnDestroy {
     if (this.createPathMode) {
       return;
     }
-    this.character.viewState$.subscribe((viewState) => {
-      if (viewState === ViewState.OVERVIEW) {
-        this.changeToOverview();
-      }
-    });
+
     this.gameData.first().subscribe(game => {
       const overviewMode = game.me['__typename'] === 'Viewer' || game.me.type === 'OVERVIEW';
       if (overviewMode) {
         this.character.viewState = ViewState.OVERVIEW;
         this.overviewSettings();
-        return;
+      }else {
+        this.character.viewState = ViewState.SEMI_FPV;
+        this.startFirstPersonMode(game.me);
       }
 
-      this.character.initCharacter({
-        id: 'me',
-        location: this.utils.getPosition(game.me.currentLocation.location),
-        heading: game.me.currentLocation.heading,
-        pitch: GameMapComponent.DEFAULT_PITCH,
-        state: game.me.state === 'DEAD' ? MeModelState.DEAD : MeModelState.WALKING,
-        team: game.me.team,
-        isCrawling: false,
-        characterInfo: game.me.character
-      });
-      this.gameService.startServerUpdatingLoop();
-
-      this.viewer.scene.preRender.addEventListener(this.preRenderHandler);
-
-      this.ngZone.runOutsideAngular(() => {
-        this.elementRef.nativeElement.addEventListener('mousemove', this.onMousemove);
-      });
-
-      this.cd.detectChanges();
     });
+
+    this.character.viewState$.subscribe((newViewState) => {
+
+      if (this.lastViewState !== ViewState.OVERVIEW && newViewState === ViewState.OVERVIEW) {
+        this.changeToOverview();
+      } else if (this.lastViewState === ViewState.OVERVIEW && newViewState !== ViewState.OVERVIEW) {
+        this.viewerOptions.setFpvCameraOptions(this.viewer);
+
+        const controlledPlayer = this.takeControlService.controlledPlayer || this.character.meFromServer;
+        this.startFirstPersonMode(controlledPlayer);
+      }
+
+      this.lastViewState = newViewState;
+    });
+
+  }
+
+  private startFirstPersonMode(player: PlayerFields.Fragment) {
+    this.character.initCharacter({
+      id: 'me',
+      location: this.utils.getPosition(player.currentLocation.location),
+      heading: player.currentLocation.heading,
+      pitch: GameMapComponent.DEFAULT_PITCH,
+      state: player.state === 'DEAD' ? MeModelState.DEAD : MeModelState.WALKING,
+      team: player.team,
+      isCrawling: false,
+      characterInfo: player.character
+    });
+    this.gameService.startServerUpdatingLoop();
+
+    this.viewer.scene.preRender.addEventListener(this.preRenderHandler);
+
+    this.ngZone.runOutsideAngular(() => {
+      this.elementRef.nativeElement.addEventListener('mousemove', this.onMousemove);
+    });
+    this.cd.detectChanges();
+    this.character.updateCharacter();
   }
 
   private changeToOverview() {

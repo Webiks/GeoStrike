@@ -207,7 +207,7 @@ export class GamesManager {
                        isCrawling: boolean,
                        skipValidation = false) {
     const game = this.getGameById(gameId);
-    const player = game.controlledPlayersMap.get(playerId) || game.playersMap.get(playerId);
+    const player = game.playersMap.get(playerId);
     if (player && position) {
       if (
         skipValidation ||
@@ -220,7 +220,11 @@ export class GamesManager {
       } else {
         player.syncState = 'INVALID';
       }
+
+      return player;
     }
+
+    return null;
   }
 
   updatePlayerState(gameId: string, playerId: string, newState: PlayerState) {
@@ -282,15 +286,26 @@ export class GamesManager {
   }
 
   takeControlOverPlayer(game, playerId: string, controlledPlayerId: string): IPlayer {
-    const controlledPlayer = game.playersMap.get(controlledPlayerId);
+    const controlledPlayer: IPlayer = game.playersMap.get(controlledPlayerId);
+    controlledPlayer.state = 'CONTROLLED';
     game.controlledPlayersMap.set(playerId, controlledPlayer);
     return controlledPlayer;
   }
 
   removeControlOverPlayer(game, playerId: string): IPlayer {
-    const controlledPlayer = game.controlledPlayersMap.get(playerId);
-    game.controlledPlayersMap.delete(playerId);
+    const controlledPlayer: IPlayer = game.controlledPlayersMap.get(playerId);
+    if (controlledPlayer){
+      controlledPlayer.state = controlledPlayer.state === 'CONTROLLED'? 'ALIVE': controlledPlayer.state;
+      game.controlledPlayersMap.delete(playerId);
+    }
     return controlledPlayer;
   }
 
+  isControlled(game: IGameObject, playerId): boolean {
+    return !!Array.from(game.controlledPlayersMap.values()).find(p => p.playerId === playerId);
+  }
+
+  isController(game: IGameObject, playerId): boolean {
+    return game.controlledPlayersMap.has(playerId);
+  }
 }

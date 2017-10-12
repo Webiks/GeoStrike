@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { CharacterService, ViewState } from '../../../services/character.service';
 import { GameConfig } from '../../../services/game-config';
-import { CesiumService } from 'angular-cesium';
+import { AcTileset3dComponent, CesiumService } from 'angular-cesium';
 import { environment } from '../../../../../environments/environment';
 
 @Component({
@@ -9,6 +9,8 @@ import { environment } from '../../../../../environments/environment';
   templateUrl: './world.component.html',
 })
 export class WorldComponent implements OnInit {
+
+  @ViewChild('tiles') tiles: AcTileset3dComponent;
   public tilesUrl = environment.tiles.url;
   public loadTiles = environment.load3dTiles;
   public tilesStyle = {
@@ -21,7 +23,7 @@ export class WorldComponent implements OnInit {
   };
   public hideTiles = false;
 
-  constructor(private cesiumService: CesiumService, public character: CharacterService) {
+  constructor(private cesiumService: CesiumService, public character: CharacterService, private cd: ChangeDetectorRef) {
   }
 
   ngOnInit() {
@@ -31,6 +33,7 @@ export class WorldComponent implements OnInit {
 
     this.character.viewState$.subscribe(viewState => {
       this.hideTiles = viewState === ViewState.OVERVIEW;
+      this.cd.detectChanges();
     });
   }
 

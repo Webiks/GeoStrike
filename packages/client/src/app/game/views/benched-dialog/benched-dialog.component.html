@@ -1,0 +1,14 @@
+<div class="background-win">
+  <div class="text-block">
+    <div class="heading-text">YOU GOT BENCHED!</div>
+    <p class="benched-text">
+      Hey {{playerName}},<br>
+      It looks like someone took control of your player.<br>
+      You may continue the game as a viewer while waiting to gain back control.<br>
+    </p>
+  </div>
+  <div class="buttons">
+    <big-button class="button" text="EXIT THE GAME" (click)="exitGame()"></big-button>
+    <big-button class="button" text="CONTINUE AS VIEWER" (click)="overview()"></big-button>
+  </div>
+</div>

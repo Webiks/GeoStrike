@@ -3,6 +3,7 @@
   <team-info-bar [players]="getPlayers('RED')" class="red-team-info"></team-info-bar>
   <game-toolbar></game-toolbar>
   <player-details [me]="me"></player-details>
+  <viewer-controls *ngIf="isViewer"></viewer-controls>
 </game-map>
 <game-dialogs [gameResult]="gameResult$"></game-dialogs>
 <game-countdown [count]="3" (done)="gameStarted()"></game-countdown>

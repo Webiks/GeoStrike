@@ -5,13 +5,16 @@ const resolvers = {
   Game: {
     id: (game: IGameObject) => game.gameId,
     gameCode: (game: IGameObject) => game.gameCode,
-    players: (game: IGameObject, args, { player }) => {
+    players: (game: IGameObject, args, {player, games}: IGraphQLContext) => {
       const players = Array.from(game.playersMap.values());
       if (player) {
-        const controlledPlayer = game.controlledPlayersMap.get(player.playerId);
-        return players.filter((p: IPlayer) => p !== player && p !== controlledPlayer);
+        if (games.isControlled(game, player.playerId)) {
+          return players;
+        }
+        else {
+          return players.filter((p: IPlayer) => p !== player);
+        }
       }
-
       return players || [];
     },
     state: (game: IGameObject) => {
@@ -22,7 +25,7 @@ const resolvers = {
 
       return 'ACTIVE';
     },
-    me: (game: IGameObject, args, { player }: IGraphQLContext) => player || null,
+    me: (game: IGameObject, args, {player}: IGraphQLContext) => player || null,
   },
   CreateOrJoinResult: {
     game: result => result.game,

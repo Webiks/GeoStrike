@@ -1,4 +1,4 @@
-<ac-3d-tile-layer *ngIf="loadTiles" [show]="!hideTiles"
+<ac-3d-tile-layer *ngIf="loadTiles && !hideTiles"
     [options]="{
       maximumMemoryUsage: 1024,
       modelMatrix: getTilesMatrix(),
@@ -10,6 +10,5 @@
       immediatelyLoadDesiredLevelOfDetail : false,
       loadSiblings : false,
       cullWithChildrenBounds : true
-    }"
-    [style]="tilesStyle">
+    }">
 </ac-3d-tile-layer>

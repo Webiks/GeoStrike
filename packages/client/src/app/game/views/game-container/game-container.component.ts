@@ -7,20 +7,23 @@ import { Subscription } from 'rxjs/Subscription';
 import { Subject } from 'rxjs/Subject';
 import { AcEntity, AcNotification, ActionType } from 'angular-cesium';
 import { Observable } from 'rxjs/Observable';
-import { MatDialog, MatSnackBar } from '@angular/material';
-import { CharacterService, MeModelState } from '../../services/character.service';
+import { MatSnackBar } from '@angular/material';
+import { CharacterService, MeModelState, ViewState } from '../../services/character.service';
+import { TakeControlService } from '../../services/take-control.service';
+import { SnackBarContentComponent } from '../../../shared/snack-bar-content/snack-bar-content.component';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/map';
 import * as _ from 'lodash';
-import { SnackBarContentComponent } from '../../../shared/snack-bar-content/snack-bar-content.component';
 
 @Component({
   selector: 'game-container',
   templateUrl: './game-container.component.html',
   styleUrls: ['./game-container.component.scss'],
+  providers: [TakeControlService]
 })
 export class GameContainerComponent implements OnInit, OnDestroy {
-  public gameData$: Observable<GameFields.Fragment>;
+  public isViewer: boolean;
+  private gameData$: Observable<GameFields.Fragment>;
   public gameNotifications$: Observable<string>;
   private game: CurrentGame.CurrentGame;
   private me: GameFields.Me;
@@ -37,8 +40,8 @@ export class GameContainerComponent implements OnInit, OnDestroy {
               private activatedRoute: ActivatedRoute,
               private router: Router,
               private ngZone: NgZone,
-              private snackBar: MatSnackBar,
-              private  dialog: MatDialog) {
+              private controlledService: TakeControlService,
+              private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
@@ -64,26 +67,27 @@ export class GameContainerComponent implements OnInit, OnDestroy {
 
           const allPlayers = [...this.game.players];
           if (this.me) {
-            const overviewMode = this.me.type === 'OVERVIEW' || this.me['__typename'] === 'Viewer';
-
-            if (!overviewMode) {
+            this.isViewer = this.me.type === 'OVERVIEW' || this.me['__typename'] === 'Viewer';
+            this.character.meFromServer = this.me;
+            if (!this.isViewer && this.me.state !== 'CONTROLLED') {
               this.character.syncState(this.me);
               allPlayers.push(this.me);
             }
 
-            if (this.me.state === 'DEAD') {
-              if (this.character.initialized) {
-                this.character.state = MeModelState.DEAD;
-              }
+            if (this.character.initialized) {
+              this.setCharacterStateFromServer();
             }
           }
 
+          const controlledPlayer = this.controlledService.controlledPlayer;
           this.allPlayers$.next(allPlayers);
-          this.game.players.map<AcNotification>(player => ({
-            actionType: ActionType.ADD_UPDATE,
-            id: player.id,
-            entity: new AcEntity(player),
-          })).forEach(notification => {
+          this.game.players
+            .filter(p => !controlledPlayer || controlledPlayer.id !== p.id)
+            .map<AcNotification>(player => ({
+              actionType: ActionType.ADD_UPDATE,
+              id: player.id,
+              entity: new AcEntity({...player, name: player.character.name}),
+            })).forEach(notification => {
             this.otherPlayers$.next(notification);
           });
         }, e => {
@@ -91,6 +95,35 @@ export class GameContainerComponent implements OnInit, OnDestroy {
         });
       });
     });
+  }
+
+  private setCharacterStateFromServer() {
+    if (!this.isViewer) {
+      if (this.me.state === 'DEAD') {
+        this.character.state = MeModelState.DEAD;
+      } else if (this.me.state === 'CONTROLLED') {
+        this.character.state = MeModelState.CONTROLLED;
+        // from controlled to normal state
+      } else if (this.character.state === MeModelState.CONTROLLED && this.me.state === 'ALIVE') {
+        this.character.state = MeModelState.WALKING;
+        this.character.viewState = ViewState.SEMI_FPV;
+
+        this.otherPlayers$.next({
+          id: this.me.id,
+          actionType: ActionType.DELETE,
+        })
+      }
+    } else {
+      // if controlling set state from controlled player
+      if (this.controlledService.controlledPlayer) {
+        const controlledPlayer = this.game.players.find(p => p.id === this.controlledService.controlledPlayer.id);
+        if (controlledPlayer && controlledPlayer.state === 'DEAD') {
+          this.character.state = MeModelState.DEAD;
+        }
+      } else {
+        this.character.state = MeModelState.WALKING;
+      }
+    }
   }
 
   ngOnDestroy() {

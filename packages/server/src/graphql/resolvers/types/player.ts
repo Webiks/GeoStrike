@@ -1,4 +1,4 @@
-import { IPlayer } from '../../../core/local-data/game';
+import { IPlayer, IViewer } from '../../../core/local-data/game';
 import { IGraphQLContext } from '../../context';
 
 const resolvers = {
@@ -6,7 +6,9 @@ const resolvers = {
     id: (player: IPlayer) => player.playerId,
     character: (player: IPlayer) => player.character,
     username: (player: IPlayer) => player.username,
-    team: (player: IPlayer) => player.team,
+    team: (player: IPlayer) => {
+      return player.team
+    },
     syncState: (player: IPlayer) => player.syncState,
     state: (player: IPlayer) => {
         return player.state;
@@ -19,6 +21,10 @@ const resolvers = {
       return player !== undefined && somePlayer.playerId === player.playerId;
     },
   },
+
+  Viewer: {
+    id: (viewer: IViewer)=> viewer.playerId,
+  }
 };
 
 export default resolvers;

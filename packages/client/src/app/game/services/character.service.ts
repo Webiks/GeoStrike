@@ -8,6 +8,7 @@ export enum MeModelState {
   RUNNING,
   SHOOTING,
   DEAD,
+  CONTROLLED,
 }
 
 export enum ViewState {
@@ -36,10 +37,18 @@ export class CharacterService {
   private _character = new BehaviorSubject<CharacterState>(null);
   private _viewState = new BehaviorSubject<ViewState>(ViewState.SEMI_FPV);
   private _entity;
+  private _meFromServer;
 
   constructor(private buildingsService: BuildingsService) {
   }
 
+  get meFromServer() {
+    return this._meFromServer;
+  }
+
+  set meFromServer(value) {
+    this._meFromServer = value;
+  }
   get entity() {
     return this._entity;
   }

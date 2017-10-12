@@ -122,7 +122,7 @@ export interface TakeControlOverPlayerMutationArgs {
 export type Team = "BLUE" | "RED" | "NONE";
 
 
-export type PlayerState = "WAITING" | "READY" | "ALIVE" | "IN_BUILDING" | "DEAD";
+export type PlayerState = "WAITING" | "READY" | "ALIVE" | "DEAD" | "CONTROLLED";
 
 
 export type PlayerSyncState = "VALID" | "INVALID";
@@ -240,6 +240,31 @@ export namespace Ready {
   } 
 
   export type Ready = GameFields.Fragment
+}
+export namespace RemoveControl {
+  export type Variables = {
+  }
+
+  export type Mutation = {
+    removeControlOverPlayer?: RemoveControlOverPlayer; 
+  } 
+
+  export type RemoveControlOverPlayer = {
+    id: string; 
+  } 
+}
+export namespace TakeControl {
+  export type Variables = {
+    playerId: string;
+  }
+
+  export type Mutation = {
+    takeControlOverPlayer?: TakeControlOverPlayer; 
+  } 
+
+  export type TakeControlOverPlayer = {
+    id: string; 
+  } 
 }
 export namespace UpdatePosition {
   export type Variables = {
