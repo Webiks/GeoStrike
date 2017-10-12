@@ -25,18 +25,20 @@ export class GameDialogsComponent implements OnInit {
 
   constructor(private dialog: MatDialog,
               private character: CharacterService,
-              private cd: ChangeDetectorRef) { }
+              private cd: ChangeDetectorRef) {
+  }
 
   ngOnInit() {
-    this.character.state$.subscribe(characterState=>{
-      if (characterState && characterState.state === MeModelState.DEAD && !this.gameoverDialogOpen) {
+    this.character.state$.subscribe(characterState => {
+      const isOverview = this.character.viewState === ViewState.OVERVIEW;
+      if (characterState && characterState.state === MeModelState.DEAD && !this.gameoverDialogOpen && !isOverview) {
         this.openGameOverDialog(false);
         if (this.character.initialized) {
           this.character.state = MeModelState.DEAD;
         }
-      } else  if (characterState && characterState.state === MeModelState.CONTROLLED && !this.benchedDialogOpen){
+      } else if (characterState && characterState.state === MeModelState.CONTROLLED && !this.benchedDialogOpen) {
         this.openBenchedDialog(characterState.characterInfo.name);
-      } else if (characterState && this.benchedDialogOpen && characterState.state !== MeModelState.CONTROLLED){
+      } else if (characterState && this.benchedDialogOpen && characterState.state !== MeModelState.CONTROLLED) {
         this.benchedDialog.close();
         this.benchedDialogOpen = false;
       }
@@ -44,7 +46,7 @@ export class GameDialogsComponent implements OnInit {
       this.cd.detectChanges();
     });
 
-    this.gameResult.subscribe(winingTeam=>{
+    this.gameResult.subscribe(winingTeam => {
       if (winingTeam !== 'NONE' && (!this.wonDialogOpen && !this.gameoverDialogOpen)) {
         const loseTeam: Team = winingTeam === 'RED' ? 'BLUE' : 'RED';
 
@@ -60,9 +62,9 @@ export class GameDialogsComponent implements OnInit {
   }
 
 
-  private openBenchedDialog(playerName){
+  private openBenchedDialog(playerName) {
     this.benchedDialogOpen = true;
-    this.benchedDialog = this.dialog.open(BenchedDialogComponent,{
+    this.benchedDialog = this.dialog.open(BenchedDialogComponent, {
       height: '80%',
       width: '80%',
       disableClose: true,
@@ -98,6 +100,7 @@ export class GameDialogsComponent implements OnInit {
       }
     }).afterClosed().subscribe((toOverView) => {
       if (toOverView) {
+        this.gameoverDialogOpen = false;
         this.character.viewState = ViewState.OVERVIEW;
       }
     });

@@ -20,7 +20,7 @@ import { TakeControlService } from '../../services/take-control.service';
   providers: [TakeControlService]
 })
 export class GameContainerComponent implements OnInit, OnDestroy {
-  public viewerMode: boolean;
+  public isViewer: boolean;
   private gameData$: Observable<GameFields.Fragment>;
   private game: CurrentGame.CurrentGame;
   private me: GameFields.Me;
@@ -59,9 +59,9 @@ export class GameContainerComponent implements OnInit, OnDestroy {
 
           const allPlayers = [...this.game.players];
           if (this.me) {
-            this.viewerMode = this.me.type === 'OVERVIEW' || this.me['__typename'] === 'Viewer';
+            this.isViewer = this.me.type === 'OVERVIEW' || this.me['__typename'] === 'Viewer';
             this.character.meFromServer = this.me;
-            if (!this.viewerMode && this.me.state !== 'CONTROLLED') {
+            if (!this.isViewer && this.me.state !== 'CONTROLLED') {
               this.character.syncState(this.me);
               allPlayers.push(this.me);
             }
@@ -76,10 +76,10 @@ export class GameContainerComponent implements OnInit, OnDestroy {
           this.game.players
             .filter(p => !controlledPlayer || controlledPlayer.id !== p.id)
             .map<AcNotification>(player => ({
-            actionType: ActionType.ADD_UPDATE,
-            id: player.id,
-            entity: new AcEntity({...player, name: player.character.name}),
-          })).forEach(notification => {
+              actionType: ActionType.ADD_UPDATE,
+              id: player.id,
+              entity: new AcEntity({...player, name: player.character.name}),
+            })).forEach(notification => {
             this.otherPlayers$.next(notification);
           });
         }, e => {
@@ -105,11 +105,15 @@ export class GameContainerComponent implements OnInit, OnDestroy {
       })
     }
 
-    // if controlling set state from controlled player
-    if (this.controlledService.controlledPlayer) {
-      const controlledPlayer = this.game.players.find(p => p.id === this.controlledService.controlledPlayer.id);
-      if (controlledPlayer && controlledPlayer.state === 'DEAD') {
-        this.character.state = MeModelState.DEAD;
+    if (this.isViewer) {
+      // if controlling set state from controlled player
+      if (this.controlledService.controlledPlayer) {
+        const controlledPlayer = this.game.players.find(p => p.id === this.controlledService.controlledPlayer.id);
+        if (controlledPlayer && controlledPlayer.state === 'DEAD') {
+          this.character.state = MeModelState.DEAD;
+        }
+      } else {
+        this.character.state = MeModelState.WALKING;
       }
     }
   }
