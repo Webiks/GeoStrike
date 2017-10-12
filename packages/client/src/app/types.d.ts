@@ -60,6 +60,8 @@ export interface Mutation {
   updatePosition?: Player; 
   ready?: Game; 
   notifyKill?: Player; 
+  takeControlOverPlayer?: Player; 
+  removeControlOverPlayer?: Player; 
 }
 
 export interface CreateOrJoinResult {
@@ -70,6 +72,12 @@ export interface CreateOrJoinResult {
 
 export interface Subscription {
   gameData?: Game; 
+  gameNotifications?: Notification; 
+}
+
+export interface Notification {
+  gameId?: string; 
+  message?: string; 
 }
 
 export interface Viewer extends User {
@@ -105,6 +113,9 @@ export interface UpdatePositionMutationArgs {
   skipValidation?: boolean; 
 }
 export interface NotifyKillMutationArgs {
+  playerId: string; 
+}
+export interface TakeControlOverPlayerMutationArgs {
   playerId: string; 
 }
 
@@ -160,6 +171,18 @@ export namespace GameData {
   } 
 
   export type GameData = GameFields.Fragment
+}
+export namespace GameNotifications {
+  export type Variables = {
+  }
+
+  export type Subscription = {
+    gameNotifications?: GameNotifications; 
+  } 
+
+  export type GameNotifications = {
+    message?: string; 
+  } 
 }
 export namespace JoinAsViewer {
   export type Variables = {

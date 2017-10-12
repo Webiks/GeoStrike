@@ -5,4 +5,4 @@
   <player-details [me]="me"></player-details>
 </game-map>
 <game-dialogs [gameResult]="gameResult$"></game-dialogs>
-<game-countdown [count]="3"></game-countdown>
+<game-countdown [count]="3" (done)="gameStarted()"></game-countdown>

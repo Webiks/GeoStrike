@@ -3,7 +3,10 @@ import { Apollo } from 'apollo-angular';
 import { createNewGameMutation } from '../../graphql/create-new-game.mutation';
 import { ApolloExecutionResult } from 'apollo-client';
 import { Observable } from 'rxjs/Observable';
-import { CreateNewGame, GameData, JoinAsViewer, JoinGame, NotifyKill, Ready, Team, UpdatePosition } from '../../types';
+import {
+  CreateNewGame, GameData, GameNotifications, JoinAsViewer, JoinGame, NotifyKill, Ready, Team,
+  UpdatePosition
+} from '../../types';
 import { joinGameMutation } from '../../graphql/join-game.mutation';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 import { gameDataSubscription } from '../../graphql/game-data.subscription';
@@ -16,6 +19,7 @@ import { notifyKillMutation } from '../../graphql/notify-kill.mutation';
 import { GameConfig } from './game-config';
 import { CharacterService } from './character.service';
 import { joinAsViewer } from '../../graphql/join-as-viewer.mutation';
+import { gameNotificationsSubscription } from '../../graphql/game-notifications.subscription';
 
 @Injectable()
 export class GameService {
@@ -40,6 +44,14 @@ export class GameService {
     });
 
     return queryRes as Observable<GameData.Subscription>;
+  }
+
+  getCurrentGameNotifications(): Observable<GameNotifications.Subscription> {
+    const queryRes = this.apollo.subscribe({
+      query: gameNotificationsSubscription,
+    });
+
+    return queryRes as Observable<GameNotifications.Subscription>;
   }
 
   createNewGame(character: string, username: string, team: Team, isViewer: boolean): Observable<ApolloExecutionResult<CreateNewGame.Mutation>> {
