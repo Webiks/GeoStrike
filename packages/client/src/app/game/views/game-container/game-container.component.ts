@@ -7,14 +7,13 @@ import { Subscription } from 'rxjs/Subscription';
 import { Subject } from 'rxjs/Subject';
 import { AcEntity, AcNotification, ActionType } from 'angular-cesium';
 import { Observable } from 'rxjs/Observable';
-import { MatDialog, MatSnackBar } from '@angular/material';
-import { CharacterService, MeModelState } from '../../services/character.service';
+import { MatSnackBar } from '@angular/material';
 import { CharacterService, MeModelState, ViewState } from '../../services/character.service';
+import { TakeControlService } from '../../services/take-control.service';
+import { SnackBarContentComponent } from '../../../shared/snack-bar-content/snack-bar-content.component';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/map';
 import * as _ from 'lodash';
-import { TakeControlService } from '../../services/take-control.service';
-import { SnackBarContentComponent } from '../../../shared/snack-bar-content/snack-bar-content.component';
 
 @Component({
   selector: 'game-container',
@@ -25,7 +24,6 @@ import { SnackBarContentComponent } from '../../../shared/snack-bar-content/snac
 export class GameContainerComponent implements OnInit, OnDestroy {
   public isViewer: boolean;
   private gameData$: Observable<GameFields.Fragment>;
-  public gameData$: Observable<GameFields.Fragment>;
   public gameNotifications$: Observable<string>;
   private game: CurrentGame.CurrentGame;
   private me: GameFields.Me;

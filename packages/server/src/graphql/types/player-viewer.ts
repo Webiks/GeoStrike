@@ -58,7 +58,6 @@ export const schema = gql`
         WAITING,
         READY,
         ALIVE,
-        IN_BUILDING,
         DEAD,
         CONTROLLED,
     }

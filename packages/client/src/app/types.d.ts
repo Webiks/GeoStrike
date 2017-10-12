@@ -122,7 +122,7 @@ export interface TakeControlOverPlayerMutationArgs {
 export type Team = "BLUE" | "RED" | "NONE";
 
 
-export type PlayerState = "WAITING" | "READY" | "ALIVE" | "IN_BUILDING" | "DEAD" | "CONTROLLED";
+export type PlayerState = "WAITING" | "READY" | "ALIVE" | "DEAD" | "CONTROLLED";
 
 
 export type PlayerSyncState = "VALID" | "INVALID";
