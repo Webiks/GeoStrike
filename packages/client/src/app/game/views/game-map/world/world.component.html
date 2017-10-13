@@ -1,4 +1,4 @@
-<ac-3d-tile-layer *ngIf="loadTiles && !hideTiles"
+<ac-3d-tile-layer *ngIf="loadTiles && !hideWorld"
     [options]="{
       maximumMemoryUsage: 1024,
       modelMatrix: getTilesMatrix(),
@@ -12,3 +12,12 @@
       cullWithChildrenBounds : true
     }">
 </ac-3d-tile-layer>
+<ac-layer acFor="let tree of trees$" [context]="this">
+  <ac-model-desc *ngIf="!hideWorld" props="{
+          heightReference: utils.getClampedToGroundHeightReference(),
+          scale: 0.5,
+					uri: tree.model,
+					position: tree.position
+  }">
+  </ac-model-desc>
+</ac-layer>
