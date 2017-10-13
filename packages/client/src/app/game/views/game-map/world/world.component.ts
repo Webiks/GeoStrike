@@ -1,8 +1,11 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { CharacterService, ViewState } from '../../../services/character.service';
 import { GameConfig } from '../../../services/game-config';
-import { AcTileset3dComponent, CesiumService } from 'angular-cesium';
+import { AcEntity, AcNotification, AcTileset3dComponent, ActionType, CesiumService } from 'angular-cesium';
 import { environment } from '../../../../../environments/environment';
+import { Observable } from 'rxjs/Observable';
+import { treeData } from './tree-data';
+import { UtilsService } from '../../../services/utils.service';
 
 @Component({
   selector: 'world',
@@ -13,6 +16,7 @@ export class WorldComponent implements OnInit {
   @ViewChild('tiles') tiles: AcTileset3dComponent;
   public tilesUrl = environment.tiles.url;
   public loadTiles = environment.load3dTiles;
+  public trees$: Observable<AcNotification>;
   public tilesStyle = {
     color: {
       conditions: [
@@ -21,9 +25,14 @@ export class WorldComponent implements OnInit {
       ]
     }
   };
-  public hideTiles = false;
+  public hideWorld = false;
 
-  constructor(private cesiumService: CesiumService, public character: CharacterService, private cd: ChangeDetectorRef) {
+  constructor(public utils: UtilsService,private cesiumService: CesiumService, public character: CharacterService, private cd: ChangeDetectorRef) {
+    this.trees$ = Observable.from(treeData).map((tree,i)=> ({
+      id: i.toString(),
+      actionType: ActionType.ADD_UPDATE,
+      entity: new AcEntity(tree),
+    }));
   }
 
   ngOnInit() {
@@ -32,7 +41,7 @@ export class WorldComponent implements OnInit {
     }
 
     this.character.viewState$.subscribe(viewState => {
-      this.hideTiles = viewState === ViewState.OVERVIEW;
+      this.hideWorld = viewState === ViewState.OVERVIEW;
       this.cd.detectChanges();
     });
   }
