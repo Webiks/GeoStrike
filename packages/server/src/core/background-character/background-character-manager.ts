@@ -9,12 +9,12 @@ const BG_CHARACTER_TYPES = [
   {
     characterName: 'grandpa',
     paths: PATHS_GRAPHS.PEOPLE,
-    updateDistanceMeters: 0.5,
+    updateDistanceMeters: 0.1,
   },
   {
     characterName: 'car',
     paths: PATHS_GRAPHS.CAR,
-    updateDistanceMeters: 10.0,
+    updateDistanceMeters: 1.0,
   },
 ];
 

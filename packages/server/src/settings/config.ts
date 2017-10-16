@@ -15,7 +15,7 @@ export const config = {
   clientsUpdateRate: 200,
   backgroundCharacters: {
     numberOfBgCharacters: 10,
-    updateIntervalMs: 1000,
+    updateIntervalMs: 100,
   },
   PLAYERS_SPAWN_POSITIONS: process.env.TERRAIN ? TERRAIN_PLAYERS_LOCATION : DEFAULT_PLAYERS_LOCATION,
 };
