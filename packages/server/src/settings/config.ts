@@ -12,10 +12,10 @@ const TERRAIN_PLAYERS_LOCATION = [
 
 export const config = {
   serverClientDistanceThreshold: 10,
-  clientsUpdateRate: 100,
+  clientsUpdateRate: 200,
   backgroundCharacters: {
     numberOfBgCharacters: 10,
     updateIntervalMs: 1000,
   },
-  PLAYERS_SPAWN_POSITIONS: DEFAULT_PLAYERS_LOCATION
+  PLAYERS_SPAWN_POSITIONS: process.env.TERRAIN ? TERRAIN_PLAYERS_LOCATION : DEFAULT_PLAYERS_LOCATION,
 };
