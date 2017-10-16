@@ -10,7 +10,8 @@
       immediatelyLoadDesiredLevelOfDetail : false,
       loadSiblings : false,
       cullWithChildrenBounds : true
-    }">
+    }"
+    [style]="tilesStyle">
 </ac-3d-tile-layer>
 <ac-layer acFor="let tree of trees$" [context]="this">
   <ac-model-desc *ngIf="!hideWorld" props="{
