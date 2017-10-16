@@ -1,6 +1,6 @@
 export class GameConfig {
   static serverUpdatingInterval = 200;
-  static maxEnterableBuildingSize = 1400;
+  static maxEnterableBuildingSize = 3000;
   static minEnterableBuildingSize = 800;
 
   // Building settings
