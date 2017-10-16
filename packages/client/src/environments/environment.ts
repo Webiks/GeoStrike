@@ -7,8 +7,8 @@ export const environment = {
   production: false,
   serverUrl: 'localhost:3000',
   movement: {
-    runningSpeed: 0.3,
-    walkingSpeed: 0.15,
+    runningSpeed: 0.4,
+    walkingSpeed: 0.25,
     crawlingSpeed: 0.1,
   },
   createPathMode: false,
