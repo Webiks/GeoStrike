@@ -52,6 +52,8 @@ export class WorldComponent implements OnInit {
         ...array,
         ...treeModel.positions.map(position => ({
           model: treeModel.model,
+          scale: treeModel.scale,
+          orientation: this.utils.getOrientation(position.location, Math.random() * 360),
           position: position.location,
         })),
       ],

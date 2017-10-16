@@ -16,8 +16,9 @@
 <ac-layer acFor="let tree of trees$" [context]="this">
   <ac-model-desc *ngIf="!hideWorld" props="{
           heightReference: utils.getClampedToGroundHeightReference(),
-          scale: 0.5,
-					uri: tree.model,
+          scale: tree.scale,
+          uri: tree.model,
+          heading: tree.orientation,
 					position: tree.position
   }">
   </ac-model-desc>
