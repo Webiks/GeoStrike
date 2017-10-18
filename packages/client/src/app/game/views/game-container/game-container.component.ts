@@ -23,15 +23,15 @@ import * as _ from 'lodash';
 })
 export class GameContainerComponent implements OnInit, OnDestroy {
   public isViewer: boolean;
-  private gameData$: Observable<GameFields.Fragment>;
+  gameData$: Observable<GameFields.Fragment>;
   public gameNotifications$: Observable<string>;
   private game: CurrentGame.CurrentGame;
-  private me: GameFields.Me;
+  me: GameFields.Me;
   private gameDataSubscription: Subscription;
   private gameNotificationsSubscription: Subscription;
-  private otherPlayers$: Subject<AcNotification> = new Subject<AcNotification>();
+  otherPlayers$: Subject<AcNotification> = new Subject<AcNotification>();
   private allPlayers$: Subject<PlayerFields.Fragment[]> = new Subject<PlayerFields.Fragment[]>();
-  private gameResult$: Subject<Team> = new Subject();
+  gameResult$: Subject<Team> = new Subject();
   private paramsSubscription: Subscription;
 
 
