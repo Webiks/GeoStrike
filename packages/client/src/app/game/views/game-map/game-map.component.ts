@@ -24,7 +24,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
     Cesium.Cartesian3.fromDegrees(-73.985187, 40.758857, 1000);
   public static readonly DEFAULT_PITCH = -5;
 
-  @Input() private playersPositions: Observable<AcNotification>;
+  @Input() playersPositions: Observable<AcNotification>;
   @Input() private gameData: Observable<GameFields.Fragment>;
   @ViewChild(AcMapComponent) private mapInstance: AcMapComponent;
 

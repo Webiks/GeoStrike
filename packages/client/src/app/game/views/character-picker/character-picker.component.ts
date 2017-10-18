@@ -7,14 +7,14 @@ import { AVAILABLE_CHARACTERS, VIEWER } from '../../../shared/characters.const';
   styleUrls: ['./character-picker.component.scss']
 })
 export class CharacterPickerComponent implements OnInit {
-  @Input() private selectedCharacter: string = null;
+  @Input() selectedCharacter: string = null;
   @Output() select: EventEmitter<any> = new EventEmitter();
 
   @Input() username = 'Anonymous User';
   @Output() usernameChange = new EventEmitter<string>();
 
-  private availableCharacters = AVAILABLE_CHARACTERS;
-  private viewer = VIEWER;
+  availableCharacters = AVAILABLE_CHARACTERS;
+  viewer = VIEWER;
 
   constructor() {
   }

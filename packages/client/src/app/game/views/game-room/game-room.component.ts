@@ -15,7 +15,7 @@ import * as _ from 'lodash';
 })
 export class GameRoomComponent implements OnInit, OnDestroy {
   private gameData$: Observable<GameData.GameData>;
-  private game: GameData.GameData;
+  game: GameData.GameData;
   private gameDataSubscription: Subscription;
   private gameStarted = false;
   private gameCode;

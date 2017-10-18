@@ -11,7 +11,9 @@
   },
   "scripts": {
     "start": "concurrently \"yarn server\" \"yarn client\"",
+    "start:prod": "concurrently \"yarn server\" \"yarn client:prod\"",
     "client": "(cd packages/client && yarn start)",
+    "client:prod": "(cd packages/client && yarn start:prod)",
     "server": "(cd packages/server && yarn start)",
     "postinstall": "lerna bootstrap"
   }
