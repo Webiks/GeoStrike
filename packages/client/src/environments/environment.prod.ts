@@ -2,7 +2,7 @@ export const environment = {
   production: true,
   serverUrl: 'cesiumfps.webiks.com:3000',
   movement: {
-    runningSpeed: 0.4,
+    runningSpeed: 20,
     walkingSpeed: 0.25,
     crawlingSpeed: 0.1,
   },
