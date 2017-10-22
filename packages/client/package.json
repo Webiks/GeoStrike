@@ -5,6 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --disableHostCheck --host 0.0.0.0",
+    "start:docker": "yarn start --env=prod",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
