@@ -53,12 +53,13 @@ export async function initServer() {
     }))
   );
 
+  const wsSchema = process.env.WS_SCHEMA || 'ws';
   server.use(
     '/graphiql',
     graphiqlExpress({
       endpointURL: '/graphql',
       query: ``,
-      subscriptionsEndpoint: 'ws://localhost:3000/subscriptions',
+      subscriptionsEndpoint: `${wsSchema}://localhost:3000/subscriptions`,
     })
   );
 
@@ -68,7 +69,7 @@ export async function initServer() {
     logger.info(`Server started on port ${PORT}...`);
     logger.info(`GraphQL HTTP: http://localhost:${PORT}/graphql`);
     logger.info(`GraphiQL HTTP: http://localhost:${PORT}/graphiql`);
-    logger.info(`GraphQL Subscriptions WebSocket: ws://localhost:${PORT}/subscriptions`);
+    logger.info(`GraphQL Subscriptions WebSocket: ${wsSchema}://localhost:${PORT}/subscriptions`);
 
     SubscriptionServer.create({
       execute,

@@ -14,7 +14,7 @@ export class ApolloService {
 
   constructor(ngZone: NgZone) {
     ngZone.runOutsideAngular(() => {
-      this._subscriptionClient = new SubscriptionClient(`ws://${environment.serverUrl}/subscriptions`, {
+      this._subscriptionClient = new SubscriptionClient(`${environment.wsSchema}://${environment.serverUrl}/subscriptions`, {
         reconnect: true,
         connectionParams: () => {
           if (!AuthorizationMiddleware.token || AuthorizationMiddleware.token === '') {
