@@ -40,22 +40,22 @@ export class GameService {
     this.socket = subscriptionClientService.subscriptionClient;
   }
 
-  refreshConnection(isForced = false) {
+  refreshConnection() {
     this.socket.close(true, true);
     this.socket['connect']();
 
     // resolve when connected
-    return new Promise(resolve => {
-      this.socket.onReconnected(() => {
-        console.log('reconnected');
-        resolve();
-      });
-
-      this.socket.onConnected(() => {
-        console.log('connected');
-        resolve();
-      });
-    });
+    // return new Promise(resolve => {
+    //   this.socket.onReconnected(() => {
+    //     console.log('reconnected');
+    //     resolve();
+    //   });
+    //
+    //   this.socket.onConnected(() => {
+    //     console.log('connected');
+    //     resolve();
+    //   });
+    // });
   }
 
   getCurrentGameData(): Observable<GameData.Subscription> {
