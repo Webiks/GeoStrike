@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  serverUrl: 'server-rqqsrznzdr.now.sh',
+  serverUrl: 'server-magejbbkvy.now.sh',
   wsSchema: 'wss',
   movement: {
     runningSpeed: 0.4,
