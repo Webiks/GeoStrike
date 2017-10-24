@@ -1,4 +1,6 @@
-
+<div *ngIf="loading" class="loading">
+  <mat-spinner [diameter]="150" ></mat-spinner>
+</div>
 <div *ngIf="game" class="game-room">
   <div *ngIf="!gameStarted">
     <h1 class="header">Game Code: {{gameCode}}</h1>
