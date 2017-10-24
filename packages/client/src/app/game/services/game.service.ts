@@ -8,7 +8,7 @@ import {
   UpdatePosition
 } from '../../types';
 import { joinGameMutation } from '../../graphql/join-game.mutation';
-import { SubscriptionClient } from 'subscriptions-transport-ws';
+import { SubscriptionClient } from 'subscriptions-transport-ws-temp';
 import { gameDataSubscription } from '../../graphql/game-data.subscription';
 import { readyMutation } from '../../graphql/ready.mutation';
 import 'rxjs/add/operator/first';

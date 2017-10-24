@@ -5057,9 +5057,9 @@ stylus@^0.54.5:
     sax "0.5.x"
     source-map "0.1.x"
 
-subscriptions-transport-ws@0.8.3:
-  version "0.8.3"
-  resolved "https://registry.yarnpkg.com/subscriptions-transport-ws/-/subscriptions-transport-ws-0.8.3.tgz#d4b22db7f5951bd30e7c6f4dc4774d34ed9f1751"
+subscriptions-transport-ws-temp@0.8.4:
+  version "0.8.4"
+  resolved "https://registry.yarnpkg.com/subscriptions-transport-ws-temp/-/subscriptions-transport-ws-temp-0.8.4.tgz#dc9f9c01965e5cd16b3c0ed50332a41e380d03a3"
   dependencies:
     backo2 "^1.0.2"
     eventemitter3 "^2.0.3"

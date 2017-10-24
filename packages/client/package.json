@@ -35,7 +35,7 @@
     "lodash": "^4.17.4",
     "lodash-decorators": "^4.4.1",
     "rxjs": "^5.4.1",
-    "subscriptions-transport-ws": "0.8.3",
+    "subscriptions-transport-ws-temp": "0.8.4",
     "zone.js": "^0.8.14"
   },
   "devDependencies": {
