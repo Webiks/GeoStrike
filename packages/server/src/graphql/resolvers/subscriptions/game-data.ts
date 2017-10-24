@@ -1,7 +1,7 @@
 import { ESubscriptionTopics, pubsub } from '../../pubsub';
 import { withFilter } from 'graphql-subscriptions';
 import { IGraphQLContext } from '../../context';
-import { createRejectionIterable } from 'subscriptions-transport-ws/dist/utils/rejection-iterable';
+import { createRejectionIterable } from 'subscriptions-transport-ws-temp/dist/utils/rejection-iterable';
 
 export const gameData = {
   subscribe: withFilter(
@@ -15,7 +15,7 @@ export const gameData = {
       if (!context.player || !context.game) {
         return false;
       }
-      return payload.gameData.gameId === context.game.gameId;
+      return payload && payload.gameData && payload.gameData.gameId === context.game.gameId;
     }
   )
 };

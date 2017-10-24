@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { GameService } from '../../../services/game.service';
 import { CharacterData } from '../../../../types';
 import { BasicDesc } from 'angular-cesium/src/angular-cesium/services/basic-desc/basic-desc.service';
+import { OtherPlayerEntity } from '../../game-container/game-container.component';
 
 @Component({
   selector: 'me',
@@ -31,7 +32,7 @@ export class MeComponent implements OnInit, OnDestroy {
   insideBuilding = false;
   transparentColor = new Cesium.Color(0, 0, 0, 0.0001);
   normalColor = new Cesium.Color(1, 1, 1, 1);
-  ViewState= ViewState;
+  ViewState = ViewState;
 
   constructor(private character: CharacterService,
               public utils: UtilsService,
@@ -60,7 +61,7 @@ export class MeComponent implements OnInit, OnDestroy {
           y: crossElement.y + crossElement.height / 2,
         };
         const picked = this.cesiumService.getScene().pick(crossLocation);
-        if (picked && picked.id && picked.id.acEntity) {
+        if (picked && picked.id && picked.id.acEntity && picked.id.acEntity instanceof OtherPlayerEntity) {
           const shotedEntity = picked.id.acEntity;
           const killSubscription = this.gameService.notifyKill(shotedEntity.id)
             .subscribe(() => killSubscription.unsubscribe());
@@ -130,7 +131,7 @@ export class MeComponent implements OnInit, OnDestroy {
     return this.normalColor;
   }
 
-  showMeModel(){
+  showMeModel() {
     return this.character.viewState !== ViewState.OVERVIEW && this.character.state !== MeModelState.CONTROLLED;
   }
 }

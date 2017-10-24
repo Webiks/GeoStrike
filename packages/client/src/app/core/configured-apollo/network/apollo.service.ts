@@ -49,7 +49,6 @@ export class ApolloService {
         }
       });
 
-
       this._apolloClient = new ApolloClient({
         networkInterface: this._subscriptionClient,
         fragmentMatcher: fragmentMatcher,

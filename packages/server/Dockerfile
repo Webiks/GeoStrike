@@ -10,4 +10,4 @@ RUN yarn
 
 EXPOSE 3000
 
-ENTRYPOINT yarn start
+ENTRYPOINT yarn start:prod

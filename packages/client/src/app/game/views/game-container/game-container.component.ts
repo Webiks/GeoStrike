@@ -15,6 +15,9 @@ import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/map';
 import * as _ from 'lodash';
 
+export class OtherPlayerEntity extends AcEntity {
+}
+
 @Component({
   selector: 'game-container',
   templateUrl: './game-container.component.html',
@@ -56,10 +59,11 @@ export class GameContainerComponent implements OnInit, OnDestroy {
 
         AuthorizationMiddleware.setToken(params.playerToken);
         this.gameService.refreshConnection();
-        this.gameData$ = (this.gameService.getCurrentGameData()).map(({ gameData }) => gameData);
         this.gameNotifications$ = (this.gameService.getCurrentGameNotifications()).map(notification => {
           return notification.gameNotifications.message;
         });
+        this.gameData$ = (this.gameService.getCurrentGameData())
+          .map(({ gameData }) => gameData);
         this.gameDataSubscription = this.gameData$.subscribe(currentGame => {
           this.game = currentGame;
           this.me = currentGame.me;
@@ -86,12 +90,15 @@ export class GameContainerComponent implements OnInit, OnDestroy {
             .map<AcNotification>(player => ({
               actionType: ActionType.ADD_UPDATE,
               id: player.id,
-              entity: new AcEntity({...player, name: player.character.name}),
+              entity: new OtherPlayerEntity({...player, name: player.character.name}),
             })).forEach(notification => {
             this.otherPlayers$.next(notification);
           });
         }, e => {
+          console.log('subscription error',e);
           this.router.navigate(['/']);
+        }, ()=>{
+          console.log('subscription complete');
         });
       });
     });

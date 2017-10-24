@@ -1,4 +1,4 @@
-export const treeData = [
+export const backgroundItemsData = [
   {
     model: '/assets/models/tree.gltf',
     scale: 1,

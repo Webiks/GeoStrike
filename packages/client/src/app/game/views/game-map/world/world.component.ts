@@ -1,20 +1,14 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import {
-  CharacterService,
-  ViewState,
-} from '../../../services/character.service';
+import { CharacterService, ViewState, } from '../../../services/character.service';
 import { GameConfig } from '../../../services/game-config';
-import {
-  AcEntity,
-  AcNotification,
-  AcTileset3dComponent,
-  ActionType,
-  CesiumService,
-} from 'angular-cesium';
+import { AcEntity, AcNotification, AcTileset3dComponent, ActionType, CesiumService, } from 'angular-cesium';
 import { environment } from '../../../../../environments/environment';
 import { Observable } from 'rxjs/Observable';
-import { treeData } from './tree-data';
 import { UtilsService } from '../../../services/utils.service';
+import { backgroundItemsData } from './background-data';
+
+export class BackgroundEntity extends AcEntity {
+}
 
 @Component({
   selector: 'world',
@@ -47,10 +41,10 @@ export class WorldComponent implements OnInit {
     public character: CharacterService,
     private cd: ChangeDetectorRef
   ) {
-    const trees = treeData.reduce(
+    const trees = backgroundItemsData.reduce(
       (array, treeModel) => [
         ...array,
-        ...treeModel.positions.map(position => ({
+        ...treeModel.positions.map(position => new BackgroundEntity({
           model: treeModel.model,
           scale: treeModel.scale,
           orientation: this.utils.getOrientation(position.location, Math.random() * 360),

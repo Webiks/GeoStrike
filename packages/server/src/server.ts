@@ -2,14 +2,14 @@ import * as morgan from 'morgan';
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
 import * as express from 'express';
-import * as session from 'express-session';
 import { Express } from 'express';
+import * as session from 'express-session';
 import { logger } from './core/logger/logger';
-import { schema } from './graphql/schema';
+import schema from './graphql/schema';
 import { graphiqlExpress, graphqlExpress } from 'apollo-server-express';
 import { createContext, resolveGameAndPlayer } from './graphql/context';
 import { createServer } from 'http';
-import { SubscriptionServer } from 'subscriptions-transport-ws';
+import { SubscriptionServer } from 'subscriptions-transport-ws-temp';
 import { execute, subscribe } from 'graphql';
 
 export async function initServer() {
@@ -72,9 +72,9 @@ export async function initServer() {
     logger.info(`GraphQL Subscriptions WebSocket: ${wsSchema}://localhost:${PORT}/subscriptions`);
 
     SubscriptionServer.create({
+      schema,
       execute,
       subscribe,
-      schema,
       onConnect: connectionParams => {
         return {
           ...resolveGameAndPlayer(connectionParams['player-token'], context.games),

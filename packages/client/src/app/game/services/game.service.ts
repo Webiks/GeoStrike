@@ -4,7 +4,14 @@ import { createNewGameMutation } from '../../graphql/create-new-game.mutation';
 import { ApolloExecutionResult } from 'apollo-client';
 import { Observable } from 'rxjs/Observable';
 import {
-  CreateNewGame, GameData, GameNotifications, JoinAsViewer, JoinGame, NotifyKill, Ready, Team,
+  CreateNewGame,
+  GameData,
+  GameNotifications,
+  JoinAsViewer,
+  JoinGame,
+  NotifyKill,
+  Ready,
+  Team,
   UpdatePosition
 } from '../../types';
 import { joinGameMutation } from '../../graphql/join-game.mutation';
@@ -36,6 +43,19 @@ export class GameService {
   refreshConnection() {
     this.socket.close(true, true);
     this.socket['connect']();
+
+    // resolve when connected
+    // return new Promise(resolve => {
+    //   this.socket.onReconnected(() => {
+    //     console.log('reconnected');
+    //     resolve();
+    //   });
+    //
+    //   this.socket.onConnected(() => {
+    //     console.log('connected');
+    //     resolve();
+    //   });
+    // });
   }
 
   getCurrentGameData(): Observable<GameData.Subscription> {
@@ -113,7 +133,7 @@ export class GameService {
     this.lastStateSentToServer = state;
     const subscription = this.apollo.mutate<UpdatePosition.Mutation>({
       mutation: updatePositionMutation,
-      variables: { ...state, skipValidation},
+      variables: {...state, skipValidation},
     }).subscribe(() => subscription.unsubscribe());
   }
 
