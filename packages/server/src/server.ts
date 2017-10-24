@@ -9,7 +9,7 @@ import schema from './graphql/schema';
 import { graphiqlExpress, graphqlExpress } from 'apollo-server-express';
 import { createContext, resolveGameAndPlayer } from './graphql/context';
 import { createServer } from 'http';
-import { SubscriptionServer } from 'subscriptions-transport-ws';
+import { SubscriptionServer } from 'subscriptions-transport-ws-temp';
 import { execute, subscribe } from 'graphql';
 
 export async function initServer() {
