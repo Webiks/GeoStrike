@@ -6,13 +6,13 @@ import { MatDialog } from '@angular/material';
   selector: 'game-toolbar',
   template: `
     <div class="right-btn-panel">
-      <button mat-icon-button class="help-btn" (click)="toggleMute($event)">
+      <button mat-icon-button class="help-btn" (click)="toggleMute()">
         <mat-icon [svgIcon]="mute ? 'volume-off' : 'volume'"></mat-icon>
       </button>
-      <button mat-icon-button class="help-btn" (click)="fullScreen($event)">
+      <button mat-icon-button class="help-btn" (click)="fullScreen()">
         <mat-icon svgIcon="full-screen"></mat-icon>
       </button>
-      <button mat-icon-button class="help-btn" (click)="openHelp($event)">
+      <button mat-icon-button class="help-btn" (click)="openHelp()">
         <mat-icon svgIcon="help" ></mat-icon>
       </button>
     </div>
@@ -21,7 +21,7 @@ import { MatDialog } from '@angular/material';
 })
 export class GameToolbarComponent implements OnInit {
 
-  private mute = false;
+  mute = false;
 
   constructor(private  dialog: MatDialog) {
   }
@@ -29,7 +29,7 @@ export class GameToolbarComponent implements OnInit {
   ngOnInit() {
   }
 
-  openHelp(event: Event) {
+  openHelp() {
     this.dialog.open(HowToPlayDialogComponent, {
       height: '80%',
       width: '85%',
