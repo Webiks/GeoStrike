@@ -1,13 +1,12 @@
 FROM node:alpine
 
 RUN apk add --update yarn
+RUN yarn global add serve
 
-COPY . /opt/app
+COPY ./dist /opt/app
 
 WORKDIR /opt/app
 
-RUN yarn
+EXPOSE 5000
 
-EXPOSE 4200
-
-ENTRYPOINT yarn start:docker
+ENTRYPOINT serve
