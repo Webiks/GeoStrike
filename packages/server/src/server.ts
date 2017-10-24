@@ -81,9 +81,6 @@ export async function initServer() {
           ...context,
         };
       },
-      onDisconnect: webSocket => {
-        console.log('disconnected---------');
-      }
     }, {
       server: httpServer,
       path: '/subscriptions',

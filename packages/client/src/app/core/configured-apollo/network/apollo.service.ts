@@ -49,14 +49,6 @@ export class ApolloService {
         }
       });
 
-      // this._subscriptionClient.onDisconnected((x)=> {console.log('disconected',x)});
-      // this._subscriptionClient.onConnected(()=>console.log('connected'));
-      // this._subscriptionClient.onConnecting(()=>console.log('connecting...'));
-      // this._subscriptionClient.onReconnected(()=>console.log('reconnected'));
-      // this._subscriptionClient.onReconnect(()=>console.log('reconnect'));
-      // this._subscriptionClient.onReconnecting(()=>console.log('reconnecting'));
-
-
       this._apolloClient = new ApolloClient({
         networkInterface: this._subscriptionClient,
         fragmentMatcher: fragmentMatcher,
