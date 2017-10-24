@@ -35,23 +35,31 @@ export class GameRoomComponent implements OnInit, OnDestroy {
       this.ngZone.runOutsideAngular(() => {
         if (params.playerToken) {
 
-          AuthorizationMiddleware.setToken(params.playerToken);
           this.gameCode = params.gameCode;
-          this.gameService.refreshConnection();
-          this.gameData$ = this.gameService.getCurrentGameData().map(({ gameData }) => gameData);
-          this.gameDataSubscription = this.gameData$.subscribe((gameData) => {
-            this.game = gameData;
-            this.players = this.getPlayers(this.game);
+          AuthorizationMiddleware.setToken(params.playerToken);
+          this.gameService.refreshConnection().then(()=>{
+            // this.gameData$ =
+            //   .map(({gameData}) => gameData);
+            this.gameDataSubscription = this.gameService.getCurrentGameData()
+              .subscribe((gameDataResult) => {
+                  console.log(gameDataResult);
+                  this.game = gameDataResult.gameData;
+                  this.players = this.getPlayers(this.game);
 
-            if (this.game && this.game.state === 'ACTIVE') {
-              this.gameStarted = true;
-              this.startGame();
+                  if (this.game && this.game.state === 'ACTIVE') {
+                    this.gameStarted = true;
+                    this.startGame();
 
-              this.gameDataSubscription.unsubscribe();
-            }
-            this.cd.detectChanges();
+                    this.gameDataSubscription.unsubscribe();
+                  }
+                  this.cd.detectChanges();
 
+                },
+                error => {
+                  console.log('subscription error:', error);
+                });
           });
+
         } else {
           this.router.navigate(['/']);
         }

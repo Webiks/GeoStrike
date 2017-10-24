@@ -56,10 +56,12 @@ export class GameContainerComponent implements OnInit, OnDestroy {
 
         AuthorizationMiddleware.setToken(params.playerToken);
         this.gameService.refreshConnection();
-        this.gameData$ = (this.gameService.getCurrentGameData()).map(({ gameData }) => gameData);
         this.gameNotifications$ = (this.gameService.getCurrentGameNotifications()).map(notification => {
           return notification.gameNotifications.message;
         });
+        this.gameData$ = (this.gameService.getCurrentGameData())
+          .do(x=> console.log(x))
+          .map(({ gameData }) => gameData);
         this.gameDataSubscription = this.gameData$.subscribe(currentGame => {
           this.game = currentGame;
           this.me = currentGame.me;
@@ -91,7 +93,10 @@ export class GameContainerComponent implements OnInit, OnDestroy {
             this.otherPlayers$.next(notification);
           });
         }, e => {
+          console.log('subscription error',e);
           this.router.navigate(['/']);
+        }, ()=>{
+          console.log('subscription complete');
         });
       });
     });

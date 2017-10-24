@@ -15,7 +15,7 @@ export const gameData = {
       if (!context.player || !context.game) {
         return false;
       }
-      return payload.gameData.gameId === context.game.gameId;
+      return payload && payload.gameData && payload.gameData.gameId === context.game.gameId;
     }
   )
 };
