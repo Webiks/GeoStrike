@@ -1,4 +1,4 @@
-# webicks-cesium-fps
+# webiks-cesium-fps
 
  3D game for real world data. Boom!
  
