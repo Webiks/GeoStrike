@@ -25,16 +25,16 @@ export class OtherPlayerEntity extends AcEntity {
   providers: [TakeControlService]
 })
 export class GameContainerComponent implements OnInit, OnDestroy {
-  public isViewer: boolean;
-  private gameData$: Observable<GameFields.Fragment>;
-  public gameNotifications$: Observable<string>;
+  isViewer: boolean;
+  otherPlayers$: Subject<AcNotification> = new Subject<AcNotification>();
+  allPlayers$: Subject<PlayerFields.Fragment[]> = new Subject<PlayerFields.Fragment[]>();
+  gameResult$: Subject<Team> = new Subject();
+  gameData$: Observable<GameFields.Fragment>;
+  gameNotifications$: Observable<string>;
+  me: GameFields.Me;
   private game: CurrentGame.CurrentGame;
-  private me: GameFields.Me;
   private gameDataSubscription: Subscription;
   private gameNotificationsSubscription: Subscription;
-  private otherPlayers$: Subject<AcNotification> = new Subject<AcNotification>();
-  private allPlayers$: Subject<PlayerFields.Fragment[]> = new Subject<PlayerFields.Fragment[]>();
-  private gameResult$: Subject<Team> = new Subject();
   private paramsSubscription: Subscription;
 
 

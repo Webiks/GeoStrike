@@ -8,7 +8,8 @@
     "start:debug": "nodemon --exec ts-node --inspect src/index.ts",
     "start:prod": "ts-node --fast src/index.ts",
     "lint": "tslint 'src/**/*.ts' --exclude 'src/models/**'",
-    "generate:types": "gql-gen --url http://localhost:3000/graphql --template typescript --out src/types.d.ts"
+    "generate:types": "gql-gen --url http://localhost:3000/graphql --template typescript --out src/types.d.ts",
+    "deploy:now": "now --docker"
   },
   "devDependencies": {
     "nodemon": "^1.11.0",

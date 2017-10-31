@@ -13,13 +13,13 @@ import * as _ from 'lodash';
   styleUrls: ['./game-room.component.scss']
 })
 export class GameRoomComponent implements OnInit, OnDestroy {
-  private game: GameData.GameData;
+  game: GameData.GameData;
+  loading: boolean;
+  gameStarted = false;
+  players;
+  gameCode;
   private gameDataSubscription: Subscription;
-  private gameStarted = false;
-  private gameCode;
-  private players;
   private paramsSubscription;
-  private loading: boolean;
 
   constructor(private activatedRoute: ActivatedRoute,
               private gameService: GameService,
