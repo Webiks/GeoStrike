@@ -86,5 +86,9 @@ export class OtherPlayersComponent {
     return Cesium.Color.WHITE;
   }
 
+  getPlayerName(player) {
+    return player.username ? player.username : '';
+  }
+
 
 }
