@@ -16,7 +16,7 @@
           JOIN GAME
         </div>
       </ng-template>
-        <character-picker [showGameCodePicker]="true" [(gamecode)]="gameCode" [selectedCharacter]="characterName" [(username)]="username" (select)="characterChanged($event)"></character-picker>
+        <character-picker [joinGameMode]="true" [(gamecode)]="gameCode" [selectedCharacter]="characterName" [(username)]="username" (select)="characterChanged($event)"></character-picker>
     </mat-tab>
   </mat-tab-group>
   <div class="row">
