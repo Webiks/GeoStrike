@@ -84,7 +84,7 @@ export class GameRoomComponent implements OnInit, OnDestroy {
 
   goToGameRoom() {
     this.ngZone.run(() => {
-      this.router.navigate(['/game', AuthorizationMiddleware.token]);
+      this.router.navigate(['/game', AuthorizationMiddleware.token, {gameCode: this.gameCode}]);
     });
   }
 

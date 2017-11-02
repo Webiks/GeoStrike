@@ -1,7 +1,7 @@
 <game-map [playersPositions]="otherPlayers$" [gameData]="gameData$">
   <team-info-bar [players]="getPlayers('BLUE')" [changeDirection]="true" class="blue-team-info"></team-info-bar>
   <team-info-bar [players]="getPlayers('RED')" class="red-team-info"></team-info-bar>
-  <game-toolbar></game-toolbar>
+  <game-toolbar [gameCode]="gameCode"></game-toolbar>
   <player-details [me]="me"></player-details>
   <viewer-controls *ngIf="isViewer"></viewer-controls>
 </game-map>

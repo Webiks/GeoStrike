@@ -1,5 +1,5 @@
-import { Component , DoCheck } from '@angular/core';
-import {ViewerConfiguration} from 'angular-cesium';
+import { Component, DoCheck } from '@angular/core';
+import { ViewerConfiguration } from 'angular-cesium';
 import { MatIconRegistry } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -18,6 +18,8 @@ export class AppComponent implements DoCheck{
     this.addIcon('full-screen');
     this.addIcon('volume');
     this.addIcon('volume-off');
+    this.addIcon('setting');
+    this.addIcon('fullscreen-exit');
   }
 
   addIcon(iconName: string){
