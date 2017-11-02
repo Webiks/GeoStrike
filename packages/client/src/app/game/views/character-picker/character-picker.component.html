@@ -18,10 +18,10 @@
       <input matInput placeholder="Username" required [(ngModel)]="username"
              (ngModelChange)="usernameChange.emit($event)">
     </mat-form-field>
-    <h2 class="viewer-btn" [class.selected-viewer]="selectedCharacter === viewer.name" (click)="select.emit(viewer)">
+    <h2 *ngIf="joinGameMode" class="viewer-btn" [class.selected-viewer]="selectedCharacter === viewer.name" (click)="select.emit(viewer)">
       Continue as Viewer</h2>
     <div style="width: 260px">
-      <mat-form-field class="gamecode-input" *ngIf="showGameCodePicker">
+      <mat-form-field class="gamecode-input" *ngIf="joinGameMode">
         <input matInput placeholder="Enter Game Code" type="number"   (ngModelChange)="gamecodeChange.emit($event)" required [(ngModel)]="gameCode">
       </mat-form-field>
     </div>
