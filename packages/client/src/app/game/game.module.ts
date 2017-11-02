@@ -9,6 +9,7 @@ import {
   MatGridListModule,
   MatIconModule,
   MatInputModule,
+  MatMenuModule,
   MatProgressSpinnerModule,
   MatSnackBarModule,
   MatTabsModule,
@@ -84,6 +85,7 @@ import { BenchedDialogComponent } from './views/benched-dialog/benched-dialog.co
     MatProgressSpinnerModule,
     MatInputModule,
     MatTabsModule,
+    MatMenuModule,
   ],
   exports: [
     MainComponent,

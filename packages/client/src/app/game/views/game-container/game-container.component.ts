@@ -32,6 +32,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
   gameData$: Observable<GameFields.Fragment>;
   gameNotifications$: Observable<string>;
   me: GameFields.Me;
+  gameCode: string;
   private game: CurrentGame.CurrentGame;
   private gameDataSubscription: Subscription;
   private gameNotificationsSubscription: Subscription;
@@ -57,6 +58,9 @@ export class GameContainerComponent implements OnInit, OnDestroy {
           return;
         }
 
+        this.ngZone.run(()=>{
+          this.gameCode = params.gameCode;
+        });
         AuthorizationMiddleware.setToken(params.playerToken);
         this.gameService.refreshConnection();
         this.gameNotifications$ = (this.gameService.getCurrentGameNotifications()).map(notification => {
