@@ -13,6 +13,7 @@ const TERRAIN_PLAYERS_LOCATION = [
 export const config = {
   serverClientDistanceThreshold: 10,
   clientsUpdateRate: 200,
+  gameTimeoutSec: 3600,
   backgroundCharacters: {
     numberOfBgCharacters: 10,
     updateIntervalMs: 100,

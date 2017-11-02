@@ -6,6 +6,7 @@ import { config } from '../../settings/config';
 import { startClientsUpdater, stopClientsUpdater } from '../clients-updater/clients-updater';
 import { BackgroundCharacterManager } from '../background-character/background-character-manager';
 import { PLAYER_CHARACTERS } from './characters';
+import { GamesTimeout } from './games-timeout';
 import Timer = NodeJS.Timer;
 
 export interface ICartesian3Location {
@@ -63,6 +64,12 @@ const TOKENS_SECRET = 'sdf43tSWDG#%Tsdfw4';
 
 export class GamesManager {
   private activeGames: Map<string, IGameObject> = new Map<string, IGameObject>();
+  private gamesTimeouts: GamesTimeout;
+
+  constructor(){
+    this.gamesTimeouts = new GamesTimeout(this);
+    this.gamesTimeouts.startTimeoutChecks();
+  }
 
   private generateGameCode(): string {
     const min = 1000;
@@ -208,6 +215,12 @@ export class GamesManager {
                        skipValidation = false) {
     const game = this.getGameById(gameId);
     const player = game.playersMap.get(playerId);
+
+      // Update game active time
+    if (player.type === CharacterType.PLAYER) {
+      this.gamesTimeouts.setGameLastActiveTime(gameId);
+    }
+
     if (player && position) {
       if (
         skipValidation ||
