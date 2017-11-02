@@ -9,7 +9,7 @@ import { MatDialog } from '@angular/material';
       <button mat-icon-button class="help-btn" (click)="toggleMute()">
         <mat-icon [svgIcon]="mute ? 'volume-off' : 'volume'"></mat-icon>
       </button>
-      <button mat-icon-button class="help-btn" (click)="fullScreen()">
+      <button mat-icon-button class="help-btn" (click)="toggleFullScreen()">
         <mat-icon [svgIcon]="fullScreenIcon"></mat-icon>
       </button>
       <button mat-icon-button class="help-btn" (click)="openHelp()">
@@ -49,14 +49,23 @@ export class GameToolbarComponent implements OnInit {
     })
   }
 
-  fullScreen() {
-    if ('requestFullScreen' in document.body) {
-      document.body.requestFullscreen();
-    } else if ('webkitRequestFullscreen' in document.body) {
-      document.body.webkitRequestFullscreen();
-    }
+  toggleFullScreen() {
+    if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+      if ('requestFullScreen' in document.body) {
+        document.body.requestFullscreen();
+      } else if ('webkitRequestFullscreen' in document.body) {
+        document.body.webkitRequestFullscreen();
+      }
+      this.fullScreenIcon = 'fullscreen-exit';
 
-    this.fullScreenIcon = 'fullscreen-exit';
+    } else {
+      if ('exitFullscreen' in document) {
+        document.exitFullscreen();
+      } else if ('webkitExitFullscreen' in document) {
+        document.webkitExitFullscreen();
+      }
+      this.fullScreenIcon = 'full-screen';
+    }
   }
 
   toggleMute() {
