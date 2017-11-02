@@ -1,5 +1,5 @@
 import { ESubscriptionTopics, pubsub } from '../../graphql/pubsub';
-import { IGameObject } from '../local-data/game';
+import { IGameObject } from '../local-data/game-manager';
 import { config } from '../../settings/config';
 
 function updateClientsLoop(gameObject: IGameObject) {

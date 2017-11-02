@@ -1,6 +1,6 @@
 import { IGraphQLContext } from '../../context';
 import { ESubscriptionTopics, pubsub } from '../../pubsub';
-import { CharacterType, IPlayer, Team } from '../../../core/local-data/game';
+import { CharacterType, IPlayer } from '../../../core/local-data/game-manager';
 
 export const notifyKill = (rootValue, { playerId }, { games, game, player }: IGraphQLContext) => {
   if (!game || !player) {

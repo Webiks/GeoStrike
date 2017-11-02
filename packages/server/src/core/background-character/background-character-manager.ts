@@ -1,5 +1,12 @@
 import { config } from '../../settings/config';
-import { CharacterType, GamesManager, ICartesian3Location, IGameObject, IPlayer, Team, } from '../local-data/game';
+import {
+  CharacterType,
+  GamesManager,
+  ICartesian3Location,
+  IGameObject,
+  IPlayer,
+  Team,
+} from '../local-data/game-manager';
 import { PathNode, PATHS_GRAPHS } from './path-node';
 import * as Cesium from 'cesium';
 import { PLAYER_CHARACTERS } from '../local-data/characters';
