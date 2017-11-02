@@ -19,7 +19,7 @@
     show: player.type === 'PLAYER',
     position: utils.toFixedHeight(player.currentLocation.location, 5),
     heightReference: utils.getClampedToGroundHeightReference(),
-    text: player.character.username,
+    text: getPlayerName(player),
     font: '15px sans-serif',
     scale: 0.9,
     pixelOffset: getLabelPixelOffset(player) | pixelOffset,
