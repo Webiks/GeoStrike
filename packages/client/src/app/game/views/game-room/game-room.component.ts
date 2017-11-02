@@ -46,7 +46,7 @@ export class GameRoomComponent implements OnInit, OnDestroy {
 
                 if (this.game && this.game.state === 'ACTIVE') {
                   this.gameStarted = true;
-                  this.startGame();
+                  this.goToGameRoom();
 
                   this.gameDataSubscription.unsubscribe();
                 }
@@ -82,7 +82,7 @@ export class GameRoomComponent implements OnInit, OnDestroy {
     }
   }
 
-  startGame() {
+  goToGameRoom() {
     this.ngZone.run(() => {
       this.router.navigate(['/game', AuthorizationMiddleware.token]);
     });
