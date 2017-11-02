@@ -8,10 +8,15 @@ import { AVAILABLE_CHARACTERS, VIEWER } from '../../../shared/characters.const';
 })
 export class CharacterPickerComponent implements OnInit {
   @Input() selectedCharacter: string = null;
+  @Input() showGameCodePicker = false;
   @Output() select: EventEmitter<any> = new EventEmitter();
 
   @Input() username = 'Anonymous User';
   @Output() usernameChange = new EventEmitter<string>();
+
+  @Input()
+  gamecode: string;
+  @Output() gamecodeChange = new EventEmitter<string>();
 
   availableCharacters = AVAILABLE_CHARACTERS;
   viewer = VIEWER;

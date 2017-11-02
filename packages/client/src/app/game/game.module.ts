@@ -11,6 +11,7 @@ import {
   MatInputModule,
   MatProgressSpinnerModule,
   MatSnackBarModule,
+  MatTabsModule,
 } from '@angular/material';
 
 import { MainComponent } from './views/main/main.component';
@@ -84,6 +85,7 @@ import { BenchedDialogComponent } from './views/benched-dialog/benched-dialog.co
     MatGridListModule,
     MatProgressSpinnerModule,
     MatInputModule,
+    MatTabsModule,
   ],
   exports: [
     MainComponent,

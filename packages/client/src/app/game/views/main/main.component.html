@@ -1,12 +1,26 @@
 <div class="main-container">
   <div class="header">Cesium FPS</div>
   <div class="sub-header"> First Person Shooter</div>
-  <div class="character-picker-container">
-    <character-picker [selectedCharacter]="characterName" [(username)]="username" (select)="characterChanged($event)"></character-picker>
-  </div>
+  <mat-tab-group class="character-picker-container" (selectedTabChange)="setActiveTab($event)">
+    <mat-tab label="New game">
+      <ng-template mat-tab-label>
+        <div class="tab-header">
+           NEW GAME
+        </div>
+      </ng-template>
+        <character-picker [selectedCharacter]="characterName" [(username)]="username" (select)="characterChanged($event)"></character-picker>
+    </mat-tab>
+    <mat-tab label="Join game" >
+      <ng-template mat-tab-label>
+        <div class="tab-header">
+          JOIN GAME
+        </div>
+      </ng-template>
+        <character-picker [showGameCodePicker]="true" [(gamecode)]="gameCode" [selectedCharacter]="characterName" [(username)]="username" (select)="characterChanged($event)"></character-picker>
+    </mat-tab>
+  </mat-tab-group>
   <div class="row">
-    <big-button text="Create new game" (click)="createGame()"></big-button>
-    <big-button text="Join game" (click)="openJoinGameDialog()"></big-button>
+    <big-button text="Start The Game" (click)="startGame()"></big-button>
   </div>
   <mat-spinner *ngIf="loading"></mat-spinner>
   <div>{{error}}</div>
