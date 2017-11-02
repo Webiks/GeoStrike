@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AVAILABLE_CHARACTERS, VIEWER } from '../../../shared/characters.const';
+import { DEFAULT_USERNAME } from '../main/main.component';
 
 @Component({
   selector: 'character-picker',
@@ -25,6 +26,18 @@ export class CharacterPickerComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  clearDefaultValue(){
+    if ( this.username === DEFAULT_USERNAME) {
+      this.username = '';
+    }
+  }
+
+  validateDefaultValue(){
+    if ( this.username === '') {
+      this.username = DEFAULT_USERNAME;
+    }
   }
 
 }

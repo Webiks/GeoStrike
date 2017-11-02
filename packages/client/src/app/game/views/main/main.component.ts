@@ -13,6 +13,8 @@ enum GameTabs {
   CREATE_GAME,
 }
 
+export const DEFAULT_USERNAME = 'Anonymous User';
+
 @Component({
   selector: 'main',
   templateUrl: './main.component.html',
@@ -20,7 +22,7 @@ enum GameTabs {
   encapsulation: ViewEncapsulation.None
 })
 export class MainComponent {
-  username = 'Anonymous User';
+  username = DEFAULT_USERNAME;
   loading = false;
   characterName: string;
   team: Team = 'BLUE';
