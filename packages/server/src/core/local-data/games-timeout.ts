@@ -23,7 +23,6 @@ export class GamesTimeout {
       })
 
     }, this.INTERVAL_MS)
-
   }
 
 
