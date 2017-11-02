@@ -11,10 +11,10 @@ import {
   MatInputModule,
   MatProgressSpinnerModule,
   MatSnackBarModule,
+  MatTabsModule,
 } from '@angular/material';
 
 import { MainComponent } from './views/main/main.component';
-import { JoinGameDialogComponent } from './views/join-game-dialog/join-game-dialog.component';
 import { CharacterPickerComponent } from './views/character-picker/character-picker.component';
 import { GameService } from './services/game.service';
 import { GameRoomComponent } from './views/game-room/game-room.component';
@@ -47,7 +47,6 @@ import { BenchedDialogComponent } from './views/benched-dialog/benched-dialog.co
 @NgModule({
   declarations: [
     MainComponent,
-    JoinGameDialogComponent,
     CharacterPickerComponent,
     GameRoomComponent,
     CharacterItemComponent,
@@ -84,6 +83,7 @@ import { BenchedDialogComponent } from './views/benched-dialog/benched-dialog.co
     MatGridListModule,
     MatProgressSpinnerModule,
     MatInputModule,
+    MatTabsModule,
   ],
   exports: [
     MainComponent,
@@ -97,7 +97,6 @@ import { BenchedDialogComponent } from './views/benched-dialog/benched-dialog.co
     CollisionDetectorService,
   ],
   entryComponents: [
-    JoinGameDialogComponent,
     EndGameDialogComponent,
     HowToPlayDialogComponent,
     YouWinDialogComponent,

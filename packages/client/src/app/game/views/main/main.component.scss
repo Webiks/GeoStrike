@@ -35,8 +35,55 @@
     margin-top: 20px;
   }
 
+  .character-picker-border {
+    border: 1px white solid;
+    border-bottom-left-radius: 20px;
+    border-top-width: 0;
+  }
+
   big-button {
     margin: 15px;
     color: white
   }
+}
+
+.tab-header {
+  font-size: 50px;
+  font-family: AGENCYR, sans-serif;
+  padding: 5px;
+}
+
+.mat-tab-header {
+  border: 0;
+}
+
+.mat-tab-body {
+  border: 1px solid white;
+  border-top: none;
+}
+
+.mat-tab-label {
+  width: 50%;
+  opacity: 1 !important;
+  height: auto !important;
+  background-color: transparent !important;
+  transition: all 1s;
+
+  &[aria-selected=true] {
+    border-bottom: none;
+    border-left: 1px solid white;
+    border-top: 1px solid white;
+    border-right: 1px solid white;
+    border-top-right-radius: 20px;
+    color: var(--light-green);
+  }
+
+  &[aria-selected=false] {
+    border: 1px solid transparent;
+    border-bottom-color: white;
+  }
+}
+
+mat-ink-bar {
+  display: none;
 }
