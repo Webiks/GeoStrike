@@ -16,9 +16,10 @@
   }">
   </ac-billboard-primitive-desc>
   <ac-label-primitive-desc *ngIf="isOverview$ | async" props="{
+    show: player.type === 'PLAYER',
     position: utils.toFixedHeight(player.currentLocation.location, 5),
     heightReference: utils.getClampedToGroundHeightReference(),
-    text: player.character.name,
+    text: player.character.username,
     font: '15px sans-serif',
     scale: 0.9,
     pixelOffset: getLabelPixelOffset(player) | pixelOffset,
