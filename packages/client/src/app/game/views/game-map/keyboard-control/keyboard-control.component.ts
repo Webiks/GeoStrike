@@ -6,18 +6,32 @@ import { KeyboardKeysService } from '../../../../core/services/keyboard-keys.ser
 import { GameService } from '../../../services/game.service';
 import { CollisionDetectorService } from '../../../services/collision-detector.service';
 
-const Direction = {
+const LookDirection = {
+  Up: 'ArrowUp',
+  Down: 'ArrowDown',
+  Left: 'ArrowLeft',
+  Right: 'ArrowRight',
+};
+
+const LookDirectionsDelta = {
+  [LookDirection.Up]: {field: 'pitch', value: 1},
+  [LookDirection.Down]: {field: 'pitch', value: -1},
+  [LookDirection.Left]: {field: 'heading', value: -1},
+  [LookDirection.Right]: {field: 'heading', value: 1},
+};
+
+const MoveDirection = {
   Forward: 'KeyW',
   Backward: 'KeyS',
   Left: 'KeyA',
   Right: 'KeyD',
 };
 
-const DirectionsDelta = {
-  [Direction.Forward]: 180,
-  [Direction.Backward]: 0,
-  [Direction.Left]: 90,
-  [Direction.Right]: -90,
+const MoveDirectionsDelta = {
+  [MoveDirection.Forward]: 180,
+  [MoveDirection.Backward]: 0,
+  [MoveDirection.Left]: 90,
+  [MoveDirection.Right]: -90,
 };
 
 @Component({
@@ -27,6 +41,8 @@ const DirectionsDelta = {
 export class KeyboardControlComponent implements OnInit {
   private inspector = false;
   private viewer;
+  private lookFactor = 0;
+  private lastLook;
 
   constructor(private character: CharacterService,
               private keyboardControlService: KeyboardControlService,
@@ -38,8 +54,34 @@ export class KeyboardControlComponent implements OnInit {
     this.viewer = cesiumService.getViewer();
   }
 
+  buildLookConfig(lookDirection: string) {
+    const lookDelta = LookDirectionsDelta[lookDirection];
+    return {
+      validation: () => {
+        return (
+          this.character.viewState !== ViewState.OVERVIEW &&
+          (this.character.state === MeModelState.RUNNING ||
+            this.character.state === MeModelState.WALKING ||
+            this.character.state === MeModelState.SHOOTING)
+        );
+      },
+      action: () => {
+        if (this.lastLook === lookDirection) {
+          this.lookFactor += 0.1;
+        } else {
+          this.lookFactor = 1;
+        }
+        const lookField = this.character[lookDelta.field];
+        if (lookField) {
+          this.character[lookDelta.field] = lookField + (lookDelta.value * this.lookFactor);
+        }
+        this.lastLook = lookDirection;
+      }
+    }
+  }
+
   buildMovementConfig(direction: string) {
-    const delta = DirectionsDelta[direction];
+    const delta = MoveDirectionsDelta[direction];
     return {
       validation: () => {
         return (
@@ -71,7 +113,7 @@ export class KeyboardControlComponent implements OnInit {
             this.character.location = nextLocation;
           }
         }
-        else if (direction !== Direction.Forward) {
+        else if (direction !== MoveDirection.Forward) {
           this.character.location = nextLocation;
           if (this.collisionDetector.collision) {
             this.collisionDetector.detectCollision(nextLocation, true);
@@ -140,14 +182,14 @@ export class KeyboardControlComponent implements OnInit {
     this.keyboardControlService.setKeyboardControls(
       keyboardDefinitions,
       (keyEvent: KeyboardEvent) => {
-        if (keyEvent.code === 'KeyW' || keyEvent.code === 'ArrowUp') {
+        if (keyEvent.code === 'KeyW') {
           if (this.character.state !== MeModelState.SHOOTING) {
             this.character.state = keyEvent.shiftKey
               ? MeModelState.RUNNING
               : this.character.state;
           }
 
-          return Direction.Forward;
+          return MoveDirection.Forward;
         }
         else {
           return keyEvent.code;
@@ -161,11 +203,15 @@ export class KeyboardControlComponent implements OnInit {
 
   private createMovementDefinitions() {
     const keyboardDefinitions = {
-      [Direction.Forward]: this.buildMovementConfig(Direction.Forward),
+      [MoveDirection.Forward]: this.buildMovementConfig(MoveDirection.Forward),
+      [LookDirection.Up]: this.buildLookConfig(LookDirection.Up),
+      [LookDirection.Left]: this.buildLookConfig(LookDirection.Left),
+      [LookDirection.Right]: this.buildLookConfig(LookDirection.Right),
+      [LookDirection.Down]: this.buildLookConfig(LookDirection.Down),
     };
-    !environment.keys.disableBackward && Object.assign(keyboardDefinitions, {[Direction.Backward]: this.buildMovementConfig(Direction.Backward)});
-    !environment.keys.disableLeft && Object.assign(keyboardDefinitions, {[Direction.Right]: this.buildMovementConfig(Direction.Right)});
-    !environment.keys.disableRight && Object.assign(keyboardDefinitions, {[Direction.Left]: this.buildMovementConfig(Direction.Left)});
+    !environment.keys.disableBackward && Object.assign(keyboardDefinitions, {[MoveDirection.Backward]: this.buildMovementConfig(MoveDirection.Backward)});
+    !environment.keys.disableLeft && Object.assign(keyboardDefinitions, {[MoveDirection.Right]: this.buildMovementConfig(MoveDirection.Right)});
+    !environment.keys.disableRight && Object.assign(keyboardDefinitions, {[MoveDirection.Left]: this.buildMovementConfig(MoveDirection.Left)});
     return keyboardDefinitions;
   }
 
