@@ -7,10 +7,10 @@ import { GameService } from '../../../services/game.service';
 import { CollisionDetectorService } from '../../../services/collision-detector.service';
 
 const Direction = {
-  Forward: 'Forward',
-  Backward: 'Backward',
-  Left: 'Left',
-  Right: 'Right',
+  Forward: 'KeyW',
+  Backward: 'KeyS',
+  Left: 'KeyA',
+  Right: 'KeyD',
 };
 
 const DirectionsDelta = {
@@ -136,13 +136,9 @@ export class KeyboardControlComponent implements OnInit {
   }
 
   ngOnInit() {
+    const keyboardDefinitions = this.createMovementDefinitions();
     this.keyboardControlService.setKeyboardControls(
-      {
-        [Direction.Forward]: this.buildMovementConfig(Direction.Forward),
-        [Direction.Backward]: this.buildMovementConfig(Direction.Backward),
-        [Direction.Left]: this.buildMovementConfig(Direction.Left),
-        [Direction.Right]: this.buildMovementConfig(Direction.Right),
-      },
+      keyboardDefinitions,
       (keyEvent: KeyboardEvent) => {
         if (keyEvent.code === 'KeyW' || keyEvent.code === 'ArrowUp') {
           if (this.character.state !== MeModelState.SHOOTING) {
@@ -152,14 +148,9 @@ export class KeyboardControlComponent implements OnInit {
           }
 
           return Direction.Forward;
-        } else if (keyEvent.code === 'KeyS' || keyEvent.code === 'ArrowDown') {
-          return Direction.Backward;
-        } else if (keyEvent.code === 'KeyA' || keyEvent.code === 'ArrowLeft') {
-          return Direction.Left;
-        } else if (keyEvent.code === 'KeyD' || keyEvent.code === 'ArrowRight') {
-          return Direction.Right;
-        } else {
-          return String.fromCharCode(keyEvent.keyCode);
+        }
+        else {
+          return keyEvent.code;
         }
       },
       true
@@ -168,13 +159,29 @@ export class KeyboardControlComponent implements OnInit {
     this.addKeyboardEvents();
   }
 
+  private createMovementDefinitions() {
+    const keyboardDefinitions = {
+      [Direction.Forward]: this.buildMovementConfig(Direction.Forward),
+    };
+    !environment.keys.disableBackward && Object.assign(keyboardDefinitions, {[Direction.Backward]: this.buildMovementConfig(Direction.Backward)});
+    !environment.keys.disableLeft && Object.assign(keyboardDefinitions, {[Direction.Right]: this.buildMovementConfig(Direction.Right)});
+    !environment.keys.disableRight && Object.assign(keyboardDefinitions, {[Direction.Left]: this.buildMovementConfig(Direction.Left)});
+    return keyboardDefinitions;
+  }
+
   private addKeyboardEvents() {
     this.keyboardKeysService.init();
     this.keyboardKeysService.registerKeyBoardEventDescription('LeftMouse', 'Shoot');
     this.keyboardKeysService.registerKeyBoardEventDescription('KeyW', 'Move Forward');
-    this.keyboardKeysService.registerKeyBoardEventDescription('KeyS', 'Move Backward');
-    this.keyboardKeysService.registerKeyBoardEventDescription('KeyA', 'Move Left');
-    this.keyboardKeysService.registerKeyBoardEventDescription('KeyD', 'Move Right');
+    if (!environment.keys.disableBackward) {
+      this.keyboardKeysService.registerKeyBoardEventDescription('KeyS', 'Move Backward');
+    }
+    if (!environment.keys.disableLeft) {
+      this.keyboardKeysService.registerKeyBoardEventDescription('KeyA', 'Move Left');
+    }
+    if (!environment.keys.disableRight) {
+      this.keyboardKeysService.registerKeyBoardEventDescription('KeyD', 'Move Right');
+    }
     this.keyboardKeysService.registerKeyBoardEvent('KeyC', 'Switch Crawling', () => {
       this.ngZone.run(() => {
         this.changeCrawlingState();
