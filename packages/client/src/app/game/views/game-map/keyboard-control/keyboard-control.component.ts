@@ -171,7 +171,6 @@ export class KeyboardControlComponent implements OnInit {
 
   private addKeyboardEvents() {
     this.keyboardKeysService.init();
-    this.keyboardKeysService.registerKeyBoardEventDescription('LeftMouse', 'Shoot');
     this.keyboardKeysService.registerKeyBoardEventDescription('KeyW', 'Move Forward');
     if (!environment.keys.disableBackward) {
       this.keyboardKeysService.registerKeyBoardEventDescription('KeyS', 'Move Backward');

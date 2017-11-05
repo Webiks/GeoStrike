@@ -10,6 +10,7 @@ import { GameService } from '../../../services/game.service';
 import { CharacterData } from '../../../../types';
 import { BasicDesc } from 'angular-cesium/src/angular-cesium/services/basic-desc/basic-desc.service';
 import { OtherPlayerEntity } from '../../game-container/game-container.component';
+import { KeyboardKeysService } from '../../../../core/services/keyboard-keys.service';
 
 @Component({
   selector: 'me',
@@ -27,7 +28,7 @@ export class MeComponent implements OnInit, OnDestroy {
 
   showWeapon$: Observable<boolean>;
   showCross$: Observable<boolean>;
-  clickSub$: Subscription;
+  shootSub$: Subscription;
   buildingNearby = false;
   insideBuilding = false;
   transparentColor = new Cesium.Color(0, 0, 0, 0.0001);
@@ -38,6 +39,7 @@ export class MeComponent implements OnInit, OnDestroy {
               public utils: UtilsService,
               private cesiumService: CesiumService,
               private gameService: GameService,
+              private keyboardKeysService: KeyboardKeysService,
               private cd: ChangeDetectorRef) {
   }
 
@@ -50,7 +52,14 @@ export class MeComponent implements OnInit, OnDestroy {
   }
 
   setShootEvent() {
-    this.clickSub$ = Observable.fromEvent(document.body, 'click')
+    this.keyboardKeysService.registerKeyBoardEventDescription('LeftMouse', 'Shoot');
+    const enterSub$ = Observable.create((observer)=>{
+      this.keyboardKeysService.registerKeyBoardEvent('Enter', 'Shoot', ()=>{
+        observer.next()
+      });
+    });
+    this.shootSub$ = Observable.fromEvent(document.body, 'click')
+      .merge(enterSub$)
       .filter(() => this.character.state === MeModelState.SHOOTING)
       .subscribe((e: MouseEvent) => {
         this.showGunMuzzleFlash();
@@ -93,7 +102,7 @@ export class MeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.clickSub$.unsubscribe();
+    this.shootSub$.unsubscribe();
     this.meModelDrawSubscription.unsubscribe();
   }
 
