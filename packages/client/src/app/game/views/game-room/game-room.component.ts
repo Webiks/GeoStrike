@@ -1,11 +1,12 @@
 import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { GameService } from '../../services/game.service';
-import { GameData } from '../../../types';
+import { GameData, GameFields } from '../../../types';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { AuthorizationMiddleware } from '../../../core/configured-apollo/network/authorization-middleware';
 import { AVAILABLE_CHARACTERS } from '../../../shared/characters.const';
 import * as _ from 'lodash';
+import Me = GameFields.Me;
 
 @Component({
   selector: 'game-room',
@@ -18,6 +19,7 @@ export class GameRoomComponent implements OnInit, OnDestroy {
   gameStarted = false;
   players;
   gameCode;
+  me: Me;
   private gameDataSubscription: Subscription;
   private paramsSubscription;
 
@@ -43,6 +45,7 @@ export class GameRoomComponent implements OnInit, OnDestroy {
                 this.loading = false;
                 this.game = gameDataResult.gameData;
                 this.players = this.getPlayers(this.game);
+                this.me = this.game.me;
 
                 if (this.game && this.game.state === 'ACTIVE') {
                   this.gameStarted = true;
@@ -94,5 +97,9 @@ export class GameRoomComponent implements OnInit, OnDestroy {
 
   ready() {
     this.gameService.readyToPlay().subscribe();
+  }
+
+  getOpponentTeam() {
+    return this.me && this.me.team === 'BLUE'? 'red' : 'blue';
   }
 }

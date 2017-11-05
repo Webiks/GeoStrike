@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { HowToPlayDialogComponent } from '../../how-to-play-dialog/how-to-play-dialog.component';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatDialogConfig } from '@angular/material';
 
 @Component({
   selector: 'game-toolbar',
@@ -46,7 +46,7 @@ export class GameToolbarComponent implements OnInit {
       height: '80%',
       width: '85%',
       panelClass: 'container-how-to-play'
-    })
+    } as MatDialogConfig)
   }
 
   toggleFullScreen() {
