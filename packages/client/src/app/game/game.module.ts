@@ -44,6 +44,7 @@ import { BuildingsService } from './services/buildings.service';
 import { CollisionDetectorService } from './services/collision-detector.service';
 import { ViewerControlsComponent } from './views/game-container/viewer-controls/viewer-controls.component';
 import { BenchedDialogComponent } from './views/benched-dialog/benched-dialog.component';
+import { KeyButtonComponent } from './views/how-to-play-dialog/key-button/key-button.component';
 
 @NgModule({
   declarations: [
@@ -69,6 +70,7 @@ import { BenchedDialogComponent } from './views/benched-dialog/benched-dialog.co
     GameDialogsComponent,
     ViewerControlsComponent,
     BenchedDialogComponent,
+    KeyButtonComponent,
   ],
   imports: [
     BrowserModule,
