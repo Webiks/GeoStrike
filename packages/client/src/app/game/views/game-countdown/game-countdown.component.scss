@@ -7,10 +7,19 @@
   z-index: 1000;
   top: 0;
   left: 0;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-h1 {
+.countdown-text {
   font-size: 50pt;
-  margin: 150px;
   color: white;
+}
+
+.countdown-number {
+  font-size: 400px;
+  margin: 100px;
 }
