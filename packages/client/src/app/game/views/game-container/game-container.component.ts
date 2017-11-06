@@ -123,7 +123,8 @@ export class GameContainerComponent implements OnInit, OnDestroy {
           id: this.me.id,
           actionType: ActionType.DELETE,
         })
-      } else if (this.character.viewState === ViewState.OVERVIEW){
+      }
+      if (this.character.viewState === ViewState.OVERVIEW){
         this.otherPlayers$.next({
           id: this.me.id,
           actionType: ActionType.ADD_UPDATE,
