@@ -79,7 +79,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
       if (overviewMode) {
         this.character.viewState = ViewState.OVERVIEW;
         this.overviewSettings();
-      }else {
+      } else {
         this.character.viewState = ViewState.SEMI_FPV;
         this.startFirstPersonMode(game.me);
       }
@@ -91,10 +91,19 @@ export class GameMapComponent implements OnInit, OnDestroy {
       if (this.lastViewState !== ViewState.OVERVIEW && newViewState === ViewState.OVERVIEW) {
         this.changeToOverview();
       } else if (this.lastViewState === ViewState.OVERVIEW && newViewState !== ViewState.OVERVIEW) {
-        this.viewerOptions.setFpvCameraOptions(this.viewer);
 
-        const controlledPlayer = this.takeControlService.controlledPlayer || this.character.meFromServer;
-        this.startFirstPersonMode(controlledPlayer);
+        const posWithHeight = Cesium.Cartographic.fromCartesian(this.character.location);
+        posWithHeight.height = 5;
+
+        this.viewer.camera.flyTo({
+          destination: Cesium.Cartesian3.fromRadians(posWithHeight.longitude, posWithHeight.latitude,posWithHeight.height),
+          complete: () => {
+            this.viewerOptions.setFpvCameraOptions(this.viewer);
+            const controlledPlayer = this.takeControlService.controlledPlayer || this.character.meFromServer;
+            this.startFirstPersonMode(controlledPlayer);
+          }
+        });
+
       }
 
       this.lastViewState = newViewState;

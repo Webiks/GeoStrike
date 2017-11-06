@@ -177,6 +177,15 @@ export class KeyboardControlComponent implements OnInit {
     }
   }
 
+  changeOverviewMode(){
+    const isViewer = this.character.meFromServer['__typename'] === 'Viewer';
+    if (!isViewer && this.character.viewState === ViewState.OVERVIEW) {
+      this.character.viewState = ViewState.SEMI_FPV;
+    } else {
+      this.character.viewState = ViewState.OVERVIEW;
+    }
+  }
+
   ngOnInit() {
     const keyboardDefinitions = this.createMovementDefinitions();
     this.keyboardControlService.setKeyboardControls(
@@ -230,6 +239,11 @@ export class KeyboardControlComponent implements OnInit {
     this.keyboardKeysService.registerKeyBoardEvent('KeyC', 'Switch Crawling', () => {
       this.ngZone.run(() => {
         this.changeCrawlingState();
+      })
+    });
+    this.keyboardKeysService.registerKeyBoardEvent('KeyM', 'Switch Overview Mode', () => {
+      this.ngZone.run(() => {
+        this.changeOverviewMode();
       })
     });
     this.keyboardKeysService.registerKeyBoardEvent('Tab', 'Switch FPV/Semi FPV',

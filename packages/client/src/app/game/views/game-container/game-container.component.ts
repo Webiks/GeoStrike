@@ -112,13 +112,6 @@ export class GameContainerComponent implements OnInit, OnDestroy {
     if (!this.isViewer) {
       if (this.me.state === 'DEAD') {
         this.character.state = MeModelState.DEAD;
-        if (this.character.viewState === ViewState.OVERVIEW){
-          this.otherPlayers$.next({
-            id: this.me.id,
-            actionType: ActionType.ADD_UPDATE,
-            entity: this.me,
-          })
-        }
       } else if (this.me.state === 'CONTROLLED') {
         this.character.state = MeModelState.CONTROLLED;
         // from controlled to normal state
@@ -129,6 +122,13 @@ export class GameContainerComponent implements OnInit, OnDestroy {
         this.otherPlayers$.next({
           id: this.me.id,
           actionType: ActionType.DELETE,
+        })
+      }
+      if (this.character.viewState === ViewState.OVERVIEW){
+        this.otherPlayers$.next({
+          id: this.me.id,
+          actionType: ActionType.ADD_UPDATE,
+          entity: this.me,
         })
       }
     } else {

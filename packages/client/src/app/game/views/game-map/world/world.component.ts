@@ -3,9 +3,9 @@ import { CharacterService, ViewState, } from '../../../services/character.servic
 import { GameConfig } from '../../../services/game-config';
 import { AcEntity, AcNotification, AcTileset3dComponent, ActionType, CesiumService, } from 'angular-cesium';
 import { environment } from '../../../../../environments/environment';
-import { Observable } from 'rxjs/Observable';
 import { UtilsService } from '../../../services/utils.service';
 import { backgroundItemsData } from './background-data';
+import { Subject } from 'rxjs/Subject';
 
 export class BackgroundEntity extends AcEntity {
 }
@@ -18,7 +18,7 @@ export class WorldComponent implements OnInit {
   @ViewChild('tiles') tiles: AcTileset3dComponent;
   public tilesUrl = environment.tiles.url;
   public loadTiles = environment.load3dTiles;
-  public trees$: Observable<AcNotification>;
+  public treesAndBoxes$: Subject<AcNotification> = new Subject();
   public tilesStyle = {
     color: {
       conditions: [
@@ -34,6 +34,7 @@ export class WorldComponent implements OnInit {
     },
   };
   public hideWorld = false;
+  private treesAndBoxes;
 
   constructor(
     public utils: UtilsService,
@@ -41,7 +42,11 @@ export class WorldComponent implements OnInit {
     public character: CharacterService,
     private cd: ChangeDetectorRef
   ) {
-    const trees = backgroundItemsData.reduce(
+    this.drawBackgroundItems();
+  }
+
+  private drawBackgroundItems() {
+    this.treesAndBoxes = backgroundItemsData.reduce(
       (array, treeModel) => [
         ...array,
         ...treeModel.positions.map(position => new BackgroundEntity({
@@ -53,11 +58,11 @@ export class WorldComponent implements OnInit {
       ],
       [],
     );
-    this.trees$ = Observable.from(trees).map((tree, i) => ({
+    this.treesAndBoxes.map((tree, i) => ({
       id: i.toString(),
       actionType: ActionType.ADD_UPDATE,
       entity: new AcEntity(tree),
-    }));
+    })).forEach((treeNotification) => this.treesAndBoxes$.next(treeNotification));
   }
 
   ngOnInit() {
@@ -68,6 +73,7 @@ export class WorldComponent implements OnInit {
     this.character.viewState$.subscribe(viewState => {
       this.hideWorld = viewState === ViewState.OVERVIEW;
       this.cd.detectChanges();
+      this.drawBackgroundItems();
     });
   }
 
