@@ -178,7 +178,8 @@ export class KeyboardControlComponent implements OnInit {
   }
 
   changeOverviewMode(){
-    if (this.character.viewState === ViewState.OVERVIEW) {
+    const isViewer = this.character.meFromServer['__typename'] === 'Viewer';
+    if (!isViewer && this.character.viewState === ViewState.OVERVIEW) {
       this.character.viewState = ViewState.SEMI_FPV;
     } else {
       this.character.viewState = ViewState.OVERVIEW;
