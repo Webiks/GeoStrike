@@ -18,5 +18,10 @@ export const environment = {
     // url : 'https://assets.agi.com/stk-terrain/v1/tilesets/PAMAP/tiles',
     requestWaterMask: true,
     requestVertexNormals: true
+  },
+  keys: {
+    disableBackward: true,
+    disableLeft: true,
+    disableRight: true,
   }
 };
