@@ -20,6 +20,11 @@ export class AppComponent implements DoCheck{
     this.addIcon('volume-off');
     this.addIcon('setting');
     this.addIcon('fullscreen-exit');
+    this.addIcon('look-around-mouse');
+    this.addIcon('arrow-left');
+    this.addIcon('arrow-right');
+    this.addIcon('arrow-up');
+    this.addIcon('arrow-down');
   }
 
   addIcon(iconName: string){

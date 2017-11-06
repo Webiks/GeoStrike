@@ -6,7 +6,10 @@
       <div class="button-wrap">
         <div *ngFor="let keyInfo of keys2.get(description); index as i;" class="button-wrap">
           <span *ngIf="i > 0" class="or-style">or</span>
-          <key-button [keyInfo]="keyInfo"></key-button>
+          <arrow-keys *ngIf="keyInfo.keyName === 'arrows'; else keyButton"></arrow-keys>
+          <ng-template #keyButton>
+            <key-button [keyInfo]="keyInfo"></key-button>
+          </ng-template>
         </div>
       </div>
     </div>

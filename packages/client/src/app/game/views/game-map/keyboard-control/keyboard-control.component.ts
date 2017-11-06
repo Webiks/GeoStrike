@@ -266,5 +266,8 @@ export class KeyboardControlComponent implements OnInit {
       (keyEvent: KeyboardEvent) => {
         this.toggleInspector(Cesium.viewerCesium3DTilesInspectorMixin, 'cesium3DTilesInspector');
       });
+
+    this.keyboardKeysService.registerKeyBoardEventDescription('LookAroundMouse', 'Look around');
+    this.keyboardKeysService.registerKeyBoardEventDescription('arrows', 'Look around');
   }
 }
