@@ -142,10 +142,10 @@ export class GameMapComponent implements OnInit, OnDestroy {
     }
 
     const pitch = this.character.pitch;
-    this.character.pitch = pitch - (event.movementY / 10);
+    this.character.pitch = pitch - (event.movementY / environment.controls.mouseSensitivity);
 
     const heading = this.character.heading;
-    this.character.heading = heading + (event.movementX / 10);
+    this.character.heading = heading + (event.movementX / environment.controls.mouseSensitivity);
   }
 
   preRenderHandler() {

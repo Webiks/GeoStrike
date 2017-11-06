@@ -24,7 +24,8 @@ export const environment = {
     requestWaterMask: true,
     requestVertexNormals: true
   },
-  keys: {
+  controls: {
+    mouseSensitivity: 16, // bigger is less sensitive
     disableBackward: true,
     disableLeft: true,
     disableRight: true,

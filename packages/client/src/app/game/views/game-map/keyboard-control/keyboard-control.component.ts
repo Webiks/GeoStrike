@@ -209,22 +209,22 @@ export class KeyboardControlComponent implements OnInit {
       [LookDirection.Right]: this.buildLookConfig(LookDirection.Right),
       [LookDirection.Down]: this.buildLookConfig(LookDirection.Down),
     };
-    !environment.keys.disableBackward && Object.assign(keyboardDefinitions, {[MoveDirection.Backward]: this.buildMovementConfig(MoveDirection.Backward)});
-    !environment.keys.disableLeft && Object.assign(keyboardDefinitions, {[MoveDirection.Right]: this.buildMovementConfig(MoveDirection.Right)});
-    !environment.keys.disableRight && Object.assign(keyboardDefinitions, {[MoveDirection.Left]: this.buildMovementConfig(MoveDirection.Left)});
+    !environment.controls.disableBackward && Object.assign(keyboardDefinitions, {[MoveDirection.Backward]: this.buildMovementConfig(MoveDirection.Backward)});
+    !environment.controls.disableLeft && Object.assign(keyboardDefinitions, {[MoveDirection.Right]: this.buildMovementConfig(MoveDirection.Right)});
+    !environment.controls.disableRight && Object.assign(keyboardDefinitions, {[MoveDirection.Left]: this.buildMovementConfig(MoveDirection.Left)});
     return keyboardDefinitions;
   }
 
   private addKeyboardEvents() {
     this.keyboardKeysService.init();
     this.keyboardKeysService.registerKeyBoardEventDescription('KeyW', 'Move Forward');
-    if (!environment.keys.disableBackward) {
+    if (!environment.controls.disableBackward) {
       this.keyboardKeysService.registerKeyBoardEventDescription('KeyS', 'Move Backward');
     }
-    if (!environment.keys.disableLeft) {
+    if (!environment.controls.disableLeft) {
       this.keyboardKeysService.registerKeyBoardEventDescription('KeyA', 'Move Left');
     }
-    if (!environment.keys.disableRight) {
+    if (!environment.controls.disableRight) {
       this.keyboardKeysService.registerKeyBoardEventDescription('KeyD', 'Move Right');
     }
     this.keyboardKeysService.registerKeyBoardEvent('KeyC', 'Switch Crawling', () => {
