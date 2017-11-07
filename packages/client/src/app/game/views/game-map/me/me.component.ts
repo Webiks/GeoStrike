@@ -11,6 +11,7 @@ import { CharacterData } from '../../../../types';
 import { BasicDesc } from 'angular-cesium/src/angular-cesium/services/basic-desc/basic-desc.service';
 import { OtherPlayerEntity } from '../../game-container/game-container.component';
 import { KeyboardKeysService } from '../../../../core/services/keyboard-keys.service';
+import { GunSoundComponent } from '../../gun-shot-sound/gun-sound/gun-sound.component';
 
 @Component({
   selector: 'me',
@@ -22,7 +23,7 @@ export class MeComponent implements OnInit, OnDestroy {
   private meModelDrawSubscription: Subscription;
 
   @ViewChild('cross') crossElement: ElementRef;
-  @ViewChild('gunShotSound') gunShotSound: ElementRef;
+  @ViewChild('gunShotSound') gunShotSound: GunSoundComponent;
   @ViewChild('muzzleFlash') muzzleFlash: ElementRef;
   @ViewChild('meModel') meModel: BasicDesc;
 
@@ -61,6 +62,7 @@ export class MeComponent implements OnInit, OnDestroy {
     this.shootSub$ = Observable.fromEvent(document.body, 'click')
       .merge(enterSub$)
       .filter(() => this.character.state === MeModelState.SHOOTING)
+      .do(()=> this.gameService.notifyShot(this.character.meFromServer.id, this.character.location))
       .subscribe((e: MouseEvent) => {
         this.showGunMuzzleFlash();
         this.soundGunFire();
@@ -107,9 +109,7 @@ export class MeComponent implements OnInit, OnDestroy {
   }
 
   private soundGunFire() {
-    const soundElement = this.gunShotSound.nativeElement;
-    soundElement.currentTime = 0;
-    soundElement.play();
+    this.gunShotSound.play();
   }
 
   private showGunMuzzleFlash() {

@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  serverUrl: 'server-ktjsvvwixu.now.sh',
+  serverUrl: 'cesium-fps-server.now.sh',
   wsSchema: 'wss',
   movement: {
     runningSpeed: 0.4,

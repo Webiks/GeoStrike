@@ -60,6 +60,7 @@ export interface Mutation {
   updatePosition?: Player; 
   ready?: Game; 
   notifyKill?: Player; 
+  notifyShot?: boolean; 
   takeControlOverPlayer?: Player; 
   removeControlOverPlayer?: Player; 
 }
@@ -73,11 +74,18 @@ export interface CreateOrJoinResult {
 export interface Subscription {
   gameData?: Game; 
   gameNotifications?: Notification; 
+  gunShot?: ShotData; 
 }
 
 export interface Notification {
   gameId?: string; 
   message?: string; 
+}
+
+export interface ShotData {
+  byPlayer?: Player; 
+  shotPosition?: Location; 
+  time?: number; 
 }
 
 export interface Viewer extends User {
@@ -114,6 +122,10 @@ export interface UpdatePositionMutationArgs {
 }
 export interface NotifyKillMutationArgs {
   playerId: string; 
+}
+export interface NotifyShotMutationArgs {
+  byPlayerId: string; 
+  shotPosition: LocationInput; 
 }
 export interface TakeControlOverPlayerMutationArgs {
   playerId: string; 
