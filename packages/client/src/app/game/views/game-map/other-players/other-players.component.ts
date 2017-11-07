@@ -59,7 +59,10 @@ export class OtherPlayersComponent {
   }
 
   getPlayerIcon(player: PlayerFields.Fragment) {
-    if (player.character.iconUrl) {
+    if (player.state === 'DEAD' && player.character.iconDeadUrl){
+      return player.character.iconDeadUrl;
+    }
+    else if (player.character.iconUrl) {
       return player.character.iconUrl;
     }
     return '/assets/icons/grey-mark.png';
@@ -77,10 +80,7 @@ export class OtherPlayersComponent {
   }
 
   getIconColor(player) {
-    if (player.state === 'DEAD') {
-      return Cesium.Color.RED;
-    }
-    else if (this.takeControlService.selectedPlayerToControl) {
+    if (this.takeControlService.selectedPlayerToControl) {
       return player.id === this.takeControlService.selectedPlayerToControl.id ? Cesium.Color.YELLOW : Cesium.Color.WHITE;
     }
     return Cesium.Color.WHITE;

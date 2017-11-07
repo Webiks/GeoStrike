@@ -10,6 +10,7 @@ export const PLAYER_CHARACTERS: CharacterData[] = [
     imageUrl: '/assets/characters/captain-america.png',
     portraitUrl: '/assets/characters/captain_america_portrait.png',
     iconUrl: '/assets/icons/captain-america-mark.png',
+    iconDeadUrl: '/assets/icons/captain-america-dead-mark.png',
   },
   {
     name: 'Anthony Stark',
@@ -20,6 +21,7 @@ export const PLAYER_CHARACTERS: CharacterData[] = [
     imageUrl: '/assets/characters/ironman.png',
     portraitUrl: '/assets/characters/ironman_portrait.png',
     iconUrl: '/assets/icons/ironman-mark.png',
+    iconDeadUrl: '/assets/icons/ironman-dead-mark.png',
   },
   {
     name: 'Peter Parker',
@@ -30,6 +32,7 @@ export const PLAYER_CHARACTERS: CharacterData[] = [
     imageUrl: '/assets/characters/spiderman.png',
     portraitUrl: '/assets/characters/spiderman_portrait.png',
     iconUrl: '/assets/icons/spiderman-mark.png',
+    iconDeadUrl: '/assets/icons/spiderman-dead-mark.png',
   },
   {
     name: 'Bruce Wayne',
@@ -40,6 +43,7 @@ export const PLAYER_CHARACTERS: CharacterData[] = [
     imageUrl: '/assets/characters/batman.png',
     portraitUrl: '/assets/characters/batman_portrait.png',
     iconUrl: '/assets/icons/batman-mark.png',
+    iconDeadUrl: '/assets/icons/batman-dead-mark.png',
   },
   {
     name: 'car',
@@ -50,6 +54,7 @@ export const PLAYER_CHARACTERS: CharacterData[] = [
     imageUrl: null,
     portraitUrl: null,
     iconUrl: '/assets/icons/car-mark.png',
+    iconDeadUrl: '/assets/icons/grandmother-dead-mark.png',
   },
   {
     name: 'grandpa',
@@ -60,5 +65,6 @@ export const PLAYER_CHARACTERS: CharacterData[] = [
     imageUrl: null,
     portraitUrl: null,
     iconUrl: '/assets/icons/grandmother-mark.png',
+    iconDeadUrl: '/assets/icons/grandmother-dead-mark.png',
   },
 ];

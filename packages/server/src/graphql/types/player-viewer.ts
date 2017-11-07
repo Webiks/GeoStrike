@@ -29,6 +29,7 @@ export const schema = gql`
         description: String
         portraitUrl: String
         iconUrl: String
+        iconDeadUrl: String
     }
     
     type Viewer implements User {
