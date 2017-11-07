@@ -10,6 +10,7 @@ import {
   JoinAsViewer,
   JoinGame,
   NotifyKill,
+  NotifyShot,
   Ready,
   Team,
   UpdatePosition
@@ -27,6 +28,7 @@ import { GameConfig } from './game-config';
 import { CharacterService } from './character.service';
 import { joinAsViewer } from '../../graphql/join-as-viewer.mutation';
 import { gameNotificationsSubscription } from '../../graphql/game-notifications.subscription';
+import { notifyShotMutation } from '../../graphql/notify-shot.mutation';
 
 @Injectable()
 export class GameService {
@@ -181,6 +183,18 @@ export class GameService {
       variables: {
         playerId: killedPlayerId,
       } as NotifyKill.Variables
+    });
+  }
+
+  notifyShot(byPlayerId, playerPosition: Cartesian3) {
+    const sub = this.apollo.mutate<NotifyShot.Mutation>({
+      mutation: notifyShotMutation,
+      variables: {
+        shotPosition: playerPosition,
+        byPlayerId: byPlayerId,
+      } as NotifyShot.Variables
+    }).subscribe(() => {
+      sub.unsubscribe();
     });
   }
 }

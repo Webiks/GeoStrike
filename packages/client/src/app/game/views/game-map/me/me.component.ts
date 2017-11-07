@@ -62,6 +62,7 @@ export class MeComponent implements OnInit, OnDestroy {
     this.shootSub$ = Observable.fromEvent(document.body, 'click')
       .merge(enterSub$)
       .filter(() => this.character.state === MeModelState.SHOOTING)
+      .do(()=> this.gameService.notifyShot(this.character.meFromServer.id, this.character.location))
       .subscribe((e: MouseEvent) => {
         this.showGunMuzzleFlash();
         this.soundGunFire();

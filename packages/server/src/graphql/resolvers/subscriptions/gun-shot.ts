@@ -17,7 +17,7 @@ export const gunShot = {
       }
 
       // Send to all players in the same game except the player that made the shot
-      return payload.gunShot.gameId === context.game.gameId && payload.gunShot.byPlayer.id !== context.player.playerId;
+      return payload.gunShot.gameId === context.game.gameId && payload.gunShot.byPlayer.playerId !== context.player.playerId;
     }
   )
 };

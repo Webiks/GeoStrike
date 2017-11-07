@@ -9,12 +9,13 @@ export const notifyShot = (rootValue, {byPlayerId, shotPosition}, {games, game, 
   const shootingPlayer = ((game.controlledPlayersMap.get(byPlayerId) || player) as IPlayer);
 
   pubsub.publish(ESubscriptionTopics.GUN_SHOT, {
-    shotGun: {
+    gunShot: {
       byPlayer: shootingPlayer,
       shotPosition: shotPosition,
       time: Date.now(),
+      gameId: game.gameId,
     }
   });
 
-  return player;
+  return true;
 };

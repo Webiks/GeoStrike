@@ -17,9 +17,10 @@ export class GunSoundComponent implements OnInit {
   ngOnInit() {
   }
 
-  play() {
-    const soundElement = this.gunShotSound.nativeElement;
+  play(volume = 1.0) {
+    const soundElement : HTMLAudioElement= this.gunShotSound.nativeElement;
     soundElement.currentTime = 0;
+    soundElement.volume = volume;
     soundElement.play();
   }
 }

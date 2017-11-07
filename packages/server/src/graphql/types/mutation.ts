@@ -8,7 +8,7 @@ export const schema = gql`
         updatePosition(position: LocationInput!, heading: Float!,isCrawling: Boolean!, skipValidation: Boolean): Player
         ready: Game
         notifyKill(playerId: String!): Player
-        notifyShot(byPlayerId: String!, shotPosition: LocationInput!): Player
+        notifyShot(byPlayerId: String!, shotPosition: LocationInput!): Boolean
         takeControlOverPlayer(playerId: String!): Player
         removeControlOverPlayer: Player
     }
