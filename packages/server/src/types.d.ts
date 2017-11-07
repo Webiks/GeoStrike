@@ -40,6 +40,7 @@ export interface CharacterData {
   description?: string; 
   portraitUrl?: string; 
   iconUrl?: string; 
+  iconDeadUrl?: string; 
 }
 
 export interface PlayerLocation {
