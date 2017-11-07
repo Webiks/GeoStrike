@@ -1,0 +1,7 @@
+<ac-layer acFor="let shotData of gunShots$" [context]="this">
+  <ac-billboard-primitive-desc *ngIf="isOverview$| async" props="{
+    position: shotData.shotPosition,
+    image: getGunImage(),
+  }">
+  </ac-billboard-primitive-desc>
+</ac-layer>
