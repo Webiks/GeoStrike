@@ -54,7 +54,7 @@ export const PLAYER_CHARACTERS: CharacterData[] = [
     imageUrl: null,
     portraitUrl: null,
     iconUrl: '/assets/icons/car-mark.png',
-    iconDeadUrl: '/assets/icons/grandmother-dead-mark.png',
+    iconDeadUrl: '/assets/icons/car-dead-mark.png',
   },
   {
     name: 'grandpa',
