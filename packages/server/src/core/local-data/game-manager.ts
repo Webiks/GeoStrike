@@ -131,8 +131,9 @@ export class GamesManager {
       TOKENS_SECRET
     );
 
-    const realPlayerCount = Array.from(game.playersMap.values()).filter(
-      p => p.type === CharacterType.PLAYER
+    const defaultPlayerPositions = config.PLAYERS_SPAWN_POSITIONS[team];
+    const realPlayerTeamCount = Array.from(game.playersMap.values()).filter(
+      p => p.type === CharacterType.PLAYER && p.team === team
     ).length;
 
     const character = PLAYER_CHARACTERS.find(p => p.name === characterName);
@@ -143,7 +144,7 @@ export class GamesManager {
       username,
       state: 'WAITING',
       game,
-      currentLocation: config.PLAYERS_SPAWN_POSITIONS[realPlayerCount],
+      currentLocation: defaultPlayerPositions[realPlayerTeamCount],
       heading: 0,
       team,
       type: CharacterType.PLAYER,

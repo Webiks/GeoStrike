@@ -11,8 +11,13 @@
     font-size: 100pt;
     color: white;
     line-height: 90pt;
-
     margin-top: 40px;
+
+    @media screen and (max-height: 650px) {
+      font-size: 50pt;
+      margin-top: 20px;
+      line-height: 45pt;
+    }
   }
 
   .sub-header {
@@ -33,6 +38,10 @@
     width: 80%;
     max-width: 1300px;
     margin-top: 20px;
+
+    @media screen and (max-height: 650px) {
+      max-width: 920px;
+    }
   }
 
   .character-picker-border {
@@ -51,6 +60,10 @@
   font-size: 50px;
   font-family: AGENCYR, sans-serif;
   padding: 5px;
+
+  @media screen and (max-height: 650px) {
+    font-size: 40px;
+  }
 }
 
 .mat-tab-header {
