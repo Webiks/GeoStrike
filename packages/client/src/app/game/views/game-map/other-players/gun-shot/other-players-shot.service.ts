@@ -1,19 +1,25 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
-import { gunShotSubscription } from '../../../../../graphql/gun-shot.subscription';
 import { Observable } from 'rxjs/Observable';
 import { GunShots } from '../../../../../types';
+import { gunShotSubscription } from '../../../../../graphql/gun-shot.subscription';
 
 @Injectable()
 export class OtherPlayersShotService {
 
-  constructor(private apollo: Apollo) { }
+  gunShots$;
 
-  public subscribeToGunShot(): Observable<GunShots.Subscription>{
-    console.log('sub');
-    return this.apollo.subscribe({
-      query: gunShotSubscription,
-    }).share();
+  constructor(private apollo: Apollo) {
+  }
+
+  public subscribeToGunShot(): Observable<GunShots.Subscription> {
+
+    if (!this.gunShots$) {
+      this.gunShots$ = this.apollo.subscribe({
+        query: gunShotSubscription,
+      }).share();
+    }
+    return this.gunShots$;
   }
 
 

@@ -2,6 +2,9 @@
   <ac-billboard-primitive-desc *ngIf="isOverview$| async" props="{
     position: shotData.shotPosition,
     image: getGunImage(),
+    height: 28,
+    width:  43,
+    pixelOffset: [0,-50] | pixelOffset
   }">
   </ac-billboard-primitive-desc>
 </ac-layer>

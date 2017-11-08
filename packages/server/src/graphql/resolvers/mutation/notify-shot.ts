@@ -9,10 +9,10 @@ export const notifyShot = (rootValue, {byPlayerId, shotPosition}, {games, game, 
   }
   const shootingPlayer = ((game.controlledPlayersMap.get(byPlayerId) || player) as IPlayer);
 
-  shotId = (shotId + 1) % Number.MAX_SAFE_INTEGER;
+  shotId = (shotId + 1);
   pubsub.publish(ESubscriptionTopics.GUN_SHOT, {
     gunShot: {
-      id: shotId.toString(),
+      id: shotId,
       byPlayer: shootingPlayer,
       shotPosition: shotPosition,
       time: Date.now(),

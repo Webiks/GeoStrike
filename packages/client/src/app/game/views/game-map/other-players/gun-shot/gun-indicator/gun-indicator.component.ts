@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { CharacterService, ViewState } from '../../../../../services/character.service';
 import { Observable } from 'rxjs/Observable';
 import { AcNotification, ActionType } from 'angular-cesium';
@@ -18,29 +18,18 @@ export class GunIndicatorComponent implements OnInit, OnDestroy {
   isOverview$: Observable<boolean>;
 
   constructor(private character: CharacterService,
+              private ngZone: NgZone,
               private otherPlayersShotService: OtherPlayersShotService) {
     this.isOverview$ = character.viewState$.map(viewState => viewState === ViewState.OVERVIEW);
-    this.gunShotSubscription = this.otherPlayersShotService.subscribeToGunShot()
-      .map(result => result.gunShot)
-      .do(gunShotData => this.removeIndicatorTimer(gunShotData))
-      .map(gunShotData => {
-        return {
-          id: gunShotData.id,
-          actionType: ActionType.ADD_UPDATE,
-          entity: gunShotData,
-        }
-      })
-      .do(x=>console.log(x))
-      .subscribe(shotEntity => this.gunShots$.next(shotEntity))
   }
 
   private removeIndicatorTimer(gunShotData) {
-    // setTimeout(()=>{
-    //   this.gunShots$.next({
-    //     id: gunShotData.id,
-    //     actionType: ActionType.DELETE,
-    //   })
-    // }, 1000);
+    setTimeout(()=>{
+      this.gunShots$.next({
+        id: gunShotData.id,
+        actionType: ActionType.DELETE,
+      })
+    }, 1000);
   }
 
   ngOnDestroy(): void {
@@ -54,6 +43,19 @@ export class GunIndicatorComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.ngZone.runOutsideAngular(()=> {
+      this.gunShotSubscription = this.otherPlayersShotService.subscribeToGunShot()
+        .map(result => result.gunShot)
+        .do(gunShotData => this.removeIndicatorTimer(gunShotData))
+        .map(gunShotData => {
+          return {
+            id: gunShotData.id,
+            actionType: ActionType.ADD_UPDATE,
+            entity: gunShotData,
+          }
+        })
+        .subscribe(shotEntity => this.gunShots$.next(shotEntity))
+    });
   }
 
 }
