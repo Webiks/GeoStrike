@@ -143,4 +143,8 @@ export class MeComponent implements OnInit, OnDestroy {
   showMeModel() {
     return this.character.viewState !== ViewState.OVERVIEW && this.character.state !== MeModelState.CONTROLLED;
   }
+
+  getPosition(location: Cartesian3){
+    return this.utils.toFixedHeight(location, 1)
+  }
 }
