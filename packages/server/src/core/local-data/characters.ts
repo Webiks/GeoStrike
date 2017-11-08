@@ -9,8 +9,8 @@ export const PLAYER_CHARACTERS: CharacterData[] = [
     team: 'BLUE',
     imageUrl: '/assets/characters/wolverine.png',
     portraitUrl: '/assets/characters/wolverine_portrait.png',
-    iconUrl: '/assets/icons/captain-america-mark.png',
-    iconDeadUrl: '/assets/icons/captain-america-dead-mark.png',
+    iconUrl: '/assets/icons/wolverine-mark.png',
+    iconDeadUrl: '/assets/icons/wolverine-dead-mark.png',
   },
   {
     name: 'Anthony Stark',
@@ -31,8 +31,8 @@ export const PLAYER_CHARACTERS: CharacterData[] = [
     team: 'RED',
     imageUrl: '/assets/characters/flash.png',
     portraitUrl: '/assets/characters/flash_portrait.png',
-    iconUrl: '/assets/icons/spiderman-mark.png',
-    iconDeadUrl: '/assets/icons/spiderman-dead-mark.png',
+    iconUrl: '/assets/icons/flash-mark.png',
+    iconDeadUrl: '/assets/icons/flash-dead-mark.png',
   },
   {
     name: 'Bruce Wayne',
