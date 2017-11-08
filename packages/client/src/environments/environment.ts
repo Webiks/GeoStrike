@@ -8,7 +8,7 @@ export const environment = {
   serverUrl: 'localhost:3000',
   wsSchema: 'ws',
   movement: {
-    runningSpeed: 0.45,
+    runningSpeed: 1.0,
     walkingSpeed: 0.25,
     crawlingSpeed: 0.1,
   },
