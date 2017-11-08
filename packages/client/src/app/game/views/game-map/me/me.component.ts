@@ -54,15 +54,15 @@ export class MeComponent implements OnInit, OnDestroy {
 
   setShootEvent() {
     this.keyboardKeysService.registerKeyBoardEventDescription('LeftMouse', 'Shoot');
-    const enterSub$ = Observable.create((observer)=>{
-      this.keyboardKeysService.registerKeyBoardEvent('Enter', 'Shoot', ()=>{
+    const enterSub$ = Observable.create((observer) => {
+      this.keyboardKeysService.registerKeyBoardEvent('Enter', 'Shoot', () => {
         observer.next()
       });
     });
     this.shootSub$ = Observable.fromEvent(document.body, 'click')
       .merge(enterSub$)
       .filter(() => this.character.state === MeModelState.SHOOTING)
-      .do(()=> this.gameService.notifyShot(this.character.meFromServer.id, this.character.location))
+      .do(() => this.gameService.notifyShot(this.character.meFromServer.id, this.character.location))
       .subscribe((e: MouseEvent) => {
         this.showGunMuzzleFlash();
         this.soundGunFire();
@@ -144,7 +144,20 @@ export class MeComponent implements OnInit, OnDestroy {
     return this.character.viewState !== ViewState.OVERVIEW && this.character.state !== MeModelState.CONTROLLED;
   }
 
-  getPosition(location: Cartesian3){
-    return this.utils.toFixedHeight(location, 1)
+  getPosition(location: Cartesian3) {
+    // put height in conf...
+    const characterName = this.character.currentStateValue.characterInfo.name;
+    if (characterName === 'Wolverine' || characterName === 'The Flash') {
+      return this.utils.toFixedHeight(location, 1)
+    }
+    return location;
+  }
+
+  getHeightReference(){
+    const characterName = this.character.currentStateValue.characterInfo.name;
+    if (characterName === 'Wolverine' || characterName === 'The Flash') {
+      return Cesium.HeightReference.NONE;
+    }
+    return this.utils.getClampedToGroundHeightReference();
   }
 }
