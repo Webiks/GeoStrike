@@ -132,7 +132,6 @@ export class KeyboardControlComponent implements OnInit {
       return;
     }
     this.character.state = MeModelState.WALKING;
-    this.character.isCrawling = false;
     let newState = ViewState.SEMI_FPV;
     if (this.character.viewState === ViewState.SEMI_FPV) {
       newState = ViewState.FPV;
@@ -159,7 +158,6 @@ export class KeyboardControlComponent implements OnInit {
     }
     let crawling = false;
     if (!this.character.isCrawling) {
-      this.character.viewState = ViewState.FPV;
       crawling = true;
     }
     this.character.isCrawling = crawling;

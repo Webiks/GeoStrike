@@ -125,7 +125,8 @@ export class MeComponent implements OnInit, OnDestroy {
     if (player.state === MeModelState.DEAD) {
       return this.utils.getOrientation(location, heading, 0, 90);
     } else {
-      return this.utils.getOrientation(location, heading);
+      const roll = this.character.isCrawling ? 85 : 0;
+      return this.utils.getOrientation(location, heading, 0, roll);
     }
   }
 
