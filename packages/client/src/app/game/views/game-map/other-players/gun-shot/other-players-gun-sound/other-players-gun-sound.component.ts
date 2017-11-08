@@ -1,7 +1,7 @@
 import { Component, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { OtherPlayersShotService } from './other-players-shot.service';
+import { OtherPlayersShotService } from '../other-players-shot.service';
 import { Subscription } from 'rxjs/Subscription';
-import { CharacterService, ViewState } from '../../../services/character.service';
+import { CharacterService, ViewState } from '../../../../../services/character.service';
 import { GunSoundComponent } from '../gun-sound/gun-sound.component';
 
 @Component({
@@ -10,7 +10,6 @@ import { GunSoundComponent } from '../gun-sound/gun-sound.component';
     <gun-sound #gunSound></gun-sound>
   `,
   styleUrls: ['./other-players-gun-sound.component.scss'],
-  providers: [OtherPlayersShotService]
 })
 export class OtherPlayersGunSoundComponent implements OnInit, OnDestroy {
 
@@ -25,7 +24,7 @@ export class OtherPlayersGunSoundComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.ngZone.runOutsideAngular(() => {
-      this.shotSubscription = this.otherPlayersGunShotService.subsribeToGunShot().subscribe((data) => {
+      this.shotSubscription = this.otherPlayersGunShotService.subscribeToGunShot().subscribe((data) => {
         if (this.character.viewState !== ViewState.OVERVIEW) {
           const distanceToShot = Cesium.Cartesian3.distance(this.character.location, data.gunShot.shotPosition);
 

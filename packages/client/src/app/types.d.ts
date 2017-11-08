@@ -84,6 +84,7 @@ export interface Notification {
 }
 
 export interface ShotData {
+  id?: string; 
   byPlayer?: Player; 
   shotPosition?: Location; 
   time?: number; 
@@ -206,6 +207,7 @@ export namespace GunShots {
   } 
 
   export type GunShot = {
+    id?: string; 
     byPlayer?: ByPlayer; 
     shotPosition?: ShotPosition; 
   } 
