@@ -45,8 +45,9 @@ import { ViewerControlsComponent } from './views/game-container/viewer-controls/
 import { BenchedDialogComponent } from './views/benched-dialog/benched-dialog.component';
 import { KeyButtonComponent } from './views/how-to-play-dialog/key-button/key-button.component';
 import { ArrowKeysComponent } from './views/how-to-play-dialog/arrow-keys/arrow-keys.component';
-import { GunSoundComponent } from './views/gun-shot-sound/gun-sound/gun-sound.component';
-import { OtherPlayersGunSoundComponent } from './views/gun-shot-sound/other-players-gun-sound/other-players-gun-sound.component';
+import { GunSoundComponent } from './views/game-map/other-players/gun-shot/gun-sound/gun-sound.component';
+import { OtherPlayersGunSoundComponent } from './views/game-map/other-players/gun-shot/other-players-gun-sound/other-players-gun-sound.component';
+import { GunIndicatorComponent } from './views/game-map/other-players/gun-shot/gun-indicator/gun-indicator.component';
 
 @NgModule({
   declarations: [
@@ -76,6 +77,7 @@ import { OtherPlayersGunSoundComponent } from './views/gun-shot-sound/other-play
     ArrowKeysComponent,
     GunSoundComponent,
     OtherPlayersGunSoundComponent,
+    GunIndicatorComponent,
   ],
   imports: [
     BrowserModule,
