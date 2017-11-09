@@ -45,6 +45,12 @@ snack-bar-container{
   color: white !important;
 }
 
+snack-bar-content{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 mat-form-field {
   font-family: AGENCYR, sans-serif !important;
 }
