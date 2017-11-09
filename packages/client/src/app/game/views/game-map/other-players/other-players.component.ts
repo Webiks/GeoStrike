@@ -6,10 +6,12 @@ import { InterpolationService, InterpolationType } from '../../../services/inter
 import { PlayerFields, } from '../../../../types';
 import { CharacterService, ViewState } from '../../../services/character.service';
 import { TakeControlService } from '../../../services/take-control.service';
+import { OtherPlayersShotService } from './gun-shot/other-players-shot.service';
 
 @Component({
   selector: 'other-players',
   templateUrl: './other-players.component.html',
+  providers: [OtherPlayersShotService]
 })
 export class OtherPlayersComponent {
   @Input() private playersPositions: Observable<AcNotification>;

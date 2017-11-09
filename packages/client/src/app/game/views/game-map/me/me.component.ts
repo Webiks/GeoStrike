@@ -11,7 +11,7 @@ import { CharacterData } from '../../../../types';
 import { BasicDesc } from 'angular-cesium/src/angular-cesium/services/basic-desc/basic-desc.service';
 import { OtherPlayerEntity } from '../../game-container/game-container.component';
 import { KeyboardKeysService } from '../../../../core/services/keyboard-keys.service';
-import { GunSoundComponent } from '../../gun-shot-sound/gun-sound/gun-sound.component';
+import { GunSoundComponent } from '../other-players/gun-shot/gun-sound/gun-sound.component';
 
 @Component({
   selector: 'me',
@@ -125,7 +125,8 @@ export class MeComponent implements OnInit, OnDestroy {
     if (player.state === MeModelState.DEAD) {
       return this.utils.getOrientation(location, heading, 0, 90);
     } else {
-      return this.utils.getOrientation(location, heading);
+      const roll = this.character.isCrawling ? 85 : 0;
+      return this.utils.getOrientation(location, heading, 0, roll);
     }
   }
 

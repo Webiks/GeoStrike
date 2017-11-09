@@ -66,7 +66,7 @@ export class GamesManager {
   private activeGames: Map<string, IGameObject> = new Map<string, IGameObject>();
   private gamesTimeouts: GamesTimeout;
 
-  constructor(){
+  constructor() {
     this.gamesTimeouts = new GamesTimeout(this);
     this.gamesTimeouts.startTimeoutChecks();
   }
@@ -116,6 +116,22 @@ export class GamesManager {
     return viewer;
   }
 
+  private validateUsername(username: string, game: IGameObject, isFirst = true): string {
+    const exists = Array.from(game.playersMap.values()).find(p => p.username === username);
+    if (exists) {
+      let newUsername = null;
+      if (isFirst) {
+        newUsername = username + '1'
+      } else {
+        const count = +username.slice(-1);
+        newUsername = username.slice(0, -1) + (count + 1);
+      }
+      return this.validateUsername(newUsername, game, false);
+    } else {
+      return username;
+    }
+  }
+
   addRealPlayerToGame(gameId: string,
                       characterName: string,
                       username: string,
@@ -136,12 +152,13 @@ export class GamesManager {
       p => p.type === CharacterType.PLAYER && p.team === team
     ).length;
 
+    const finalUsername = this.validateUsername(username, game);
     const character = PLAYER_CHARACTERS.find(p => p.name === characterName);
     const player: IPlayer = {
       playerId,
       character,
       token: playerToken,
-      username,
+      username: finalUsername,
       state: 'WAITING',
       game,
       currentLocation: defaultPlayerPositions[realPlayerTeamCount],
@@ -217,7 +234,7 @@ export class GamesManager {
     const game = this.getGameById(gameId);
     const player = game.playersMap.get(playerId);
 
-      // Update game active time
+    // Update game active time
     if (player.type === CharacterType.PLAYER) {
       this.gamesTimeouts.setGameLastActiveTime(gameId);
     }
@@ -308,8 +325,8 @@ export class GamesManager {
 
   removeControlOverPlayer(game, playerId: string): IPlayer {
     const controlledPlayer: IPlayer = game.controlledPlayersMap.get(playerId);
-    if (controlledPlayer){
-      controlledPlayer.state = controlledPlayer.state === 'CONTROLLED'? 'ALIVE': controlledPlayer.state;
+    if (controlledPlayer) {
+      controlledPlayer.state = controlledPlayer.state === 'CONTROLLED' ? 'ALIVE' : controlledPlayer.state;
       game.controlledPlayersMap.delete(playerId);
     }
     return controlledPlayer;

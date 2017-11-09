@@ -77,7 +77,7 @@ export class KeyboardControlComponent implements OnInit {
         }
         this.lastLook = lookDirection;
       }
-    }
+    };
   }
 
   buildMovementConfig(direction: string) {
@@ -132,7 +132,6 @@ export class KeyboardControlComponent implements OnInit {
       return;
     }
     this.character.state = MeModelState.WALKING;
-    this.character.isCrawling = false;
     let newState = ViewState.SEMI_FPV;
     if (this.character.viewState === ViewState.SEMI_FPV) {
       newState = ViewState.FPV;
@@ -159,7 +158,6 @@ export class KeyboardControlComponent implements OnInit {
     }
     let crawling = false;
     if (!this.character.isCrawling) {
-      this.character.viewState = ViewState.FPV;
       crawling = true;
     }
     this.character.isCrawling = crawling;
@@ -177,7 +175,7 @@ export class KeyboardControlComponent implements OnInit {
     }
   }
 
-  changeOverviewMode(){
+  changeOverviewMode() {
     const isViewer = this.character.meFromServer['__typename'] === 'Viewer';
     if (!isViewer && this.character.viewState === ViewState.OVERVIEW) {
       this.character.viewState = ViewState.SEMI_FPV;
@@ -192,10 +190,12 @@ export class KeyboardControlComponent implements OnInit {
       keyboardDefinitions,
       (keyEvent: KeyboardEvent) => {
         if (keyEvent.code === 'KeyW') {
-          if (this.character.state !== MeModelState.SHOOTING) {
-            this.character.state = keyEvent.shiftKey
-              ? MeModelState.RUNNING
-              : this.character.state;
+          if (
+            (this.character.state === MeModelState.WALKING ||
+            this.character.state === MeModelState.RUNNING) &&
+            this.character.viewState !== ViewState.OVERVIEW
+          ) {
+            this.character.state = keyEvent.shiftKey ? MeModelState.RUNNING : MeModelState.WALKING;
           }
 
           return MoveDirection.Forward;
@@ -239,12 +239,12 @@ export class KeyboardControlComponent implements OnInit {
     this.keyboardKeysService.registerKeyBoardEvent('KeyC', 'Switch Crawling', () => {
       this.ngZone.run(() => {
         this.changeCrawlingState();
-      })
+      });
     });
     this.keyboardKeysService.registerKeyBoardEvent('KeyM', 'Switch Overview Mode', () => {
       this.ngZone.run(() => {
         this.changeOverviewMode();
-      })
+      });
     });
     this.keyboardKeysService.registerKeyBoardEvent('Tab', 'Switch FPV/Semi FPV',
       (keyEvent: KeyboardEvent) => {
