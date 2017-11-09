@@ -101,7 +101,7 @@ export class MeComponent implements OnInit, OnDestroy {
           this.ngZone.run(() => {
             this.snackBar.openFromComponent(SnackBarContentComponent, {
               data: `Press E to Enter Building`,
-              duration: 5000,
+              duration: 3000,
             });
           });
         }
@@ -112,7 +112,7 @@ export class MeComponent implements OnInit, OnDestroy {
           this.ngZone.run(() => {
             this.snackBar.openFromComponent(SnackBarContentComponent, {
               data: `Press E to Exit Building`,
-              duration: 5000,
+              duration: 3000,
             });
           });
         }
