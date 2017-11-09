@@ -25,20 +25,21 @@ export class BuildingsService {
     center.latitude = Cesium.Math.toDegrees(center.latitude);
     center.longitude = Cesium.Math.toDegrees(center.longitude);
     const id = this.generateId();
-    const buildingHeight = GameConfig.buildingHeight;
+    const ceilingHeight = GameConfig.roomFloorHeightFromGround + GameConfig.roomHeight;
     const wallSize = GameConfig.wallSize;
     const wallOnWindowSides = GameConfig.wallOnWindowSides;
-    const windowHeightFromGround = GameConfig.windowHeightFromGround;
+    const windowHeightFromGround = GameConfig.roomFloorHeightFromGround + GameConfig.windowHeightFromFloor;
     const windowHeight = GameConfig.windowHeight;
+    const floorHeight = GameConfig.roomFloorHeightFromGround;
     const roomOffset = wallSize / 2;
     const building = {
       id,
       wallsPositions: Cesium.Cartesian3.fromDegreesArrayHeights([
-        center.longitude - roomOffset, center.latitude - roomOffset, buildingHeight,
-        center.longitude - roomOffset, center.latitude + roomOffset, buildingHeight,
-        center.longitude + roomOffset, center.latitude + roomOffset, buildingHeight,
-        center.longitude + roomOffset, center.latitude - roomOffset, buildingHeight,
-        center.longitude - roomOffset, center.latitude - roomOffset, buildingHeight
+        center.longitude - roomOffset, center.latitude - roomOffset, ceilingHeight,
+        center.longitude - roomOffset, center.latitude + roomOffset, ceilingHeight,
+        center.longitude + roomOffset, center.latitude + roomOffset, ceilingHeight,
+        center.longitude + roomOffset, center.latitude - roomOffset, ceilingHeight,
+        center.longitude - roomOffset, center.latitude - roomOffset, ceilingHeight
       ]),
       lowerWallsMaxHeights: [
         windowHeightFromGround,
@@ -55,30 +56,36 @@ export class BuildingsService {
         windowHeightFromGround + windowHeight,
       ],
       southEastWallsPositions: Cesium.Cartesian3.fromDegreesArrayHeights([
-        center.longitude + roomOffset, center.latitude - roomOffset + wallOnWindowSides, buildingHeight,
-        center.longitude + roomOffset, center.latitude - roomOffset, buildingHeight,
-        center.longitude + roomOffset - wallOnWindowSides, center.latitude - roomOffset, buildingHeight,
+        center.longitude + roomOffset, center.latitude - roomOffset + wallOnWindowSides, ceilingHeight,
+        center.longitude + roomOffset, center.latitude - roomOffset, ceilingHeight,
+        center.longitude + roomOffset - wallOnWindowSides, center.latitude - roomOffset, ceilingHeight,
       ]),
       southWestWallsPositions: Cesium.Cartesian3.fromDegreesArrayHeights([
-        center.longitude - roomOffset + wallOnWindowSides, center.latitude - roomOffset, buildingHeight,
-        center.longitude - roomOffset, center.latitude - roomOffset, buildingHeight,
-        center.longitude - roomOffset, center.latitude - roomOffset + wallOnWindowSides, buildingHeight,
+        center.longitude - roomOffset + wallOnWindowSides, center.latitude - roomOffset, ceilingHeight,
+        center.longitude - roomOffset, center.latitude - roomOffset, ceilingHeight,
+        center.longitude - roomOffset, center.latitude - roomOffset + wallOnWindowSides, ceilingHeight,
       ]),
       northEastWallsPositions: Cesium.Cartesian3.fromDegreesArrayHeights([
-        center.longitude + roomOffset - wallOnWindowSides, center.latitude + roomOffset, buildingHeight,
-        center.longitude + roomOffset, center.latitude + roomOffset, buildingHeight,
-        center.longitude + roomOffset, center.latitude + roomOffset - wallOnWindowSides, buildingHeight,
+        center.longitude + roomOffset - wallOnWindowSides, center.latitude + roomOffset, ceilingHeight,
+        center.longitude + roomOffset, center.latitude + roomOffset, ceilingHeight,
+        center.longitude + roomOffset, center.latitude + roomOffset - wallOnWindowSides, ceilingHeight,
       ]),
       northWestWallsPositions: Cesium.Cartesian3.fromDegreesArrayHeights([
-        center.longitude - roomOffset, center.latitude + roomOffset - wallOnWindowSides, buildingHeight,
-        center.longitude - roomOffset, center.latitude + roomOffset, buildingHeight,
-        center.longitude - roomOffset + wallOnWindowSides, center.latitude + roomOffset, buildingHeight,
+        center.longitude - roomOffset, center.latitude + roomOffset - wallOnWindowSides, ceilingHeight,
+        center.longitude - roomOffset, center.latitude + roomOffset, ceilingHeight,
+        center.longitude - roomOffset + wallOnWindowSides, center.latitude + roomOffset, ceilingHeight,
       ]),
       ceiling: Cesium.Cartesian3.fromDegreesArrayHeights([
-        center.longitude - roomOffset, center.latitude - roomOffset, buildingHeight,
-        center.longitude - roomOffset, center.latitude + roomOffset, buildingHeight,
-        center.longitude + roomOffset, center.latitude + roomOffset, buildingHeight,
-        center.longitude + roomOffset, center.latitude - roomOffset, buildingHeight,
+        center.longitude - roomOffset, center.latitude - roomOffset, ceilingHeight,
+        center.longitude - roomOffset, center.latitude + roomOffset, ceilingHeight,
+        center.longitude + roomOffset, center.latitude + roomOffset, ceilingHeight,
+        center.longitude + roomOffset, center.latitude - roomOffset, ceilingHeight,
+      ]),
+      floor: Cesium.Cartesian3.fromDegreesArrayHeights([
+        center.longitude - roomOffset, center.latitude - roomOffset, floorHeight,
+        center.longitude - roomOffset, center.latitude + roomOffset, floorHeight,
+        center.longitude + roomOffset, center.latitude + roomOffset, floorHeight,
+        center.longitude + roomOffset, center.latitude - roomOffset, floorHeight,
       ]),
     };
     this.buildings$.next({ id, entity: building, actionType: ActionType.ADD_UPDATE });
