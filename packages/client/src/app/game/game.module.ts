@@ -47,6 +47,7 @@ import { KeyButtonComponent } from './views/how-to-play-dialog/key-button/key-bu
 import { ArrowKeysComponent } from './views/how-to-play-dialog/arrow-keys/arrow-keys.component';
 import { OtherPlayersGunSoundComponent } from './views/game-map/other-players/gun-shot/other-players-gun-sound/other-players-gun-sound.component';
 import { GunIndicatorComponent } from './views/game-map/other-players/gun-shot/gun-indicator/gun-indicator.component';
+import { SoundService } from './services/sound.service';
 
 @NgModule({
   declarations: [
@@ -103,6 +104,7 @@ import { GunIndicatorComponent } from './views/game-map/other-players/gun-shot/g
     UtilsService,
     BuildingsService,
     CollisionDetectorService,
+    SoundService,
   ],
   entryComponents: [
     EndGameDialogComponent,
