@@ -1,4 +1,4 @@
-<ac-layer acFor="let building of buildings$" [context]="this">
+<ac-layer acFor="let building of buildings$" [context]="this" [show]="showBuildings">
   <ac-wall-desc props="{
     positions: building.wallsPositions,
     maximumHeights: building.lowerWallsMaxHeights,

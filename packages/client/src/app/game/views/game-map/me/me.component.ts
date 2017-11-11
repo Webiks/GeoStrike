@@ -95,15 +95,19 @@ export class MeComponent implements OnInit, OnDestroy {
 
     this.setShootEvent();
     this.character.state$.subscribe(state => {
-      if (state && this.buildingNearby !== !!state.nearbyBuildingPosition) {
+      if (state && !state.enteredBuilding && this.buildingNearby !== !!state.nearbyBuildingPosition) {
         this.buildingNearby = !!state.nearbyBuildingPosition;
         if (this.buildingNearby) {
           this.ngZone.run(() => {
+            this.snackBar.dismiss();
             this.snackBar.openFromComponent(SnackBarContentComponent, {
               data: `Press E to Enter Building`,
               duration: 3000,
             });
           });
+        }
+        else {
+          this.ngZone.run(() => this.snackBar.dismiss());
         }
       }
       if (state && this.insideBuilding !== !!state.enteredBuilding) {
