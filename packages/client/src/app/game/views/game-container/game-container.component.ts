@@ -58,7 +58,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
           return;
         }
 
-        this.ngZone.run(()=>{
+        this.ngZone.run(() => {
           this.gameCode = params.gameCode;
         });
         AuthorizationMiddleware.setToken(params.playerToken);
@@ -67,13 +67,14 @@ export class GameContainerComponent implements OnInit, OnDestroy {
           return notification.gameNotifications.message;
         });
         this.gameData$ = (this.gameService.getCurrentGameData())
-          .map(({ gameData }) => gameData);
+          .map(({gameData}) => gameData);
         this.gameDataSubscription = this.gameData$.subscribe(currentGame => {
           this.game = currentGame;
           this.me = currentGame.me;
           this.gameResult$.next(currentGame.winingTeam);
+          const players = this.game.players.filter(p => p.state !== 'WAITING');
 
-          const allPlayers = [...this.game.players];
+          const allPlayers = [...players];
           if (this.me) {
             this.isViewer = this.me.type === 'OVERVIEW' || this.me['__typename'] === 'Viewer';
             this.character.meFromServer = this.me;
@@ -89,19 +90,20 @@ export class GameContainerComponent implements OnInit, OnDestroy {
 
           const controlledPlayer = this.controlledService.controlledPlayer;
           this.allPlayers$.next(allPlayers);
-          this.game.players
+          players
             .filter(p => !controlledPlayer || controlledPlayer.id !== p.id)
             .map<AcNotification>(player => ({
               actionType: ActionType.ADD_UPDATE,
               id: player.id,
               entity: new OtherPlayerEntity({...player, name: player.character.name}),
             })).forEach(notification => {
+              console.log(notification.entity);
             this.otherPlayers$.next(notification);
           });
         }, e => {
-          console.log('subscription error',e);
+          console.log('subscription error', e);
           this.router.navigate(['/']);
-        }, ()=>{
+        }, () => {
           console.log('subscription complete');
         });
       });
@@ -124,7 +126,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
           actionType: ActionType.DELETE,
         })
       }
-      if (this.character.viewState === ViewState.OVERVIEW){
+      if (this.character.viewState === ViewState.OVERVIEW) {
         this.otherPlayers$.next({
           id: this.me.id,
           actionType: ActionType.ADD_UPDATE,
