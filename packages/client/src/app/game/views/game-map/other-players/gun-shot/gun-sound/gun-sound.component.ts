@@ -18,7 +18,7 @@ export class GunSoundComponent implements OnInit {
   }
 
   play(volume = 1.0) {
-    const soundElement : HTMLAudioElement= this.gunShotSound.nativeElement;
+    const soundElement: HTMLAudioElement = this.gunShotSound.nativeElement;
     soundElement.currentTime = 0;
     soundElement.volume = volume;
     soundElement.play();

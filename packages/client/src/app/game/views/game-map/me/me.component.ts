@@ -84,6 +84,7 @@ export class MeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.gunShotSound.play(0);
     this.showWeapon$ = Observable.combineLatest(
       this.character.viewState$.map(viewState => viewState === ViewState.FPV),
       this.character.state$.map(meState => meState && meState.state === MeModelState.SHOOTING))
