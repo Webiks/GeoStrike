@@ -6,10 +6,12 @@ import { InterpolationService, InterpolationType } from '../../../services/inter
 import { PlayerFields, } from '../../../../types';
 import { CharacterService, ViewState } from '../../../services/character.service';
 import { TakeControlService } from '../../../services/take-control.service';
+import { OtherPlayersShotService } from './gun-shot/other-players-shot.service';
 
 @Component({
   selector: 'other-players',
   templateUrl: './other-players.component.html',
+  providers: [OtherPlayersShotService]
 })
 export class OtherPlayersComponent {
   @Input() private playersPositions: Observable<AcNotification>;
@@ -59,7 +61,10 @@ export class OtherPlayersComponent {
   }
 
   getPlayerIcon(player: PlayerFields.Fragment) {
-    if (player.character.iconUrl) {
+    if (player.state === 'DEAD' && player.character.iconDeadUrl){
+      return player.character.iconDeadUrl;
+    }
+    else if (player.character.iconUrl) {
       return player.character.iconUrl;
     }
     return '/assets/icons/grey-mark.png';
@@ -77,13 +82,14 @@ export class OtherPlayersComponent {
   }
 
   getIconColor(player) {
-    if (player.state === 'DEAD') {
-      return Cesium.Color.RED;
-    }
-    else if (this.takeControlService.selectedPlayerToControl) {
+    if (this.takeControlService.selectedPlayerToControl) {
       return player.id === this.takeControlService.selectedPlayerToControl.id ? Cesium.Color.YELLOW : Cesium.Color.WHITE;
     }
     return Cesium.Color.WHITE;
+  }
+
+  getPlayerName(player) {
+    return player.username ? player.username : '';
   }
 
 

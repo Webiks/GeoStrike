@@ -1,5 +1,12 @@
 import { config } from '../../settings/config';
-import { CharacterType, GamesManager, ICartesian3Location, IGameObject, IPlayer, Team, } from '../local-data/game';
+import {
+  CharacterType,
+  GamesManager,
+  ICartesian3Location,
+  IGameObject,
+  IPlayer,
+  Team,
+} from '../local-data/game-manager';
 import { PathNode, PATHS_GRAPHS } from './path-node';
 import * as Cesium from 'cesium';
 import { PLAYER_CHARACTERS } from '../local-data/characters';
@@ -9,12 +16,12 @@ const BG_CHARACTER_TYPES = [
   {
     characterName: 'grandpa',
     paths: PATHS_GRAPHS.PEOPLE,
-    updateDistanceMeters: 0.5,
+    updateDistanceMeters: 0.1,
   },
   {
     characterName: 'car',
     paths: PATHS_GRAPHS.CAR,
-    updateDistanceMeters: 10.0,
+    updateDistanceMeters: 1.0,
   },
 ];
 

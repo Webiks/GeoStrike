@@ -5,7 +5,11 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --disableHostCheck --host 0.0.0.0",
-    "build": "ng build",
+    "start:docker": "yarn start --env=prod",
+    "build": "ng build --env=prod",
+    "build:prod": "ng build -prod",
+    "serve:dist": "yarn serve dist",
+    "deploy:now": "yarn build && now --docker && rimraf dist",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
@@ -35,7 +39,7 @@
     "lodash": "^4.17.4",
     "lodash-decorators": "^4.4.1",
     "rxjs": "^5.4.1",
-    "subscriptions-transport-ws": "0.8.3",
+    "subscriptions-transport-ws-temp": "0.8.4",
     "zone.js": "^0.8.14"
   },
   "devDependencies": {
@@ -55,6 +59,8 @@
     "karma-jasmine": "~1.1.0",
     "karma-jasmine-html-reporter": "^0.2.2",
     "protractor": "~5.1.2",
+    "rimraf": "^2.6.2",
+    "serve": "^6.3.1",
     "ts-node": "^3.3.0",
     "tslint": "^5.7.0",
     "typescript": "~2.3.3"

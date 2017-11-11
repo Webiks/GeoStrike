@@ -6,9 +6,10 @@
 export const environment = {
   production: false,
   serverUrl: 'localhost:3000',
+  wsSchema: 'ws',
   movement: {
-    runningSpeed: 0.3,
-    walkingSpeed: 0.15,
+    runningSpeed: 1.0,
+    walkingSpeed: 0.25,
     crawlingSpeed: 0.1,
   },
   createPathMode: false,
@@ -22,5 +23,11 @@ export const environment = {
     // url : 'https://assets.agi.com/stk-terrain/v1/tilesets/PAMAP/tiles',
     requestWaterMask: true,
     requestVertexNormals: true
+  },
+  controls: {
+    mouseSensitivity: 16, // bigger is less sensitive
+    disableBackward: true,
+    disableLeft: true,
+    disableRight: true,
   }
 };

@@ -49,23 +49,3 @@
   margin-top: -0.5%;
   width: 100%;
 }
-
-.action-text-line {
-  position: fixed;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  z-index: 10;
-  bottom: 50px;
-}
-
-.action-text {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 400px;
-  background-color: rgba(0, 0, 0, 0.3);
-  color: white;
-  font-size: 25px;
-}

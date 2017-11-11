@@ -1,4 +1,4 @@
-<ac-layer acFor="let building of buildings$" [context]="this">
+<ac-layer acFor="let building of buildings$" [context]="this" [show]="showBuildings">
   <ac-wall-desc props="{
     positions: building.wallsPositions,
     maximumHeights: building.lowerWallsMaxHeights,
@@ -45,6 +45,14 @@
 
   <ac-polygon-desc props="{
     hierarchy: building.ceiling,
+    perPositionHeight: true,
+    material: wallMaterial,
+    shadows: Cesium.ShadowMode.ENABLED
+  }">
+  </ac-polygon-desc>
+
+  <ac-polygon-desc props="{
+    hierarchy: building.floor,
     perPositionHeight: true,
     material: wallMaterial,
     shadows: Cesium.ShadowMode.ENABLED

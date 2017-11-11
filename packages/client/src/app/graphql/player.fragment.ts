@@ -11,6 +11,7 @@ export const playerFragment = gql`
       scale
       portraitUrl
       iconUrl
+      iconDeadUrl
     }
     state
     isCrawling

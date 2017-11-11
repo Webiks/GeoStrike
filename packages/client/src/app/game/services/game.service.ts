@@ -4,11 +4,19 @@ import { createNewGameMutation } from '../../graphql/create-new-game.mutation';
 import { ApolloExecutionResult } from 'apollo-client';
 import { Observable } from 'rxjs/Observable';
 import {
-  CreateNewGame, GameData, GameNotifications, JoinAsViewer, JoinGame, NotifyKill, Ready, Team,
+  CreateNewGame,
+  GameData,
+  GameNotifications,
+  JoinAsViewer,
+  JoinGame,
+  NotifyKill,
+  NotifyShot,
+  Ready,
+  Team,
   UpdatePosition
 } from '../../types';
 import { joinGameMutation } from '../../graphql/join-game.mutation';
-import { SubscriptionClient } from 'subscriptions-transport-ws';
+import { SubscriptionClient } from 'subscriptions-transport-ws-temp';
 import { gameDataSubscription } from '../../graphql/game-data.subscription';
 import { readyMutation } from '../../graphql/ready.mutation';
 import 'rxjs/add/operator/first';
@@ -20,6 +28,7 @@ import { GameConfig } from './game-config';
 import { CharacterService } from './character.service';
 import { joinAsViewer } from '../../graphql/join-as-viewer.mutation';
 import { gameNotificationsSubscription } from '../../graphql/game-notifications.subscription';
+import { notifyShotMutation } from '../../graphql/notify-shot.mutation';
 
 @Injectable()
 export class GameService {
@@ -36,6 +45,19 @@ export class GameService {
   refreshConnection() {
     this.socket.close(true, true);
     this.socket['connect']();
+
+    // resolve when connected
+    // return new Promise(resolve => {
+    //   this.socket.onReconnected(() => {
+    //     console.log('reconnected');
+    //     resolve();
+    //   });
+    //
+    //   this.socket.onConnected(() => {
+    //     console.log('connected');
+    //     resolve();
+    //   });
+    // });
   }
 
   getCurrentGameData(): Observable<GameData.Subscription> {
@@ -113,7 +135,7 @@ export class GameService {
     this.lastStateSentToServer = state;
     const subscription = this.apollo.mutate<UpdatePosition.Mutation>({
       mutation: updatePositionMutation,
-      variables: { ...state, skipValidation},
+      variables: {...state, skipValidation},
     }).subscribe(() => subscription.unsubscribe());
   }
 
@@ -161,6 +183,18 @@ export class GameService {
       variables: {
         playerId: killedPlayerId,
       } as NotifyKill.Variables
+    });
+  }
+
+  notifyShot(byPlayerId, playerPosition: Cartesian3) {
+    const sub = this.apollo.mutate<NotifyShot.Mutation>({
+      mutation: notifyShotMutation,
+      variables: {
+        shotPosition: playerPosition,
+        byPlayerId: byPlayerId,
+      } as NotifyShot.Variables
+    }).subscribe(() => {
+      sub.unsubscribe();
     });
   }
 }

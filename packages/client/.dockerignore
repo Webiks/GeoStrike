@@ -1,0 +1,9 @@
+**/node_modules
+**/.gitignore
+**/.editorconfig
+**/karma.conf.js
+**/protactor.conf.js
+**/README.md
+
+e2e
+src

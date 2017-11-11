@@ -24,8 +24,8 @@ export class GameMapComponent implements OnInit, OnDestroy {
     Cesium.Cartesian3.fromDegrees(-73.985187, 40.758857, 1000);
   public static readonly DEFAULT_PITCH = -5;
 
-  @Input() private playersPositions: Observable<AcNotification>;
-  @Input() private gameData: Observable<GameFields.Fragment>;
+  @Input() playersPositions: Observable<AcNotification>;
+  @Input() gameData: Observable<GameFields.Fragment>;
   @ViewChild(AcMapComponent) private mapInstance: AcMapComponent;
 
   public createPathMode = environment.createPathMode;
@@ -79,7 +79,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
       if (overviewMode) {
         this.character.viewState = ViewState.OVERVIEW;
         this.overviewSettings();
-      }else {
+      } else {
         this.character.viewState = ViewState.SEMI_FPV;
         this.startFirstPersonMode(game.me);
       }
@@ -91,10 +91,19 @@ export class GameMapComponent implements OnInit, OnDestroy {
       if (this.lastViewState !== ViewState.OVERVIEW && newViewState === ViewState.OVERVIEW) {
         this.changeToOverview();
       } else if (this.lastViewState === ViewState.OVERVIEW && newViewState !== ViewState.OVERVIEW) {
-        this.viewerOptions.setFpvCameraOptions(this.viewer);
 
-        const controlledPlayer = this.takeControlService.controlledPlayer || this.character.meFromServer;
-        this.startFirstPersonMode(controlledPlayer);
+        const posWithHeight = Cesium.Cartographic.fromCartesian(this.character.location);
+        posWithHeight.height = 5;
+
+        this.viewer.camera.flyTo({
+          destination: Cesium.Cartesian3.fromRadians(posWithHeight.longitude, posWithHeight.latitude, posWithHeight.height),
+          complete: () => {
+            this.viewerOptions.setFpvCameraOptions(this.viewer);
+            const controlledPlayer = this.takeControlService.controlledPlayer || this.character.meFromServer;
+            this.startFirstPersonMode(controlledPlayer);
+          }
+        });
+
       }
 
       this.lastViewState = newViewState;
@@ -133,7 +142,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
 
   private overviewSettings() {
     this.viewerOptions.setFreeCameraOptions(this.viewer);
-    this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_START_LOCATION});
+    this.viewer.camera.flyTo({ destination: GameMapComponent.DEFAULT_START_LOCATION });
   }
 
   onMousemove(event: MouseEvent) {
@@ -142,10 +151,10 @@ export class GameMapComponent implements OnInit, OnDestroy {
     }
 
     const pitch = this.character.pitch;
-    this.character.pitch = pitch - (event.movementY / 10);
+    this.character.pitch = pitch - (event.movementY / environment.controls.mouseSensitivity);
 
     const heading = this.character.heading;
-    this.character.heading = heading + (event.movementX / 10);
+    this.character.heading = heading + (event.movementX / environment.controls.mouseSensitivity);
   }
 
   preRenderHandler() {
@@ -175,7 +184,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
     this.viewer.zoomTo([this.character.entity, this.helperEntityPoint], new Cesium.HeadingPitchRange(heading, pitch, range));
     this.lastPlayerLocation = this.character.location;
     this.lastPlayerHead = playerHeadCart;
-    this.lastPlayerHPR = {heading: this.character.heading, pitch: this.character.pitch, range};
+    this.lastPlayerHPR = { heading: this.character.heading, pitch: this.character.pitch, range };
   }
 
   ngOnDestroy(): void {

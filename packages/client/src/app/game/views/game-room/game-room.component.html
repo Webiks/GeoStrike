@@ -1,20 +1,35 @@
-
+<div *ngIf="loading" class="loading">
+  <mat-spinner [diameter]="150" ></mat-spinner>
+</div>
 <div *ngIf="game" class="game-room">
   <div *ngIf="!gameStarted">
-    <h1 class="header">Game Code: {{gameCode}}</h1>
-    <h1 class="header">Waiting for all player to be ready to play...</h1>
+
+    <div class="header">
+      <div class="first-text-row">
+        <h1 >Hey {{me.username}},</h1>
+        <h1 class="game-code-text">Game Code: {{gameCode}}</h1>
+      </div>
+
+      <h1>You are fighting for the {{me.team}} team.</h1>
+      <h1>Your mission is to locate and shoot the {{getOpponentTeam()}} team members down!</h1>
+
+      <h1 class="ready-text">Waiting for all player to be ready to play...</h1>
+    </div>
     <div class="players">
       <div class="player-container" *ngFor="let player of players; trackBy:player?.id">
         <character-item
             [disabled]="player.state !=='READY'"
-            [name]="player.isMe ? 'Me (' + player.username + ')' : player.username"
-            [description]="player.state"
+            [name]="player.username"
+            [description]="player.team"
             [image]="getCharacter(player.character.name).imageUrl"
             [team]="player.team">
         </character-item>
-        <div *ngIf="player.isMe" class="ready" >
-          <big-button text="READY" (click)="ready()" [highlight]="player.state ==='READY'"></big-button>
+        <div *ngIf="player.isMe; else state" class="ready" >
+          <big-button fontSize="30px" width="220" text="I'M READY" (click)="ready()" [highlight]="player.state ==='READY'"></big-button>
         </div>
+        <ng-template #state>
+          <div class="state-text">{{player.state}}</div>
+        </ng-template>
       </div>
     </div>
   </div>

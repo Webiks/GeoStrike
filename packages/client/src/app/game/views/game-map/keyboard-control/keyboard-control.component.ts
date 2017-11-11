@@ -6,18 +6,32 @@ import { KeyboardKeysService } from '../../../../core/services/keyboard-keys.ser
 import { GameService } from '../../../services/game.service';
 import { CollisionDetectorService } from '../../../services/collision-detector.service';
 
-const Direction = {
-  Forward: 'Forward',
-  Backward: 'Backward',
-  Left: 'Left',
-  Right: 'Right',
+const LookDirection = {
+  Up: 'ArrowUp',
+  Down: 'ArrowDown',
+  Left: 'ArrowLeft',
+  Right: 'ArrowRight',
 };
 
-const DirectionsDelta = {
-  [Direction.Forward]: 180,
-  [Direction.Backward]: 0,
-  [Direction.Left]: 90,
-  [Direction.Right]: -90,
+const LookDirectionsDelta = {
+  [LookDirection.Up]: {field: 'pitch', value: 1},
+  [LookDirection.Down]: {field: 'pitch', value: -1},
+  [LookDirection.Left]: {field: 'heading', value: -1},
+  [LookDirection.Right]: {field: 'heading', value: 1},
+};
+
+const MoveDirection = {
+  Forward: 'KeyW',
+  Backward: 'KeyS',
+  Left: 'KeyA',
+  Right: 'KeyD',
+};
+
+const MoveDirectionsDelta = {
+  [MoveDirection.Forward]: 180,
+  [MoveDirection.Backward]: 0,
+  [MoveDirection.Left]: 90,
+  [MoveDirection.Right]: -90,
 };
 
 @Component({
@@ -27,6 +41,8 @@ const DirectionsDelta = {
 export class KeyboardControlComponent implements OnInit {
   private inspector = false;
   private viewer;
+  private lookFactor = 0;
+  private lastLook;
 
   constructor(private character: CharacterService,
               private keyboardControlService: KeyboardControlService,
@@ -38,8 +54,34 @@ export class KeyboardControlComponent implements OnInit {
     this.viewer = cesiumService.getViewer();
   }
 
+  buildLookConfig(lookDirection: string) {
+    const lookDelta = LookDirectionsDelta[lookDirection];
+    return {
+      validation: () => {
+        return (
+          this.character.viewState !== ViewState.OVERVIEW &&
+          (this.character.state === MeModelState.RUNNING ||
+            this.character.state === MeModelState.WALKING ||
+            this.character.state === MeModelState.SHOOTING)
+        );
+      },
+      action: () => {
+        if (this.lastLook === lookDirection) {
+          this.lookFactor += 0.1;
+        } else {
+          this.lookFactor = 1;
+        }
+        const lookField = this.character[lookDelta.field];
+        if (lookField) {
+          this.character[lookDelta.field] = lookField + (lookDelta.value * this.lookFactor);
+        }
+        this.lastLook = lookDirection;
+      }
+    };
+  }
+
   buildMovementConfig(direction: string) {
-    const delta = DirectionsDelta[direction];
+    const delta = MoveDirectionsDelta[direction];
     return {
       validation: () => {
         return (
@@ -71,7 +113,7 @@ export class KeyboardControlComponent implements OnInit {
             this.character.location = nextLocation;
           }
         }
-        else if (direction !== Direction.Forward) {
+        else if (direction !== MoveDirection.Forward) {
           this.character.location = nextLocation;
           if (this.collisionDetector.collision) {
             this.collisionDetector.detectCollision(nextLocation, true);
@@ -90,7 +132,6 @@ export class KeyboardControlComponent implements OnInit {
       return;
     }
     this.character.state = MeModelState.WALKING;
-    this.character.isCrawling = false;
     let newState = ViewState.SEMI_FPV;
     if (this.character.viewState === ViewState.SEMI_FPV) {
       newState = ViewState.FPV;
@@ -117,7 +158,6 @@ export class KeyboardControlComponent implements OnInit {
     }
     let crawling = false;
     if (!this.character.isCrawling) {
-      this.character.viewState = ViewState.FPV;
       crawling = true;
     }
     this.character.isCrawling = crawling;
@@ -135,31 +175,36 @@ export class KeyboardControlComponent implements OnInit {
     }
   }
 
+  changeOverviewMode() {
+    const isViewer = this.character.meFromServer['__typename'] === 'Viewer';
+    if (this.character.state === MeModelState.SHOOTING) {
+      this.character.state = MeModelState.WALKING;
+    }
+    if (!isViewer && this.character.viewState === ViewState.OVERVIEW) {
+      this.character.viewState = ViewState.SEMI_FPV;
+    } else {
+      this.character.viewState = ViewState.OVERVIEW;
+    }
+  }
+
   ngOnInit() {
+    const keyboardDefinitions = this.createMovementDefinitions();
     this.keyboardControlService.setKeyboardControls(
-      {
-        [Direction.Forward]: this.buildMovementConfig(Direction.Forward),
-        [Direction.Backward]: this.buildMovementConfig(Direction.Backward),
-        [Direction.Left]: this.buildMovementConfig(Direction.Left),
-        [Direction.Right]: this.buildMovementConfig(Direction.Right),
-      },
+      keyboardDefinitions,
       (keyEvent: KeyboardEvent) => {
-        if (keyEvent.code === 'KeyW' || keyEvent.code === 'ArrowUp') {
-          if (this.character.state !== MeModelState.SHOOTING) {
-            this.character.state = keyEvent.shiftKey
-              ? MeModelState.RUNNING
-              : this.character.state;
+        if (keyEvent.code === 'KeyW') {
+          if (
+            (this.character.state === MeModelState.WALKING ||
+              this.character.state === MeModelState.RUNNING) &&
+            this.character.viewState !== ViewState.OVERVIEW
+          ) {
+            this.character.state = keyEvent.shiftKey ? MeModelState.RUNNING : MeModelState.WALKING;
           }
 
-          return Direction.Forward;
-        } else if (keyEvent.code === 'KeyS' || keyEvent.code === 'ArrowDown') {
-          return Direction.Backward;
-        } else if (keyEvent.code === 'KeyA' || keyEvent.code === 'ArrowLeft') {
-          return Direction.Left;
-        } else if (keyEvent.code === 'KeyD' || keyEvent.code === 'ArrowRight') {
-          return Direction.Right;
-        } else {
-          return String.fromCharCode(keyEvent.keyCode);
+          return MoveDirection.Forward;
+        }
+        else {
+          return keyEvent.code;
         }
       },
       true
@@ -168,17 +213,41 @@ export class KeyboardControlComponent implements OnInit {
     this.addKeyboardEvents();
   }
 
+  private createMovementDefinitions() {
+    const keyboardDefinitions = {
+      [MoveDirection.Forward]: this.buildMovementConfig(MoveDirection.Forward),
+      [LookDirection.Up]: this.buildLookConfig(LookDirection.Up),
+      [LookDirection.Left]: this.buildLookConfig(LookDirection.Left),
+      [LookDirection.Right]: this.buildLookConfig(LookDirection.Right),
+      [LookDirection.Down]: this.buildLookConfig(LookDirection.Down),
+    };
+    !environment.controls.disableBackward && Object.assign(keyboardDefinitions, {[MoveDirection.Backward]: this.buildMovementConfig(MoveDirection.Backward)});
+    !environment.controls.disableLeft && Object.assign(keyboardDefinitions, {[MoveDirection.Right]: this.buildMovementConfig(MoveDirection.Right)});
+    !environment.controls.disableRight && Object.assign(keyboardDefinitions, {[MoveDirection.Left]: this.buildMovementConfig(MoveDirection.Left)});
+    return keyboardDefinitions;
+  }
+
   private addKeyboardEvents() {
     this.keyboardKeysService.init();
-    this.keyboardKeysService.registerKeyBoardEventDescription('LeftMouse', 'Shoot');
     this.keyboardKeysService.registerKeyBoardEventDescription('KeyW', 'Move Forward');
-    this.keyboardKeysService.registerKeyBoardEventDescription('KeyS', 'Move Backward');
-    this.keyboardKeysService.registerKeyBoardEventDescription('KeyA', 'Move Left');
-    this.keyboardKeysService.registerKeyBoardEventDescription('KeyD', 'Move Right');
+    if (!environment.controls.disableBackward) {
+      this.keyboardKeysService.registerKeyBoardEventDescription('KeyS', 'Move Backward');
+    }
+    if (!environment.controls.disableLeft) {
+      this.keyboardKeysService.registerKeyBoardEventDescription('KeyA', 'Move Left');
+    }
+    if (!environment.controls.disableRight) {
+      this.keyboardKeysService.registerKeyBoardEventDescription('KeyD', 'Move Right');
+    }
     this.keyboardKeysService.registerKeyBoardEvent('KeyC', 'Switch Crawling', () => {
       this.ngZone.run(() => {
         this.changeCrawlingState();
-      })
+      });
+    });
+    this.keyboardKeysService.registerKeyBoardEvent('KeyM', 'Switch Overview Mode', () => {
+      this.ngZone.run(() => {
+        this.changeOverviewMode();
+      });
     });
     this.keyboardKeysService.registerKeyBoardEvent('Tab', 'Switch FPV/Semi FPV',
       (keyEvent: KeyboardEvent) => {
@@ -214,5 +283,8 @@ export class KeyboardControlComponent implements OnInit {
       (keyEvent: KeyboardEvent) => {
         this.toggleInspector(Cesium.viewerCesium3DTilesInspectorMixin, 'cesium3DTilesInspector');
       });
+
+    this.keyboardKeysService.registerKeyBoardEventDescription('LookAroundMouse', 'Look around');
+    this.keyboardKeysService.registerKeyBoardEventDescription('arrows', 'Look around');
   }
 }

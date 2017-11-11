@@ -1,4 +1,4 @@
-import { SubscriptionClient } from 'subscriptions-transport-ws';
+import { SubscriptionClient } from 'subscriptions-transport-ws-temp';
 import { Injectable, NgZone } from '@angular/core';
 import { AuthorizationMiddleware } from './authorization-middleware';
 import ApolloClient from 'apollo-client/ApolloClient';
@@ -14,8 +14,9 @@ export class ApolloService {
 
   constructor(ngZone: NgZone) {
     ngZone.runOutsideAngular(() => {
-      this._subscriptionClient = new SubscriptionClient(`ws://${environment.serverUrl}/subscriptions`, {
+      this._subscriptionClient = new SubscriptionClient(`${environment.wsSchema}://${environment.serverUrl}/subscriptions`, {
         reconnect: true,
+        minTimeout: 5000,
         connectionParams: () => {
           if (!AuthorizationMiddleware.token || AuthorizationMiddleware.token === '') {
             return {};
@@ -47,7 +48,6 @@ export class ApolloService {
           },
         }
       });
-
 
       this._apolloClient = new ApolloClient({
         networkInterface: this._subscriptionClient,

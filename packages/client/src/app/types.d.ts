@@ -40,6 +40,7 @@ export interface CharacterData {
   description?: string; 
   portraitUrl?: string; 
   iconUrl?: string; 
+  iconDeadUrl?: string; 
 }
 
 export interface PlayerLocation {
@@ -60,6 +61,7 @@ export interface Mutation {
   updatePosition?: Player; 
   ready?: Game; 
   notifyKill?: Player; 
+  notifyShot?: boolean; 
   takeControlOverPlayer?: Player; 
   removeControlOverPlayer?: Player; 
 }
@@ -73,11 +75,19 @@ export interface CreateOrJoinResult {
 export interface Subscription {
   gameData?: Game; 
   gameNotifications?: Notification; 
+  gunShot?: ShotData; 
 }
 
 export interface Notification {
   gameId?: string; 
   message?: string; 
+}
+
+export interface ShotData {
+  id?: string; 
+  byPlayer?: Player; 
+  shotPosition?: Location; 
+  time?: number; 
 }
 
 export interface Viewer extends User {
@@ -114,6 +124,10 @@ export interface UpdatePositionMutationArgs {
 }
 export interface NotifyKillMutationArgs {
   playerId: string; 
+}
+export interface NotifyShotMutationArgs {
+  byPlayerId: string; 
+  shotPosition: LocationInput; 
 }
 export interface TakeControlOverPlayerMutationArgs {
   playerId: string; 
@@ -184,6 +198,31 @@ export namespace GameNotifications {
     message?: string; 
   } 
 }
+export namespace GunShots {
+  export type Variables = {
+  }
+
+  export type Subscription = {
+    gunShot?: GunShot; 
+  } 
+
+  export type GunShot = {
+    id?: string; 
+    byPlayer?: ByPlayer; 
+    shotPosition?: ShotPosition; 
+  } 
+
+  export type ByPlayer = {
+    id: string; 
+    username?: string; 
+  } 
+
+  export type ShotPosition = {
+    x: number; 
+    y: number; 
+    z: number; 
+  } 
+}
 export namespace JoinAsViewer {
   export type Variables = {
     gameCode?: string;
@@ -230,6 +269,16 @@ export namespace NotifyKill {
   } 
 
   export type NotifyKill = PlayerFields.Fragment
+}
+export namespace NotifyShot {
+  export type Variables = {
+    byPlayerId: string;
+    shotPosition: LocationInput;
+  }
+
+  export type Mutation = {
+    notifyShot?: boolean; 
+  } 
 }
 export namespace Ready {
   export type Variables = {
@@ -319,6 +368,7 @@ export namespace PlayerFields {
     scale?: number; 
     portraitUrl?: string; 
     iconUrl?: string; 
+    iconDeadUrl?: string; 
   } 
 
   export type CurrentLocation = LocationFields.Fragment

@@ -1,4 +1,4 @@
-import { GamesManager, IGameObject, IPlayer, IViewer } from '../core/local-data/game';
+import { GamesManager, IGameObject, IPlayer, IViewer } from '../core/local-data/game-manager';
 import { decode } from 'jsonwebtoken';
 
 export interface IGraphQLContext {

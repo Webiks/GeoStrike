@@ -11,6 +11,10 @@ export class UtilsService {
     return Cesium.HeightReference.CLAMP_TO_GROUND;
   }
 
+  getRelativeToGroundHeightReference() {
+    return Cesium.HeightReference.RELATIVE_TO_GROUND;
+  }
+
   getOrientation(location, heading = 0, pitch = 0, roll = 0) {
     const headingC = Cesium.Math.toRadians(heading);
     const pitchC = Cesium.Math.toRadians(pitch);

@@ -1,5 +1,5 @@
 .game-room {
-  padding: 20px;
+  padding: 50px;
 
   .header {
     color: white;
@@ -12,11 +12,42 @@
     .player-container {
       display: flex;
       flex-direction: column;
+      margin-right: 20px;
+      margin-top: 10px;
 
       .ready {
         align-self: center;
         margin: 10px;
+        font-size: 40px !important;
       }
     }
   }
+
+  .game-code-text{
+    font-size: 2.5em;
+  }
+  .ready-text{
+    font-size: 1.5em;
+    margin-top: 39px;
+  }
+  .state-text {
+    font-size: 30px;
+    margin-top: 20px;
+    color: white;
+    text-align: center;
+    font-family: system-ui, sans-serif;
+    color: rgba(255,255,255,0.6);
+  }
+  .first-text-row {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1800px;
+  }
+}
+
+.loading{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 50px;
 }

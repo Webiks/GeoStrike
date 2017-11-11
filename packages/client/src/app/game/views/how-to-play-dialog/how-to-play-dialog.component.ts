@@ -10,16 +10,25 @@ import { KeyboardKeysService } from '../../../core/services/keyboard-keys.servic
 })
 export class HowToPlayDialogComponent implements OnInit {
 
-  keys: {keyName: string,description: string}[];
-  constructor(public dialog: MatDialog,private keyboardKeysService: KeyboardKeysService) { }
+  Array =Array;
+  keys2: Map<string, { keyName: string, description: string }[]> = new Map();
+
+  constructor(public dialog: MatDialog, private keyboardKeysService: KeyboardKeysService) {
+  }
 
   ngOnInit() {
-    this.keys = Array.from(this.keyboardKeysService.getRegisteredKey()
+    Array.from(this.keyboardKeysService.getRegisteredKey()
       .entries())
-      .filter(([keyName,keyInput])=> keyInput.description)
-      .map(([keyName,keyInput])=>{
-        const name = keyName.replace(/^Key/,'');
+      .filter(([keyName, keyInput]) => keyInput.description)
+      .map(([keyName, keyInput]) => {
+        const name = keyName.replace(/^Key/, '');
         return {keyName: name, description: keyInput.description};
+      }).forEach((keyObject) => {
+      if (this.keys2.has(keyObject.description)) {
+        this.keys2.get(keyObject.description).push(keyObject);
+      } else {
+        this.keys2.set(keyObject.description, [keyObject]);
+      }
     });
   }
 

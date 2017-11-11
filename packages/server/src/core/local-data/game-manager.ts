@@ -6,6 +6,7 @@ import { config } from '../../settings/config';
 import { startClientsUpdater, stopClientsUpdater } from '../clients-updater/clients-updater';
 import { BackgroundCharacterManager } from '../background-character/background-character-manager';
 import { PLAYER_CHARACTERS } from './characters';
+import { GamesTimeout } from './games-timeout';
 import Timer = NodeJS.Timer;
 
 export interface ICartesian3Location {
@@ -63,6 +64,12 @@ const TOKENS_SECRET = 'sdf43tSWDG#%Tsdfw4';
 
 export class GamesManager {
   private activeGames: Map<string, IGameObject> = new Map<string, IGameObject>();
+  private gamesTimeouts: GamesTimeout;
+
+  constructor() {
+    this.gamesTimeouts = new GamesTimeout(this);
+    this.gamesTimeouts.startTimeoutChecks();
+  }
 
   private generateGameCode(): string {
     const min = 1000;
@@ -109,6 +116,22 @@ export class GamesManager {
     return viewer;
   }
 
+  private validateUsername(username: string, game: IGameObject, isFirst = true): string {
+    const exists = Array.from(game.playersMap.values()).find(p => p.username === username);
+    if (exists) {
+      let newUsername = null;
+      if (isFirst) {
+        newUsername = username + '1'
+      } else {
+        const count = +username.slice(-1);
+        newUsername = username.slice(0, -1) + (count + 1);
+      }
+      return this.validateUsername(newUsername, game, false);
+    } else {
+      return username;
+    }
+  }
+
   addRealPlayerToGame(gameId: string,
                       characterName: string,
                       username: string,
@@ -124,19 +147,21 @@ export class GamesManager {
       TOKENS_SECRET
     );
 
-    const realPlayerCount = Array.from(game.playersMap.values()).filter(
-      p => p.type === CharacterType.PLAYER
+    const defaultPlayerPositions = config.PLAYERS_SPAWN_POSITIONS[team];
+    const realPlayerTeamCount = Array.from(game.playersMap.values()).filter(
+      p => p.type === CharacterType.PLAYER && p.team === team
     ).length;
 
+    const finalUsername = this.validateUsername(username, game);
     const character = PLAYER_CHARACTERS.find(p => p.name === characterName);
     const player: IPlayer = {
       playerId,
       character,
       token: playerToken,
-      username,
+      username: finalUsername,
       state: 'WAITING',
       game,
-      currentLocation: config.PLAYERS_SPAWN_POSITIONS[realPlayerCount],
+      currentLocation: defaultPlayerPositions[realPlayerTeamCount],
       heading: 0,
       team,
       type: CharacterType.PLAYER,
@@ -208,6 +233,12 @@ export class GamesManager {
                        skipValidation = false) {
     const game = this.getGameById(gameId);
     const player = game.playersMap.get(playerId);
+
+    // Update game active time
+    if (player.type === CharacterType.PLAYER) {
+      this.gamesTimeouts.setGameLastActiveTime(gameId);
+    }
+
     if (player && position) {
       if (
         skipValidation ||
@@ -294,8 +325,8 @@ export class GamesManager {
 
   removeControlOverPlayer(game, playerId: string): IPlayer {
     const controlledPlayer: IPlayer = game.controlledPlayersMap.get(playerId);
-    if (controlledPlayer){
-      controlledPlayer.state = controlledPlayer.state === 'CONTROLLED'? 'ALIVE': controlledPlayer.state;
+    if (controlledPlayer) {
+      controlledPlayer.state = controlledPlayer.state === 'CONTROLLED' ? 'ALIVE' : controlledPlayer.state;
       game.controlledPlayersMap.delete(playerId);
     }
     return controlledPlayer;

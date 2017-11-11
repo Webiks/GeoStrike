@@ -1,7 +1,7 @@
 <ac-layer acFor="let me of notifications$" [context]="this">
   <ac-model-desc #meModel props="{
           show: showMeModel(),
-          heightReference: utils.getClampedToGroundHeightReference(),
+          heightReference: utils.getRelativeToGroundHeightReference(),
           scale: characterInfo.scale,
 					uri: characterInfo.model,
 					position: me.location,
@@ -13,8 +13,4 @@
 <img *ngIf="showWeapon$ | async" src="assets/gun1.png" class="gun" alt="" (click)="canvasPropagation()">
 <img #muzzleFlash src="assets/muzzle-flash.png" class="gun-flare" alt="">
 <img #cross *ngIf="showCross$ | async" src="assets/focus.png" class="gun-cross" alt="">
-<div class="action-text-line">
-  <div *ngIf="buildingNearby" class="action-text">Press E to Enter Building</div>
-  <div *ngIf="insideBuilding" class="action-text">Press E to Exit Building</div>
-</div>
-<audio #gunShotSound src="assets/sound/smg_shoot.wav"></audio>
+

@@ -1,7 +1,7 @@
 import { ESubscriptionTopics, pubsub } from '../../pubsub';
 import { withFilter } from 'graphql-subscriptions';
 import { IGraphQLContext } from '../../context';
-import { createRejectionIterable } from 'subscriptions-transport-ws/dist/utils/rejection-iterable';
+import { createRejectionIterable } from 'subscriptions-transport-ws-temp/dist/utils/rejection-iterable';
 
 export const gameNotifications = {
   subscribe: withFilter(

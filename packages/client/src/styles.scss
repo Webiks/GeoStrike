@@ -37,9 +37,23 @@ mat-dialog-container{
   padding: 0 !important;
 }
 
+.mat-tab-group {
+  font-family: AGENCYR, sans-serif !important;
+}
 snack-bar-container{
-  background: rgba(0,0,0,0.7) !important;
+  background: rgba(0,0,0,0.54) !important;
   color: white !important;
+  font-size: 24px;
+  border-top-left-radius: 15px !important;
+  border-top-right-radius: 15px !important;
+  max-width: 750px !important;
+  min-width: 400px !important;
+}
+
+snack-bar-content{
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 mat-form-field {

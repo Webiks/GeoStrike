@@ -11,10 +11,10 @@ import {
   MatInputModule,
   MatProgressSpinnerModule,
   MatSnackBarModule,
+  MatTabsModule,
 } from '@angular/material';
 
 import { MainComponent } from './views/main/main.component';
-import { JoinGameDialogComponent } from './views/join-game-dialog/join-game-dialog.component';
 import { CharacterPickerComponent } from './views/character-picker/character-picker.component';
 import { GameService } from './services/game.service';
 import { GameRoomComponent } from './views/game-room/game-room.component';
@@ -43,11 +43,15 @@ import { BuildingsService } from './services/buildings.service';
 import { CollisionDetectorService } from './services/collision-detector.service';
 import { ViewerControlsComponent } from './views/game-container/viewer-controls/viewer-controls.component';
 import { BenchedDialogComponent } from './views/benched-dialog/benched-dialog.component';
+import { KeyButtonComponent } from './views/how-to-play-dialog/key-button/key-button.component';
+import { ArrowKeysComponent } from './views/how-to-play-dialog/arrow-keys/arrow-keys.component';
+import { OtherPlayersGunSoundComponent } from './views/game-map/other-players/gun-shot/other-players-gun-sound/other-players-gun-sound.component';
+import { GunIndicatorComponent } from './views/game-map/other-players/gun-shot/gun-indicator/gun-indicator.component';
+import { SoundService } from './services/sound.service';
 
 @NgModule({
   declarations: [
     MainComponent,
-    JoinGameDialogComponent,
     CharacterPickerComponent,
     GameRoomComponent,
     CharacterItemComponent,
@@ -69,6 +73,10 @@ import { BenchedDialogComponent } from './views/benched-dialog/benched-dialog.co
     GameDialogsComponent,
     ViewerControlsComponent,
     BenchedDialogComponent,
+    KeyButtonComponent,
+    ArrowKeysComponent,
+    OtherPlayersGunSoundComponent,
+    GunIndicatorComponent,
   ],
   imports: [
     BrowserModule,
@@ -84,6 +92,7 @@ import { BenchedDialogComponent } from './views/benched-dialog/benched-dialog.co
     MatGridListModule,
     MatProgressSpinnerModule,
     MatInputModule,
+    MatTabsModule,
   ],
   exports: [
     MainComponent,
@@ -95,9 +104,9 @@ import { BenchedDialogComponent } from './views/benched-dialog/benched-dialog.co
     UtilsService,
     BuildingsService,
     CollisionDetectorService,
+    SoundService,
   ],
   entryComponents: [
-    JoinGameDialogComponent,
     EndGameDialogComponent,
     HowToPlayDialogComponent,
     YouWinDialogComponent,

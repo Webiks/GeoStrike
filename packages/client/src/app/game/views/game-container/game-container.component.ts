@@ -15,6 +15,9 @@ import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/map';
 import * as _ from 'lodash';
 
+export class OtherPlayerEntity extends AcEntity {
+}
+
 @Component({
   selector: 'game-container',
   templateUrl: './game-container.component.html',
@@ -22,16 +25,17 @@ import * as _ from 'lodash';
   providers: [TakeControlService]
 })
 export class GameContainerComponent implements OnInit, OnDestroy {
-  public isViewer: boolean;
-  private gameData$: Observable<GameFields.Fragment>;
-  public gameNotifications$: Observable<string>;
+  isViewer: boolean;
+  otherPlayers$: Subject<AcNotification> = new Subject<AcNotification>();
+  allPlayers$: Subject<PlayerFields.Fragment[]> = new Subject<PlayerFields.Fragment[]>();
+  gameResult$: Subject<Team> = new Subject();
+  gameData$: Observable<GameFields.Fragment>;
+  gameNotifications$: Observable<string>;
+  me: GameFields.Me;
+  gameCode: string;
   private game: CurrentGame.CurrentGame;
-  private me: GameFields.Me;
   private gameDataSubscription: Subscription;
   private gameNotificationsSubscription: Subscription;
-  private otherPlayers$: Subject<AcNotification> = new Subject<AcNotification>();
-  private allPlayers$: Subject<PlayerFields.Fragment[]> = new Subject<PlayerFields.Fragment[]>();
-  private gameResult$: Subject<Team> = new Subject();
   private paramsSubscription: Subscription;
 
 
@@ -54,18 +58,23 @@ export class GameContainerComponent implements OnInit, OnDestroy {
           return;
         }
 
+        this.ngZone.run(() => {
+          this.gameCode = params.gameCode;
+        });
         AuthorizationMiddleware.setToken(params.playerToken);
         this.gameService.refreshConnection();
-        this.gameData$ = (this.gameService.getCurrentGameData()).map(({ gameData }) => gameData);
         this.gameNotifications$ = (this.gameService.getCurrentGameNotifications()).map(notification => {
           return notification.gameNotifications.message;
         });
+        this.gameData$ = (this.gameService.getCurrentGameData())
+          .map(({gameData}) => gameData);
         this.gameDataSubscription = this.gameData$.subscribe(currentGame => {
           this.game = currentGame;
           this.me = currentGame.me;
           this.gameResult$.next(currentGame.winingTeam);
+          const players = this.game.players.filter(p => p.state !== 'WAITING');
 
-          const allPlayers = [...this.game.players];
+          const allPlayers = [...players];
           if (this.me) {
             this.isViewer = this.me.type === 'OVERVIEW' || this.me['__typename'] === 'Viewer';
             this.character.meFromServer = this.me;
@@ -81,17 +90,20 @@ export class GameContainerComponent implements OnInit, OnDestroy {
 
           const controlledPlayer = this.controlledService.controlledPlayer;
           this.allPlayers$.next(allPlayers);
-          this.game.players
+          players
             .filter(p => !controlledPlayer || controlledPlayer.id !== p.id)
             .map<AcNotification>(player => ({
               actionType: ActionType.ADD_UPDATE,
               id: player.id,
-              entity: new AcEntity({...player, name: player.character.name}),
+              entity: new OtherPlayerEntity({...player, name: player.character.name}),
             })).forEach(notification => {
             this.otherPlayers$.next(notification);
           });
         }, e => {
+          console.log('subscription error', e);
           this.router.navigate(['/']);
+        }, () => {
+          console.log('subscription complete');
         });
       });
     });
@@ -111,7 +123,14 @@ export class GameContainerComponent implements OnInit, OnDestroy {
         this.otherPlayers$.next({
           id: this.me.id,
           actionType: ActionType.DELETE,
-        })
+        });
+      }
+      if (this.character.viewState === ViewState.OVERVIEW) {
+        this.otherPlayers$.next({
+          id: this.me.id,
+          actionType: ActionType.ADD_UPDATE,
+          entity: this.me,
+        });
       }
     } else {
       // if controlling set state from controlled player
