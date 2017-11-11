@@ -20,13 +20,16 @@
         <character-item
             [disabled]="player.state !=='READY'"
             [name]="player.username"
-            [description]="player.state"
+            [description]="player.team"
             [image]="getCharacter(player.character.name).imageUrl"
             [team]="player.team">
         </character-item>
-        <div *ngIf="player.isMe" class="ready" >
+        <div *ngIf="player.isMe; else state" class="ready" >
           <big-button fontSize="30px" width="220" text="I'M READY" (click)="ready()" [highlight]="player.state ==='READY'"></big-button>
         </div>
+        <ng-template #state>
+          <div class="state-text">{{player.state}}</div>
+        </ng-template>
       </div>
     </div>
   </div>

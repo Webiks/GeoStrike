@@ -13,9 +13,4 @@
 <img *ngIf="showWeapon$ | async" src="assets/gun1.png" class="gun" alt="" (click)="canvasPropagation()">
 <img #muzzleFlash src="assets/muzzle-flash.png" class="gun-flare" alt="">
 <img #cross *ngIf="showCross$ | async" src="assets/focus.png" class="gun-cross" alt="">
-<div class="action-text-line">
-  <div *ngIf="buildingNearby" class="action-text">Press E to Enter Building</div>
-  <div *ngIf="insideBuilding" class="action-text">Press E to Exit Building</div>
-</div>
-<gun-sound #gunShotSound></gun-sound>
 

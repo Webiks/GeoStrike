@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActionType, CesiumService } from 'angular-cesium';
 import { CharacterService, CharacterState, MeModelState, ViewState } from '../../../services/character.service';
 import { UtilsService } from '../../../services/utils.service';
@@ -11,7 +11,9 @@ import { CharacterData } from '../../../../types';
 import { BasicDesc } from 'angular-cesium/src/angular-cesium/services/basic-desc/basic-desc.service';
 import { OtherPlayerEntity } from '../../game-container/game-container.component';
 import { KeyboardKeysService } from '../../../../core/services/keyboard-keys.service';
-import { GunSoundComponent } from '../other-players/gun-shot/gun-sound/gun-sound.component';
+import { MatSnackBar } from '@angular/material';
+import { SnackBarContentComponent } from '../../../../shared/snack-bar-content/snack-bar-content.component';
+import { SoundService } from '../../../services/sound.service';
 
 @Component({
   selector: 'me',
@@ -23,7 +25,6 @@ export class MeComponent implements OnInit, OnDestroy {
   private meModelDrawSubscription: Subscription;
 
   @ViewChild('cross') crossElement: ElementRef;
-  @ViewChild('gunShotSound') gunShotSound: GunSoundComponent;
   @ViewChild('muzzleFlash') muzzleFlash: ElementRef;
   @ViewChild('meModel') meModel: BasicDesc;
 
@@ -41,7 +42,9 @@ export class MeComponent implements OnInit, OnDestroy {
               private cesiumService: CesiumService,
               private gameService: GameService,
               private keyboardKeysService: KeyboardKeysService,
-              private cd: ChangeDetectorRef) {
+              private ngZone: NgZone,
+              private snackBar: MatSnackBar,
+              private soundService: SoundService) {
   }
 
   get notifications$() {
@@ -56,7 +59,7 @@ export class MeComponent implements OnInit, OnDestroy {
     this.keyboardKeysService.registerKeyBoardEventDescription('LeftMouse', 'Shoot');
     const enterSub$ = Observable.create((observer) => {
       this.keyboardKeysService.registerKeyBoardEvent('Enter', 'Shoot', () => {
-        observer.next()
+        observer.next();
       });
     });
     this.shootSub$ = Observable.fromEvent(document.body, 'click')
@@ -65,7 +68,7 @@ export class MeComponent implements OnInit, OnDestroy {
       .do(() => this.gameService.notifyShot(this.character.meFromServer.id, this.character.location))
       .subscribe((e: MouseEvent) => {
         this.showGunMuzzleFlash();
-        this.soundGunFire();
+        this.soundService.gunShot();
         const crossElement = this.crossElement.nativeElement;
         const crossLocation = {
           x: crossElement.x + crossElement.width / 2,
@@ -92,13 +95,31 @@ export class MeComponent implements OnInit, OnDestroy {
 
     this.setShootEvent();
     this.character.state$.subscribe(state => {
-      if (state && this.buildingNearby !== !!state.nearbyBuildingPosition) {
+      if (state && !state.enteredBuilding && this.buildingNearby !== !!state.nearbyBuildingPosition) {
         this.buildingNearby = !!state.nearbyBuildingPosition;
-        this.cd.detectChanges();
+        if (this.buildingNearby) {
+          this.ngZone.run(() => {
+            this.snackBar.dismiss();
+            this.snackBar.openFromComponent(SnackBarContentComponent, {
+              data: `Press E to Enter Building`,
+              duration: 3000,
+            });
+          });
+        }
+        else {
+          this.ngZone.run(() => this.snackBar.dismiss());
+        }
       }
       if (state && this.insideBuilding !== !!state.enteredBuilding) {
         this.insideBuilding = !!state.enteredBuilding;
-        this.cd.detectChanges();
+        if (this.insideBuilding) {
+          this.ngZone.run(() => {
+            this.snackBar.openFromComponent(SnackBarContentComponent, {
+              data: `Press E to Exit Building`,
+              duration: 3000,
+            });
+          });
+        }
       }
     });
   }
@@ -106,10 +127,6 @@ export class MeComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.shootSub$.unsubscribe();
     this.meModelDrawSubscription.unsubscribe();
-  }
-
-  private soundGunFire() {
-    this.gunShotSound.play();
   }
 
   private showGunMuzzleFlash() {

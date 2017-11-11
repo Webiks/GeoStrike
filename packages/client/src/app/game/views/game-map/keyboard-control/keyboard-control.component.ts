@@ -177,6 +177,9 @@ export class KeyboardControlComponent implements OnInit {
 
   changeOverviewMode() {
     const isViewer = this.character.meFromServer['__typename'] === 'Viewer';
+    if (this.character.state === MeModelState.SHOOTING) {
+      this.character.state = MeModelState.WALKING;
+    }
     if (!isViewer && this.character.viewState === ViewState.OVERVIEW) {
       this.character.viewState = ViewState.SEMI_FPV;
     } else {
@@ -192,7 +195,7 @@ export class KeyboardControlComponent implements OnInit {
         if (keyEvent.code === 'KeyW') {
           if (
             (this.character.state === MeModelState.WALKING ||
-            this.character.state === MeModelState.RUNNING) &&
+              this.character.state === MeModelState.RUNNING) &&
             this.character.viewState !== ViewState.OVERVIEW
           ) {
             this.character.state = keyEvent.shiftKey ? MeModelState.RUNNING : MeModelState.WALKING;
