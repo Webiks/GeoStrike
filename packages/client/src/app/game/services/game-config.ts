@@ -4,7 +4,7 @@ export class GameConfig {
   static minEnterableBuildingSize = 800;
 
   // Building settings
-  static innerBuildingColor = new Cesium.Color(40.0 / 255.0, 40.0 / 255.0, 40.0 / 255.0, 1);
+  static innerBuildingColor = new Cesium.fromBytes(40, 40, 40);
   static enterableBuildingColor = 'rgb(60, 60, 60)';
   static roomHeight = 5;
   static roomFloorHeightFromGround = 7;
