@@ -8,9 +8,17 @@
       "root": "src",
       "outDir": "dist",
       "assets": [
-        {"glob": "**/*", "input": "../node_modules/cesium/Build/Cesium", "output": "./assets/cesium"},
+        {
+          "glob": "**/*",
+          "input": "../node_modules/cesium/Build/Cesium",
+          "output": "./assets/cesium"
+        },
         "assets",
-        {"glob": "**/*", "input": "assets/models/captain-america", "output": "./game/assets/models/captain-america"},
+        {
+          "glob": "**/*",
+          "input": "assets/models/captain-america",
+          "output": "./game/assets/models/captain-america"
+        },
         "favicon.ico"
       ],
       "index": "index.html",
@@ -20,6 +28,7 @@
       "tsconfig": "tsconfig.app.json",
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "",
+      "serviceWorker": true,
       "styles": [
         "styles.scss",
         "../node_modules/cesium/Build/Cesium/Widgets/widgets.css"
@@ -60,6 +69,7 @@
   },
   "defaults": {
     "styleExt": "scss",
-    "component": {}
+    "component": {
+    }
   }
 }
