@@ -97,7 +97,6 @@ export class GameContainerComponent implements OnInit, OnDestroy {
               id: player.id,
               entity: new OtherPlayerEntity({...player, name: player.character.name}),
             })).forEach(notification => {
-              console.log(notification.entity);
             this.otherPlayers$.next(notification);
           });
         }, e => {
@@ -124,14 +123,14 @@ export class GameContainerComponent implements OnInit, OnDestroy {
         this.otherPlayers$.next({
           id: this.me.id,
           actionType: ActionType.DELETE,
-        })
+        });
       }
       if (this.character.viewState === ViewState.OVERVIEW) {
         this.otherPlayers$.next({
           id: this.me.id,
           actionType: ActionType.ADD_UPDATE,
           entity: this.me,
-        })
+        });
       }
     } else {
       // if controlling set state from controlled player
