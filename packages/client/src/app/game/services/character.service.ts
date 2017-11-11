@@ -213,9 +213,9 @@ export class CharacterService {
 
   public exitBuilding() {
     this.tileBuilding.show = true;
+    this.buildingsService.removeBuilding(this.enteredBuilding.id);
     this.enteredBuilding = undefined;
     this.location = this.enteringBuildingPosition;
-    this.buildingsService.removeBuilding(this.enteredBuilding.id);
     this.tileBuilding = undefined;
     this.enteringBuildingPosition = undefined;
     this.nearbyBuildingPosition = undefined;
