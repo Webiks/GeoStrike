@@ -146,11 +146,6 @@ export class MeComponent implements OnInit, OnDestroy {
   }
 
   getPosition(location: Cartesian3) {
-    // put height in conf...
-    const characterName = this.character.currentStateValue.characterInfo.name;
-    if (characterName === 'Wolverine' || characterName === 'The Flash') {
-      return this.utils.toFixedHeight(location, 1)
-    }
     return location;
   }
 
@@ -159,6 +154,6 @@ export class MeComponent implements OnInit, OnDestroy {
     if (characterName === 'Wolverine' || characterName === 'The Flash') {
       return Cesium.HeightReference.NONE;
     }
-    return this.utils.getClampedToGroundHeightReference();
+    return this.utils.getRelativeToGroundHeightReference();
   }
 }
