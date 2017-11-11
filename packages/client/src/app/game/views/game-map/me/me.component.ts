@@ -11,9 +11,9 @@ import { CharacterData } from '../../../../types';
 import { BasicDesc } from 'angular-cesium/src/angular-cesium/services/basic-desc/basic-desc.service';
 import { OtherPlayerEntity } from '../../game-container/game-container.component';
 import { KeyboardKeysService } from '../../../../core/services/keyboard-keys.service';
-import { GunSoundComponent } from '../other-players/gun-shot/gun-sound/gun-sound.component';
 import { MatSnackBar } from '@angular/material';
 import { SnackBarContentComponent } from '../../../../shared/snack-bar-content/snack-bar-content.component';
+import { SoundService } from '../../../services/sound.service';
 
 @Component({
   selector: 'me',
@@ -25,7 +25,6 @@ export class MeComponent implements OnInit, OnDestroy {
   private meModelDrawSubscription: Subscription;
 
   @ViewChild('cross') crossElement: ElementRef;
-  @ViewChild('gunShotSound') gunShotSound: GunSoundComponent;
   @ViewChild('muzzleFlash') muzzleFlash: ElementRef;
   @ViewChild('meModel') meModel: BasicDesc;
 
@@ -44,7 +43,8 @@ export class MeComponent implements OnInit, OnDestroy {
               private gameService: GameService,
               private keyboardKeysService: KeyboardKeysService,
               private ngZone: NgZone,
-              private snackBar: MatSnackBar) {
+              private snackBar: MatSnackBar,
+              private soundService: SoundService) {
   }
 
   get notifications$() {
@@ -68,7 +68,7 @@ export class MeComponent implements OnInit, OnDestroy {
       .do(() => this.gameService.notifyShot(this.character.meFromServer.id, this.character.location))
       .subscribe((e: MouseEvent) => {
         this.showGunMuzzleFlash();
-        this.soundGunFire();
+        this.soundService.gunShot();
         const crossElement = this.crossElement.nativeElement;
         const crossLocation = {
           x: crossElement.x + crossElement.width / 2,
@@ -84,7 +84,6 @@ export class MeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.gunShotSound.play(0);
     this.showWeapon$ = Observable.combineLatest(
       this.character.viewState$.map(viewState => viewState === ViewState.FPV),
       this.character.state$.map(meState => meState && meState.state === MeModelState.SHOOTING))
@@ -128,10 +127,6 @@ export class MeComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.shootSub$.unsubscribe();
     this.meModelDrawSubscription.unsubscribe();
-  }
-
-  private soundGunFire() {
-    this.gunShotSound.play();
   }
 
   private showGunMuzzleFlash() {

@@ -1,25 +1,23 @@
-import { Component, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { OtherPlayersShotService } from '../other-players-shot.service';
 import { Subscription } from 'rxjs/Subscription';
 import { CharacterService, ViewState } from '../../../../../services/character.service';
-import { GunSoundComponent } from '../gun-sound/gun-sound.component';
+import { SoundService } from '../../../../../services/sound.service';
 
 @Component({
   selector: 'other-players-gun-sound',
-  template: `
-    <gun-sound #gunSound></gun-sound>
-  `,
+  template: ``,
   styleUrls: ['./other-players-gun-sound.component.scss'],
 })
 export class OtherPlayersGunSoundComponent implements OnInit, OnDestroy {
 
-  @ViewChild('gunSound') gunSound: GunSoundComponent;
   shotSubscription: Subscription;
   private readonly maxSoudnDistance = 500;
 
   constructor(private otherPlayersGunShotService: OtherPlayersShotService,
               private character: CharacterService,
-              private ngZone: NgZone) {
+              private ngZone: NgZone,
+              private soundService: SoundService) {
   }
 
   ngOnInit() {
@@ -29,14 +27,14 @@ export class OtherPlayersGunSoundComponent implements OnInit, OnDestroy {
           const distanceToShot = Cesium.Cartesian3.distance(this.character.location, data.gunShot.shotPosition);
 
           let volume = 0;
-          if (distanceToShot <this.maxSoudnDistance){
+          if (distanceToShot < this.maxSoudnDistance) {
             const factor = distanceToShot ? distanceToShot / this.maxSoudnDistance : 1;
             volume = 1 - factor;
           }
 
-          this.gunSound.play(volume);
+          this.soundService.gunShot(volume);
         }
-      })
+      });
     });
   }
 

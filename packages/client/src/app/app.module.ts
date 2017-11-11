@@ -7,6 +7,7 @@ import { HttpModule } from '@angular/http';
 import { ConfiguredApolloModule } from './core/configured-apollo/configured-apollo.module';
 import { MATERIAL_COMPATIBILITY_MODE } from '@angular/material';
 import { SnackBarContentComponent } from './shared/snack-bar-content/snack-bar-content.component';
+import { SoundService } from './game/services/sound.service';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { SnackBarContentComponent } from './shared/snack-bar-content/snack-bar-c
   providers: [
     KeyboardKeysService,
     {provide: MATERIAL_COMPATIBILITY_MODE, useValue: true},
+    SoundService,
   ],
   bootstrap: [
     AppComponent,
