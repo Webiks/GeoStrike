@@ -1,11 +1,11 @@
 <ac-layer acFor="let me of notifications$" [context]="this">
   <ac-model-desc #meModel props="{
           show: showMeModel(),
-          heightReference: utils.getRelativeToGroundHeightReference(),
           scale: characterInfo.scale,
 					uri: characterInfo.model,
-					position: me.location,
+					position: getPosition(me.location),
 					orientation: getOrientation(me.location, me.heading,me),
+					heightReference: getHeightReference(),
 					color: getColor(),
   }">
   </ac-model-desc>

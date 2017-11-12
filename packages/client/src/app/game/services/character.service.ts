@@ -161,11 +161,17 @@ export class CharacterService {
 
   set location(value: any) {
     let position = value;
+    const cartLocation = Cesium.Cartographic.fromCartesian(value);
     if (this.enteredBuilding) {
-      const cartLocation = Cesium.Cartographic.fromCartesian(value);
       cartLocation.height = GameConfig.roomFloorHeightFromGround;
-      position = Cesium.Cartesian3.fromRadians(cartLocation.longitude, cartLocation.latitude, cartLocation.height);
     }
+    // TODO put height in conf...
+    const characterName = this.currentStateValue.characterInfo.name;
+    if (characterName === 'Wolverine' || characterName === 'The Flash') {
+      cartLocation.height += 1;
+    }
+    position = Cesium.Cartesian3.fromRadians(cartLocation.longitude, cartLocation.latitude, cartLocation.height);
+
     this.modifyCurrentStateValue({
       location: position,
     });

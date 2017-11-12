@@ -161,4 +161,16 @@ export class MeComponent implements OnInit, OnDestroy {
   showMeModel() {
     return this.character.viewState !== ViewState.OVERVIEW && this.character.state !== MeModelState.CONTROLLED;
   }
+
+  getPosition(location: Cartesian3) {
+    return location;
+  }
+
+  getHeightReference(){
+    const characterName = this.character.currentStateValue.characterInfo.name;
+    if (characterName === 'Wolverine' || characterName === 'The Flash') {
+      return Cesium.HeightReference.NONE;
+    }
+    return this.utils.getRelativeToGroundHeightReference();
+  }
 }

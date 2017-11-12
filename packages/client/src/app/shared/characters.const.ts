@@ -1,9 +1,9 @@
 export const AVAILABLE_CHARACTERS = [
   {
-    name: 'Steve Rogers',
+    name: 'Wolverine',
     description: 'Blue Team',
     team: 'BLUE',
-    imageUrl: '/assets/characters/captain-america.png',
+    imageUrl: '/assets/characters/wolverine.png',
   },
   {
     name: 'Anthony Stark',
@@ -12,10 +12,10 @@ export const AVAILABLE_CHARACTERS = [
     imageUrl: '/assets/characters/ironman.png',
   },
   {
-    name: 'Peter Parker',
+    name: 'The Flash',
     description: 'Red Team',
     team: 'RED',
-    imageUrl: '/assets/characters/spiderman.png',
+    imageUrl: '/assets/characters/flash.png',
   },
   {
     name: 'Bruce Wayne',
