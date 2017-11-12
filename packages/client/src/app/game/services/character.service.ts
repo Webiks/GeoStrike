@@ -151,8 +151,8 @@ export class CharacterService {
     else if (value < -89.9) {
       value = -89.9;
     }
-    else if (value > 89.9) {
-      value = 89.9;
+    else if (value > 80.0) {
+      value = 80.0;
     }
     this.modifyCurrentStateValue({
       pitch: value,
