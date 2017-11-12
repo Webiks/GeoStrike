@@ -4,7 +4,7 @@
           heightReference: utils.getRelativeToGroundHeightReference(),
           scale: characterInfo.scale,
 					uri: characterInfo.model,
-					position: me.location,
+					position: getPosition(me.location),
 					orientation: getOrientation(me.location, me.heading,me),
 					color: getColor(),
   }">

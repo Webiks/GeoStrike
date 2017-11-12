@@ -2,15 +2,16 @@ import { CharacterData } from '../../types';
 
 export const PLAYER_CHARACTERS: CharacterData[] = [
   {
-    name: 'Steve Rogers',
-    scale: 0.011,
-    model: '/assets/models/captain-america/scene.gltf',
+    name: 'Wolverine',
+    scale: 0.009,
+    model: '/assets/models/v2/wolverine/scene.gltf',
     description: 'Blue Team',
     team: 'BLUE',
-    imageUrl: '/assets/characters/captain-america.png',
-    portraitUrl: '/assets/characters/captain_america_portrait.png',
-    iconUrl: '/assets/icons/captain-america-mark.png',
-    iconDeadUrl: '/assets/icons/captain-america-dead-mark.png',
+    imageUrl: '/assets/characters/wolverine.png',
+    portraitUrl: '/assets/characters/wolverine_portrait.png',
+    iconUrl: '/assets/icons/wolverine-mark.png',
+    iconDeadUrl: '/assets/icons/wolverine-dead-mark.png',
+    fixedHeight: 1
   },
   {
     name: 'Anthony Stark',

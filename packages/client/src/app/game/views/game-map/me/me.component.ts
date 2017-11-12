@@ -161,4 +161,13 @@ export class MeComponent implements OnInit, OnDestroy {
   showMeModel() {
     return this.character.viewState !== ViewState.OVERVIEW && this.character.state !== MeModelState.CONTROLLED;
   }
+
+  getPosition(position) {
+    if (this.characterInfo.fixedHeight) {
+      const cart = Cesium.Cartographic.fromCartesian(position);
+      cart.height += this.characterInfo.fixedHeight;
+      return Cesium.Cartesian3.fromRadians(cart.longitude, cart.latitude, cart.height);
+    }
+    return position;
+  }
 }

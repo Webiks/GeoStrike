@@ -1,9 +1,9 @@
 export const AVAILABLE_CHARACTERS = [
   {
-    name: 'Steve Rogers',
+    name: 'Wolverine',
     description: 'Blue Team',
     team: 'BLUE',
-    imageUrl: '/assets/characters/captain-america.png',
+    imageUrl: '/assets/characters/wolverine.png',
   },
   {
     name: 'Anthony Stark',

@@ -8,7 +8,7 @@ import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleCha
        'blue': me?.team === 'BLUE',
        'red': me?.team === 'RED'
      }">
-        <img [src]="me?.character?.portraitUrl" alt="">
+        <img [src]="me?.character?.portraitUrl" alt="" class="img">
       </div>
       <div *ngIf="!viewer" class="text">{{me?.username}}</div>
       <div *ngIf="viewer" class="text">VIEWER</div>
