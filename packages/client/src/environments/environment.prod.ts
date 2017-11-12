@@ -3,7 +3,7 @@ export const environment = {
   serverUrl: 'cesium-fps-server.now.sh',
   wsSchema: 'wss',
   movement: {
-    runningSpeed: 0.4,
+    runningSpeed: 1.0,
     walkingSpeed: 0.25,
     crawlingSpeed: 0.1,
   },
