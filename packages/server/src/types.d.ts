@@ -41,6 +41,7 @@ export interface CharacterData {
   portraitUrl?: string; 
   iconUrl?: string; 
   iconDeadUrl?: string; 
+  fixedHeight?: number; 
 }
 
 export interface PlayerLocation {

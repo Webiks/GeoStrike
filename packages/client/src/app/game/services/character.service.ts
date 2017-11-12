@@ -29,7 +29,7 @@ export interface CharacterState {
   characterInfo: PlayerFields.Character;
   tileBuilding: any;
   nearbyBuildingPosition: Cartesian3;
-  enteringBuildingPosition: {location: Cartesian3, heading: number, pitch: number};
+  enteringBuildingPosition: { location: Cartesian3, heading: number, pitch: number };
   enteredBuilding: any;
 }
 

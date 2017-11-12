@@ -9,8 +9,9 @@
       "outDir": "dist",
       "assets": [
         {"glob": "**/*", "input": "../node_modules/cesium/Build/Cesium", "output": "./assets/cesium"},
-        "assets",
         {"glob": "**/*", "input": "assets/models/captain-america", "output": "./game/assets/models/captain-america"},
+        {"glob": "**/*", "input": "assets/models/v2", "output": "./game/assets/models/v2"},
+        "assets",
         "favicon.ico"
       ],
       "index": "index.html",

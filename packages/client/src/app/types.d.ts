@@ -41,6 +41,7 @@ export interface CharacterData {
   portraitUrl?: string; 
   iconUrl?: string; 
   iconDeadUrl?: string; 
+  fixedHeight?: number; 
 }
 
 export interface PlayerLocation {
@@ -369,6 +370,7 @@ export namespace PlayerFields {
     portraitUrl?: string; 
     iconUrl?: string; 
     iconDeadUrl?: string; 
+    fixedHeight?: number; 
   } 
 
   export type CurrentLocation = LocationFields.Fragment
