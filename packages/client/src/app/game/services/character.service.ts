@@ -29,7 +29,7 @@ export interface CharacterState {
   characterInfo: PlayerFields.Character;
   tileBuilding: any;
   nearbyBuildingPosition: Cartesian3;
-  enteringBuildingPosition: Cartesian3;
+  enteringBuildingPosition: {location: Cartesian3, heading: number, pitch: number};
   enteredBuilding: any;
 }
 
@@ -145,6 +145,15 @@ export class CharacterService {
   }
 
   set pitch(value: number) {
+    if (this.isCrawling === true && value < -50) {
+      value = -50;
+    }
+    else if (value < -89.9) {
+      value = -89.9;
+    }
+    else if (value > 80.0) {
+      value = 80.0;
+    }
     this.modifyCurrentStateValue({
       pitch: value,
     });
@@ -211,7 +220,7 @@ export class CharacterService {
 
   public enterBuilding() {
     this.tileBuilding.show = false;
-    this.enteringBuildingPosition = this.location;
+    this.enteringBuildingPosition = {location: this.location, heading: this.heading, pitch: this.pitch};
     this.enteredBuilding = this.buildingsService.createBuilding(this.nearbyBuildingPosition);
     this.location = this.nearbyBuildingPosition;
     this.nearbyBuildingPosition = undefined;
@@ -219,9 +228,10 @@ export class CharacterService {
 
   public exitBuilding() {
     this.tileBuilding.show = true;
-    this.buildingsService.removeBuilding(this.enteredBuilding.id);
     this.enteredBuilding = undefined;
-    this.location = this.enteringBuildingPosition;
+    this.location = this.enteringBuildingPosition.location;
+    this.heading = this.enteringBuildingPosition.heading;
+    this.pitch = this.enteringBuildingPosition.pitch;
     this.tileBuilding = undefined;
     this.enteringBuildingPosition = undefined;
     this.nearbyBuildingPosition = undefined;

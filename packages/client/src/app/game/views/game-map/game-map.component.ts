@@ -146,7 +146,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
   }
 
   onMousemove(event: MouseEvent) {
-    if (!this.character.initialized) {
+    if (!this.character.initialized || !document.pointerLockElement) {
       return;
     }
 
@@ -180,7 +180,8 @@ export class GameMapComponent implements OnInit, OnDestroy {
     const pitchDeg = this.character.pitch;
     const pitch = Cesium.Math.toRadians(pitchDeg);
     const heading = Cesium.Math.toRadians(-180 + this.character.heading);
-    this.helperEntityPoint.position = Cesium.Cartesian3.fromRadians(playerHeadCart.longitude, playerHeadCart.latitude, playerHeadCart.height);
+    this.helperEntityPoint.position =
+      Cesium.Cartesian3.fromRadians(playerHeadCart.longitude, playerHeadCart.latitude, playerHeadCart.height);
     this.viewer.zoomTo([this.character.entity, this.helperEntityPoint], new Cesium.HeadingPitchRange(heading, pitch, range));
     this.lastPlayerLocation = this.character.location;
     this.lastPlayerHead = playerHeadCart;
