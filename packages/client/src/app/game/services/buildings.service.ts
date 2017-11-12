@@ -7,13 +7,14 @@ import { Subject } from 'rxjs/Subject';
 export class BuildingsService {
 
   private buildings$ = new Subject<AcNotification>();
-  private counter = 0;
+  private building;
+  private id = '__building-interior';
 
   constructor() {
   }
 
-  private generateId(): string {
-    return 'tileBuilding-' + this.counter++;
+  init() {
+    this.building = this.createBuilding(new Cesium.Cartesian3(1000, 1000, 1000));
   }
 
   getBuildings(): Subject<AcNotification> {
@@ -24,7 +25,6 @@ export class BuildingsService {
     const center: any = Cesium.Cartographic.fromCartesian(position);
     center.latitude = Cesium.Math.toDegrees(center.latitude);
     center.longitude = Cesium.Math.toDegrees(center.longitude);
-    const id = this.generateId();
     const ceilingHeight = GameConfig.roomFloorHeightFromGround + GameConfig.roomHeight;
     const wallSize = GameConfig.wallSize;
     const wallOnWindowSides = GameConfig.wallOnWindowSides;
@@ -32,8 +32,8 @@ export class BuildingsService {
     const windowHeight = GameConfig.windowHeight;
     const floorHeight = GameConfig.roomFloorHeightFromGround;
     const roomOffset = wallSize / 2;
-    const building = {
-      id,
+    this.building = {
+      id: this.id,
       wallsPositions: Cesium.Cartesian3.fromDegreesArrayHeights([
         center.longitude - roomOffset, center.latitude - roomOffset, ceilingHeight,
         center.longitude - roomOffset, center.latitude + roomOffset, ceilingHeight,
@@ -88,11 +88,7 @@ export class BuildingsService {
         center.longitude + roomOffset, center.latitude - roomOffset, floorHeight,
       ]),
     };
-    this.buildings$.next({ id, entity: building, actionType: ActionType.ADD_UPDATE });
-    return building;
-  }
-
-  removeBuilding(id) {
-    this.buildings$.next({ id, actionType: ActionType.DELETE });
+    this.buildings$.next({ id: this.id, entity: this.building, actionType: ActionType.ADD_UPDATE });
+    return this.building;
   }
 }

@@ -18,6 +18,7 @@ export class BuildingsComponent implements OnInit {
   showBuildings = false;
 
   constructor(buildingsService: BuildingsService, private character: CharacterService, private cd: ChangeDetectorRef) {
+    buildingsService.init();
     this.buildings$ = buildingsService.getBuildings();
   }
 
