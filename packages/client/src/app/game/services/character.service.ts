@@ -145,6 +145,15 @@ export class CharacterService {
   }
 
   set pitch(value: number) {
+    if (this.isCrawling === true && value < -50) {
+      value = -50;
+    }
+    else if (value < -89.9) {
+      value = -89.9;
+    }
+    else if (value > 89.9) {
+      value = 89.9;
+    }
     this.modifyCurrentStateValue({
       pitch: value,
     });
