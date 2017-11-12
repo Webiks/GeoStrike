@@ -1,7 +1,7 @@
 export class GameConfig {
   static serverUpdatingInterval = 200;
   static maxEnterableBuildingSize = 3000;
-  static minEnterableBuildingSize = 800;
+  static minEnterableBuildingSize = 1000;
 
   // Building settings
   static innerBuildingColor = new Cesium.Color.fromBytes(40, 40, 40);
