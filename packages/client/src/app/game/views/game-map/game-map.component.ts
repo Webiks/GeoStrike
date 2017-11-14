@@ -138,6 +138,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
     this.elementRef.nativeElement.removeEventListener('mousemove', this.onMousemove);
     this.viewer.scene.preRender.removeEventListener(this.preRenderHandler);
     this.overviewSettings();
+    this.character.updateCharacter();
   }
 
   private overviewSettings() {
