@@ -163,7 +163,9 @@ export class MeComponent implements OnInit, OnDestroy {
   }
 
   getPosition(position) {
-    if (this.character.isCrawling) {
+    if (this.character.state === MeModelState.DEAD) {
+      return position;
+    } else if (this.character.isCrawling) {
       return this.utils.toHeightOffset(position, 0.2);
     } else if (this.characterInfo.fixedHeight) {
       return this.utils.toHeightOffset(position, this.characterInfo.fixedHeight);

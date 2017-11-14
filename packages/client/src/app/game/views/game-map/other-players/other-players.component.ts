@@ -24,18 +24,31 @@ export class OtherPlayersComponent {
     this.isOverview$ = character.viewState$.map(viewState => viewState === ViewState.OVERVIEW);
   }
 
-  interpolatePlayerPosition(playerId, playerPosition) {
+  private fixPosition(position, player: PlayerFields.Fragment) {
+    if (player.state === 'DEAD') {
+      return position;
+    } else if (player.isCrawling) {
+      return this.utils.toHeightOffset(position, 0.2);
+    } else if (player.character.fixedHeight) {
+      return this.utils.toHeightOffset(position, player.character.fixedHeight);
+    }
+    return position;
+  }
+
+  interpolatePlayerPosition(player: PlayerFields.Fragment, playerPosition) {
+    const playerId = player.id;
+    const fixedPosition = this.fixPosition(playerPosition, player);
     const positionProperty = this.playersPositionMap.get(playerId);
     if (!positionProperty) {
       const result = InterpolationService.interpolate({
-        data: playerPosition,
+        data: fixedPosition,
       }, InterpolationType.POSITION);
       this.playersPositionMap.set(playerId, result);
       return result;
     }
     else {
       return InterpolationService.interpolate({
-        data: playerPosition,
+        data: fixedPosition,
         cesiumSampledProperty: positionProperty,
       });
     }
@@ -47,7 +60,7 @@ export class OtherPlayersComponent {
       return this.utils.getOrientation(location, heading, 0, roll);
     } else {
       const playerHeading = player.type === 'PLAYER' ? heading : heading + 90;
-      const roll = player.isCrawling ? 85 : 0;
+      const roll = player.isCrawling ? 90 : 0;
       return this.utils.getOrientation(location, playerHeading, 0, roll);
     }
   }
@@ -61,7 +74,7 @@ export class OtherPlayersComponent {
   }
 
   getPlayerIcon(player: PlayerFields.Fragment) {
-    if (player.state === 'DEAD' && player.character.iconDeadUrl){
+    if (player.state === 'DEAD' && player.character.iconDeadUrl) {
       return player.character.iconDeadUrl;
     }
     else if (player.character.iconUrl) {
