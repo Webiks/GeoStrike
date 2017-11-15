@@ -49,5 +49,4 @@ export class GunIndicatorComponent implements OnInit, OnDestroy {
         .subscribe(shotEntity => this.gunShots$.next(shotEntity))
     });
   }
-
 }

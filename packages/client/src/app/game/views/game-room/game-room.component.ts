@@ -20,6 +20,8 @@ export class GameRoomComponent implements OnInit, OnDestroy {
   players;
   gameCode;
   me: Me;
+  isViewer: boolean;
+
   private gameDataSubscription: Subscription;
   private paramsSubscription;
 
@@ -47,6 +49,7 @@ export class GameRoomComponent implements OnInit, OnDestroy {
                 this.players = this.getPlayers(this.game);
                 this.me = this.game.me;
 
+                this.isViewer = this.me['__typename'] === 'Viewer';
                 if (this.game && this.game.state === 'ACTIVE') {
                   this.gameStarted = true;
                   this.goToGameRoom();
