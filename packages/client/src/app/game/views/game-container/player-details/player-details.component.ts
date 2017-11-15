@@ -8,7 +8,7 @@ import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleCha
        'blue': me?.team === 'BLUE',
        'red': me?.team === 'RED'
      }">
-        <img [src]="me?.character?.portraitUrl" alt="" class="img">
+        <img [src]="getPortrait()" alt="" class="img">
       </div>
       <div *ngIf="!viewer" class="text">{{me?.username}}</div>
       <div *ngIf="viewer" class="text">VIEWER</div>
@@ -24,6 +24,15 @@ export class PlayerDetailsComponent implements OnInit, OnChanges {
   @Input() me;
 
   constructor() {
+  }
+
+  getPortrait(){
+    const url =  this.me && this.me.character && this.me.character.portraitUrl;
+    if (url){
+      const urlSplit = url.split('.');
+      return `${urlSplit[0]}_right.${urlSplit[1]}`;
+    }
+    return undefined;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
