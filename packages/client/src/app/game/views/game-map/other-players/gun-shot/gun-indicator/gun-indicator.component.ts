@@ -40,7 +40,6 @@ export class GunIndicatorComponent implements OnInit, OnDestroy {
         .flatMap(p => p)
         .filter(p=> p.type === 'PLAYER')
         .map(player => {
-          console.log(player);
           return {
             id: player.id,
             actionType: ActionType.ADD_UPDATE,
