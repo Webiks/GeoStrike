@@ -82,6 +82,7 @@ export class BackgroundCharacterManager {
       type: CharacterType.BACKGROUND_CHARACTER,
       syncState: 'VALID',
       isCrawling: false,
+      isShooting: false,
     } as IPlayer;
 
     const nextLocationNode = this.getRandomLocation(currentPath.points);

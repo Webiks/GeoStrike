@@ -25,7 +25,7 @@ import { updatePositionMutation } from '../../graphql/update-position.mutation';
 import { ApolloService } from '../../core/configured-apollo/network/apollo.service';
 import { notifyKillMutation } from '../../graphql/notify-kill.mutation';
 import { GameConfig } from './game-config';
-import { CharacterService } from './character.service';
+import { CharacterService, MeModelState } from './character.service';
 import { joinAsViewer } from '../../graphql/join-as-viewer.mutation';
 import { gameNotificationsSubscription } from '../../graphql/game-notifications.subscription';
 import { notifyShotMutation } from '../../graphql/notify-shot.mutation';
@@ -63,7 +63,7 @@ export class GameService {
   getCurrentGameData(): Observable<GameData.Subscription> {
     const queryRes = this.apollo.subscribe({
       query: gameDataSubscription,
-    });
+    }).share();
 
     return queryRes as Observable<GameData.Subscription>;
   }
@@ -143,6 +143,7 @@ export class GameService {
     const location = this.character.location;
     const heading = this.character.heading;
     const isCrawling = this.character.isCrawling;
+    const isShooting = this.character.state === MeModelState.SHOOTING;
     if (!location || !heading) {
       return;
     }
@@ -155,6 +156,7 @@ export class GameService {
       },
       heading,
       isCrawling,
+      isShooting
     };
   }
 
@@ -165,15 +167,18 @@ export class GameService {
     const oldStatePosition = this.lastStateSentToServer.position;
     const oldStateHeading = this.lastStateSentToServer.heading;
     const oldStateCrawling = this.lastStateSentToServer.isCrawling;
+    const oldStateShooting = this.lastStateSentToServer.isShooting;
     const newStatePosition = state.position;
     const newStateHeading = state.heading;
     const newStateCrawling = state.isCrawling;
+    const newStateShooting = state.isShooting;
     return (
       oldStatePosition.x !== newStatePosition.x ||
       oldStatePosition.y !== newStatePosition.y ||
       oldStatePosition.z !== newStatePosition.z ||
       oldStateHeading !== newStateHeading ||
-      oldStateCrawling !== newStateCrawling
+      oldStateCrawling !== newStateCrawling ||
+      oldStateShooting !== newStateShooting
     );
   }
 
