@@ -63,6 +63,7 @@ export class MeComponent implements OnInit, OnDestroy {
       });
     });
     this.shootSub$ = Observable.fromEvent(document.body, 'click')
+      .filter(() => !!document.pointerLockElement)
       .merge(enterSub$)
       .filter(() => this.character.state === MeModelState.SHOOTING)
       .do(() => this.gameService.notifyShot(this.character.meFromServer.id, this.character.location))
@@ -139,7 +140,7 @@ export class MeComponent implements OnInit, OnDestroy {
   }
 
   getOrientation(location, heading: number, player: CharacterState) {
-    if (this.showMeModel()){
+    if (this.showMeModel()) {
       if (player.state === MeModelState.DEAD) {
         return this.utils.getOrientation(location, heading, 0, 90);
       } else {
