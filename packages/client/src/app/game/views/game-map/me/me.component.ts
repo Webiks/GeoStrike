@@ -142,7 +142,7 @@ export class MeComponent implements OnInit, OnDestroy {
     if (player.state === MeModelState.DEAD) {
       return this.utils.getOrientation(location, heading, 0, 90);
     } else {
-      const roll = this.character.isCrawling ? 85 : 0;
+      const roll = this.character.isCrawling ? 90 : 0;
       return this.utils.getOrientation(location, heading, 0, roll);
     }
   }
@@ -163,10 +163,12 @@ export class MeComponent implements OnInit, OnDestroy {
   }
 
   getPosition(position) {
-    if (this.characterInfo.fixedHeight) {
-      const cart = Cesium.Cartographic.fromCartesian(position);
-      cart.height += this.characterInfo.fixedHeight;
-      return Cesium.Cartesian3.fromRadians(cart.longitude, cart.latitude, cart.height);
+    if (this.character.state === MeModelState.DEAD) {
+      return position;
+    } else if (this.character.isCrawling) {
+      return this.utils.toHeightOffset(position, 0.2);
+    } else if (this.characterInfo.fixedHeight) {
+      return this.utils.toHeightOffset(position, this.characterInfo.fixedHeight);
     }
     return position;
   }

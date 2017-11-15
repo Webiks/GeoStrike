@@ -30,6 +30,12 @@ export class UtilsService {
     return new Cesium.Cartesian3(x, y, z);
   }
 
+  toHeightOffset(position: Cartesian3, offset: number){
+    const cart = Cesium.Cartographic.fromCartesian(position);
+    cart.height += offset;
+    return Cesium.Cartesian3.fromRadians(cart.longitude, cart.latitude, cart.height);
+  }
+
 
   toFixedHeight(cartesian, height = 0) {
     const cart = Cesium.Cartographic.fromCartesian(cartesian);

@@ -1,9 +1,9 @@
 <ac-layer acFor="let player of playersPositions" [context]="this">
   <ac-model-desc *ngIf="!(isOverview$ | async)" props="{
-    heightReference: utils.getClampedToGroundHeightReference(),
+    heightReference: utils.getRelativeToGroundHeightReference(),
     uri: getModel(player),
     scale: getModelScale(player),
-    position: interpolatePlayerPosition(player.id, utils.getPosition(player.currentLocation.location)),
+    position: interpolatePlayerPosition(player, utils.getPosition(player.currentLocation.location)),
     orientation: getOrientation(player.currentLocation.location, player.currentLocation.heading, player),
     runAnimations: player.state !== 'DEAD',
 	}">
