@@ -2,9 +2,9 @@ import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { CharacterService, ViewState } from '../../../../../services/character.service';
 import { Observable } from 'rxjs/Observable';
 import { AcNotification, ActionType } from 'angular-cesium';
-import { OtherPlayersShotService } from '../other-players-shot.service';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
+import { GameService } from '../../../../../services/game.service';
 
 @Component({
   selector: 'gun-indicator',
@@ -19,17 +19,8 @@ export class GunIndicatorComponent implements OnInit, OnDestroy {
 
   constructor(private character: CharacterService,
               private ngZone: NgZone,
-              private otherPlayersShotService: OtherPlayersShotService) {
+              private gameService: GameService) {
     this.isOverview$ = character.viewState$.map(viewState => viewState === ViewState.OVERVIEW);
-  }
-
-  private removeIndicatorTimer(gunShotData) {
-    setTimeout(()=>{
-      this.gunShots$.next({
-        id: gunShotData.id,
-        actionType: ActionType.DELETE,
-      })
-    }, 1000);
   }
 
   ngOnDestroy(): void {
@@ -38,20 +29,21 @@ export class GunIndicatorComponent implements OnInit, OnDestroy {
   }
 
 
-  getGunImage(){
+  getGunImage() {
     return '/assets/icons/gun-marker.png';
   }
 
   ngOnInit() {
-    this.ngZone.runOutsideAngular(()=> {
-      this.gunShotSubscription = this.otherPlayersShotService.subscribeToGunShot()
-        .map(result => result.gunShot)
-        .do(gunShotData => this.removeIndicatorTimer(gunShotData))
-        .map(gunShotData => {
+    this.ngZone.runOutsideAngular(() => {
+      this.gunShotSubscription = this.gameService.getCurrentGameData()
+        .map(result => result.gameData.players)
+        .flatMap(p => p)
+        .filter(p=> p.type === 'PLAYER')
+        .map(player => {
           return {
-            id: gunShotData.id,
+            id: player.id,
             actionType: ActionType.ADD_UPDATE,
-            entity: gunShotData,
+            entity: player,
           }
         })
         .subscribe(shotEntity => this.gunShots$.next(shotEntity))

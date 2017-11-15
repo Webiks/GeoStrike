@@ -24,6 +24,7 @@ export interface Player extends User {
   character: CharacterData; 
   state: PlayerState; 
   isCrawling: boolean; 
+  isShooting: boolean; 
   isMe: boolean; 
   currentLocation: PlayerLocation; 
   team: Team; 
@@ -121,6 +122,7 @@ export interface UpdatePositionMutationArgs {
   position: LocationInput; 
   heading: number; 
   isCrawling: boolean; 
+  isShooting: boolean; 
   skipValidation?: boolean; 
 }
 export interface NotifyKillMutationArgs {
@@ -321,6 +323,7 @@ export namespace UpdatePosition {
     position: LocationInput;
     heading: number;
     isCrawling: boolean;
+    isShooting: boolean;
     skipValidation?: boolean;
   }
 
@@ -357,6 +360,7 @@ export namespace PlayerFields {
     character: Character; 
     state: PlayerState; 
     isCrawling: boolean; 
+    isShooting: boolean; 
     isMe: boolean; 
     id: string; 
     type: CharacterType; 
