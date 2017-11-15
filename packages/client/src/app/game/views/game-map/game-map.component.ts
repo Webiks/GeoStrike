@@ -92,14 +92,14 @@ export class GameMapComponent implements OnInit, OnDestroy {
         this.changeToOverview();
       } else if (this.lastViewState === ViewState.OVERVIEW && newViewState !== ViewState.OVERVIEW) {
 
-        const posWithHeight = Cesium.Cartographic.fromCartesian(this.character.location);
+        const controlledPlayer = this.takeControlService.controlledPlayer || this.character.meFromServer;
+        const posWithHeight = Cesium.Cartographic.fromCartesian(controlledPlayer.currentLocation.location);
         posWithHeight.height = 5;
 
         this.viewer.camera.flyTo({
           destination: Cesium.Cartesian3.fromRadians(posWithHeight.longitude, posWithHeight.latitude, posWithHeight.height),
           complete: () => {
             this.viewerOptions.setFpvCameraOptions(this.viewer);
-            const controlledPlayer = this.takeControlService.controlledPlayer || this.character.meFromServer;
             this.startFirstPersonMode(controlledPlayer);
           }
         });

@@ -15,7 +15,7 @@ import { TakeControlService } from '../../../services/take-control.service';
 @Component({
   selector: 'viewer-controls',
   template: `
-    <div class="control-container radius-border">
+    <div class="control-container radius-border" *ngIf="isInFpvMode()|| takeControlService.selectedPlayerToControl">
       <div class="control-btn" [class.disable]="!takeControlService.controlledPlayer" (click)="removeControl()">VIEWER
       </div>
       <div class="control-btn radius-border"

@@ -98,11 +98,12 @@ export class GamesManager {
   addViewerToGame(gameId: string, username: string): IViewer {
     const game = this.getGameById(gameId);
     const playerId = v4();
+    const finalUsername = this.validateUsername(username, game);
     const playerToken = sign(
       {
         gameId: game.gameId,
         playerId,
-        username,
+        username: finalUsername,
       },
       TOKENS_SECRET
     );
@@ -110,7 +111,7 @@ export class GamesManager {
     const viewer = {
       token: playerToken,
       playerId,
-      username,
+      username: finalUsername,
     };
     game.viewers.push(viewer);
     return viewer;

@@ -10,8 +10,7 @@ import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleCha
      }">
         <img [src]="getPortrait()" alt="" class="img">
       </div>
-      <div *ngIf="!viewer" class="text">{{me?.username}}</div>
-      <div *ngIf="viewer" class="text">VIEWER</div>
+      <div class="text">{{me?.username}}</div>
     </div>
   `,
   styleUrls: ['./player-details.component.scss'],

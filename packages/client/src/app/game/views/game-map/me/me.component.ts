@@ -139,16 +139,18 @@ export class MeComponent implements OnInit, OnDestroy {
   }
 
   getOrientation(location, heading: number, player: CharacterState) {
-    if (player.state === MeModelState.DEAD) {
-      return this.utils.getOrientation(location, heading, 0, 90);
-    } else {
-      const roll = this.character.isCrawling ? 90 : 0;
-      return this.utils.getOrientation(location, heading, 0, roll);
+    if (this.showMeModel()){
+      if (player.state === MeModelState.DEAD) {
+        return this.utils.getOrientation(location, heading, 0, 90);
+      } else {
+        const roll = this.character.isCrawling ? 90 : 0;
+        return this.utils.getOrientation(location, heading, 0, roll);
+      }
     }
   }
 
   get characterInfo(): CharacterData {
-    return this.character.currentStateValue.characterInfo;
+    return this.character.currentStateValue.characterInfo || {} as CharacterData;
   }
 
   getColor() {

@@ -10,7 +10,9 @@ export class SoundService {
   }
 
   gunShot(volume = 1.0) {
-    this.gunShotSound.pause();
+    if (!this.gunShotSound.paused) {
+      this.gunShotSound.pause();
+    }
     this.gunShotSound.volume = volume;
     this.gunShotSound.currentTime = 0;
     this.gunShotSound.play();

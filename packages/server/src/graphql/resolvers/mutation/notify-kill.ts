@@ -17,7 +17,7 @@ export const notifyKill = (rootValue, { playerId }, { games, game, player }: IGr
   if (!shootingPlayer || !shootingPlayer.team || !shotPlayer || !shotPlayer.team ||
     shotPlayerState === 'DEAD' ||
     shotPlayer.type === CharacterType.BACKGROUND_CHARACTER) {
-    return player;
+    return shotPlayer;
   }
   const killingPlayerTeamColor = shootingPlayer.team.toString().toLowerCase();
   const killedPlayerTeamColor = shotPlayer.team.toString().toLowerCase();
@@ -27,5 +27,5 @@ export const notifyKill = (rootValue, { playerId }, { games, game, player }: IGr
 
   pubsub.publish(ESubscriptionTopics.GAME_NOTIFICATIONS, { gameNotifications: { message, gameId: game.gameId } });
 
-  return player;
+  return shotPlayer;
 };
