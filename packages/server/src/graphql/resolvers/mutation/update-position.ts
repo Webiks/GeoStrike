@@ -1,7 +1,7 @@
 import { IGraphQLContext } from '../../context';
 import { UpdatePositionMutationArgs } from '../../../types';
 
-export const updatePosition = (rootValue, {position, heading, isCrawling, isShooting, skipValidation}: UpdatePositionMutationArgs, {games, game, player}: IGraphQLContext) => {
+export const updatePosition = (rootValue, {position, heading, isCrawling, isShooting, enteringBuildingPosition, skipValidation}: UpdatePositionMutationArgs, {games, game, player}: IGraphQLContext) => {
   if (!game || !player) {
     return null;
   }
@@ -15,7 +15,7 @@ export const updatePosition = (rootValue, {position, heading, isCrawling, isShoo
   if (game.controlledPlayersMap.has(player.playerId)) {
     playerId = game.controlledPlayersMap.get(player.playerId).playerId;
   }
-  const updatedPlayer = games.updatePlayerPosition(game.gameId, playerId, position, heading, isCrawling,isShooting, skipValidation);
+  const updatedPlayer = games.updatePlayerPosition(game.gameId, playerId, position, heading, isCrawling, isShooting, enteringBuildingPosition, skipValidation);
 
   return updatedPlayer;
 };

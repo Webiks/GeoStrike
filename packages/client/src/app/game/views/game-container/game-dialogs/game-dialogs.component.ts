@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, NgZone, OnInit } from '@angular/core';
 import { YouWinDialogComponent } from '../../you-win-dialog/you-win-dialog.component';
 import { Team } from '../../../../types';
 import { EndGameDialogComponent } from '../../end-game-dialog/end-game-dialog.component';
@@ -25,7 +25,8 @@ export class GameDialogsComponent implements OnInit {
 
   constructor(private dialog: MatDialog,
               private character: CharacterService,
-              private cd: ChangeDetectorRef) {
+              private cd: ChangeDetectorRef,
+              private ngZone: NgZone) {
   }
 
   ngOnInit() {
@@ -39,7 +40,7 @@ export class GameDialogsComponent implements OnInit {
       } else if (characterState && characterState.state === MeModelState.CONTROLLED && !this.benchedDialogOpen && !isOverview) {
         this.openBenchedDialog(characterState.characterInfo.name);
       } else if (characterState && this.benchedDialogOpen && characterState.state !== MeModelState.CONTROLLED) {
-        this.benchedDialog.close();
+        this.ngZone.run(() => this.benchedDialog.close());
         this.benchedDialogOpen = false;
       }
 
@@ -58,17 +59,19 @@ export class GameDialogsComponent implements OnInit {
         }
         this.cd.detectChanges();
       }
-    })
+    });
   }
 
 
   private openBenchedDialog(playerName) {
     this.benchedDialogOpen = true;
-    this.benchedDialog = this.dialog.open(BenchedDialogComponent, {
-      height: '80%',
-      width: '80%',
-      disableClose: true,
-      data: {playerName},
+    this.ngZone.run(() => {
+      this.benchedDialog = this.dialog.open(BenchedDialogComponent, {
+        height: '80%',
+        width: '80%',
+        disableClose: true,
+        data: { playerName },
+      });
     });
     this.benchedDialog.afterClosed().subscribe((toOverView) => {
       if (toOverView) {
@@ -80,29 +83,33 @@ export class GameDialogsComponent implements OnInit {
 
   private openWinDialog(losingTeam: Team) {
     this.wonDialogOpen = true;
-    this.dialog.open(YouWinDialogComponent, {
-      height: '80%',
-      width: '80%',
-      disableClose: true,
-      data: {losingTeam},
+    this.ngZone.run(() => {
+      this.dialog.open(YouWinDialogComponent, {
+        height: '80%',
+        width: '80%',
+        disableClose: true,
+        data: { losingTeam },
+      });
     });
   }
 
   private openGameOverDialog(gameOver: boolean, losingTeam?: Team) {
     this.gameoverDialogOpen = true;
-    this.dialog.open(EndGameDialogComponent, {
-      height: '80%',
-      width: '80%',
-      disableClose: true,
-      data: {
-        gameOver,
-        losingTeam
-      }
-    }).afterClosed().subscribe((toOverView) => {
-      if (toOverView) {
-        this.gameoverDialogOpen = false;
-        this.character.viewState = ViewState.OVERVIEW;
-      }
+    this.ngZone.run(() => {
+      this.dialog.open(EndGameDialogComponent, {
+        height: '80%',
+        width: '80%',
+        disableClose: true,
+        data: {
+          gameOver,
+          losingTeam
+        }
+      }).afterClosed().subscribe((toOverView) => {
+        if (toOverView) {
+          this.gameoverDialogOpen = false;
+          this.character.viewState = ViewState.OVERVIEW;
+        }
+      });
     });
   }
 

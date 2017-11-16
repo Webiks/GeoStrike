@@ -135,7 +135,7 @@ export class GameService {
     this.lastStateSentToServer = state;
     const subscription = this.apollo.mutate<UpdatePosition.Mutation>({
       mutation: updatePositionMutation,
-      variables: {...state, skipValidation},
+      variables: { ...state, skipValidation },
     }).subscribe(() => subscription.unsubscribe());
   }
 
@@ -144,6 +144,7 @@ export class GameService {
     const heading = this.character.heading;
     const isCrawling = this.character.isCrawling;
     const isShooting = this.character.state === MeModelState.SHOOTING;
+    const enteringBuildingPosition = this.character.enteringBuildingPosition && this.character.enteringBuildingPosition.location;
     if (!location || !heading) {
       return;
     }
@@ -156,7 +157,8 @@ export class GameService {
       },
       heading,
       isCrawling,
-      isShooting
+      isShooting,
+      enteringBuildingPosition,
     };
   }
 
@@ -168,17 +170,20 @@ export class GameService {
     const oldStateHeading = this.lastStateSentToServer.heading;
     const oldStateCrawling = this.lastStateSentToServer.isCrawling;
     const oldStateShooting = this.lastStateSentToServer.isShooting;
+    const oldEnteringBuildingPosition = this.lastStateSentToServer.EnteringBuildingPosition;
     const newStatePosition = state.position;
     const newStateHeading = state.heading;
     const newStateCrawling = state.isCrawling;
     const newStateShooting = state.isShooting;
+    const newStateEnteringBuildingPosition = state.enteringBuildingPosition;
     return (
       oldStatePosition.x !== newStatePosition.x ||
       oldStatePosition.y !== newStatePosition.y ||
       oldStatePosition.z !== newStatePosition.z ||
       oldStateHeading !== newStateHeading ||
       oldStateCrawling !== newStateCrawling ||
-      oldStateShooting !== newStateShooting
+      oldStateShooting !== newStateShooting ||
+      oldEnteringBuildingPosition !== newStateEnteringBuildingPosition
     );
   }
 

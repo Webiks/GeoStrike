@@ -1,4 +1,4 @@
-<ac-3d-tile-layer *ngIf="loadTiles && !hideWorld"
+<ac-3d-tile-layer #tiles
     [options]="{
       maximumMemoryUsage: 1024,
       modelMatrix: getTilesMatrix(),

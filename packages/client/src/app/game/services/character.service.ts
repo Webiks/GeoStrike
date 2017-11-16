@@ -15,6 +15,7 @@ export enum MeModelState {
 export enum ViewState {
   FPV,
   SEMI_FPV,
+  SEMI_FPV_NOT_CONTROLLED,
   OVERVIEW,
 }
 
@@ -28,9 +29,10 @@ export interface CharacterState {
   team: Team;
   characterInfo: PlayerFields.Character;
   tileBuilding: any;
+  enteredBuilding: any;
   nearbyBuildingPosition: Cartesian3;
   enteringBuildingPosition: { location: Cartesian3, heading: number, pitch: number };
-  enteredBuilding: any;
+  isInsideBuilding: boolean;
 }
 
 @Injectable()
@@ -111,7 +113,7 @@ export class CharacterService {
     return this._character && this._character.getValue() && this._character.getValue().nearbyBuildingPosition;
   }
 
-  get enteringBuildingPosition() {
+  get enteringBuildingPosition(): { location: Cartesian3, heading: number, pitch: number } {
     return this._character && this._character.getValue() && this._character.getValue().enteringBuildingPosition;
   }
 
@@ -183,7 +185,7 @@ export class CharacterService {
     });
   }
 
-  set enteringBuildingPosition(value: any) {
+  set enteringBuildingPosition(value: { location: Cartesian3, heading: number, pitch: number }) {
     this.modifyCurrentStateValue({
       enteringBuildingPosition: value,
     });
@@ -201,6 +203,41 @@ export class CharacterService {
     });
   }
 
+  get isInsideBuilding(): boolean {
+    return this._character.getValue().isInsideBuilding;
+
+  }
+
+  set isInsideBuilding(value: boolean) {
+    if (value) {
+      if (this.tileBuilding) {
+        this.tileBuilding.show = false;
+      }
+      this.enteringBuildingPosition = { location: this.location, heading: this.heading, pitch: this.pitch };
+      this.enteredBuilding = this.buildingsService.createBuilding(this.nearbyBuildingPosition);
+      this.location = this.nearbyBuildingPosition;
+      this.nearbyBuildingPosition = undefined;
+      this.modifyCurrentStateValue({
+        isInsideBuilding: value,
+      });
+    }
+    else if (this.isInsideBuilding) {
+      if (this.tileBuilding) {
+        this.tileBuilding.show = true;
+      }
+      this.enteredBuilding = undefined;
+      this.location = this.enteringBuildingPosition.location;
+      this.heading = this.enteringBuildingPosition.heading;
+      this.pitch = this.enteringBuildingPosition.pitch;
+      this.tileBuilding = undefined;
+      this.enteringBuildingPosition = undefined;
+      this.nearbyBuildingPosition = undefined;
+      this.modifyCurrentStateValue({
+        isInsideBuilding: value
+      });
+    }
+  }
+
   updateCharacter() {
     this.state = this.state;
   }
@@ -210,24 +247,5 @@ export class CharacterService {
       this.location = player.currentLocation.location;
       this.heading = player.currentLocation.heading;
     }
-  }
-
-  public enterBuilding() {
-    this.tileBuilding.show = false;
-    this.enteringBuildingPosition = {location: this.location, heading: this.heading, pitch: this.pitch};
-    this.enteredBuilding = this.buildingsService.createBuilding(this.nearbyBuildingPosition);
-    this.location = this.nearbyBuildingPosition;
-    this.nearbyBuildingPosition = undefined;
-  }
-
-  public exitBuilding() {
-    this.tileBuilding.show = true;
-    this.enteredBuilding = undefined;
-    this.location = this.enteringBuildingPosition.location;
-    this.heading = this.enteringBuildingPosition.heading;
-    this.pitch = this.enteringBuildingPosition.pitch;
-    this.tileBuilding = undefined;
-    this.enteringBuildingPosition = undefined;
-    this.nearbyBuildingPosition = undefined;
   }
 }

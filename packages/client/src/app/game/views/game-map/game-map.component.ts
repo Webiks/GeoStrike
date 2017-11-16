@@ -83,11 +83,9 @@ export class GameMapComponent implements OnInit, OnDestroy {
         this.character.viewState = ViewState.SEMI_FPV;
         this.startFirstPersonMode(game.me);
       }
-
     });
 
     this.character.viewState$.subscribe((newViewState) => {
-
       if (this.lastViewState !== ViewState.OVERVIEW && newViewState === ViewState.OVERVIEW) {
         this.changeToOverview();
       } else if (this.lastViewState === ViewState.OVERVIEW && newViewState !== ViewState.OVERVIEW) {
@@ -95,15 +93,20 @@ export class GameMapComponent implements OnInit, OnDestroy {
         const controlledPlayer = this.takeControlService.controlledPlayer || this.character.meFromServer;
         const posWithHeight = Cesium.Cartographic.fromCartesian(controlledPlayer.currentLocation.location);
         posWithHeight.height = 5;
+        let initPlayer = true;
+        if (newViewState === ViewState.SEMI_FPV_NOT_CONTROLLED) {
+          initPlayer = false;
+          this.character.viewState = ViewState.SEMI_FPV;
+          this.lastViewState = ViewState.SEMI_FPV_NOT_CONTROLLED;
+        }
 
         this.viewer.camera.flyTo({
           destination: Cesium.Cartesian3.fromRadians(posWithHeight.longitude, posWithHeight.latitude, posWithHeight.height),
           complete: () => {
             this.viewerOptions.setFpvCameraOptions(this.viewer);
-            this.startFirstPersonMode(controlledPlayer);
+            this.startFirstPersonMode(controlledPlayer, initPlayer);
           }
         });
-
       }
 
       this.lastViewState = newViewState;
@@ -111,17 +114,20 @@ export class GameMapComponent implements OnInit, OnDestroy {
 
   }
 
-  private startFirstPersonMode(player: PlayerFields.Fragment) {
-    this.character.initCharacter({
-      id: 'me',
-      location: this.utils.getPosition(player.currentLocation.location),
-      heading: player.currentLocation.heading,
-      pitch: GameMapComponent.DEFAULT_PITCH,
-      state: player.state === 'DEAD' ? MeModelState.DEAD : MeModelState.WALKING,
-      team: player.team,
-      isCrawling: false,
-      characterInfo: player.character
-    });
+  private startFirstPersonMode(player: PlayerFields.Fragment, initCharacter = true) {
+    if (initCharacter) {
+      this.character.initCharacter({
+        id: 'me',
+        location: player.enteringBuildingPosition ?
+          this.utils.getPosition(player.enteringBuildingPosition) : this.utils.getPosition(player.currentLocation.location),
+        heading: player.currentLocation.heading,
+        pitch: GameMapComponent.DEFAULT_PITCH,
+        state: player.state === 'DEAD' ? MeModelState.DEAD : MeModelState.WALKING,
+        team: player.team,
+        isCrawling: false,
+        characterInfo: player.character
+      });
+    }
     this.gameService.startServerUpdatingLoop();
 
     this.viewer.scene.preRender.addEventListener(this.preRenderHandler);

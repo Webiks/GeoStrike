@@ -47,6 +47,7 @@ export interface IPlayer {
   team: Team;
   syncState: PlayerSyncState;
   type: CharacterType;
+  enteringBuildingPosition?: ICartesian3Location | undefined;
 }
 
 export interface IGameObject {
@@ -234,6 +235,7 @@ export class GamesManager {
                        heading: number,
                        isCrawling: boolean,
                        isShooting: boolean,
+                       enteringBuildingPosition: ICartesian3Location,
                        skipValidation = false) {
     const game = this.getGameById(gameId);
     const player = game.playersMap.get(playerId);
@@ -253,6 +255,7 @@ export class GamesManager {
         player.heading = heading;
         player.isCrawling = isCrawling;
         player.isShooting = isShooting;
+        player.enteringBuildingPosition = enteringBuildingPosition;
       } else {
         player.syncState = 'INVALID';
       }

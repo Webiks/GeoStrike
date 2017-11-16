@@ -1,8 +1,8 @@
 import { Injectable, NgZone } from '@angular/core';
 
 export interface KeyboardInput {
-  callback?: (event: KeyboardEvent) => void,
-  description: string,
+  callback?: (event: KeyboardEvent) => void;
+  description: string;
 }
 
 @Injectable()
@@ -22,7 +22,7 @@ export class KeyboardKeysService {
       document.addEventListener('keydown', (keyEvent: KeyboardEvent) => {
         if (this.eventMap.has(keyEvent.code)) {
           const keyInput = this.eventMap.get(keyEvent.code);
-          if (keyInput.callback){
+          if (keyInput.callback) {
             keyInput.callback(keyEvent);
           }
         }
@@ -30,12 +30,12 @@ export class KeyboardKeysService {
     });
   }
 
-  registerKeyBoardEvent(keyName: string, description: string,callback: (event: KeyboardEvent) => void) {
-    this.eventMap.set(keyName, {callback, description});
+  registerKeyBoardEvent(keyName: string, description: string, callback: (event: KeyboardEvent) => void) {
+    this.eventMap.set(keyName, { callback, description });
   }
 
   registerKeyBoardEventDescription(keyName: string, description: string) {
-    this.eventMap.set(keyName, {description});
+    this.eventMap.set(keyName, { description });
   }
 
 }
