@@ -16,6 +16,7 @@ export class GunIndicatorComponent implements OnInit, OnDestroy {
   gunShots$: Subject<AcNotification> = new Subject();
   gunShotSubscription: Subscription;
   isOverview$: Observable<boolean>;
+  eyeOffset = new Cesium.Cartesian3(0.0, 0.0, -10.0 );
 
   constructor(private character: CharacterService,
               private ngZone: NgZone,
@@ -36,6 +37,7 @@ export class GunIndicatorComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.ngZone.runOutsideAngular(() => {
       this.gunShotSubscription = this.gameService.getCurrentGameData()
+        .filter(()=> this.character.viewState === ViewState.OVERVIEW)
         .map(result => result.gameData.players)
         .flatMap(p => p)
         .filter(p=> p.type === 'PLAYER')
@@ -46,7 +48,9 @@ export class GunIndicatorComponent implements OnInit, OnDestroy {
             entity: player,
           }
         })
-        .subscribe(shotEntity => this.gunShots$.next(shotEntity))
+        .subscribe(shotEntity => {
+          this.gunShots$.next(shotEntity)
+        })
     });
   }
 }
