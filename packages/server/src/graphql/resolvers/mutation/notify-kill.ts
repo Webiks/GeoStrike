@@ -22,8 +22,12 @@ export const notifyKill = (rootValue, { playerId }, { games, game, player }: IGr
   const killingPlayerTeamColor = shootingPlayer.team.toString().toLowerCase();
   const killedPlayerTeamColor = shotPlayer.team.toString().toLowerCase();
 
-  const message =
+  let message =
     `<span style="color:${killingPlayerTeamColor}">${shootingPlayer.username}</span> <span>has killed</span> <span style="color:${killedPlayerTeamColor}">${shotPlayer.username}</span>`;
+  if (playerId === player.playerId){
+    message =
+      `<span style="color: white">${shootingPlayer.username} left the game</span>`;
+  }
 
   pubsub.publish(ESubscriptionTopics.GAME_NOTIFICATIONS, { gameNotifications: { message, gameId: game.gameId } });
 
