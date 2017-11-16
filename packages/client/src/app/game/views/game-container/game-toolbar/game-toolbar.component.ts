@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { HowToPlayDialogComponent } from '../../how-to-play-dialog/how-to-play-dialog.component';
 import { MatDialog, MatDialogConfig } from '@angular/material';
+import { GameService } from '../../../services/game.service';
+import { CharacterService } from '../../../services/character.service';
 
 @Component({
   selector: 'game-toolbar',
@@ -35,7 +37,9 @@ export class GameToolbarComponent implements OnInit {
   mute = false;
   fullScreenIcon = 'full-screen';
 
-  constructor(private  dialog: MatDialog) {
+  constructor(private  dialog: MatDialog,
+              private gameService: GameService,
+              private character: CharacterService) {
   }
 
   ngOnInit() {
@@ -79,6 +83,8 @@ export class GameToolbarComponent implements OnInit {
   }
 
   exitGame() {
+    const killSubscription = this.gameService.notifyKill(this.character.meFromServer.id)
+      .subscribe(() => killSubscription.unsubscribe());
     location.href = '/';
   }
 
