@@ -52,6 +52,7 @@ export class GameDialogsComponent implements OnInit {
         const loseTeam: Team = winingTeam === 'RED' ? 'BLUE' : 'RED';
 
         const isViewer = this.character.meFromServer['__typename'] === 'Viewer';
+        this.dialog.closeAll();
         if (isViewer || winingTeam === this.character.currentStateValue.team) {
           this.openWinDialog(loseTeam);
         } else {
