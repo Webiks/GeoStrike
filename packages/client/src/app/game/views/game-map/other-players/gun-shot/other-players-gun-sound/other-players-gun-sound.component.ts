@@ -23,6 +23,8 @@ export class OtherPlayersGunSoundComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.ngZone.runOutsideAngular(() => {
       this.shotSubscription = this.otherPlayersGunShotService.subscribeToGunShot().subscribe((data) => {
+        const shotTime = window['shotTime'];
+        console.log('round trip time: ' + (performance.now() -shotTime)  + ' ms');
         if (this.character.viewState !== ViewState.OVERVIEW) {
           const distanceToShot = Cesium.Cartesian3.distance(this.character.location, data.gunShot.shotPosition);
 
@@ -32,7 +34,7 @@ export class OtherPlayersGunSoundComponent implements OnInit, OnDestroy {
             volume = 1 - factor;
           }
 
-          this.soundService.gunShot(volume);
+          // this.soundService.gunShot(volume);
         }
       });
     });

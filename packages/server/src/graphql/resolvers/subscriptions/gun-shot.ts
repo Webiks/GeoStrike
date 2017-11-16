@@ -16,10 +16,8 @@ export const gunShot = {
         return false;
       }
 
-      // console.log('publish' + payload.gunShot.gameId === context.game.gameId && payload.gunShot.byPlayer.playerId !== context.player.playerId);
-      // console.log('playerId ' + payload.gunShot.byPlayer.playerId,'  ',context.player.playerId);
       // Send to all players in the same game except the player that made the shot
-      return payload.gunShot.gameId === context.game.gameId && payload.gunShot.byPlayer.playerId !== context.player.playerId;
+      return payload.gunShot.gameId === context.game.gameId;
     }
   )
 };

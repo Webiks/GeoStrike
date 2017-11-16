@@ -192,6 +192,7 @@ export class GameService {
   }
 
   notifyShot(byPlayerId, playerPosition: Cartesian3) {
+    window['shotTime'] = performance.now();
     const sub = this.apollo.mutate<NotifyShot.Mutation>({
       mutation: notifyShotMutation,
       variables: {
