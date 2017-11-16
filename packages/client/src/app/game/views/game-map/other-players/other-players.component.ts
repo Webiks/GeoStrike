@@ -74,13 +74,21 @@ export class OtherPlayersComponent {
   }
 
   getPlayerIcon(player: PlayerFields.Fragment) {
-    if (player.state === 'DEAD' && player.character.iconDeadUrl) {
-      return player.character.iconDeadUrl;
+    const url =  player.character && player.character.iconUrl;
+    if (url){
+      const urlSplit = url.split('.');
+      let postfix = '';
+      if (player.state === 'DEAD' ) {
+        postfix = '-dead'
+      }
+      if (player.isMe) {
+        postfix += '-me'
+      }
+
+      return `${urlSplit[0]}${postfix}.${urlSplit[1]}`;
+    } else {
+      return '/assets/icons/grey-mark.png';
     }
-    else if (player.character.iconUrl) {
-      return player.character.iconUrl;
-    }
-    return '/assets/icons/grey-mark.png';
   }
 
   runAnimation(player: PlayerFields.Fragment) {
