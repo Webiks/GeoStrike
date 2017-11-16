@@ -5,6 +5,7 @@ import { environment } from '../../../../../environments/environment';
 import { KeyboardKeysService } from '../../../../core/services/keyboard-keys.service';
 import { GameService } from '../../../services/game.service';
 import { CollisionDetectorService } from '../../../services/collision-detector.service';
+import { TakeControlService } from '../../../services/take-control.service';
 
 const LookDirection = {
   Up: 'ArrowUp',
@@ -14,10 +15,10 @@ const LookDirection = {
 };
 
 const LookDirectionsDelta = {
-  [LookDirection.Up]: {field: 'pitch', value: 1},
-  [LookDirection.Down]: {field: 'pitch', value: -1},
-  [LookDirection.Left]: {field: 'heading', value: -1},
-  [LookDirection.Right]: {field: 'heading', value: 1},
+  [LookDirection.Up]: { field: 'pitch', value: 1 },
+  [LookDirection.Down]: { field: 'pitch', value: -1 },
+  [LookDirection.Left]: { field: 'heading', value: -1 },
+  [LookDirection.Right]: { field: 'heading', value: 1 },
 };
 
 const MoveDirection = {
@@ -50,7 +51,8 @@ export class KeyboardControlComponent implements OnInit {
               private keyboardKeysService: KeyboardKeysService,
               private gameService: GameService,
               private collisionDetector: CollisionDetectorService,
-              private ngZone: NgZone) {
+              private ngZone: NgZone,
+              private takeControlService: TakeControlService) {
     this.viewer = cesiumService.getViewer();
   }
 
@@ -183,7 +185,12 @@ export class KeyboardControlComponent implements OnInit {
     if (!isViewer && this.character.viewState === ViewState.OVERVIEW) {
       this.character.viewState = ViewState.SEMI_FPV_NOT_CONTROLLED;
     } else {
-      this.character.viewState = ViewState.OVERVIEW;
+      if (this.takeControlService.controlledPlayer) {
+        this.takeControlService.removePlayerControl();
+      }
+      else {
+        this.character.viewState = ViewState.OVERVIEW;
+      }
     }
   }
 
@@ -221,9 +228,9 @@ export class KeyboardControlComponent implements OnInit {
       [LookDirection.Right]: this.buildLookConfig(LookDirection.Right),
       [LookDirection.Down]: this.buildLookConfig(LookDirection.Down),
     };
-    !environment.controls.disableBackward && Object.assign(keyboardDefinitions, {[MoveDirection.Backward]: this.buildMovementConfig(MoveDirection.Backward)});
-    !environment.controls.disableLeft && Object.assign(keyboardDefinitions, {[MoveDirection.Right]: this.buildMovementConfig(MoveDirection.Right)});
-    !environment.controls.disableRight && Object.assign(keyboardDefinitions, {[MoveDirection.Left]: this.buildMovementConfig(MoveDirection.Left)});
+    !environment.controls.disableBackward && Object.assign(keyboardDefinitions, { [MoveDirection.Backward]: this.buildMovementConfig(MoveDirection.Backward) });
+    !environment.controls.disableLeft && Object.assign(keyboardDefinitions, { [MoveDirection.Right]: this.buildMovementConfig(MoveDirection.Right) });
+    !environment.controls.disableRight && Object.assign(keyboardDefinitions, { [MoveDirection.Left]: this.buildMovementConfig(MoveDirection.Left) });
     return keyboardDefinitions;
   }
 
