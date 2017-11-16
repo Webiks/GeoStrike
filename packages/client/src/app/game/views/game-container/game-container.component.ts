@@ -115,9 +115,11 @@ export class GameContainerComponent implements OnInit, OnDestroy {
         this.character.state = MeModelState.DEAD;
       } else if (this.me.state === 'CONTROLLED') {
         this.character.state = MeModelState.CONTROLLED;
+        this.character.isInsideBuilding = false;
         // from controlled to normal state
       } else if (this.character.state === MeModelState.CONTROLLED && this.me.state === 'ALIVE') {
         this.character.state = MeModelState.WALKING;
+        this.character.viewState = ViewState.OVERVIEW;
         this.character.viewState = ViewState.SEMI_FPV;
 
         this.otherPlayers$.next({

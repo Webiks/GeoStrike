@@ -181,7 +181,7 @@ export class KeyboardControlComponent implements OnInit {
       this.character.state = MeModelState.WALKING;
     }
     if (!isViewer && this.character.viewState === ViewState.OVERVIEW) {
-      this.character.viewState = ViewState.SEMI_FPV;
+      this.character.viewState = ViewState.SEMI_FPV_NOT_CONTROLLED;
     } else {
       this.character.viewState = ViewState.OVERVIEW;
     }
@@ -259,11 +259,11 @@ export class KeyboardControlComponent implements OnInit {
     this.keyboardKeysService.registerKeyBoardEvent('KeyE', 'Enter Nearby Building',
       (keyEvent: KeyboardEvent) => {
         if (this.character.enteredBuilding) {
-          this.character.exitBuilding();
+          this.character.isInsideBuilding = false;
           this.gameService.updateServerOnPosition(true);
 
         } else if (this.character.nearbyBuildingPosition) {
-          this.character.enterBuilding();
+          this.character.isInsideBuilding = true;
           this.gameService.updateServerOnPosition(true);
         }
       });

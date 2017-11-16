@@ -30,6 +30,7 @@ export interface Player extends User {
   team: Team; 
   syncState: PlayerSyncState; 
   type: CharacterType; 
+  enteringBuildingPosition?: PlayerLocation; 
 }
 
 export interface CharacterData {
@@ -123,6 +124,7 @@ export interface UpdatePositionMutationArgs {
   heading: number; 
   isCrawling: boolean; 
   isShooting: boolean; 
+  enteringBuildingPosition?: LocationInput; 
   skipValidation?: boolean; 
 }
 export interface NotifyKillMutationArgs {

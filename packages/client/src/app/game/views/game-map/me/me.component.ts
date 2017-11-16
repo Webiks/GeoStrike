@@ -1,4 +1,4 @@
-import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActionType, CesiumService } from 'angular-cesium';
 import { CharacterService, CharacterState, MeModelState, ViewState } from '../../../services/character.service';
 import { UtilsService } from '../../../services/utils.service';
@@ -28,8 +28,10 @@ export class MeComponent implements OnInit, OnDestroy {
   @ViewChild('muzzleFlash') muzzleFlash: ElementRef;
   @ViewChild('meModel') meModel: BasicDesc;
 
-  showWeapon$: Observable<boolean>;
-  showCross$: Observable<boolean>;
+  showWeapon$: Subscription;
+  showWeapon = false;
+  showCross$: Subscription;
+  showCross = false;
   shootSub$: Subscription;
   buildingNearby = false;
   insideBuilding = false;
@@ -45,7 +47,8 @@ export class MeComponent implements OnInit, OnDestroy {
               private keyboardKeysService: KeyboardKeysService,
               private ngZone: NgZone,
               private snackBar: MatSnackBar,
-              private soundService: SoundService) {
+              private soundService: SoundService,
+              private cd: ChangeDetectorRef) {
   }
 
   get notifications$() {
@@ -88,9 +91,15 @@ export class MeComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.showWeapon$ = Observable.combineLatest(
       this.character.viewState$.map(viewState => viewState === ViewState.FPV),
-      this.character.state$.map(meState => meState && meState.state === MeModelState.SHOOTING))
-      .map((result => result[0] || result[1]));
-    this.showCross$ = this.character.state$.map(meState => meState && meState.state === MeModelState.SHOOTING);
+      this.character.state$.map(meState => meState && meState.state === MeModelState.SHOOTING)
+    ).map((result => result[0] || result[1])).subscribe((value) => {
+        this.showWeapon = value;
+        this.cd.detectChanges();
+      });
+    this.showCross$ = this.character.state$.map(meState => meState && meState.state === MeModelState.SHOOTING).subscribe((value) => {
+      this.showCross = value;
+      this.cd.detectChanges();
+    });
     this.meModelDrawSubscription = this.meModel.onDraw.subscribe(entity => {
       this.character.entity = entity.cesiumEntity;
     });
@@ -129,6 +138,8 @@ export class MeComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.shootSub$.unsubscribe();
     this.meModelDrawSubscription.unsubscribe();
+    this.showCross$.unsubscribe();
+    this.showWeapon$.unsubscribe();
   }
 
   private showGunMuzzleFlash() {

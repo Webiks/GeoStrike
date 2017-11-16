@@ -11,7 +11,7 @@ const resolvers = {
     },
     syncState: (player: IPlayer) => player.syncState,
     state: (player: IPlayer) => {
-        return player.state;
+      return player.state;
     },
     currentLocation: (player: IPlayer) => ({
       location: player.currentLocation,
@@ -20,10 +20,11 @@ const resolvers = {
     isMe: (somePlayer: IPlayer, args, { player }: IGraphQLContext) => {
       return player !== undefined && somePlayer.playerId === player.playerId;
     },
+    enteringBuildingPosition: (player: IPlayer) => player.enteringBuildingPosition,
   },
 
   Viewer: {
-    id: (viewer: IViewer)=> viewer.playerId,
+    id: (viewer: IViewer) => viewer.playerId,
   }
 };
 

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { CharacterService, ViewState, } from '../../../services/character.service';
 import { GameConfig } from '../../../services/game-config';
 import { AcEntity, AcNotification, AcTileset3dComponent, ActionType, CesiumService, } from 'angular-cesium';
@@ -24,9 +24,9 @@ export class WorldComponent implements OnInit {
       conditions: [
         [
           '${area} <= ' +
-            GameConfig.maxEnterableBuildingSize +
-            ' && ${area} > ' +
-            GameConfig.minEnterableBuildingSize,
+          GameConfig.maxEnterableBuildingSize +
+          ' && ${area} > ' +
+          GameConfig.minEnterableBuildingSize,
           GameConfig.enterableBuildingColor,
         ],
         ['true', 'rgb(255, 255, 255)'],
@@ -36,12 +36,10 @@ export class WorldComponent implements OnInit {
   public hideWorld = false;
   private treesAndBoxes;
 
-  constructor(
-    public utils: UtilsService,
-    private cesiumService: CesiumService,
-    public character: CharacterService,
-    private cd: ChangeDetectorRef
-  ) {
+  constructor(public utils: UtilsService,
+              private cesiumService: CesiumService,
+              public character: CharacterService,
+              private cd: ChangeDetectorRef) {
     this.drawBackgroundItems();
   }
 
@@ -72,6 +70,9 @@ export class WorldComponent implements OnInit {
 
     this.character.viewState$.subscribe(viewState => {
       this.hideWorld = viewState === ViewState.OVERVIEW;
+      if (this.tiles && this.tiles.tilesetInstance) {
+        this.tiles.tilesetInstance.show = !this.hideWorld;
+      }
       this.cd.detectChanges();
       this.drawBackgroundItems();
     });

@@ -114,6 +114,7 @@ export class BackgroundCharacterManager {
             heading,
             false,
             true,
+            undefined
           );
         }
       });

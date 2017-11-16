@@ -30,6 +30,7 @@ export interface Player extends User {
   team: Team; 
   syncState: PlayerSyncState; 
   type: CharacterType; 
+  enteringBuildingPosition?: PlayerLocation; 
 }
 
 export interface CharacterData {
@@ -123,6 +124,7 @@ export interface UpdatePositionMutationArgs {
   heading: number; 
   isCrawling: boolean; 
   isShooting: boolean; 
+  enteringBuildingPosition?: LocationInput; 
   skipValidation?: boolean; 
 }
 export interface NotifyKillMutationArgs {
@@ -324,6 +326,7 @@ export namespace UpdatePosition {
     heading: number;
     isCrawling: boolean;
     isShooting: boolean;
+    enteringBuildingPosition?: LocationInput;
     skipValidation?: boolean;
   }
 
@@ -365,6 +368,7 @@ export namespace PlayerFields {
     id: string; 
     type: CharacterType; 
     currentLocation: CurrentLocation; 
+    enteringBuildingPosition?: EnteringBuildingPosition; 
   } 
 
   export type Character = {
@@ -378,6 +382,8 @@ export namespace PlayerFields {
   } 
 
   export type CurrentLocation = LocationFields.Fragment
+
+  export type EnteringBuildingPosition = LocationFields.Fragment
 }
 
 export namespace LocationFields {

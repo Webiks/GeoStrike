@@ -19,9 +19,14 @@ export const playerFragment = gql`
     isShooting
     isMe
     id
-    type 
+    type
     currentLocation {
       ...LocationFields
+    }
+    enteringBuildingPosition {
+      x
+      y
+      z
     }
   }
 
@@ -33,4 +38,4 @@ export const playerFragment = gql`
     }
     heading
   }
-  `;
+`;
