@@ -9,13 +9,15 @@ import { environment } from '../../../../environments/environment';
 import { CesiumViewerOptionsService } from './viewer-options/cesium-viewer-options.service';
 import { CollisionDetectorService } from '../../services/collision-detector.service';
 import { TakeControlService } from '../../services/take-control.service';
+import { PitchCalculatorService } from './services/pitch-calculator.service';
 
 @Component({
   selector: 'game-map',
   templateUrl: './game-map.component.html',
   providers: [
     ViewerConfiguration,
-    CesiumViewerOptionsService
+    CesiumViewerOptionsService,
+    PitchCalculatorService,
   ],
   styleUrls: ['./game-map.component.scss'],
 })
@@ -45,6 +47,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
               private cd: ChangeDetectorRef,
               private viewerOptions: CesiumViewerOptionsService,
               private collisionDetector: CollisionDetectorService,
+              private pitchCalculatorService: PitchCalculatorService,
               private takeControlService: TakeControlService) {
     viewerConf.viewerOptions = viewerOptions.getViewerOption();
 
@@ -143,7 +146,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
 
   private overviewSettings() {
     this.viewerOptions.setFreeCameraOptions(this.viewer);
-    this.viewer.camera.flyTo({ destination: GameMapComponent.DEFAULT_START_LOCATION });
+    this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_START_LOCATION});
   }
 
   onMousemove(event: MouseEvent) {
@@ -151,11 +154,14 @@ export class GameMapComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const pitch = this.character.pitch;
-    this.character.pitch = pitch - (event.movementY / environment.controls.mouseSensitivity);
+    const oldPitch = this.character.pitch;
+    let newPitch = oldPitch - (event.movementY / environment.controls.mouseSensitivity);
 
-    const heading = this.character.heading;
-    this.character.heading = heading + (event.movementX / environment.controls.mouseSensitivity);
+    this.pitchCalculatorService.calcAndSetNewPitch(oldPitch, newPitch);
+
+    const oldHeading = this.character.heading;
+    const newHeading = oldHeading + (event.movementX / environment.controls.mouseSensitivity);
+    this.pitchCalculatorService.calcAndSetNewHeading(oldHeading, newHeading);
   }
 
   preRenderHandler() {
@@ -186,7 +192,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
     this.viewer.zoomTo([this.character.entity, this.helperEntityPoint], new Cesium.HeadingPitchRange(heading, pitch, range));
     this.lastPlayerLocation = this.character.location;
     this.lastPlayerHead = playerHeadCart;
-    this.lastPlayerHPR = { heading: this.character.heading, pitch: this.character.pitch, range };
+    this.lastPlayerHPR = {heading: this.character.heading, pitch: this.character.pitch, range};
   }
 
   ngOnDestroy(): void {
