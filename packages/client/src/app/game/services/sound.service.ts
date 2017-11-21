@@ -14,4 +14,8 @@ export class SoundService {
     this.gunShotSound.currentTime = 0;
     this.gunShotSound.play();
   }
+
+  toggleMute(){
+    this.gunShotSound.muted = !this.gunShotSound.muted;
+  }
 }
