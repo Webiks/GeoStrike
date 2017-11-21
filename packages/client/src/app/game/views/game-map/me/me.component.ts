@@ -34,7 +34,7 @@ export class MeComponent implements OnInit, OnDestroy {
   showCross = false;
   shootSub$: Subscription;
   buildingNearby = false;
-  insideBuilding = false;
+  canExitBuilding = false;
   transparentColor = new Cesium.Color(0, 0, 0, 0.0001);
   normalColor = new Cesium.Color(1, 1, 1, 1);
   ViewState = ViewState;
@@ -121,15 +121,20 @@ export class MeComponent implements OnInit, OnDestroy {
           this.ngZone.run(() => this.snackBar.dismiss());
         }
       }
-      if (state && this.insideBuilding !== !!state.enteredBuilding) {
-        this.insideBuilding = !!state.enteredBuilding;
-        if (this.insideBuilding) {
+
+      if (state && this.canExitBuilding !== state.canExitBuilding) {
+        this.canExitBuilding = state.canExitBuilding;
+        if (this.canExitBuilding) {
           this.ngZone.run(() => {
+            this.snackBar.dismiss();
             this.snackBar.openFromComponent(SnackBarContentComponent, {
               data: `Press E to Exit Building`,
               duration: 3000,
             });
           });
+        }
+        else {
+          this.ngZone.run(() => this.snackBar.dismiss());
         }
       }
     });

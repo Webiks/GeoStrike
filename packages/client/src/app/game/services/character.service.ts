@@ -33,6 +33,7 @@ export interface CharacterState {
   nearbyBuildingPosition: Cartesian3;
   enteringBuildingPosition: { location: Cartesian3, heading: number, pitch: number };
   isInsideBuilding: boolean;
+  canExitBuilding: boolean;
 }
 
 @Injectable()
@@ -196,7 +197,16 @@ export class CharacterService {
 
   get isInsideBuilding(): boolean {
     return this._character.getValue().isInsideBuilding;
+  }
 
+  get canExitBuilding(): boolean {
+    return this._character.getValue().canExitBuilding;
+  }
+
+  set canExitBuilding(value: boolean) {
+    this.modifyCurrentStateValue({
+      canExitBuilding: value,
+    });
   }
 
   set isInsideBuilding(value: boolean) {
@@ -225,6 +235,9 @@ export class CharacterService {
       this.nearbyBuildingPosition = undefined;
       this.modifyCurrentStateValue({
         isInsideBuilding: value
+      });
+      this.modifyCurrentStateValue({
+        canExitBuilding: value
       });
     }
   }

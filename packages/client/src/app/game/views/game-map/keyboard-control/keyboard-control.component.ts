@@ -6,6 +6,7 @@ import { KeyboardKeysService } from '../../../../core/services/keyboard-keys.ser
 import { GameService } from '../../../services/game.service';
 import { CollisionDetectorService } from '../../../services/collision-detector.service';
 import { TakeControlService } from '../../../services/take-control.service';
+import { MatSnackBar } from '@angular/material';
 
 const LookDirection = {
   Up: 'ArrowUp',
@@ -52,6 +53,7 @@ export class KeyboardControlComponent implements OnInit {
               private gameService: GameService,
               private collisionDetector: CollisionDetectorService,
               private ngZone: NgZone,
+              private snackBar: MatSnackBar,
               private takeControlService: TakeControlService) {
     this.viewer = cesiumService.getViewer();
   }
@@ -265,12 +267,14 @@ export class KeyboardControlComponent implements OnInit {
       });
     this.keyboardKeysService.registerKeyBoardEvent('KeyE', 'Enter Nearby Building',
       (keyEvent: KeyboardEvent) => {
-        if (this.character.enteredBuilding) {
+        if (this.character.enteredBuilding && this.character.canExitBuilding) {
           this.character.isInsideBuilding = false;
+          this.ngZone.run(() => this.snackBar.dismiss());
           this.gameService.updateServerOnPosition(true);
 
         } else if (this.character.nearbyBuildingPosition) {
           this.character.isInsideBuilding = true;
+          this.ngZone.run(() => this.snackBar.dismiss());
           this.gameService.updateServerOnPosition(true);
         }
       });
