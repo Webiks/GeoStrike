@@ -10,6 +10,7 @@ import { Component, Input, OnInit } from '@angular/core';
       <img  *ngSwitchCase="'arrow-down'" src="/assets/icons/arrow-down.png" class="arrow">
       <img  *ngSwitchCase="'arrow-left'" src="/assets/icons/arrow-left.png" class="arrow">
       <img  *ngSwitchCase="'arrow-right'" src="/assets/icons/arrow-right.png" class="arrow">
+      <span *ngSwitchCase="'Shift'">Shift + W</span>
       <span *ngSwitchDefault> {{keyInfo.keyName}}</span>
     </div>
   `,
