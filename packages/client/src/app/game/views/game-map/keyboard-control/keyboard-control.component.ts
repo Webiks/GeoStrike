@@ -279,7 +279,7 @@ export class KeyboardControlComponent implements OnInit {
           this.gameService.updateServerOnPosition(true);
         }
       });
-    this.keyboardKeysService.registerKeyBoardEventDescription('Shift', 'Run');
+    this.keyboardKeysService.registerKeyBoardEventDescription('Shift', 'Run Forward');
     this.keyboardKeysService.registerKeyBoardEvent('Space', 'Switch Shooting Mode',
       (keyEvent: KeyboardEvent) => {
         this.ngZone.run(() => {
