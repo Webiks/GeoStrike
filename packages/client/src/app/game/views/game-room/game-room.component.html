@@ -33,7 +33,7 @@
           <big-button fontSize="30px" width="220" text="I'M READY" (click)="ready()" [highlight]="player.state ==='READY'"></big-button>
         </div>
         <ng-template #state>
-          <div class="state-text">{{player.state}}</div>
+          <div class="state-text">{{getState(player)}}</div>
         </ng-template>
       </div>
     </div>

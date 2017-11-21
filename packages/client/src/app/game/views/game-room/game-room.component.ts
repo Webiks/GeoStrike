@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { GameService } from '../../services/game.service';
-import { GameData, GameFields } from '../../../types';
+import {GameData, GameFields, PlayerFields} from '../../../types';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { AuthorizationMiddleware } from '../../../core/configured-apollo/network/authorization-middleware';
@@ -104,5 +104,9 @@ export class GameRoomComponent implements OnInit, OnDestroy {
 
   getOpponentTeam() {
     return this.me && this.me.team === 'BLUE'? 'red' : 'blue';
+  }
+
+  getState(player: PlayerFields.Fragment) {
+    return player.state === 'WAITING'? 'WAITING': 'READY';
   }
 }
