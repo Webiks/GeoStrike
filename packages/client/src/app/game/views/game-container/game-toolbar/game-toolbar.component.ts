@@ -3,6 +3,7 @@ import { HowToPlayDialogComponent } from '../../how-to-play-dialog/how-to-play-d
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { GameService } from '../../../services/game.service';
 import { CharacterService } from '../../../services/character.service';
+import {SoundService} from '../../../services/sound.service';
 
 @Component({
   selector: 'game-toolbar',
@@ -39,7 +40,8 @@ export class GameToolbarComponent implements OnInit {
 
   constructor(private  dialog: MatDialog,
               private gameService: GameService,
-              private character: CharacterService) {
+              private character: CharacterService,
+              private audioService: SoundService) {
   }
 
   ngOnInit() {
@@ -73,12 +75,7 @@ export class GameToolbarComponent implements OnInit {
   }
 
   toggleMute() {
-    const audios = document.getElementsByTagName('audio');
-    for (let i = 0; i < audios.length; i++) {
-      const audio = audios[i];
-      audio.muted = !audio.muted;
-    }
-
+    this.audioService.toggleMute();
     this.mute = !this.mute;
   }
 
