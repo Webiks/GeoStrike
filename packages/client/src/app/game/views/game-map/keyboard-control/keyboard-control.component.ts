@@ -183,6 +183,7 @@ export class KeyboardControlComponent implements OnInit {
     const isViewer = this.character.meFromServer['__typename'] === 'Viewer';
     if (this.character.state === MeModelState.SHOOTING) {
       this.character.state = MeModelState.WALKING;
+      this.gameService.updateServerOnPosition(true);
     }
     if (!isViewer && this.character.viewState === ViewState.OVERVIEW) {
       this.character.viewState = ViewState.SEMI_FPV_NOT_CONTROLLED;
