@@ -45,10 +45,13 @@ export class CollisionDetectorService {
     const minLongitude = positions.reduce((value, pos) => Math.min(value, pos.longitude), Number.MAX_SAFE_INTEGER);
     const minLatitude = positions.reduce((value, pos) => Math.min(value, pos.latitude), Number.MAX_SAFE_INTEGER);
 
-    return characterPosition.longitude + this.roomCollisionRange > maxLongitude ||
+    const collision = characterPosition.longitude + this.roomCollisionRange > maxLongitude ||
       characterPosition.latitude + this.roomCollisionRange > maxLatitude ||
       characterPosition.longitude - this.roomCollisionRange < minLongitude ||
       characterPosition.latitude - this.roomCollisionRange < minLatitude;
+
+    this.character.canExitBuilding = this.collision;
+    return collision;
   }
 
   public detectCollision(fromLocation, skipHeadingOptimization = false): boolean {
