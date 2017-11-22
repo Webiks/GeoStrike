@@ -22,7 +22,7 @@ import {SoundService} from '../../../services/sound.service';
         <mat-icon svgIcon="setting"></mat-icon>
       </button>
     </div>
-    <div class="settings-panel" *ngIf="showMenu">
+    <div class="settings-panel" *ngIf="showMenu" [excludeBeforeClick]="true" [delayClickOutsideInit]="100" (clickOutside)="showMenu=false">
       <div class="settings-item">GAME CODE: {{gameCode}}</div>
       <div class="settings-item" (click)="exitGame()">EXIT THE GAME</div>
     </div>

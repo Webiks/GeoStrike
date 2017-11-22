@@ -48,6 +48,7 @@ import { ArrowKeysComponent } from './views/how-to-play-dialog/arrow-keys/arrow-
 import { OtherPlayersGunSoundComponent } from './views/game-map/other-players/gun-shot/other-players-gun-sound/other-players-gun-sound.component';
 import { GunIndicatorComponent } from './views/game-map/other-players/gun-shot/gun-indicator/gun-indicator.component';
 import { SoundService } from './services/sound.service';
+import {ClickOutsideModule} from 'ng-click-outside';
 
 @NgModule({
   declarations: [
@@ -93,6 +94,7 @@ import { SoundService } from './services/sound.service';
     MatProgressSpinnerModule,
     MatInputModule,
     MatTabsModule,
+    ClickOutsideModule,
   ],
   exports: [
     MainComponent,
