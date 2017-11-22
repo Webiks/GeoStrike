@@ -20,6 +20,7 @@ export class GameDialogsComponent implements OnInit {
   private gameoverDialogOpen = false;
   private wonDialogOpen = false;
   private benchedDialogOpen = false;
+  private isfirstTimeBenchedDialog = true;
   private benchedDialog: MatDialogRef<BenchedDialogComponent>;
 
 
@@ -37,8 +38,10 @@ export class GameDialogsComponent implements OnInit {
         if (this.character.initialized) {
           this.character.state = MeModelState.DEAD;
         }
-      } else if (characterState && characterState.state === MeModelState.CONTROLLED && !this.benchedDialogOpen && !isOverview) {
+      } else if (characterState && characterState.state === MeModelState.CONTROLLED && !this.benchedDialogOpen &&
+        (this.isfirstTimeBenchedDialog || !isOverview)) {
         this.openBenchedDialog(characterState.characterInfo.name);
+        this.isfirstTimeBenchedDialog = false;
       } else if (characterState && this.benchedDialogOpen && characterState.state !== MeModelState.CONTROLLED) {
         this.ngZone.run(() => this.benchedDialog.close());
         this.benchedDialogOpen = false;
@@ -113,5 +116,4 @@ export class GameDialogsComponent implements OnInit {
       });
     });
   }
-
 }

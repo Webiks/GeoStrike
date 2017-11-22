@@ -108,6 +108,4 @@ export class OtherPlayersComponent {
   getPlayerName(player) {
     return player.username ? player.username : '';
   }
-
-
 }
