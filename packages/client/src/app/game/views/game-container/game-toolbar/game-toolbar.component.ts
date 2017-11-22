@@ -47,10 +47,6 @@ export class GameToolbarComponent implements OnInit {
   ngOnInit() {
   }
 
-  outside(){
-    console.log('outside');
-  }
-
   openHelp() {
     this.dialog.open(HowToPlayDialogComponent, {
       height: '80%',
