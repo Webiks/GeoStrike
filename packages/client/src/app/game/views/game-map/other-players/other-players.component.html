@@ -12,8 +12,7 @@
   <ac-billboard-primitive-desc *ngIf="isOverview$| async" props="{
     position: utils.toFixedHeight(player.currentLocation.location, 5),
     heightReference: utils.getClampedToGroundHeightReference(),
-    image: getPlayerIcon(player),
-    color: getIconColor(player),
+    image: getPlayerIcon(player)
   }">
   </ac-billboard-primitive-desc>
   <ac-label-primitive-desc *ngIf="isOverview$ | async" props="{

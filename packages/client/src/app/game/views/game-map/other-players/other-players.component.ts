@@ -81,6 +81,9 @@ export class OtherPlayersComponent {
       if (player.state === 'DEAD' ) {
         postfix = '-dead'
       }
+      else if (this.takeControlService.selectedPlayerToControl && player.id === this.takeControlService.selectedPlayerToControl.id) {
+        postfix += '-chosen'
+      }
       if (player.isMe) {
         postfix += '-me'
       }
@@ -100,13 +103,6 @@ export class OtherPlayersComponent {
     xOffset -= player.character.name.length * 2.5;
 
     return [xOffset, 45];
-  }
-
-  getIconColor(player) {
-    if (this.takeControlService.selectedPlayerToControl) {
-      return player.id === this.takeControlService.selectedPlayerToControl.id ? Cesium.Color.YELLOW : Cesium.Color.WHITE;
-    }
-    return Cesium.Color.WHITE;
   }
 
   getPlayerName(player) {
