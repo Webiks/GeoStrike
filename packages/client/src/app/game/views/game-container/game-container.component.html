@@ -2,7 +2,7 @@
   <team-info-bar [players]="getPlayers('BLUE')" [changeDirection]="true" class="blue-team-info"></team-info-bar>
   <team-info-bar [players]="getPlayers('RED')" class="red-team-info"></team-info-bar>
   <game-toolbar [gameCode]="gameCode"></game-toolbar>
-  <player-details [me]="me"></player-details>
+  <player-details [me]="controlledService.controlledPlayer || me"></player-details>
   <viewer-controls *ngIf="isViewer"></viewer-controls>
 </game-map>
 <game-dialogs [gameResult]="gameResult$"></game-dialogs>

@@ -44,7 +44,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
               private activatedRoute: ActivatedRoute,
               private router: Router,
               private ngZone: NgZone,
-              private controlledService: TakeControlService,
+              public controlledService: TakeControlService,
               private snackBar: MatSnackBar) {
   }
 

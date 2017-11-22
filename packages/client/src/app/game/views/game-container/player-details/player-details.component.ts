@@ -42,7 +42,6 @@ export class PlayerDetailsComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-
   }
 
 }
