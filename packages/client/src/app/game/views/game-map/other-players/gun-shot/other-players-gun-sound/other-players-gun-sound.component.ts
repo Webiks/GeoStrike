@@ -33,6 +33,7 @@ export class OtherPlayersGunSoundComponent implements OnInit, OnDestroy {
           }
 
           this.soundService.gunShot(volume);
+          console.log('Shot Latency', performance.now() - window['performanceNow']);
         }
       });
     });
