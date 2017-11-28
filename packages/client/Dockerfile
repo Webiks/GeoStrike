@@ -9,4 +9,4 @@ WORKDIR /opt/app
 
 EXPOSE 5000
 
-ENTRYPOINT serve
+ENTRYPOINT serve -s
