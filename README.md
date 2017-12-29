@@ -1,7 +1,7 @@
 # webiks-cesium-fps
 
  3D game for real world data. Boom!
- [http://cesiumfps.webiks.com/](https://cesium-fps.now.sh/)
+ [http://cesiumfps.webiks.com/](http://cesiumfps.webiks.com/)
  
  ## Getting started
  * Go to project directory
