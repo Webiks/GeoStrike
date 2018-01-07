@@ -2,7 +2,7 @@
   <div class="sub-header">
     <img src="/assets/logo/geo_strike_logo.svg">
   </div>
-  <mat-tab-group class="character-picker-container" (selectedTabChange)="setActiveTab($event)">
+  <mat-tab-group class="main-content character-picker-container" (selectedTabChange)="setActiveTab($event)">
     <mat-tab label="New game">
       <ng-template mat-tab-label>
         <div class="tab-header">
@@ -20,8 +20,16 @@
         <character-picker [joinGameMode]="true" [(gamecode)]="gameCode" [selectedCharacter]="characterName" [(username)]="username" (select)="characterChanged($event)"></character-picker>
     </mat-tab>
   </mat-tab-group>
-  <div class="row">
+  <div class="main-content button row">
     <big-button text="Start The Game" (click)="startGame()"></big-button>
+  </div>
+  <div class="main-content-unsupported">
+    <p>
+      GeoStrike is not supported for mobile devices.
+    </p>
+    <p>
+      Use desktop / laptop for a Geo-Striking experience.
+    </p>
   </div>
   <div class="footer">
     <div class="footer-logos">
