@@ -1,8 +1,12 @@
+$footer-line-height: 24px;
+$footer-font-size: 12px;
+
 .main-container {
   overflow: auto;
   position: absolute;
   width: 100%;
   height: 100%;
+  min-height: 750px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -21,9 +25,7 @@
   }
 
   .sub-header {
-    padding-left: 271pt;
-    font-size: 20pt;
-    color: white;
+    padding: 20px;
   }
 
   .row {
@@ -53,6 +55,50 @@
   big-button {
     margin: 15px;
     color: white
+  }
+
+  .footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    height: $footer-line-height;
+    line-height: $footer-line-height;
+    color: white;
+    font-family: Roboto, Arial, Helvetica, sans-serif;
+    font-size: $footer-font-size;
+    margin-bottom: 12px;
+
+    .footer-logos {
+      a {
+        text-decoration: none;
+      }
+      min-width: 180px;
+      text-align: center;
+      margin: 0 12px;
+      img {
+        height: 100%;
+      }
+      span {
+        opacity: .54;
+        position: relative;
+        top: -#{$footer-line-height / 3};
+        padding: 0 12px;
+        &:first-child {
+          padding-left: 0;
+        }
+      }
+    }
+    &:before, &:after {
+      content: '';
+      width: 100%;
+      height: 1px;
+      background-color: #C4C4C4;
+      opacity: .54;
+      position: relative;
+      top: #{$footer-line-height / 2};
+    }
   }
 }
 

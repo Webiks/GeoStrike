@@ -1,6 +1,7 @@
 <div class="main-container">
-  <div class="header">Cesium FPS</div>
-  <div class="sub-header"> First Person Shooter</div>
+  <div class="sub-header">
+    <img src="/assets/logo/geo_strike_logo.svg">
+  </div>
   <mat-tab-group class="character-picker-container" (selectedTabChange)="setActiveTab($event)">
     <mat-tab label="New game">
       <ng-template mat-tab-label>
@@ -21,6 +22,18 @@
   </mat-tab-group>
   <div class="row">
     <big-button text="Start The Game" (click)="startGame()"></big-button>
+  </div>
+  <div class="footer">
+    <div class="footer-logos">
+      <span>By</span>
+      <a href="http://webiks.com/" target="_blank">
+        <img src="/assets/logo/webiks_logo.svg">
+      </a>
+      <span>&</span>
+      <a href="http://guild.software/" target="_blank">
+        <img src="/assets/logo/guild_logo.svg">
+      </a>
+    </div>
   </div>
   <mat-spinner *ngIf="loading"></mat-spinner>
   <div>{{error}}</div>
