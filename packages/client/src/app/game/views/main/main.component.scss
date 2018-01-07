@@ -10,7 +10,9 @@ $footer-font-size: 12px;
   display: flex;
   flex-direction: column;
   align-items: center;
-
+  @media screen and (max-width: 500px) {
+    min-height: inherit;
+  }
   .header {
     font-size: 100pt;
     color: white;
@@ -23,9 +25,33 @@ $footer-font-size: 12px;
       line-height: 45pt;
     }
   }
-
+  /* hide main content for mobile */
+  .main-content, .main-content.button {
+    @media screen and (max-width: 500px) {
+      display: none;
+    }
+  }
+  .main-content-unsupported{
+    display: none;
+    @media screen and (max-width: 500px) {
+      display: block;
+    }
+    margin: 15vw 20px;
+    padding: 20px;
+    border: 1px solid white;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    color: white;
+    font-family: Agency FB, Roboto, Arial, Helvetica, sans-serif;
+    font-weight: Bold;
+    font-size: 36px;
+    text-align: center;
+  }
   .sub-header {
     padding: 20px;
+    img {
+      max-width: 100%;
+    }
   }
 
   .row {
