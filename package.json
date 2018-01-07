@@ -1,6 +1,6 @@
 {
   "name": "cesium-fps",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "description": "Cesium FPS",
   "repository": "git@github.com:Webiks/CesiumFPS.git",
   "author": "dotansimha <dotansimha@gmail.com>",

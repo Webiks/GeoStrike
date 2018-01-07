@@ -48,3 +48,12 @@
 ## Start game on terrain
 - Go to `packages/client/src/environments/environment.ts` and change the flag `loadTerrain` to true.
 - Then run the command `TERRAIN=true yarn start`
+
+## Required global packages for development
+ install using `yarn global add <PACKAGE_NAME>` or `npm i  -g <PACKAGE_NAME>` 
+ - server tools for running  local server:
+    - [ts-node](https://github.com/TypeStrong/ts-node)
+    - [nodemon](https://github.com/remy/nodemon)
+ - client tools for running  angular/cli dev server:
+    - [@angular/cli](https://github.com/angular/angular-cli)
+ - generate code for GraphQL: [graphql-code-generator](https://github.com/dotansimha/graphql-code-generator) 
