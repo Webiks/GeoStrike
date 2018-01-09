@@ -1,4 +1,4 @@
-# webiks-cesium-fps
+# Geo-Strike (alpha)
 
  3D game for real world data. Boom!
  
