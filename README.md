@@ -2,7 +2,7 @@
 
  3D game for real world data. Boom!
  
- Play it live at <a href="http://geo-strike.com/" target="_blank">geo-strike.com</a>
+ Play it live at [geo-strike.com](http://geo-strike.com/)
  
  ## Getting started
  * Go to project directory
