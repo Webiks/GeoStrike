@@ -1,7 +1,8 @@
 # webiks-cesium-fps
 
  3D game for real world data. Boom!
- [http://cesiumfps.webiks.com/](http://cesiumfps.webiks.com/)
+ 
+ Play it live at [geo-strike.com](http://geo-strike.com/)
  
  ## Getting started
  * Go to project directory
