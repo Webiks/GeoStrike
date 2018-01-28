@@ -1,0 +1,73 @@
+@import '~@angular/material/prebuilt-themes/purple-green.css';
+
+@font-face {
+  font-family: 'AGENCYR';
+  src: url('/assets/fonts/AGENCYR.eot');
+  src: local('/assets/fonts/AGENCYR'), url('/assets/fonts/AGENCYR.woff') format('woff'), url('/assets/fonts/AGENCYR.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Orena';
+  src: url('/assets/fonts/Orena.ttf');
+}
+
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: AGENCYR, sans-serif !important;
+  background-image: url('/assets/menu/background.png');
+  background-size: cover;
+}
+
+.map-container {
+  height: 100vh;
+}
+
+.mat-dialog-container {
+  border-radius: 10px !important;
+  background-color: transparent;
+  padding: 0;
+}
+mat-dialog-container{
+  padding: 0 !important;
+}
+
+.mat-tab-group {
+  font-family: AGENCYR, sans-serif !important;
+}
+snack-bar-container{
+  background: rgba(0,0,0,0.54) !important;
+  color: white !important;
+  font-size: 24px;
+  border-top-left-radius: 15px !important;
+  border-top-right-radius: 15px !important;
+  max-width: 750px !important;
+  min-width: 400px !important;
+}
+
+snack-bar-content{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+mat-form-field {
+  font-family: AGENCYR, sans-serif !important;
+}
+.general-dialog {
+  background-color: rgba(0, 0, 0, 0.99);
+  border-top-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+
+:root {
+  --light-green: #6FCF97;
+  --grey: #4F4F4F;
+  --blue-gradient: linear-gradient(#1B476B, #000000);
+  --red-gradient: linear-gradient(#6B1B1B, #000000);
+}

@@ -1,0 +1,25 @@
+<ac-3d-tile-layer #tiles
+    [options]="{
+      maximumMemoryUsage: 1024,
+      modelMatrix: getTilesMatrix(),
+      url: tilesUrl,
+      skipLevelOfDetail : true,
+      baseScreenSpaceError : 1024,
+      skipScreenSpaceErrorFactor : 16,
+      skipLevels : 1,
+      immediatelyLoadDesiredLevelOfDetail : false,
+      loadSiblings : false,
+      cullWithChildrenBounds : true
+    }"
+    [style]="tilesStyle">
+</ac-3d-tile-layer>
+<ac-layer acFor="let tree of treesAndBoxes$" [context]="this">
+  <ac-model-desc *ngIf="!hideWorld" props="{
+          heightReference: utils.getClampedToGroundHeightReference(),
+          scale: tree.scale,
+          uri: tree.model,
+          heading: tree.orientation,
+					position: tree.position
+  }">
+  </ac-model-desc>
+</ac-layer>

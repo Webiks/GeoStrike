@@ -1,0 +1,45 @@
+<svg width="42" height="51" viewBox="0 0 42 51" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<title>look around</title>
+<desc>Created using Figma</desc>
+<g id="Canvas" transform="translate(-48138 -16323)">
+<g id="look around">
+<g id="Vector" filter="url(#filter0_d)">
+<use xlink:href="#path0_fill" transform="translate(48147 16332.6)" fill="#4F4F4F"/>
+<mask id="mask0_outline_ins">
+<use xlink:href="#path0_fill" fill="white" transform="translate(48147 16332.6)"/>
+</mask>
+<g mask="url(#mask0_outline_ins)">
+<use xlink:href="#path1_stroke_2x" transform="translate(48147 16332.6)" fill="#FFFFFF"/>
+</g>
+</g>
+<g id="Group">
+<g id="Vector">
+<use xlink:href="#path2_fill" transform="translate(48155 16323)" fill="#FFFFFF"/>
+</g>
+<g id="Vector">
+<use xlink:href="#path2_fill" transform="matrix(6.12323e-17 -1 1 6.12323e-17 48138 16353)" fill="#FFFFFF"/>
+</g>
+<g id="Vector">
+<use xlink:href="#path2_fill" transform="matrix(6.12323e-17 1 -1 6.12323e-17 48180 16345)" fill="#FFFFFF"/>
+</g>
+<g id="Vector">
+<use xlink:href="#path2_fill" transform="matrix(-1 1.22465e-16 -1.22465e-16 -1 48163 16374)" fill="#FFFFFF"/>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<filter id="filter0_d" filterUnits="userSpaceOnUse" x="48143" y="16332" width="32" height="42" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 255 0"/>
+<feOffset dx="0" dy="4"/>
+<feGaussianBlur stdDeviation="2"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+</filter>
+<path id="path0_fill" d="M 13.5 7.86781e-08L 13.5 11.895L 24 11.895C 24 5.775 19.425 0.735 13.5 7.86781e-08ZM 0 20.895C 0 27.525 5.37 32.895 12 32.895C 18.63 32.895 24 27.525 24 20.895L 24 14.895L 0 14.895L 0 20.895ZM 10.5 7.86781e-08C 4.575 0.735 0 5.775 0 11.895L 10.5 11.895L 10.5 7.86781e-08Z"/>
+<path id="path1_stroke_2x" d="M 13.5 11.895L 12.5 11.895L 12.5 12.895L 13.5 12.895L 13.5 11.895ZM 24 11.895L 24 12.895L 25 12.895L 25 11.895L 24 11.895ZM 24 14.895L 25 14.895L 25 13.895L 24 13.895L 24 14.895ZM 0 14.895L 0 13.895L -1 13.895L -1 14.895L 0 14.895ZM 0 11.895L -1 11.895L -1 12.895L 0 12.895L 0 11.895ZM 10.5 11.895L 10.5 12.895L 11.5 12.895L 11.5 11.895L 10.5 11.895ZM 12.5 7.86781e-08L 12.5 11.895L 14.5 11.895L 14.5 7.86781e-08L 12.5 7.86781e-08ZM 13.5 12.895L 24 12.895L 24 10.895L 13.5 10.895L 13.5 12.895ZM 25 11.895C 25 5.26381 20.0425 -0.196069 13.6231 -0.992393L 13.3769 0.992393C 18.8075 1.66607 23 6.28619 23 11.895L 25 11.895ZM -1 20.895C -1 28.0773 4.81772 33.895 12 33.895L 12 31.895C 5.92228 31.895 1 26.9727 1 20.895L -1 20.895ZM 12 33.895C 19.1823 33.895 25 28.0773 25 20.895L 23 20.895C 23 26.9727 18.0777 31.895 12 31.895L 12 33.895ZM 25 20.895L 25 14.895L 23 14.895L 23 20.895L 25 20.895ZM 24 13.895L 0 13.895L 0 15.895L 24 15.895L 24 13.895ZM -1 14.895L -1 20.895L 1 20.895L 1 14.895L -1 14.895ZM 10.3769 -0.992393C 3.95754 -0.196069 -1 5.26381 -1 11.895L 1 11.895C 1 6.28619 5.19246 1.66607 10.6231 0.992393L 10.3769 -0.992393ZM 0 12.895L 10.5 12.895L 10.5 10.895L 0 10.895L 0 12.895ZM 11.5 11.895L 11.5 7.86781e-08L 9.5 7.86781e-08L 9.5 11.895L 11.5 11.895Z"/>
+<path id="path2_fill" d="M 4 0L 0 4L 8 4L 4 0Z"/>
+</defs>
+</svg>

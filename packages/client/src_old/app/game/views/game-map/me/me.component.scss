@@ -1,0 +1,51 @@
+.gun {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  z-index: 2;
+}
+
+.gun-flare {
+  position: fixed;
+  bottom: 0;
+  width: 50%;
+  margin-left: 34.7%;
+  margin-bottom: 7.7%;
+  z-index: 1;
+  visibility: hidden;
+}
+
+.weapon {
+  position: absolute;
+}
+
+.gun-cross {
+  width: 50px;
+  height: 50px;
+  position: fixed;
+  top: 45%;
+  left: 50%;
+  z-index: 100;
+}
+
+.cross:before, #cross:after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  background: greenyellow;
+}
+
+.cross:before {
+  left: 50%;
+  width: 1%;
+  margin-left: -0.5%;
+  height: 100%;
+}
+
+.cross:after {
+  top: 50%;
+  height: 1%;
+  margin-top: -0.5%;
+  width: 100%;
+}

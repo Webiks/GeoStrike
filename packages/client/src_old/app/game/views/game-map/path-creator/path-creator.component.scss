@@ -1,0 +1,24 @@
+.json-path {
+  position: fixed;
+  left: 650px;
+  bottom: 20px;
+}
+
+.reset {
+  position: fixed;
+  left: 500px;
+  bottom: 20px;
+}
+
+.path-panel {
+  position: fixed;
+  bottom: 100px;
+  left: 150px;
+  background-color: white;
+  color: black;
+  overflow: auto;
+
+  width: 50vh;
+  height: 30vw;
+
+}

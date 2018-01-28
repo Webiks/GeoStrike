@@ -1,0 +1,48 @@
+<div class="main-container">
+  <div class="sub-header">
+    <img src="/assets/logo/geo_strike_logo.svg">
+  </div>
+  <mat-tab-group class="main-content character-picker-container" (selectedTabChange)="setActiveTab($event)">
+    <mat-tab label="New game">
+      <ng-template mat-tab-label>
+        <div class="tab-header">
+           NEW GAME
+        </div>
+      </ng-template>
+        <character-picker [selectedCharacter]="characterName" [(username)]="username" (select)="characterChanged($event)"></character-picker>
+    </mat-tab>
+    <mat-tab label="Join game" >
+      <ng-template mat-tab-label>
+        <div class="tab-header">
+          JOIN GAME
+        </div>
+      </ng-template>
+        <character-picker [joinGameMode]="true" [(gamecode)]="gameCode" [selectedCharacter]="characterName" [(username)]="username" (select)="characterChanged($event)"></character-picker>
+    </mat-tab>
+  </mat-tab-group>
+  <div class="main-content button row">
+    <big-button text="Start The Game" (click)="startGame()"></big-button>
+  </div>
+  <div class="main-content-unsupported">
+    <p>
+      GeoStrike is not supported for mobile devices.
+    </p>
+    <p>
+      Use desktop / laptop for a Geo-Striking experience.
+    </p>
+  </div>
+  <div class="footer">
+    <div class="footer-logos">
+      <span>By</span>
+      <a href="http://webiks.com/" target="_blank">
+        <img src="/assets/logo/webiks_logo.svg">
+      </a>
+      <span>&</span>
+      <a href="http://guild.software/" target="_blank">
+        <img src="/assets/logo/guild_logo.svg">
+      </a>
+    </div>
+  </div>
+  <mat-spinner *ngIf="loading"></mat-spinner>
+  <div>{{error}}</div>
+</div>

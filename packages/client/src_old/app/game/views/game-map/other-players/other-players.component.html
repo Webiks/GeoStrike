@@ -1,0 +1,31 @@
+<ac-layer acFor="let player of playersPositions" [context]="this">
+  <ac-model-desc *ngIf="!(isOverview$ | async)" props="{
+    heightReference: utils.getRelativeToGroundHeightReference(),
+    uri: getModel(player),
+    scale: getModelScale(player),
+    position: interpolatePlayerPosition(player, utils.getPosition(player.currentLocation.location)),
+    orientation: getOrientation(player.currentLocation.location, player.currentLocation.heading, player),
+    shadows: Cesium.ShadowMode.DISABLED,
+    runAnimations: player.state !== 'DEAD',
+	}">
+  </ac-model-desc>
+  <ac-billboard-primitive-desc *ngIf="isOverview$| async" props="{
+    position: utils.toFixedHeight(player.currentLocation.location, 5),
+    heightReference: utils.getClampedToGroundHeightReference(),
+    image: getPlayerIcon(player)
+  }">
+  </ac-billboard-primitive-desc>
+  <ac-label-primitive-desc *ngIf="isOverview$ | async" props="{
+    show: player.type === 'PLAYER',
+    position: utils.toFixedHeight(player.currentLocation.location, 5),
+    heightReference: utils.getClampedToGroundHeightReference(),
+    text: getPlayerName(player),
+    font: '15px sans-serif',
+    scale: 0.9,
+    pixelOffset: getLabelPixelOffset(player) | pixelOffset,
+    showBackground: true
+  }">
+  </ac-label-primitive-desc>
+</ac-layer>
+<other-players-gun-sound></other-players-gun-sound>
+<gun-indicator></gun-indicator>

@@ -1,0 +1,29 @@
+<div class="character-picker">
+  <h1 class="header">Choose your character</h1>
+  <mat-grid-list gutterSize="20" cols="4">
+    <mat-grid-tile *ngFor="let character of availableCharacters">
+      <character-item
+        (onClick)="select.emit(character)"
+        [description]="character.description"
+        [team]="character.team"
+        [name]="character.name"
+        [selected]="character.name === selectedCharacter"
+        [image]="character.imageUrl"
+        [disabled]="false">
+      </character-item>
+    </mat-grid-tile>
+  </mat-grid-list>
+  <div class="viewer-row">
+    <mat-form-field class="username-input">
+      <input matInput placeholder="Username" required [(ngModel)]="username" (focus)="clearDefaultValue()" (blur)="validateDefaultValue()"
+             (ngModelChange)="usernameChange.emit($event)">
+    </mat-form-field>
+    <h2 *ngIf="joinGameMode" class="viewer-btn" [class.selected-viewer]="selectedCharacter === viewer.name" (click)="select.emit(viewer)">
+      Continue as Viewer</h2>
+    <div style="width: 260px">
+      <mat-form-field class="gamecode-input" *ngIf="joinGameMode">
+        <input matInput placeholder="Enter Game Code" type="number"   (ngModelChange)="gamecodeChange.emit($event)" required [(ngModel)]="gameCode">
+      </mat-form-field>
+    </div>
+  </div>
+</div>

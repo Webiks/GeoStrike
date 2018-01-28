@@ -1,0 +1,24 @@
+.button {
+  background: var(--grey);
+  border: 1px solid #FFFFFF;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+  padding: 2px 10px;
+  min-width: 30px;
+  text-align: center;
+}
+
+.mouse {
+  height: 30px;
+  width: 30px;
+  fill: currentColor;
+  color: white;
+}
+
+.space-btn {
+  padding: 2px 35px;
+}
+
+.arrow{
+  margin: 5px;
+}
