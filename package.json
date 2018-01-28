@@ -14,5 +14,8 @@
     "client": "(cd packages/client && yarn start)",
     "server": "(cd packages/server && yarn start)",
     "postinstall": "lerna bootstrap"
+  },
+  "devDependencies": {
+    "graphql-code-generator": "^0.8.14"
   }
 }
