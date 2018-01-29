@@ -9,8 +9,7 @@ credits-dialog {
   .container {
     display: flex;
     flex-direction: column;
-    //justify-content: space-around;
-    height: 95%;
+    height: 100%;
     overflow: hidden;
     width: 100%;
   }
@@ -20,19 +19,21 @@ credits-dialog {
     justify-content: center;
     padding-bottom: 48px;
     padding-top: 64px;
-    line-height: 72px;
+    line-height: 53px;
   }
   .container-credits-lines {
     flex-direction: column;
     align-items: center;
-
+    padding-bottom: 48px;
+    flex-wrap: wrap;
+    overflow: auto;
     .credit-line {
-      line-height:36px;
+      line-height: 36px;
       display: flex;
-      margin-left:64px;
+      margin-left: 64px;
       font-size: 36px;
       padding-bottom: 24px;
-      span{
+      span {
         a, a:visited, a:hover {
           text-decoration: none;
           color: white;
@@ -43,16 +44,33 @@ credits-dialog {
         }
       }
     }
+    .credit-line:last-child {
+      padding-bottom: 0px;
+    }
   }
   .btn-row {
     display: flex;
     justify-content: center;
   }
 
-
   @media screen and (min-width: 1400px) {
     flex-direction: column;
     align-items: center;
+  }
+  @media screen and (max-width: 1440px) {
+    .title {
+      font-size: 62px;
+      padding-bottom: 13px;
+      padding-top: 19px;
+      line-height: 59px;
+    }
+    .container-credits-lines {
+      padding-bottom: 38px;
+      .credit-line {
+        font-size: 30px;
+        padding-bottom: 17px;
+      }
+    }
   }
 
 }

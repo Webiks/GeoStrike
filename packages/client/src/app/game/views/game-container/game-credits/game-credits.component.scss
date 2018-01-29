@@ -12,9 +12,9 @@
   width: 100%;
 
   .image-container {
-    display: inline-block;
+    display: flex;
     height:42px;
-
+    flex-grow:1;
     img {
       padding: 0;
       margin: 0 auto;
@@ -39,14 +39,18 @@
       padding-bottom: 8px;
       padding-top:8px;
     }
-
   }
+
   .credit-text {
+    flex-grow:1;
     font-size: 10px;
     font-family: 'Roboto', sans-serif;
     font-style: normal;
-
+    line-height: 15px;
+    display: flex;
+    flex-flow: row wrap;
     .credit-link {
+
       color: white;
     }
     .credit-link:hover, a.credit-link:visited {
@@ -55,6 +59,9 @@
   }
 
   .more-credits {
+    display: flex;
+    flex-grow:2;
+    flex-basis:max-content;
     font-size: 10px;
     font-family: 'Roboto', sans-serif;
     text-outline: none;
