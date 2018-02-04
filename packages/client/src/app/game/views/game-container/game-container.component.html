@@ -4,6 +4,7 @@
   <game-toolbar [gameCode]="gameCode"></game-toolbar>
   <player-details [me]="controlledService.controlledPlayer || me" [username]="me?.username"></player-details>
   <viewer-controls *ngIf="isViewer"></viewer-controls>
+  <game-credits></game-credits>
 </game-map>
 <game-dialogs [gameResult]="gameResult$"></game-dialogs>
 <game-countdown [count]="5" (done)="gameStarted()"></game-countdown>
