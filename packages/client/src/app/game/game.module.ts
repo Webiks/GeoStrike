@@ -117,6 +117,7 @@ import {CreditsDialogComponent} from "./views/credits-dialog/credits-dialog.comp
     HowToPlayDialogComponent,
     YouWinDialogComponent,
     BenchedDialogComponent,
+    CreditsDialogComponent
   ],
 })
 export class GameModule {
