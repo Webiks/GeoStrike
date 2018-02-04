@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material';
-import {CreditsDialogComponent} from "../../credits-dialog/credits-dialog.component";
+// import {CreditsDialogComponent} from "../../credits-dialog/credits-dialog.component";
 
 @Component({
   selector: 'game-credits',
@@ -15,13 +15,13 @@ export class GameCreditsComponent implements OnInit {
   ngOnInit() {
   }
 
-  openCredits() {
-    this.dialog.open(CreditsDialogComponent, {
-      // height: '94%',
-      height: '740px',
-      width: '67%',
-      panelClass: 'container-credits'
-    } as MatDialogConfig)
-  }
+  // openCredits() {
+  //   this.dialog.open(CreditsDialogComponent, {
+  //     // height: '94%',
+  //     height: '740px',
+  //     width: '67%',
+  //     panelClass: 'container-credits'
+  //   } as MatDialogConfig)
+  // }
 
 }
