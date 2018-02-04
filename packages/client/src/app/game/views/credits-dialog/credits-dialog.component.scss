@@ -1,0 +1,101 @@
+.container-credits {
+  background: rgba(0, 0, 0, 0.76);
+  border-radius: 10px;
+  border: 1px solid #FFFFFF;
+  color: white;
+}
+
+credits-dialog {
+  .container {
+    display: flex;
+    flex-direction: column;
+    height: 738px;
+    overflow: hidden;
+    width: 100%;
+  }
+  .title {
+    font-size: 72px;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 48px;
+    padding-top: 64px;
+    line-height: 62px;
+  }
+  .container-credits-lines::-webkit-scrollbar {
+    width: 8px;
+    height: 396px;
+  }
+  .container-credits-lines::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.26);
+    width: 8px;
+  }
+  .container-credits-lines::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.54);
+    width: 8px;
+  }
+  .container-credits-lines::-webkit-scrollbar-button {
+    width: 0;
+    height: 0;
+    display: none;
+  }
+  .container-credits-lines::-webkit-scrollbar-corner {
+    background-color: transparent;
+  }
+  .container-credits-lines {
+    height: 396px;
+    max-height: 396px;
+    flex-direction: column;
+    align-items: center;
+    //padding-bottom: 48px;
+    flex-wrap: wrap;
+    overflow: auto;
+    .credit-line {
+      line-height: 36px;
+      display: flex;
+      margin-left: 64px;
+      margin-right: 56px;
+      font-size: 28px;
+      padding-bottom: 24px;
+      span {
+        a, a:visited, a:hover {
+          text-decoration: none;
+          color: white;
+          outline: none;
+        }
+        .credit-for-lbl {
+          color: #8C8E90;
+        }
+      }
+    }
+    .credit-line:last-child {
+      padding-bottom: 0px;
+    }
+  }
+  .btn-row {
+    margin-top: 48px;
+    margin-bottom: 64px;
+    display: flex;
+    justify-content: center;
+  }
+
+  @media screen and (min-width: 1400px) {
+    flex-direction: column;
+    align-items: center;
+  }
+  //@media screen and (max-width: 1440px) {
+  //  .title {
+  //    font-size: 62px;
+  //    padding-bottom: 13px;
+  //    padding-top: 19px;
+  //    line-height: 59px;
+  //  }
+  //  .container-credits-lines {
+  //    padding-bottom: 38px;
+  //    .credit-line {
+  //      font-size: 30px;
+  //      padding-bottom: 17px;
+  //    }
+  //  }
+  //}
+
+}

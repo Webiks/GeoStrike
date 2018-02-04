@@ -50,6 +50,7 @@ import { GunIndicatorComponent } from './views/game-map/other-players/gun-shot/g
 import { SoundService } from './services/sound.service';
 import {ClickOutsideModule} from 'ng-click-outside';
 import {GameCreditsComponent} from "./views/game-container/game-credits/game-credits.component";
+import {CreditsDialogComponent} from "./views/credits-dialog/credits-dialog.component";
 
 @NgModule({
   declarations: [
@@ -79,7 +80,8 @@ import {GameCreditsComponent} from "./views/game-container/game-credits/game-cre
     ArrowKeysComponent,
     OtherPlayersGunSoundComponent,
     GunIndicatorComponent,
-    GameCreditsComponent
+    GameCreditsComponent,
+    CreditsDialogComponent
   ],
   imports: [
     BrowserModule,
