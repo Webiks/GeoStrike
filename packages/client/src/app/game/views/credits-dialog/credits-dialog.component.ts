@@ -7,11 +7,7 @@ import { MatDialog } from '@angular/material';
   styleUrls: ['./credits-dialog.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class CreditsDialogComponent implements OnInit {
+export class CreditsDialogComponent {
 
   constructor(public dialog: MatDialog) { }
-
-  ngOnInit() {
-  }
-
 }
