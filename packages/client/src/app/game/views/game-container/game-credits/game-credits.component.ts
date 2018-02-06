@@ -17,7 +17,6 @@ export class GameCreditsComponent implements OnInit {
 
   openCredits() {
     this.dialog.open(CreditsDialogComponent, {
-      // height: '94%',
       height: '78%',
       width: '67%',
       panelClass: 'container-credits'
