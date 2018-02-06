@@ -10,7 +10,13 @@ import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleCha
      }">
         <img [src]="getPortrait()" alt="" class="img">
       </div>
-      <div class="text">{{username}}</div>
+      <div class="name-life-bar-container">
+        <div class="text">{{username}}</div>
+        <!--<div class="life-bar-wrapper">-->
+          <div class="life-bar--75percent"></div>
+          <!--<progress max="100" value="80"></progress>-->
+        </div>
+      <!--</div>-->
     </div>
   `,
   styleUrls: ['./player-details.component.scss'],
