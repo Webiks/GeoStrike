@@ -13,7 +13,6 @@ export class GameCreditsComponent implements AfterViewInit {
   @ViewChild("creditsContainer") documentRef: ElementRef;
 
   @HostListener('window:resize') onResize() {
-    // guard against resize before view is rendered
     if (this.documentRef) {
       this.creditsComponentsWidth = this.documentRef.nativeElement.clientWidth;
     }
@@ -37,5 +36,4 @@ export class GameCreditsComponent implements AfterViewInit {
 
     dialogRef.afterClosed().subscribe(()=> this.isDialogOpen = false);
   }
-
 }
