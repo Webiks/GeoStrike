@@ -45,8 +45,13 @@
     margin: auto;
     font-size: 10px;
     font-family: 'Roboto', sans-serif;
-    color: inherit;
     cursor: pointer;
     text-decoration-line: underline;
+  }
+  .more-credits-open {
+    color:#6FCF97;
+  }
+  .more-credits-close {
+    color:inherit;
   }
 }

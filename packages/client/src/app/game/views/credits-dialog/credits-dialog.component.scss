@@ -24,13 +24,14 @@ credits-dialog {
   }
 
   .container-credits-lines {
-    height: 396px;
-    max-height: 396px;
+    height: 300px;
+    //max-height: 396px;
     flex-direction: column;
     align-items: center;
     flex-wrap: wrap;
     overflow: auto;
-    margin:0;
+    margin: 0;
+    padding: 0;
     .credit-line {
       line-height: 36px;
       display: flex;
@@ -62,5 +63,10 @@ credits-dialog {
   @media screen and (min-width: 1400px) {
     flex-direction: column;
     align-items: center;
+  }
+  @media screen and (min-width: 1600px) {
+    .container-credits-lines {
+      height: 396px;
+    }
   }
 }
