@@ -1,0 +1,57 @@
+
+.credits-container {
+  background: rgba(0, 0, 0, 1);
+  color: white;
+  //height: 42px;
+  display: flex;
+  align-items: center;
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+
+  .image-container {
+    display: flex;
+
+    #cesium-img {
+      width: 108px;
+      height: 26px;
+      padding: 8px 16px;
+    }
+    #agi-img {
+      width: 68px;
+      height: 28px;
+      padding: 7px 16px 7px 0;
+    }
+    #bing-img {
+      width: 61px;
+      height: 26px;
+      padding: 8px 24px 8px 0;
+    }
+  }
+
+  .credit-text {
+    list-style: none;
+    font-size: 10px;
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    padding: 0;
+
+    .credit-link, .credit-link:hover, a.credit-link:visited {
+      color: inherit;
+    }
+  }
+
+  .more-credits {
+    margin: auto;
+    font-size: 10px;
+    font-family: 'Roboto', sans-serif;
+    cursor: pointer;
+    text-decoration-line: underline;
+  }
+  .more-credits-open {
+    color:#6FCF97;
+  }
+  .more-credits-close {
+    color:inherit;
+  }
+}

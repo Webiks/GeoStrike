@@ -42,3 +42,6 @@ docker push "223455578796.dkr.ecr.eu-central-1.amazonaws.com/$target:latest"
 docker push "223455578796.dkr.ecr.eu-central-1.amazonaws.com/$target:$version"
 
 echo "deployment succeeded";
+
+PAUSE
+read -n1 -r -p "Press any key to continue..." key

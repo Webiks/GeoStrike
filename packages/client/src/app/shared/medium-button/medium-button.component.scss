@@ -1,0 +1,32 @@
+.btn-text {
+  display: inline-block;
+  font-family: Saira ExtraCondensed, sans-serif;
+  font-size: 40px;
+  font-weight: bold;
+  margin: auto 22px;
+  width: 258px;
+}
+
+.btn-container {
+  background-color: transparent;
+  border: 1px solid white;
+  border-bottom-left-radius: 20px;
+  border-top-right-radius: 20px;
+  color: white;
+  cursor: pointer;
+  outline: none;
+  padding: 0px;
+  transition: all 0.5s;
+  &:hover {
+    border: 1px solid var(--light-green);
+    box-shadow: 0 0 0 2px var(--light-green);
+    color: var(--light-green);
+  }
+
+}
+
+.highlight {
+  border: 1px solid var(--light-green);
+  box-shadow: 0 0 0 2px var(--light-green);
+  color: var(--light-green);
+}
