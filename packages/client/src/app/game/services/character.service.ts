@@ -12,6 +12,14 @@ export enum MeModelState {
   CONTROLLED,
 }
 
+export enum MeLifeStatus {
+  FULL,
+  THREE_QUARTERS,
+  HALF_FULL,
+  QUARTER,
+  EMPTY
+}
+
 export enum ViewState {
   FPV,
   SEMI_FPV,
@@ -25,6 +33,7 @@ export interface CharacterState {
   heading: number;
   pitch: number;
   state: MeModelState;
+  lifeState: MeLifeStatus;
   isCrawling: boolean;
   team: Team;
   characterInfo: PlayerFields.Character;

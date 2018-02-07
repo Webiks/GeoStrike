@@ -22,7 +22,8 @@ export interface Player extends User {
   id: string; 
   username?: string; 
   character: CharacterData; 
-  state: PlayerState; 
+  state: PlayerState;
+  lifeState: PlayerLifeState;
   isCrawling: boolean; 
   isShooting: boolean; 
   isMe: boolean; 
@@ -151,4 +152,9 @@ export type CharacterType = "PLAYER" | "BACKGROUND_CHARACTER" | "OVERVIEW";
 
 
 export type GameState = "WAITING" | "ACTIVE" | "DONE";
+
+
+export type PlayerLifeState = "FULL" | "THREE_QUARTERS" | "HALF_FULL" | "QUARTER" | "EMPTY";
+
+
 

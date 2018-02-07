@@ -1,141 +1,144 @@
 /* tslint:disable */
 
+
 export interface User {
-  id: string; 
-  username?: string; 
+  id: string;
+  username?: string;
 }
 
 export interface Query {
-  currentGame?: Game; 
+  currentGame?: Game;
 }
 
 export interface Game {
-  id: string; 
-  players: Player[]; 
-  gameCode: string; 
-  state: GameState; 
-  me?: User; 
-  winingTeam?: Team; 
+  id: string;
+  players: Player[];
+  gameCode: string;
+  state: GameState;
+  me?: User;
+  winingTeam?: Team;
 }
 
 export interface Player extends User {
-  id: string; 
-  username?: string; 
-  character: CharacterData; 
-  state: PlayerState; 
-  isCrawling: boolean; 
-  isShooting: boolean; 
-  isMe: boolean; 
-  currentLocation: PlayerLocation; 
-  team: Team; 
-  syncState: PlayerSyncState; 
-  type: CharacterType; 
-  enteringBuildingPosition?: PlayerLocation; 
+  id: string;
+  username?: string;
+  character: CharacterData;
+  state: PlayerState;
+  lifeState: PlayerLifeState;
+  isCrawling: boolean;
+  isShooting: boolean;
+  isMe: boolean;
+  currentLocation: PlayerLocation;
+  team: Team;
+  syncState: PlayerSyncState;
+  type: CharacterType;
+  enteringBuildingPosition?: PlayerLocation;
 }
 
 export interface CharacterData {
-  name: string; 
-  model?: string; 
-  scale?: number; 
-  team?: Team; 
-  imageUrl?: string; 
-  description?: string; 
-  portraitUrl?: string; 
-  iconUrl?: string; 
-  iconDeadUrl?: string; 
-  fixedHeight?: number; 
+  name: string;
+  model?: string;
+  scale?: number;
+  team?: Team;
+  imageUrl?: string;
+  description?: string;
+  portraitUrl?: string;
+  iconUrl?: string;
+  iconDeadUrl?: string;
+  fixedHeight?: number;
 }
 
 export interface PlayerLocation {
-  location: Location; 
-  heading: number; 
+  location: Location;
+  heading: number;
 }
 
 export interface Location {
-  x: number; 
-  y: number; 
-  z: number; 
+  x: number;
+  y: number;
+  z: number;
 }
 
 export interface Mutation {
-  createNewGame?: CreateOrJoinResult; 
-  joinGame?: CreateOrJoinResult; 
-  joinAsViewer?: CreateOrJoinResult; 
-  updatePosition?: Player; 
-  ready?: Game; 
-  notifyKill?: Player; 
-  notifyShot?: boolean; 
-  takeControlOverPlayer?: Player; 
-  removeControlOverPlayer?: Player; 
+  createNewGame?: CreateOrJoinResult;
+  joinGame?: CreateOrJoinResult;
+  joinAsViewer?: CreateOrJoinResult;
+  updatePosition?: Player;
+  ready?: Game;
+  notifyKill?: Player;
+  notifyBeenShot?: Player;
+  notifyShot?: boolean;
+  takeControlOverPlayer?: Player;
+  removeControlOverPlayer?: Player;
 }
 
 export interface CreateOrJoinResult {
-  game: Game; 
-  player: User; 
-  playerToken: string; 
+  game: Game;
+  player: User;
+  playerToken: string;
 }
 
 export interface Subscription {
-  gameData?: Game; 
-  gameNotifications?: Notification; 
-  gunShot?: ShotData; 
+  gameData?: Game;
+  gameNotifications?: Notification;
+  gunShot?: ShotData;
 }
 
 export interface Notification {
-  gameId?: string; 
-  message?: string; 
+  gameId?: string;
+  message?: string;
 }
 
 export interface ShotData {
-  id?: string; 
-  byPlayer?: Player; 
-  shotPosition?: Location; 
-  time?: number; 
+  id?: string;
+  byPlayer?: Player;
+  shotPosition?: Location;
+  time?: number;
 }
 
 export interface Viewer extends User {
-  id: string; 
-  username?: string; 
+  id: string;
+  username?: string;
 }
 
 export interface LocationInput {
-  x: number; 
-  y: number; 
-  z: number; 
+  x: number;
+  y: number;
+  z: number;
 }
 export interface CreateNewGameMutationArgs {
-  character?: string; 
-  username: string; 
-  team: Team; 
-  isViewer: boolean; 
+  character?: string;
+  username: string;
+  team: Team;
+  isViewer: boolean;
 }
 export interface JoinGameMutationArgs {
-  gameCode: string; 
-  character: string; 
-  username: string; 
-  team: Team; 
+  gameCode: string;
+  character: string;
+  username: string;
+  team: Team;
 }
 export interface JoinAsViewerMutationArgs {
-  gameCode?: string; 
-  username?: string; 
+  gameCode?: string;
+  username?: string;
 }
 export interface UpdatePositionMutationArgs {
-  position: LocationInput; 
-  heading: number; 
-  isCrawling: boolean; 
-  isShooting: boolean; 
-  enteringBuildingPosition?: LocationInput; 
-  skipValidation?: boolean; 
+  position: LocationInput;
+  heading: number;
+  isCrawling: boolean;
+  isShooting: boolean;
+  enteringBuildingPosition?: LocationInput;
+  skipValidation?: boolean;
 }
 export interface NotifyKillMutationArgs {
-  playerId: string; 
+  playerId: string;
 }
 export interface NotifyShotMutationArgs {
-  byPlayerId: string; 
-  shotPosition: LocationInput; 
+  byPlayerId: string;
+  shotPosition: LocationInput;
 }
 export interface TakeControlOverPlayerMutationArgs {
-  playerId: string; 
+  playerId: string;
 }
 
 export type Team = "BLUE" | "RED" | "NONE";
@@ -152,6 +155,9 @@ export type CharacterType = "PLAYER" | "BACKGROUND_CHARACTER" | "OVERVIEW";
 
 export type GameState = "WAITING" | "ACTIVE" | "DONE";
 
+export type PlayerLifeState = "NO_HIT" | "FIRST_HIT" | "SECOND_HIT" | "THIRD_HIT" | "FOURTH_HIT";
+
+
 export namespace CreateNewGame {
   export type Variables = {
     character: string;
@@ -161,13 +167,13 @@ export namespace CreateNewGame {
   }
 
   export type Mutation = {
-    createNewGame?: CreateNewGame; 
-  } 
+    createNewGame?: CreateNewGame;
+  }
 
   export type CreateNewGame = {
-    game: Game; 
-    playerToken: string; 
-  } 
+    game: Game;
+    playerToken: string;
+  }
 
   export type Game = GameFields.Fragment
 }
@@ -176,8 +182,8 @@ export namespace CurrentGame {
   }
 
   export type Query = {
-    currentGame?: CurrentGame; 
-  } 
+    currentGame?: CurrentGame;
+  }
 
   export type CurrentGame = GameFields.Fragment
 }
@@ -186,8 +192,8 @@ export namespace GameData {
   }
 
   export type Subscription = {
-    gameData?: GameData; 
-  } 
+    gameData?: GameData;
+  }
 
   export type GameData = GameFields.Fragment
 }
@@ -196,37 +202,37 @@ export namespace GameNotifications {
   }
 
   export type Subscription = {
-    gameNotifications?: GameNotifications; 
-  } 
+    gameNotifications?: GameNotifications;
+  }
 
   export type GameNotifications = {
-    message?: string; 
-  } 
+    message?: string;
+  }
 }
 export namespace GunShots {
   export type Variables = {
   }
 
   export type Subscription = {
-    gunShot?: GunShot; 
-  } 
+    gunShot?: GunShot;
+  }
 
   export type GunShot = {
-    id?: string; 
-    byPlayer?: ByPlayer; 
-    shotPosition?: ShotPosition; 
-  } 
+    id?: string;
+    byPlayer?: ByPlayer;
+    shotPosition?: ShotPosition;
+  }
 
   export type ByPlayer = {
-    id: string; 
-    username?: string; 
-  } 
+    id: string;
+    username?: string;
+  }
 
   export type ShotPosition = {
-    x: number; 
-    y: number; 
-    z: number; 
-  } 
+    x: number;
+    y: number;
+    z: number;
+  }
 }
 export namespace JoinAsViewer {
   export type Variables = {
@@ -235,13 +241,13 @@ export namespace JoinAsViewer {
   }
 
   export type Mutation = {
-    joinAsViewer?: JoinAsViewer; 
-  } 
+    joinAsViewer?: JoinAsViewer;
+  }
 
   export type JoinAsViewer = {
-    playerToken: string; 
-    game: Game; 
-  } 
+    playerToken: string;
+    game: Game;
+  }
 
   export type Game = GameFields.Fragment
 }
@@ -254,13 +260,13 @@ export namespace JoinGame {
   }
 
   export type Mutation = {
-    joinGame?: JoinGame; 
-  } 
+    joinGame?: JoinGame;
+  }
 
   export type JoinGame = {
-    game: Game; 
-    playerToken: string; 
-  } 
+    game: Game;
+    playerToken: string;
+  }
 
   export type Game = GameFields.Fragment
 }
@@ -270,11 +276,24 @@ export namespace NotifyKill {
   }
 
   export type Mutation = {
-    notifyKill?: NotifyKill; 
-  } 
+    notifyKill?: NotifyKill;
+  }
 
   export type NotifyKill = PlayerFields.Fragment
 }
+
+export namespace NotifyBeenShot {
+  export type Variables = {
+    playerId: string;
+  }
+
+  export type Mutation = {
+    notifyKill?: NotifyBeenShot;
+  }
+
+  export type NotifyBeenShot = PlayerFields.Fragment
+}
+
 export namespace NotifyShot {
   export type Variables = {
     byPlayerId: string;
@@ -282,16 +301,16 @@ export namespace NotifyShot {
   }
 
   export type Mutation = {
-    notifyShot?: boolean; 
-  } 
+    notifyShot?: boolean;
+  }
 }
 export namespace Ready {
   export type Variables = {
   }
 
   export type Mutation = {
-    ready?: Ready; 
-  } 
+    ready?: Ready;
+  }
 
   export type Ready = GameFields.Fragment
 }
@@ -300,12 +319,12 @@ export namespace RemoveControl {
   }
 
   export type Mutation = {
-    removeControlOverPlayer?: RemoveControlOverPlayer; 
-  } 
+    removeControlOverPlayer?: RemoveControlOverPlayer;
+  }
 
   export type RemoveControlOverPlayer = {
-    id: string; 
-  } 
+    id: string;
+  }
 }
 export namespace TakeControl {
   export type Variables = {
@@ -313,12 +332,12 @@ export namespace TakeControl {
   }
 
   export type Mutation = {
-    takeControlOverPlayer?: TakeControlOverPlayer; 
-  } 
+    takeControlOverPlayer?: TakeControlOverPlayer;
+  }
 
   export type TakeControlOverPlayer = {
-    id: string; 
-  } 
+    id: string;
+  }
 }
 export namespace UpdatePosition {
   export type Variables = {
@@ -331,25 +350,25 @@ export namespace UpdatePosition {
   }
 
   export type Mutation = {
-    updatePosition?: UpdatePosition; 
-  } 
+    updatePosition?: UpdatePosition;
+  }
 
   export type UpdatePosition = PlayerFields.Fragment
 }
 
 export namespace GameFields {
   export type Fragment = {
-    id: string; 
-    gameCode: string; 
-    state: GameState; 
-    winingTeam?: Team; 
-    players: Players[]; 
-    me?: Me; 
-  } 
+    id: string;
+    gameCode: string;
+    state: GameState;
+    winingTeam?: Team;
+    players: Players[];
+    me?: Me;
+  }
 
   export type Players = {
-    id: string; 
-    username?: string; 
+    id: string;
+    username?: string;
   } & PlayerFields.Fragment
 
   export type Me = PlayerFields.Fragment & ViewerFields.Fragment
@@ -357,29 +376,30 @@ export namespace GameFields {
 
 export namespace PlayerFields {
   export type Fragment = {
-    team: Team; 
-    syncState: PlayerSyncState; 
-    username?: string; 
-    character: Character; 
-    state: PlayerState; 
-    isCrawling: boolean; 
-    isShooting: boolean; 
-    isMe: boolean; 
-    id: string; 
-    type: CharacterType; 
-    currentLocation: CurrentLocation; 
-    enteringBuildingPosition?: EnteringBuildingPosition; 
-  } 
+    team: Team;
+    syncState: PlayerSyncState;
+    username?: string;
+    character: Character;
+    state: PlayerState;
+    lifeState: PlayerLifeState;
+    isCrawling: boolean;
+    isShooting: boolean;
+    isMe: boolean;
+    id: string;
+    type: CharacterType;
+    currentLocation: CurrentLocation;
+    enteringBuildingPosition?: EnteringBuildingPosition;
+  }
 
   export type Character = {
-    name: string; 
-    model?: string; 
-    scale?: number; 
-    portraitUrl?: string; 
-    iconUrl?: string; 
-    iconDeadUrl?: string; 
-    fixedHeight?: number; 
-  } 
+    name: string;
+    model?: string;
+    scale?: number;
+    portraitUrl?: string;
+    iconUrl?: string;
+    iconDeadUrl?: string;
+    fixedHeight?: number;
+  }
 
   export type CurrentLocation = LocationFields.Fragment
 
@@ -388,20 +408,20 @@ export namespace PlayerFields {
 
 export namespace LocationFields {
   export type Fragment = {
-    location: Location; 
-    heading: number; 
-  } 
+    location: Location;
+    heading: number;
+  }
 
   export type Location = {
-    x: number; 
-    y: number; 
-    z: number; 
-  } 
+    x: number;
+    y: number;
+    z: number;
+  }
 }
 
 export namespace ViewerFields {
   export type Fragment = {
-    username?: string; 
-    id: string; 
-  } 
+    username?: string;
+    id: string;
+  }
 }

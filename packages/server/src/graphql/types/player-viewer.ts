@@ -12,6 +12,7 @@ export const schema = gql`
     username: String
     character: CharacterData!
     state: PlayerState!
+    lifeState: PlayerLifeState
     isCrawling: Boolean!
     isShooting: Boolean!
     isMe: Boolean!
@@ -64,6 +65,14 @@ export const schema = gql`
     ALIVE,
     DEAD,
     CONTROLLED,
+  }
+  
+  enum PlayerLifeState {
+    FULL,
+    THREE_QUARTERS,
+    HALF_FULL,
+    QUARTER,
+    EMPTY
   }
 
   type Location {

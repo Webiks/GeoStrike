@@ -13,6 +13,9 @@ const resolvers = {
     state: (player: IPlayer) => {
       return player.state;
     },
+    lifeState: (player: IPlayer) => {
+          return player.lifeState;
+    },
     currentLocation: (player: IPlayer) => ({
       location: player.currentLocation,
       heading: player.heading,

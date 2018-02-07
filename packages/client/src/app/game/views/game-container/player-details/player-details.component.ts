@@ -12,11 +12,18 @@ import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleCha
       </div>
       <div class="name-life-bar-container">
         <div class="text">{{username}}</div>
-        <!--<div class="life-bar-wrapper">-->
-          <div class="life-bar--75percent"></div>
-          <!--<progress max="100" value="80"></progress>-->
+        <div class="life-bar-wrapper">
+          <div class="life-bar" 
+               [ngClass]="{
+            'life-bar--full': getlifeStateCondtion('FULL'),
+            'life-bar--three-quarters': getlifeStateCondtion('THREE_QUARTERS'),
+            'life-bar--half': getlifeStateCondtion('HALF_FULL'),
+            'life-bar--quarter': getlifeStateCondtion('QUARTER')
+        }">
+            
+          </div>
         </div>
-      <!--</div>-->
+      </div>
     </div>
   `,
   styleUrls: ['./player-details.component.scss'],
@@ -30,6 +37,8 @@ export class PlayerDetailsComponent implements OnInit, OnChanges {
 
   @Input() username;
 
+  lifeState: string;
+
   constructor() {
   }
 
@@ -42,9 +51,17 @@ export class PlayerDetailsComponent implements OnInit, OnChanges {
     return undefined;
   }
 
+  getlifeStateCondtion(condtion: string): Boolean{
+    if(this.lifeState === condtion)
+      return true;
+    else
+      return false;
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     if (this.me) {
       this.viewer = this.me['__typename'] === 'Viewer';
+      this.lifeState = this.me.lifeState;
     }
   }
 

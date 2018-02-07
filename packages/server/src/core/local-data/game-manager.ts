@@ -1,6 +1,6 @@
 import { v4 } from 'uuid';
 import { sign } from 'jsonwebtoken';
-import { CharacterData, GameState, PlayerState, PlayerSyncState } from '../../types';
+import { CharacterData, GameState, PlayerState, PlayerSyncState, PlayerLifeState } from '../../types';
 import * as Cesium from 'cesium';
 import { config } from '../../settings/config';
 import { startClientsUpdater, stopClientsUpdater } from '../clients-updater/clients-updater';
@@ -39,6 +39,8 @@ export interface IPlayer {
   character: CharacterData;
   username: string;
   state: PlayerState;
+  lifeState: PlayerLifeState;
+  numberOfShotsHitsThatHit: number;
   isCrawling: boolean;
   isShooting: boolean;
   game: IGameObject;
@@ -163,6 +165,8 @@ export class GamesManager {
       token: playerToken,
       username: finalUsername,
       state: 'WAITING',
+      lifeState: 'FULL',
+      numberOfShotsHitsThatHit: 0,
       game,
       currentLocation: defaultPlayerPositions[realPlayerTeamCount],
       heading: 0,
@@ -250,6 +254,7 @@ export class GamesManager {
         skipValidation ||
         this.validatePlayerPosition(player.currentLocation, position)
       ) {
+        player.lifeState = 'FULL';
         player.syncState = 'VALID';
         player.currentLocation = position;
         player.heading = heading;
@@ -275,6 +280,16 @@ export class GamesManager {
 
     this.checkGameResult(game);
 
+  }
+
+  updatePlayerLifeState(gameId: string, playerId: string, newState: PlayerLifeState){
+      const game = this.getGameById(gameId);
+      const player = game.controlledPlayersMap.get(playerId) || game.playersMap.get(playerId);
+      if (player) {
+          player.lifeState = newState;
+      }
+
+      // this.checkGameResult(game);
   }
 
   private checkGameResult(game: IGameObject) {

@@ -64,7 +64,6 @@ export class MainComponent {
       .createNewGame(this.characterName, this.username, this.team, isViewer)
       .subscribe((result: ApolloQueryResult<CreateNewGame.Mutation>) => {
         this.loading = false;
-
         if (!result.loading && result.data) {
           AuthorizationMiddleware.setToken(result.data.createNewGame.playerToken);
           const gameCode = result.data.createNewGame.game.gameCode;
