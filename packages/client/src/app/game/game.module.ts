@@ -49,8 +49,9 @@ import { OtherPlayersGunSoundComponent } from './views/game-map/other-players/gu
 import { GunIndicatorComponent } from './views/game-map/other-players/gun-shot/gun-indicator/gun-indicator.component';
 import { SoundService } from './services/sound.service';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { GameCreditsComponent } from "./views/game-container/game-credits/game-credits.component";
-import { CreditsDialogComponent } from "./views/credits-dialog/credits-dialog.component";
+import { GameCreditsComponent } from './views/game-container/game-credits/game-credits.component';
+import { CreditsDialogComponent } from './views/credits-dialog/credits-dialog.component';
+import { BloodOnScreen } from './views/game-container/blood-on-screen/blood-on-screen';
 
 @NgModule({
   declarations: [
@@ -81,7 +82,8 @@ import { CreditsDialogComponent } from "./views/credits-dialog/credits-dialog.co
     OtherPlayersGunSoundComponent,
     GunIndicatorComponent,
     GameCreditsComponent,
-    CreditsDialogComponent
+    CreditsDialogComponent,
+    BloodOnScreen
   ],
   imports: [
     BrowserModule,

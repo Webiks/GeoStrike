@@ -288,7 +288,7 @@ export namespace NotifyBeenShot {
   }
 
   export type Mutation = {
-    notifyKill?: NotifyBeenShot;
+    notifyBeenShot?: NotifyBeenShot;
   }
 
   export type NotifyBeenShot = PlayerFields.Fragment

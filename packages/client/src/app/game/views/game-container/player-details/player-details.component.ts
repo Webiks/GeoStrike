@@ -15,8 +15,7 @@ import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleCha
         <div class="life-bar-wrapper">
           <div class="life-bar" 
                [ngClass]="{
-                          'life-bar--full': getlifeStateCondtion('FULL'),
-                          'life-bar--three-quarters': getlifeStateCondtion('THREE_QUARTERS'),
+                          'life-bar--three-quarters': getlifeStateCondtion('FULL'),
                           'life-bar--half': getlifeStateCondtion('HALF_FULL'),
                           'life-bar--quarter': getlifeStateCondtion('QUARTER')
                          }">
@@ -26,6 +25,8 @@ import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleCha
       </div>
     </div>
   `,
+  // 'life-bar--full': getlifeStateCondtion('FULL'),
+
   styleUrls: ['./player-details.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })

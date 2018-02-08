@@ -11,7 +11,6 @@ export const notifyKill = (rootValue, { playerId }, { games, game, player }: IGr
   const shotPlayer = game.playersMap.get(playerId);
   const shotPlayerState = shotPlayer.state;
   games.updatePlayerState(game.gameId, playerId, 'DEAD');
-  // games.updatePlayerLifeState(game.gameId, playerId, 'EMPTY');
   pubsub.publish(ESubscriptionTopics.GAME_STATE_CHANGED, { gameData: game });
 
   if (!shootingPlayer || !shootingPlayer.team || !shotPlayer || !shotPlayer.team ||
@@ -29,7 +28,7 @@ export const notifyKill = (rootValue, { playerId }, { games, game, player }: IGr
       `<span style="color: white">${shootingPlayer.username} left the game</span>`;
   }
 
-  // pubsub.publish(ESubscriptionTopics.GAME_NOTIFICATIONS, { gameNotifications: { message, gameId: game.gameId } });
+  pubsub.publish(ESubscriptionTopics.GAME_NOTIFICATIONS, { gameNotifications: { message, gameId: game.gameId } });
 
   return shotPlayer;
 };

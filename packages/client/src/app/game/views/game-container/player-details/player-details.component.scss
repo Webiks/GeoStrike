@@ -16,20 +16,22 @@
 
 .name-life-bar-container {
   display: flex;
-  flex-direction: column;
+  //flex-direction: column;
   position: relative;
+  justify-content: center;
   .text {
-    padding: 0 10px 15px 10px;
+    line-height: 34px;
+    margin: 13px 16px 15px 16px;
     align-items: start;
     align-self: flex-start;
+    line-height: 34px;
   }
 
   .life-bar-wrapper {
-    //width: 67%;
     position: absolute;
     height: 4px;
     background-color: rgba(255, 255, 255, 0.26);
-    margin: 10px;
+    margin-bottom: 6px;
     bottom: 0;
     width: 83%;
 
