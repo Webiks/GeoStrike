@@ -85,24 +85,24 @@ export class MeComponent implements OnInit, OnDestroy {
         const picked = this.cesiumService.getScene().pick(crossLocation);
         if (picked && picked.id && picked.id.acEntity && picked.id.acEntity instanceof OtherPlayerEntity) {
           const shotedEntity = picked.id.acEntity;
-          console.log("picked.id.acEntity.lifeState"+picked.id.acEntity.lifeState);
-          //notify been shot
           let killSubscription;
-          // killSubscription = this.gameService.notifyKill(shotedEntity.id)
-          //   .subscribe(() => killSubscription.unsubscribe());
-          if(picked.id.acEntity.lifeState === MeLifeStatus.QUARTER)
-          {
-            killSubscription = this.gameService.notifyKill(shotedEntity.id)
-              .subscribe(() => killSubscription.unsubscribe());
-          }
-          else{
-            killSubscription = this.gameService.notifyBeenShot(shotedEntity.id)
-              .subscribe(() => killSubscription.unsubscribe());
-          }
-          // const killSubscription = this.gameService.notifyKill(shotedEntity.id)
-          //   .subscribe(() => killSubscription.unsubscribe());
+
+          killSubscription = this.gameService.notifyBeenShot(shotedEntity.id)
+            .subscribe( beenShotData => {
+              console.log("beenShotData.data.NotifyBeenShot.lifeState:" + beenShotData.data.notifyBeenShot.lifeState),
+                this.setKillEvent(beenShotData.data.notifyBeenShot.lifeState,shotedEntity.id),
+                killSubscription.unsubscribe()
+            });
         }
       });
+  }
+
+  setKillEvent(lifeState:string, shotedEntityId) {
+    if(lifeState === "EMPTY")
+      {
+        let killSubscription = this.gameService.notifyKill(shotedEntityId)
+          .subscribe(() => killSubscription.unsubscribe());
+      }
   }
 
   ngOnInit(): void {
@@ -110,9 +110,9 @@ export class MeComponent implements OnInit, OnDestroy {
       this.character.viewState$.map(viewState => viewState === ViewState.FPV),
       this.character.state$.map(meState => meState && meState.state === MeModelState.SHOOTING)
     ).map((result => result[0] || result[1])).subscribe((value) => {
-        this.showWeapon = value;
-        this.cd.detectChanges();
-      });
+      this.showWeapon = value;
+      this.cd.detectChanges();
+    });
     this.showCross$ = this.character.state$.map(meState => meState && meState.state === MeModelState.SHOOTING).subscribe((value) => {
       this.showCross = value;
       this.cd.detectChanges();

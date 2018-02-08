@@ -15,11 +15,11 @@ import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleCha
         <div class="life-bar-wrapper">
           <div class="life-bar" 
                [ngClass]="{
-            'life-bar--full': getlifeStateCondtion('FULL'),
-            'life-bar--three-quarters': getlifeStateCondtion('THREE_QUARTERS'),
-            'life-bar--half': getlifeStateCondtion('HALF_FULL'),
-            'life-bar--quarter': getlifeStateCondtion('QUARTER')
-        }">
+                          'life-bar--full': getlifeStateCondtion('FULL'),
+                          'life-bar--three-quarters': getlifeStateCondtion('THREE_QUARTERS'),
+                          'life-bar--half': getlifeStateCondtion('HALF_FULL'),
+                          'life-bar--quarter': getlifeStateCondtion('QUARTER')
+                         }">
             
           </div>
         </div>
