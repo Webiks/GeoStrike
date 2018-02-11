@@ -89,7 +89,6 @@ export class MeComponent implements OnInit, OnDestroy {
 
           killSubscription = this.gameService.notifyBeenShot(shotedEntity.id)
             .subscribe( beenShotData => {
-              console.log("beenShotData.data.NotifyBeenShot.lifeState:" + beenShotData.data.notifyBeenShot.lifeState),
                 this.setKillEvent(beenShotData.data.notifyBeenShot.lifeState,shotedEntity.id),
                 killSubscription.unsubscribe()
             });

@@ -16,15 +16,14 @@
 
 .name-life-bar-container {
   display: flex;
-  //flex-direction: column;
   position: relative;
   justify-content: center;
+  height: 100%;
   .text {
-    line-height: 34px;
-    margin: 13px 16px 15px 16px;
-    align-items: start;
-    align-self: flex-start;
-    line-height: 34px;
+    line-height: 36px;
+    margin: 13px 16px 5px;
+    font-size: 36px;
+    justify-content: center;
   }
 
   .life-bar-wrapper {
