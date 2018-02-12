@@ -1,0 +1,38 @@
+.flight-container {
+  border-top-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+  color: white;
+  border: 1px solid white;
+  height: 65px;
+  font-size: 34px;
+  display: flex;
+  align-items: center;
+  position: fixed;
+  bottom: 153px;
+  left: 10px;
+  width: 200px;
+  background-color: rgba(0, 0, 0, 0.42);
+}
+
+.img-container {
+  width: 64px;
+  height: 64px;
+  border: 1px solid white;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  border-top-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.54));
+}
+
+.img-container:hover {
+  //background-color: rgba(111, 207, 151, 0.26);
+  background: linear-gradient(180deg, black, rgba(111, 207, 151, 0.26));
+}
+
+.text {
+  padding: 0 10px;
+  margin: auto;
+}

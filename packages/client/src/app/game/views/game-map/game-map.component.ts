@@ -118,6 +118,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
   }
 
   private startFirstPersonMode(player: PlayerFields.Fragment, initCharacter = true) {
+    debugger;
     if (initCharacter) {
       this.character.initCharacter({
         id: 'me',
@@ -154,6 +155,10 @@ export class GameMapComponent implements OnInit, OnDestroy {
     this.viewerOptions.setFreeCameraOptions(this.viewer);
     this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_START_LOCATION});
   }
+
+  // private startFlightMode() {
+  //
+  // }
 
   onMousemove(event: MouseEvent) {
     if (!this.character.initialized || !document.pointerLockElement) {
