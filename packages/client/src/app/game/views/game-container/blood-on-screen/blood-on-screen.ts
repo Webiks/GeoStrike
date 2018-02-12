@@ -5,15 +5,12 @@ import {Component, Input, OnInit} from '@angular/core';
   templateUrl: './blood-on-screen.html',
   styleUrls: ['./blood-on-screen.scss']
 })
-export class BloodOnScreen implements OnInit {
+export class BloodOnScreen {
   @Input() lifeState;
-  constructor() { }
 
-  ngOnInit() {
-  }
 
   getCondition(condition: string) {
-    if(this.lifeState && condition === this.lifeState.lifeState)
+    if (this.lifeState && condition === this.lifeState.lifeState)
       return true
     return false
   }

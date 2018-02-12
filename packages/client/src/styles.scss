@@ -23,7 +23,7 @@ body {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  font-family: Saira ExtraCondensed, sans-serif !important;
+  font-family: Saira ExtraCondensed, sans-serif;
   background-image: url('/assets/menu/background.png');
   background-size: cover;
 }
@@ -78,7 +78,6 @@ mat-form-field {
 
 ::-webkit-scrollbar {
   width: 8px;
-  height: 396px;
 }
 ::-webkit-scrollbar-track {
   background: rgba(255, 255, 255, 0.26);

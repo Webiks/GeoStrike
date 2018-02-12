@@ -7,36 +7,27 @@ export const notifyBeenShot = (rootValue, {playerId}, {games, game, player}: IGr
       return null;
     }
     const numOfShotsToKill: number = 4;
-    const shotPlayer = game.playersMap.get(playerId);
-    const shootingPlayer = ((game.controlledPlayersMap.get(playerId) || player) as IPlayer);
-    const shotPlayerState = shotPlayer.state;
+    let shotPlayer = game.playersMap.get(playerId);
+    const ShootingPlayer = ((game.controlledPlayersMap.get(playerId) || player) as IPlayer);
+    const ShotPlayerState = shotPlayer.state;
     shotPlayer.numberOfShotsThatHit += 1;
     let lifeStatePerctange = Math.ceil(4 * (1 - (shotPlayer.numberOfShotsThatHit / numOfShotsToKill))) / 4;
 
-    if (!shootingPlayer || !shootingPlayer.team || !shotPlayer || !shotPlayer.team ||
-        shotPlayerState === 'DEAD' ||
+    if (!ShootingPlayer || !ShootingPlayer.team || !shotPlayer || !shotPlayer.team ||
+        ShotPlayerState === 'DEAD' ||
         shotPlayer.type === CharacterType.BACKGROUND_CHARACTER) {
         games.updatePlayerLifeState(game.gameId, playerId, 'EMPTY');
         return shotPlayer;
     }
-    // console.log("numberOfShotsHitsThatHit"+shotPlayer.numberOfShotsThatHit);
-    // console.log("lifeStatePerctange"+lifeStatePerctange)
-    // console.log("shotPlayer.numberOfShotsThatHit"+shotPlayer.numberOfShotsThatHit)
-    // console.log("numOfShotsToKill"+numOfShotsToKill)
-
     if (lifeStatePerctange === 0.75)
-        games.updatePlayerLifeState(game.gameId, playerId, 'THREE_QUARTERS');
+        games.updatePlayerLifeState(game.gameId, playerId, 'HIGH');
     else if (lifeStatePerctange === 0.5)
-        games.updatePlayerLifeState(game.gameId, playerId, 'HALF_FULL');
+        games.updatePlayerLifeState(game.gameId, playerId, 'MEDIUM');
     else if (lifeStatePerctange === 0.25)
-        games.updatePlayerLifeState(game.gameId, playerId, 'QUARTER');
+        games.updatePlayerLifeState(game.gameId, playerId, 'LOW');
     else if (lifeStatePerctange === 0){
         games.updatePlayerLifeState(game.gameId, playerId, 'EMPTY');
-        // games.updatePlayerState(game.gameId, playerId, 'DEAD');
     }
-
-    // pubsub.publish(ESubscriptionTopics.GAME_NOTIFICATIONS, { gameNotifications: {  gameId: game.gameId } });
-
     return shotPlayer;
 
 };

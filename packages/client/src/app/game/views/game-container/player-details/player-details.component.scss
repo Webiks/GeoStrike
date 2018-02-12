@@ -19,11 +19,17 @@
   position: relative;
   justify-content: center;
   height: 100%;
+  max-width:220px;
+  min-width: 160px;
   .text {
     line-height: 36px;
     margin: 13px 16px 5px;
     font-size: 36px;
     justify-content: center;
+    text-overflow: ellipsis;
+    display: inline-block;
+    overflow: hidden;
+    text-align: center;
   }
 
   .life-bar-wrapper {
@@ -43,15 +49,15 @@
       width: 100%;
       background-color: #6FCF97;
     }
-    .life-bar--three-quarters {
+    .life-bar--high {
       width: 75%;
       background-color: #6FCF97;
     }
-    .life-bar--half {
+    .life-bar--medium {
       background-color: #F2C94C;
       width:50%;
     }
-    .life-bar--quarter {
+    .life-bar--low {
       background-color: #e9575a;
       width:25%;
     }

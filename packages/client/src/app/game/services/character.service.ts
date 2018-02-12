@@ -12,11 +12,11 @@ export enum MeModelState {
   CONTROLLED,
 }
 
-export enum MeLifeStatus {
+export enum LifeStatus {
   FULL,
-  THREE_QUARTERS,
-  HALF_FULL,
-  QUARTER,
+  HIGH,
+  MEDIUM,
+  LOW,
   EMPTY
 }
 
@@ -33,7 +33,7 @@ export interface CharacterState {
   heading: number;
   pitch: number;
   state: MeModelState;
-  lifeState: MeLifeStatus;
+  lifeState: LifeStatus;
   isCrawling: boolean;
   team: Team;
   characterInfo: PlayerFields.Character;

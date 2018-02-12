@@ -1,9 +1,13 @@
-<div class="life" [ngClass]="{
-                            'life--three-quarters':getCondition('THREE_QUARTERS'),
-                            'life--half':getCondition('HALF_FULL'),
-                            'life--quarter':getCondition('QUARTER')
-                            }">
-
+<div class="life">
+  <div *ngIf="lifeState && lifeState.lifeState == 'HIGH'">
+    <img src="assets/effects/blood-low.png">
+  </div>
+  <div *ngIf="lifeState && lifeState.lifeState == 'MEDIUM'">
+    <img src="assets/effects/blood-medium.png">
+  </div>
+  <div *ngIf="lifeState && lifeState.lifeState == 'LOW'">
+    <img src="assets/effects/blood-high.png">
+  </div>
 </div>
 
 

@@ -4,8 +4,8 @@ import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
   selector: 'medium-button',
   styleUrls: ['./medium-button.component.scss'],
   template :`
-    <button class="btn-container" [class.highlight]="highlight" [style.width]="width ? width +'px': undefined">
-      <span class="btn-text" [style.font-size]="fontSize? fontSize: undefined">{{text}}</span>
+    <button class="btn-container">
+      <span class="btn-text">{{text}}</span>
     </button>
   `,
 

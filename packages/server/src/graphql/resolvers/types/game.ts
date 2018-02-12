@@ -25,14 +25,6 @@ const resolvers = {
 
             return 'ACTIVE';
         },
-        // lifeState: (game: IGameObject) => {
-        //     const players = Array.from(game.playersMap.values());
-        //     if (players.some(player => player.lifeState === "NO_HIT")) {
-        //         return 'NO_HIT';
-        //     }
-        //
-        //     return 'NO_HIT';
-        // },
         me: (game: IGameObject, args, {player}: IGraphQLContext) => player || null,
     },
     CreateOrJoinResult: {

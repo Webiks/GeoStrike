@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActionType, CesiumService } from 'angular-cesium';
 import {
-  CharacterService, CharacterState, MeLifeStatus, MeModelState,
+  CharacterService, CharacterState, LifeStatus, MeModelState,
   ViewState
 } from '../../../services/character.service';
 import { UtilsService } from '../../../services/utils.service';

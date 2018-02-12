@@ -288,8 +288,6 @@ export class GamesManager {
       if (player) {
           player.lifeState = newState;
       }
-
-      // this.checkGameResult(game);
   }
 
   private checkGameResult(game: IGameObject) {

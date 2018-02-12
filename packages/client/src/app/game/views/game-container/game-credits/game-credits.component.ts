@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material';
 import {CreditsDialogComponent} from "../../credits-dialog/credits-dialog.component";
 
@@ -7,12 +7,9 @@ import {CreditsDialogComponent} from "../../credits-dialog/credits-dialog.compon
   templateUrl: './game-credits.component.html',
   styleUrls: ['./game-credits.component.scss']
 })
-export class GameCreditsComponent implements OnInit {
+export class GameCreditsComponent {
 
   constructor(private  dialog: MatDialog) {
-  }
-
-  ngOnInit() {
   }
 
   openCredits() {

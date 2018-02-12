@@ -2,12 +2,12 @@
 .credits-container {
   background: rgba(0, 0, 0, 1);
   color: white;
-  //height: 42px;
   display: flex;
   align-items: center;
   position: fixed;
   bottom: 0px;
   width: 100%;
+  font-family: 'Roboto', sans-serif;
 
   .image-container {
     display: flex;
@@ -32,7 +32,6 @@
   .credit-text {
     list-style: none;
     font-size: 10px;
-    font-family: 'Roboto', sans-serif;
     display: flex;
     padding: 0;
 
@@ -44,9 +43,7 @@
   .more-credits {
     margin: auto;
     font-size: 10px;
-    font-family: 'Roboto', sans-serif;
     color: inherit;
     cursor: pointer;
-    text-decoration-line: underline;
   }
 }

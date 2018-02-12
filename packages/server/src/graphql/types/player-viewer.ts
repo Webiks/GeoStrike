@@ -69,9 +69,9 @@ export const schema = gql`
   
   enum PlayerLifeState {
     FULL,
-    THREE_QUARTERS,
-    HALF_FULL,
-    QUARTER,
+    HIGH,
+    MEDIUM,
+    LOW,
     EMPTY
   }
 

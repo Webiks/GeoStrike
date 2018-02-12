@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 
 @Component({
   selector: 'player-details',
@@ -13,14 +13,8 @@ import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleCha
       <div class="name-life-bar-container">
         <div class="text">{{username}}</div>
         <div class="life-bar-wrapper">
-          <div class="life-bar" 
-               [ngClass]="{
-                          'life-bar--full': getlifeStateCondtion('FULL'),
-                          'life-bar--three-quarters': getlifeStateCondtion('THREE_QUARTERS'),
-                          'life-bar--half': getlifeStateCondtion('HALF_FULL'),
-                          'life-bar--quarter': getlifeStateCondtion('QUARTER')
-                         }">
-            
+          <div class="life-bar"
+               [ngClass]="{'life-bar--full': getlifeStateCondtion('FULL'),'life-bar--high': getlifeStateCondtion('HIGH'),'life-bar--medium': getlifeStateCondtion('MEDIUM'),'life-bar--low': getlifeStateCondtion('LOW')}">
           </div>
         </div>
       </div>
@@ -42,17 +36,17 @@ export class PlayerDetailsComponent implements OnInit, OnChanges {
   constructor() {
   }
 
-  getPortrait(){
-    const url =  this.me && this.me.character && this.me.character.portraitUrl;
-    if (url){
+  getPortrait() {
+    const url = this.me && this.me.character && this.me.character.portraitUrl;
+    if (url) {
       const urlSplit = url.split('.');
       return `${urlSplit[0]}_right.${urlSplit[1]}`;
     }
     return undefined;
   }
 
-  getlifeStateCondtion(condtion: string): Boolean{
-    if(this.lifeState === condtion)
+  getlifeStateCondtion(condtion: string): Boolean {
+    if (this.lifeState === condtion)
       return true;
     else
       return false;
