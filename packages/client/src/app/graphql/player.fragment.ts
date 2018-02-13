@@ -16,6 +16,7 @@ export const playerFragment = gql`
     }
     state
     isCrawling
+    isFlying
     isShooting
     isMe
     id

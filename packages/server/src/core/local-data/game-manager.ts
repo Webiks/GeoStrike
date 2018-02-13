@@ -40,6 +40,7 @@ export interface IPlayer {
   username: string;
   state: PlayerState;
   isCrawling: boolean;
+  isFlying: boolean;
   isShooting: boolean;
   game: IGameObject;
   currentLocation: ICartesian3Location;
@@ -169,6 +170,7 @@ export class GamesManager {
       team,
       type: CharacterType.PLAYER,
       isCrawling: false,
+      isFlying: false,
       isShooting: false,
       syncState: 'VALID',
     };

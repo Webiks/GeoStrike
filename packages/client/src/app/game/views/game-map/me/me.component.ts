@@ -190,6 +190,9 @@ export class MeComponent implements OnInit, OnDestroy {
     } else if (this.characterInfo.fixedHeight) {
       return this.utils.toHeightOffset(position, this.characterInfo.fixedHeight);
     }
+    else if(this.character.isFlying) {
+      return this.utils.toHeightOffset(position, 200.0);
+    }
     return position;
   }
 }

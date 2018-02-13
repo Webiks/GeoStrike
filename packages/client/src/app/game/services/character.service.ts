@@ -26,6 +26,7 @@ export interface CharacterState {
   pitch: number;
   state: MeModelState;
   isCrawling: boolean;
+  isFlying: boolean;
   team: Team;
   characterInfo: PlayerFields.Character;
   tileBuilding: any;
@@ -70,10 +71,20 @@ export class CharacterService {
     return this._character.getValue().isCrawling;
   }
 
+  get isFlying() {
+    return this._character.getValue().isFlying;
+  }
+
   set isCrawling(value: boolean) {
     this.modifyCurrentStateValue({
       isCrawling: value,
     });
+  }
+
+  set isFlying(value: boolean) {
+    this.modifyCurrentStateValue( {
+      isFlying: value
+    })
   }
 
   set viewState(value: ViewState) {

@@ -23,7 +23,8 @@ export interface Player extends User {
   username?: string; 
   character: CharacterData; 
   state: PlayerState; 
-  isCrawling: boolean; 
+  isCrawling: boolean;
+  isFlying: boolean;
   isShooting: boolean; 
   isMe: boolean; 
   currentLocation: PlayerLocation; 

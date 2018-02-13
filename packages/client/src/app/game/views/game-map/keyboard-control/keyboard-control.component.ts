@@ -167,6 +167,17 @@ export class KeyboardControlComponent implements OnInit {
     this.character.isCrawling = crawling;
   }
 
+  changeFlyingState() {
+    if(this.character.viewState === ViewState.OVERVIEW){
+      return;
+    }
+    let flying = false;
+    if(!this.character.isFlying) {
+      flying = true;
+    }
+    this.character.isFlying = flying;
+  }
+
   toggleInspector(inspectorClass, inspectorProp) {
     if (!environment.production) {
       if (!this.inspector) {
@@ -252,6 +263,11 @@ export class KeyboardControlComponent implements OnInit {
     this.keyboardKeysService.registerKeyBoardEvent('KeyC', 'Switch Crawling', () => {
       this.ngZone.run(() => {
         this.changeCrawlingState();
+      });
+    });
+    this.keyboardKeysService.registerKeyBoardEvent('KeyF', 'Switch Flying', () => {
+      this.ngZone.run(() => {
+        this.changeFlyingState();
       });
     });
     this.keyboardKeysService.registerKeyBoardEvent('KeyM', 'Switch Overview Mode', () => {

@@ -14,13 +14,17 @@
   background-color: rgba(0, 0, 0, 0.42);
 }
 
+.clickable {
+  cursor: pointer;
+}
+
 .img-container {
   width: 64px;
   height: 64px;
   border: 1px solid white;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: center;
   overflow: hidden;
   border-top-right-radius: 20px;
   border-bottom-left-radius: 20px;

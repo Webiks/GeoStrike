@@ -129,6 +129,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
         state: player.state === 'DEAD' ? MeModelState.DEAD : MeModelState.WALKING,
         team: player.team,
         isCrawling: false,
+        isFlying: false,
         characterInfo: player.character
       });
     }
@@ -182,10 +183,11 @@ export class GameMapComponent implements OnInit, OnDestroy {
     const isFPV = this.character.viewState === ViewState.FPV;
     const isShooting = this.character.state === MeModelState.SHOOTING;
     const isCrawling = this.character.isCrawling;
+    const isFlying = this.character.isFlying;
     const range = isFPV || isShooting ? 0.1 : 4;
 
     const playerHeadCart = Cesium.Cartographic.fromCartesian(this.character.location);
-    playerHeadCart.height += isCrawling ? 2 : 4.4;
+    playerHeadCart.height += (isCrawling) ? 2 :((isFlying) ? (200) : 4.4);
 
     if (this.lastPlayerLocation === this.character.location &&
       this.lastPlayerHPR.heading === this.character.heading &&
