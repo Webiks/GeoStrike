@@ -155,6 +155,3 @@ export type GameState = "WAITING" | "ACTIVE" | "DONE";
 
 
 export type PlayerLifeState = "FULL" | "HIGH" | "MEDIUM" | "LOW" | "EMPTY";
-
-
-

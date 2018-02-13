@@ -23,11 +23,11 @@ credits-dialog {
   }
 
   .container-credits-lines {
-    height: 396px;
+    //height: 396px;
     max-height: 396px;
     flex-direction: column;
     align-items: center;
-    flex-wrap: wrap;
+    //flex-wrap: wrap;
     overflow: auto;
     margin:0;
     .credit-line {
