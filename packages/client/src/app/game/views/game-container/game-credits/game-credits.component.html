@@ -1,4 +1,4 @@
-<div class="credits-container">
+<div class="credits-container" #creditsContainer>
   <div class="image-container">
     <img id="cesium-img" src="assets/logo/credits/cesium.png">
   </div>
@@ -9,32 +9,45 @@
     <img id="bing-img" src="assets/logo/credits/bing.png">
   </div>
   <ul class="credit-text">
-    <li>
-      <a class="credit-link" target="_blank" href="http://www1.nyc.gov/site/doitt/initiatives/3d-building.page">Building
-        data courtesy of NYC OpenData portal</a>
-      &nbsp; <span>•</span>&nbsp;
+    <li title="Building data courtesy of NYC OpenData portal">
+      <a class="credit-link" target="_blank"
+         href="http://www1.nyc.gov/site/doitt/initiatives/3d-building.page">
+        <span>Building data courtesy of NYC OpenData portal </span>
+      </a>
+      &nbsp;•&nbsp;
     </li>
-    <li>
-      <a class="credit-link" target="_blank" href="https://s3.amazonaws.com/cesiumjs/3DTiles/NewYorkCityGml.zip">
-        Download this 3D Tiles tileset&nbsp;</a>
+    <li title="Download this 3D Tiles tileset">
+      <a class="credit-link" target="_blank"
+         href="https://s3.amazonaws.com/cesiumjs/3DTiles/NewYorkCityGml.zip">
+        <span>Download this 3D Tiles tileset&nbsp;</span>
+      </a>
     </li>
-    <li>
+    <li title="Analytical Graphics Inc.">
       <span>•&nbsp;&copy; Analytical Graphics Inc.</span>
     </li>
-    <li>
-      <span>&copy; CGIAR-CSI, Produced using Copernicus data and information funded by the European Union - EU-DEM
-        layers •&nbsp;</span>
+    <li title="CGIAR-CSI, Produced using Copernicus data and information funded by the European Union - EU-DEM layers">
+      <span *ngIf="creditsComponentsWidth > 1900">&copy; CGIAR-CSI, Produced using Copernicus data and information
+        funded by the European Union - EU-DEM layers •&nbsp;</span>
+      <span title="" *ngIf="creditsComponentsWidth < 1900 && creditsComponentsWidth > 1850">&copy; CGIAR-CSI, Produced
+        using Copernicus data and information funded by the...&nbsp;</span>
+      <span *ngIf="creditsComponentsWidth < 1850 && creditsComponentsWidth > 1800">&copy; CGIAR-CSI, Produced using
+        Copernicus data and...&nbsp;</span>
+      <span *ngIf="creditsComponentsWidth < 1800">&copy; CGIAR-CSI, Produced using...&nbsp;</span>
     </li>
-    <li>
-      <span>&copy; 2018 Microsoft Corporation •&nbsp;</span></li>
-    <li>
+    <li title="2018 Microsoft Corporation">
+      <span>&copy; 2018 Microsoft Corporation •&nbsp;</span>
+    </li>
+    <li title="2018 DigitalGlobe">
       <span>&copy; 2018 DigitalGlobe •&nbsp;</span>
     </li>
     <li>
-      <span>&copy; CNES (2018) Distribution Airbus DS • Earthstar Geographics SIO</span>
+      <span>&copy; CNES (2018) Distribution Airbus DS • </span>
+    </li>
+    <li title="Earthstar Geographics SIO">
+      <span>Earthstar Geographics SIO</span>
     </li>
   </ul>
-  <span class="more-credits" (click)="openCredits()">
-    More Credits
+  <span class="more-credits" (click)="openCredits()"
+        [ngClass]="{'more-credits-open':isDialogOpen,'more-credits-close':!isDialogOpen}">More Credits
   </span>
 </div>
