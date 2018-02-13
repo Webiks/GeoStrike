@@ -27,9 +27,8 @@
     font-size: 36px;
     justify-content: center;
     text-overflow: ellipsis;
-    display: inline-block;
     overflow: hidden;
-    text-align: center;
+    white-space: nowrap;
   }
 
   .life-bar-wrapper {
