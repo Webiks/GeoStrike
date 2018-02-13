@@ -40,6 +40,7 @@ export interface IPlayer {
   username: string;
   state: PlayerState;
   lifeState: PlayerLifeState;
+  lifeStatePerctange: number;
   numberOfShotsThatHit: number;
   isCrawling: boolean;
   isShooting: boolean;
@@ -166,7 +167,8 @@ export class GamesManager {
       username: finalUsername,
       state: 'WAITING',
       lifeState: 'FULL',
-        numberOfShotsThatHit: 0,
+      lifeStatePerctange: 100,
+      numberOfShotsThatHit: 0,
       game,
       currentLocation: defaultPlayerPositions[realPlayerTeamCount],
       heading: 0,

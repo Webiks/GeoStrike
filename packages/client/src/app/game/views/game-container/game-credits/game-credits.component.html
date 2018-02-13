@@ -12,7 +12,8 @@
     <li title="Building data courtesy of NYC OpenData portal">
       <a class="credit-link" target="_blank"
          href="http://www1.nyc.gov/site/doitt/initiatives/3d-building.page">
-        <span>Building data courtesy of NYC OpenData portal </span>
+        <span *ngIf="creditsComponentsWidth > 1900">Building data courtesy of NYC OpenData portal </span>
+        <span *ngIf="creditsComponentsWidth < 1600">Building data courtesy...</span>
       </a>
       &nbsp;•&nbsp;
     </li>
