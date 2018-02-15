@@ -14,7 +14,7 @@ import {ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChan
         <div class="text">{{username}}</div>
         <div class="life-bar-wrapper">
           <div class="life-bar"
-               [ngClass]="{'life-bar--full': getlifeStateCondtion('FULL'),'life-bar--high': getlifeStateCondtion('HIGH'),'life-bar--medium': getlifeStateCondtion('MEDIUM'),'life-bar--low': getlifeStateCondtion('LOW')}">
+               [ngClass]="{'life-bar--full': getlifeStateCondtion('FULL'),'life-bar--high': getlifeStateCondtion('HIGH'),'life-bar--medium': getlifeStateCondtion('MEDIUM'),'life-bar--low': getlifeStateCondtion('LOW')}" [style.width.%]="me.lifeStatePerctange">
           </div>
         </div>
       </div>
@@ -32,6 +32,7 @@ export class PlayerDetailsComponent implements OnInit, OnChanges {
   @Input() username;
 
   lifeState: string;
+  lifeStatePerctange: number;
 
   constructor() {
   }
@@ -56,6 +57,7 @@ export class PlayerDetailsComponent implements OnInit, OnChanges {
     if (this.me) {
       this.viewer = this.me['__typename'] === 'Viewer';
       this.lifeState = this.me.lifeState;
+      this.lifeStatePerctange = this.me.lifeStatePerctange;
     }
   }
 

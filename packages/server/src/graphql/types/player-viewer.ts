@@ -13,6 +13,7 @@ export const schema = gql`
     character: CharacterData!
     state: PlayerState!
     lifeState: PlayerLifeState
+    lifeStatePerctange: Float
     isCrawling: Boolean!
     isShooting: Boolean!
     isMe: Boolean!
@@ -73,7 +74,7 @@ export const schema = gql`
     MEDIUM,
     LOW,
     EMPTY
-  }
+  } 
 
   type Location {
     x: Float!

@@ -86,10 +86,10 @@ export class MeComponent implements OnInit, OnDestroy {
         if (picked && picked.id && picked.id.acEntity && picked.id.acEntity instanceof OtherPlayerEntity) {
           const shotedEntity = picked.id.acEntity;
           let killSubscription;
-
+          debugger;
           killSubscription = this.gameService.notifyBeenShot(shotedEntity.id)
             .subscribe( beenShotData => {
-                this.setKillEvent(beenShotData.data.notifyBeenShot.lifeState,shotedEntity.id),
+                this.setKillEvent(beenShotData.data.notifyBeenShot.lifeState,shotedEntity.id)
                 killSubscription.unsubscribe()
             });
         }

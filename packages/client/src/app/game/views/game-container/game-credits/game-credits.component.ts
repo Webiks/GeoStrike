@@ -1,13 +1,18 @@
 import {AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material';
 import {CreditsDialogComponent} from "../../credits-dialog/credits-dialog.component";
+import {HttpClient} from "@angular/common/http";
+import {Credit} from "./credit";
+import {Observable} from "rxjs/Observable";
+
 
 @Component({
   selector: 'game-credits',
   templateUrl: './game-credits.component.html',
   styleUrls: ['./game-credits.component.scss']
 })
-export class GameCreditsComponent implements AfterViewInit {
+export class GameCreditsComponent implements OnInit,AfterViewInit {
+  private creditsJson: Observable<Credit[]>;
   private creditsComponentsWidth: number = 0;
   private isDialogOpen:boolean = false;
   @ViewChild("creditsContainer") documentRef: ElementRef;
@@ -18,9 +23,12 @@ export class GameCreditsComponent implements AfterViewInit {
     }
   }
 
-  constructor(private  dialog: MatDialog) {
+  constructor(private  dialog: MatDialog, private http:HttpClient) {
   }
 
+  ngOnInit() {
+    this.getCreditsFromJson();
+  }
   ngAfterViewInit() {
     setTimeout(() => this.creditsComponentsWidth = this.documentRef.nativeElement.clientWidth);
   }
@@ -35,5 +43,10 @@ export class GameCreditsComponent implements AfterViewInit {
       } as MatDialogConfig)
 
     dialogRef.afterClosed().subscribe(()=> this.isDialogOpen = false);
+  }
+
+  getCreditsFromJson() {
+    this.creditsJson =  this.http.get<Credit[]>('assets/credits/credits.json').map(res => res);
+    this.creditsJson = this.creditsJson.map(x => x.filter(y => y.level == 'main'));
   }
 }

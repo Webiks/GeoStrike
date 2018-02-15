@@ -16,6 +16,7 @@ export const playerFragment = gql`
     }
     state
     lifeState
+    lifeStatePerctange
     isCrawling
     isShooting
     isMe

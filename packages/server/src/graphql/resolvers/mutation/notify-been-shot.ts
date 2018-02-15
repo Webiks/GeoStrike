@@ -11,7 +11,10 @@ export const notifyBeenShot = (rootValue, {playerId}, {games, game, player}: IGr
     const ShootingPlayer = ((game.controlledPlayersMap.get(playerId) || player) as IPlayer);
     const ShotPlayerState = shotPlayer.state;
     shotPlayer.numberOfShotsThatHit += 1;
-    let lifeStatePerctange = Math.ceil(4 * (1 - (shotPlayer.numberOfShotsThatHit / numOfShotsToKill))) / 4;
+    const lifeStatePerctange = 100 * (1 - shotPlayer.numberOfShotsThatHit / numOfShotsToKill);
+    const lifeStatePerctangeRounded = Math.ceil(4 * (1 - (shotPlayer.numberOfShotsThatHit / numOfShotsToKill))) / 4;
+
+    games.updateLifeStatePerctange(game.gameId, playerId,lifeStatePerctange);
 
     if (!ShootingPlayer || !ShootingPlayer.team || !shotPlayer || !shotPlayer.team ||
         ShotPlayerState === 'DEAD' ||
@@ -19,13 +22,13 @@ export const notifyBeenShot = (rootValue, {playerId}, {games, game, player}: IGr
         games.updatePlayerLifeState(game.gameId, playerId, 'EMPTY');
         return shotPlayer;
     }
-    if (lifeStatePerctange === 0.75)
+    if (lifeStatePerctangeRounded === 0.75)
         games.updatePlayerLifeState(game.gameId, playerId, 'HIGH');
-    else if (lifeStatePerctange === 0.5)
+    else if (lifeStatePerctangeRounded === 0.5)
         games.updatePlayerLifeState(game.gameId, playerId, 'MEDIUM');
-    else if (lifeStatePerctange === 0.25)
+    else if (lifeStatePerctangeRounded === 0.25)
         games.updatePlayerLifeState(game.gameId, playerId, 'LOW');
-    else if (lifeStatePerctange === 0){
+    else if (lifeStatePerctangeRounded === 0){
         games.updatePlayerLifeState(game.gameId, playerId, 'EMPTY');
     }
     return shotPlayer;

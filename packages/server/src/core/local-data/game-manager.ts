@@ -256,7 +256,8 @@ export class GamesManager {
         skipValidation ||
         this.validatePlayerPosition(player.currentLocation, position)
       ) {
-        player.lifeState = 'FULL';
+        // player.lifeState = 'FULL';
+        // player.lifeStatePerctange = 100;
         player.syncState = 'VALID';
         player.currentLocation = position;
         player.heading = heading;
@@ -291,6 +292,14 @@ export class GamesManager {
           player.lifeState = newState;
       }
   }
+
+    updateLifeStatePerctange(gameId: string, playerId: string, newState: number){
+        const game = this.getGameById(gameId);
+        const player = game.controlledPlayersMap.get(playerId) || game.playersMap.get(playerId);
+        if (player) {
+            player.lifeStatePerctange = newState;
+        }
+    }
 
   private checkGameResult(game: IGameObject) {
     const players = Array.from(game.playersMap.values());

@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { GameFields, PlayerFields, Team } from '../../types';
 import { BuildingsService } from './buildings.service';
 import { GameConfig } from './game-config';
+import {PlayerLifeState} from "../../../../../server/src/types";
 
 export enum MeModelState {
   WALKING,
@@ -33,7 +34,8 @@ export interface CharacterState {
   heading: number;
   pitch: number;
   state: MeModelState;
-  lifeState: LifeStatus;
+  lifeState: PlayerLifeState;
+  lifeStatePerctange: number;
   isCrawling: boolean;
   team: Team;
   characterInfo: PlayerFields.Character;
@@ -161,6 +163,12 @@ export class CharacterService {
       pitch: value,
     });
   }
+
+  // set lifeState(value: PlayerLifeState) {
+  //   this.modifyCurrentStateValue({
+  //     lifeState: value,
+  //   });
+  // }
 
   set location(value: any) {
     let position = value;

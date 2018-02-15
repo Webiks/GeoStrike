@@ -25,6 +25,7 @@ export interface Player extends User {
   character: CharacterData;
   state: PlayerState;
   lifeState: PlayerLifeState;
+  lifeStatePerctange: number;
   isCrawling: boolean;
   isShooting: boolean;
   isMe: boolean;
@@ -155,7 +156,8 @@ export type CharacterType = "PLAYER" | "BACKGROUND_CHARACTER" | "OVERVIEW";
 
 export type GameState = "WAITING" | "ACTIVE" | "DONE";
 
-export type PlayerLifeState = "NO_HIT" | "FIRST_HIT" | "SECOND_HIT" | "THIRD_HIT" | "FOURTH_HIT";
+export type PlayerLifeState = "FULL" | "HIGH" | "MEDIUM" | "LOW" | "EMPTY";
+
 
 
 export namespace CreateNewGame {
@@ -382,6 +384,7 @@ export namespace PlayerFields {
     character: Character;
     state: PlayerState;
     lifeState: PlayerLifeState;
+    lifeStatePerctange: number;
     isCrawling: boolean;
     isShooting: boolean;
     isMe: boolean;

@@ -1,13 +1,11 @@
 <div class="life">
-  <div *ngIf="lifeState && lifeState.lifeState == 'HIGH'">
+  <div class="img-container" *ngIf="me && me.isShooting  && me.lifeState == 'HIGH' && showBlood">
     <img src="assets/effects/blood-low.png">
   </div>
-  <div *ngIf="lifeState && lifeState.lifeState == 'MEDIUM'">
+  <div class="img-container" *ngIf="me && me.lifeState == 'MEDIUM' && showBlood">
     <img src="assets/effects/blood-medium.png">
   </div>
-  <div *ngIf="lifeState && lifeState.lifeState == 'LOW'">
+  <div class="img-container" *ngIf="me && me.lifeState == 'LOW' && showBlood">
     <img src="assets/effects/blood-high.png">
   </div>
 </div>
-
-

@@ -9,46 +9,26 @@
     <img id="bing-img" src="assets/logo/credits/bing.png">
   </div>
   <ul class="credit-text">
-    <li title="Building data courtesy of NYC OpenData portal">
-      <a class="credit-link" target="_blank"
-         href="http://www1.nyc.gov/site/doitt/initiatives/3d-building.page">
-        <span *ngIf="creditsComponentsWidth > 1900">Building data courtesy of NYC OpenData portal </span>
-        <span *ngIf="creditsComponentsWidth < 1600">Building data courtesy...</span>
+    <li title="{{credit.name}}" *ngFor="let credit of creditsJson | async">
+      <a *ngIf="credit.urlOne!=''" href="{{credit.urlOne}}" class="credit-link" target="_blank">
+        <span [innerHTML]="credit.symbol"></span>
+        <span *ngIf="creditsComponentsWidth >= 1900">{{credit.nameFieldOne}}</span>
+        <span *ngIf="creditsComponentsWidth < 1900 && creditsComponentsWidth > 1850">{{credit.nameFieldOne | slice:0:60}}...</span>
+        <span *ngIf="creditsComponentsWidth < 1850 && creditsComponentsWidth > 1800">{{credit.nameFieldOne | slice:0:50}}...</span>
+        <span *ngIf="creditsComponentsWidth < 1800">{{credit.nameFieldOne | slice:0:25}}...</span>
       </a>
-      &nbsp;•&nbsp;
-    </li>
-    <li title="Download this 3D Tiles tileset">
-      <a class="credit-link" target="_blank"
-         href="https://s3.amazonaws.com/cesiumjs/3DTiles/NewYorkCityGml.zip">
-        <span>Download this 3D Tiles tileset&nbsp;</span>
-      </a>
-    </li>
-    <li title="Analytical Graphics Inc.">
-      <span>•&nbsp;&copy; Analytical Graphics Inc.</span>
-    </li>
-    <li title="CGIAR-CSI, Produced using Copernicus data and information funded by the European Union - EU-DEM layers">
-      <span *ngIf="creditsComponentsWidth > 1900">&copy; CGIAR-CSI, Produced using Copernicus data and information
-        funded by the European Union - EU-DEM layers •&nbsp;</span>
-      <span title="" *ngIf="creditsComponentsWidth < 1900 && creditsComponentsWidth > 1850">&copy; CGIAR-CSI, Produced
-        using Copernicus data and information funded by the...&nbsp;</span>
-      <span *ngIf="creditsComponentsWidth < 1850 && creditsComponentsWidth > 1800">&copy; CGIAR-CSI, Produced using
-        Copernicus data and...&nbsp;</span>
-      <span *ngIf="creditsComponentsWidth < 1800">&copy; CGIAR-CSI, Produced using...&nbsp;</span>
-    </li>
-    <li title="2018 Microsoft Corporation">
-      <span>&copy; 2018 Microsoft Corporation •&nbsp;</span>
-    </li>
-    <li title="2018 DigitalGlobe">
-      <span>&copy; 2018 DigitalGlobe •&nbsp;</span>
-    </li>
-    <li>
-      <span>&copy; CNES (2018) Distribution Airbus DS • </span>
-    </li>
-    <li title="Earthstar Geographics SIO">
-      <span>Earthstar Geographics SIO</span>
+      <span *ngIf="credit.urlOne == ''">
+        <span [innerHTML]="credit.symbol"></span>
+        <span *ngIf="creditsComponentsWidth >= 1900">{{credit.nameFieldOne}}</span>
+        <span *ngIf="creditsComponentsWidth < 1900 && creditsComponentsWidth > 1850">{{credit.nameFieldOne | slice:0:60}}...</span>
+        <span *ngIf="creditsComponentsWidth < 1850 && creditsComponentsWidth > 1800">{{credit.nameFieldOne | slice:0:50}}...</span>
+        <span *ngIf="creditsComponentsWidth < 1800">{{credit.nameFieldOne | slice:0:25}}...</span>
+      </span>
     </li>
   </ul>
   <span class="more-credits" (click)="openCredits()"
         [ngClass]="{'more-credits-open':isDialogOpen,'more-credits-close':!isDialogOpen}">More Credits
   </span>
 </div>
+
+
