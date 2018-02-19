@@ -4,7 +4,6 @@
   <game-toolbar [gameCode]="gameCode"></game-toolbar>
   <player-details [me]="controlledService.controlledPlayer || me" [username]="me?.username"></player-details>
   <viewer-controls *ngIf="isViewer"></viewer-controls>
-  <blood-on-screen [me]="me"></blood-on-screen>
 </game-map>
 <game-dialogs [gameResult]="gameResult$"></game-dialogs>
 <game-credits></game-credits>

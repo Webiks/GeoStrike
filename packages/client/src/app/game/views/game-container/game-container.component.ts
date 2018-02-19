@@ -33,6 +33,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
   gameNotifications$: Observable<string>;
   me: GameFields.Me;
   gameCode: string;
+  viewState: ViewState;
   private game: CurrentGame.CurrentGame;
   private gameDataSubscription: Subscription;
   private gameNotificationsSubscription: Subscription;

@@ -1,5 +1,3 @@
-/* tslint:disable */
-
 
 export interface User {
   id: string;
@@ -155,6 +153,7 @@ export type CharacterType = "PLAYER" | "BACKGROUND_CHARACTER" | "OVERVIEW";
 
 
 export type GameState = "WAITING" | "ACTIVE" | "DONE";
+
 
 export type PlayerLifeState = "FULL" | "HIGH" | "MEDIUM" | "LOW" | "EMPTY";
 

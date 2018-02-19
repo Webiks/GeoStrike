@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { GameFields, PlayerFields, Team } from '../../types';
+import { GameFields, PlayerFields, Team, PlayerLifeState } from '../../types';
 import { BuildingsService } from './buildings.service';
 import { GameConfig } from './game-config';
-import {PlayerLifeState} from "../../../../../server/src/types";
 
 export enum MeModelState {
   WALKING,
@@ -13,13 +12,13 @@ export enum MeModelState {
   CONTROLLED,
 }
 
-export enum LifeStatus {
-  FULL,
-  HIGH,
-  MEDIUM,
-  LOW,
-  EMPTY
-}
+// export enum LifeStatus {
+//   FULL,
+//   HIGH,
+//   MEDIUM,
+//   LOW,
+//   EMPTY
+// }
 
 export enum ViewState {
   FPV,
@@ -79,6 +78,10 @@ export class CharacterService {
 
   get isCrawling() {
     return this._character.getValue().isCrawling;
+  }
+
+  get lifeState() {
+    return this._character.getValue().lifeState;
   }
 
   set isCrawling(value: boolean) {

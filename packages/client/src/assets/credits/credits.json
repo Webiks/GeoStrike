@@ -42,7 +42,7 @@
   },
   {
     "symbol": "",
-    "nameFieldOne": "2018 Microsoft Corporation",
+    "nameFieldOne": "2018 Microsoft Corporation •",
     "nameFieldTwo":"",
     "nameFieldThree":"",
     "urlOne" :"",
@@ -51,8 +51,8 @@
     "level": "main"
   },
   {
-    "symbol": "",
-    "nameFieldOne": "2018 DigitalGlobe",
+    "symbol": "&nbsp;&copy;",
+    "nameFieldOne": "2018 DigitalGlobe • ",
     "nameFieldTwo":"",
     "nameFieldThree":"",
     "urlOne" :"",
@@ -72,7 +72,7 @@
   },
   {
     "symbol": "",
-    "nameFieldOne": "arthstar Geographics SIO",
+    "nameFieldOne": "Earthstar Geographics SIO",
     "nameFieldTwo":"",
     "nameFieldThree":"",
     "urlOne" :"",
