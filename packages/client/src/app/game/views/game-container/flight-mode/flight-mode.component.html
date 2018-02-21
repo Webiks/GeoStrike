@@ -1,0 +1,36 @@
+<div class="flight-container" *ngIf="me">
+  <div class="img-container clickable" (click)="setFlightMode()">
+    <img src="assets/icons/jetpack.svg">
+  </div>
+  <div class="text">
+    <span>00:</span>
+    <span *ngIf="minutes?.length < 2">0</span>
+    <span>{{minutes}}:</span>
+    <span *ngIf="seconds?.length < 2">0</span>
+    <span>{{seconds}}</span>
+  </div>
+
+  <div class="gauges" *ngIf="character.isFlying">
+    <div class="gauge">
+      <span>HEIGHT</span>
+      <div class="gauge-container">
+        <span class="gauge-level" [ngClass]="{'isActive':character.state === 1}"></span>
+        <span class="gauge-level"></span>
+        <span class="gauge-level"></span>
+        <span class="gauge-level"></span>
+        <span class="gauge-level"></span>
+      </div>
+    </div>
+  <div class="gauge">
+    <span>SPEED</span>
+    <div class="gauge-container">
+      <span class="gauge-level"></span>
+      <span class="gauge-level"></span>
+      <span class="gauge-level"></span>
+      <span class="gauge-level"></span>
+      <span class="gauge-level"></span>
+    </div>
+  </div>
+  </div>
+</div>
+

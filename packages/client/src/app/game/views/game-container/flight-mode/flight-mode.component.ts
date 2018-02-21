@@ -8,20 +8,7 @@ import {GameService} from "../../../services/game.service";
 @Component({
   selector: 'flight-mode',
   styleUrls: ['./flight-mode.component.scss'],
-  template: `
-    <div class="flight-container" *ngIf="me">
-      <div class="img-container clickable" (click)="setFlightMode()">
-        <img src="assets/icons/jetpack.svg">
-      </div>
-      <div class="text">
-        <span>00:</span>
-        <span *ngIf="minutes?.length < 2">0</span>
-        <span>{{minutes}}:</span>
-        <span *ngIf="seconds?.length < 2">0</span>
-        <span>{{seconds}}</span>
-      </div>
-    </div>
-  `
+  templateUrl: './flight-mode.component.html'
 
 })
 export class FlightModeComponent implements OnInit, OnDestroy {

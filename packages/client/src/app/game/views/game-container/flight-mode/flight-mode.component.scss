@@ -12,35 +12,80 @@
   left: 10px;
   width: 200px;
   background-color: rgba(0, 0, 0, 0.42);
-}
 
-.clickable {
-  cursor: pointer;
-}
+  .clickable {
+    cursor: pointer;
+  }
 
-.img-container {
-  width: 64px;
-  height: 64px;
-  border: 1px solid white;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  overflow: hidden;
-  border-top-right-radius: 20px;
-  border-bottom-left-radius: 20px;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.54));
-}
+  .img-container {
+    width: 64px;
+    height: 64px;
+    border: 1px solid white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.54));
+  }
 
-.img-container:hover {
-  //background-color: rgba(111, 207, 151, 0.26);
-  background: linear-gradient(180deg, black, rgba(111, 207, 151, 0.26));
-}
-
-.text {
-  padding: 0 10px;
-  margin: auto;
-  span {
-    padding:0;
-    margin: -3px;
+  .img-container:hover {
+    //background-color: rgba(111, 207, 151, 0.26);
+    background: linear-gradient(180deg, black, rgba(111, 207, 151, 0.26));
+  }
+  .text {
+    padding: 0 10px;
+    margin: auto;
+    span {
+      padding: 0;
+      margin: -3px;
+    }
+  }
+  .gauges {
+    position: fixed;
+    //bottom: 177px;
+    bottom: 242px;
+    //left: 44px;
+    left: 22px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    .gauge {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-right: 16px;
+      .gauge-container {
+        border-top-right-radius: 8px;
+        border-bottom-left-radius: 8px;
+        color: white;
+        border: 1px solid white;
+        width: 36px;
+        //height: 627px;
+        height: 545px;
+        //margin-right: 60px;
+        background: linear-gradient(black, rgba(255, 255, 255, 0.3));
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        //justify-content: space-evenly;
+        .gauge-level {
+          width: 24px;
+          height: 16.6%;
+          padding: 0;
+          margin: 0;
+          //background-color: white;
+          border-bottom: 1px solid white;
+        }
+      }
+    }
   }
 }
+
+
+.isActive {
+  background-color: green;
+}
+
+
