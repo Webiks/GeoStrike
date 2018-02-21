@@ -197,6 +197,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
     const playerHeadCart = Cesium.Cartographic.fromCartesian(this.character.location);
     playerHeadCart.height += (isCrawling) ? 2 :((isFlying) ? (200) : 4.4);
 
+
     if (this.lastPlayerLocation === this.character.location &&
       this.lastPlayerHPR.heading === this.character.heading &&
       this.lastPlayerHPR.pitch === this.character.pitch &&

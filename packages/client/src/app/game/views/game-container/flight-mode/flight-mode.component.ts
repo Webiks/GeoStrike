@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, Input, NgZone, OnDestroy, OnInit} from '@angular/core';
-import {CharacterService} from "../../../services/character.service";
+import {CharacterService, MeModelState} from "../../../services/character.service";
 import {Subscription} from "rxjs/Subscription";
 import {FlightData} from "../../../../types";
 import {ActionType} from "angular-cesium";
@@ -61,6 +61,27 @@ export class FlightModeComponent implements OnInit, OnDestroy {
   calculateRemainingTime(timeInSeconds) {
     this.minutes = (Math.floor(timeInSeconds / 60)).toString();
     this.seconds = (timeInSeconds - (+this.minutes * 60)).toString();
+  }
+
+  isPlayerRunning(movingType: number){
+    if(this.character.state === movingType){
+      console.log("good");
+      return true;
+    }
+    else{
+      console.log("err");
+      return false;
+    }
+  }
+  isPlayerWalking(movingType: number){
+    if(this.character.state === movingType){
+      console.log("good");
+      return true;
+    }
+    else{
+      console.log("err");
+      return false;
+    }
   }
 
 }

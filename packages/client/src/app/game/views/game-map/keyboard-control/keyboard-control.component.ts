@@ -105,7 +105,6 @@ export class KeyboardControlComponent implements OnInit {
         if (this.character.isCrawling) {
           speed = environment.movement.crawlingSpeed;
         }
-
         const nextLocation = GeoUtilsService.pointByLocationDistanceAndAzimuth(
           position,
           speed,

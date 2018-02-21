@@ -14,21 +14,23 @@
     <div class="gauge">
       <span>HEIGHT</span>
       <div class="gauge-container">
-        <span class="gauge-level" [ngClass]="{'isActive':character.state === 1}"></span>
         <span class="gauge-level"></span>
         <span class="gauge-level"></span>
         <span class="gauge-level"></span>
         <span class="gauge-level"></span>
+        <span class="gauge-level"></span>
+        <span class="gauge-level isActive"></span>
       </div>
     </div>
   <div class="gauge">
     <span>SPEED</span>
-    <div class="gauge-container">
+    <div class="gauge-container" [ngClass]="{'isActive':isPlayerRunning(1)}">
       <span class="gauge-level"></span>
       <span class="gauge-level"></span>
       <span class="gauge-level"></span>
-      <span class="gauge-level"></span>
-      <span class="gauge-level"></span>
+      <span class="gauge-level" [ngClass]="{'isActive':isPlayerWalking(0)}"></span>
+      <span class="gauge-level" [ngClass]="{'isActive':isPlayerWalking(0)}"></span>
+      <span class="gauge-level" [ngClass]="{'isActive':isPlayerWalking(0)}"></span>
     </div>
   </div>
   </div>
