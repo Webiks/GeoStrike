@@ -7,8 +7,9 @@ export const schema = gql`
     joinAsViewer(gameCode: String, username: String): CreateOrJoinResult
     updatePosition(position: LocationInput!, heading: Float!,isCrawling: Boolean!,isShooting: Boolean!, enteringBuildingPosition: LocationInput , skipValidation: Boolean): Player
     ready: Game
-    notifyKill(playerId: String!): Player
+    notifyKill(playerId: String!, isFlying: Boolean!): Player
     notifyShot(byPlayerId: String!, shotPosition: LocationInput!): Boolean
+    toggleFlightMode(playerId: String!, isFlying: Boolean!): Player
     takeControlOverPlayer(playerId: String!): Player
     removeControlOverPlayer: Player
   }

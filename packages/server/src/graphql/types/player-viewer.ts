@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import {FlightData, FlightHeight, FlightSpeed} from "../../types";
 
 export const schema = gql`
 
@@ -14,6 +15,7 @@ export const schema = gql`
     state: PlayerState!
     isCrawling: Boolean!
     isFlying: Boolean
+    flight: FlightData
     isShooting: Boolean!
     isMe: Boolean!
     currentLocation: PlayerLocation!
@@ -35,6 +37,13 @@ export const schema = gql`
     iconDeadUrl: String
     fixedHeight: Int
   }
+  
+  type FlightData {
+  remainingTime: Float
+  speed: FlightSpeed
+  height: FlightHeight
+}
+
 
   type Viewer implements User {
     id: String!
@@ -82,5 +91,21 @@ export const schema = gql`
   type PlayerLocation {
     location: Location!
     heading: Float!
+  }
+  
+  enum FlightSpeed {
+      NONE,
+      MIN,
+      MAX
+  }
+  
+  enum FlightHeight {
+    NONE,
+    A,
+    B,
+    C,
+    D,
+    E,
+    MAX
   }
 `;

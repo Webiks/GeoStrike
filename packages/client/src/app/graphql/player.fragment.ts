@@ -17,6 +17,11 @@ export const playerFragment = gql`
     state
     isCrawling
     isFlying
+    flight {
+      speed
+      height
+      remainingTime
+    }
     isShooting
     isMe
     id

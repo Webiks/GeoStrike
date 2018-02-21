@@ -13,7 +13,8 @@ import {
   NotifyShot,
   Ready,
   Team,
-  UpdatePosition
+  UpdatePosition,
+  ToggleFlightMode
 } from '../../types';
 import { joinGameMutation } from '../../graphql/join-game.mutation';
 import { SubscriptionClient } from 'subscriptions-transport-ws-temp';
@@ -29,6 +30,7 @@ import { CharacterService, MeModelState } from './character.service';
 import { joinAsViewer } from '../../graphql/join-as-viewer.mutation';
 import { gameNotificationsSubscription } from '../../graphql/game-notifications.subscription';
 import { notifyShotMutation } from '../../graphql/notify-shot.mutation';
+import {toggleFlightModeMutation} from "../../graphql/toggle-flight-mode.mutation";
 
 @Injectable()
 export class GameService {
@@ -185,6 +187,16 @@ export class GameService {
       oldStateShooting !== newStateShooting ||
       oldEnteringBuildingPosition !== newStateEnteringBuildingPosition
     );
+  }
+
+  toggleFlightMode(playerId, isFlying): Observable<ApolloExecutionResult<ToggleFlightMode.Mutation>> {
+    return this.apollo.mutate<ToggleFlightMode.Mutation>({
+      mutation: toggleFlightModeMutation,
+      variables: {
+        playerId: playerId,
+        isFlying: isFlying,
+      } as ToggleFlightMode.Variables
+    });
   }
 
   notifyKill(killedPlayerId): Observable<ApolloExecutionResult<NotifyKill.Mutation>> {

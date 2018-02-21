@@ -172,7 +172,8 @@ export class KeyboardControlComponent implements OnInit {
       return;
     }
     let flying = false;
-    if(!this.character.isFlying) {
+    if(this.character.viewState !== ViewState.FLYING_SEMI_FPV ) {
+      this.character.viewState = ViewState.FLYING_SEMI_FPV;
       flying = true;
     }
     this.character.isFlying = flying;
@@ -265,7 +266,7 @@ export class KeyboardControlComponent implements OnInit {
         this.changeCrawlingState();
       });
     });
-    this.keyboardKeysService.registerKeyBoardEvent('KeyF', 'Switch Flying', () => {
+    this.keyboardKeysService.registerKeyBoardEvent('KeyF', 'Switch Flying Semi FPV', () => {
       this.ngZone.run(() => {
         this.changeFlyingState();
       });

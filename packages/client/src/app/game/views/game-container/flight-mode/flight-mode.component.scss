@@ -39,4 +39,8 @@
 .text {
   padding: 0 10px;
   margin: auto;
+  span {
+    padding:0;
+    margin: -3px;
+  }
 }

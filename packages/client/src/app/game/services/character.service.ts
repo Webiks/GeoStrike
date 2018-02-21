@@ -17,6 +17,7 @@ export enum ViewState {
   SEMI_FPV,
   SEMI_FPV_NOT_CONTROLLED,
   OVERVIEW,
+  FLYING_SEMI_FPV
 }
 
 export interface CharacterState {

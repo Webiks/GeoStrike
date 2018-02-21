@@ -25,6 +25,7 @@ export interface Player extends User {
   state: PlayerState; 
   isCrawling: boolean;
   isFlying: boolean;
+  flight:FlightData;
   isShooting: boolean; 
   isMe: boolean; 
   currentLocation: PlayerLocation; 
@@ -138,6 +139,16 @@ export interface NotifyShotMutationArgs {
 export interface TakeControlOverPlayerMutationArgs {
   playerId: string; 
 }
+
+export interface FlightData {
+  remainingTime: number;
+  speed: FlightSpeed;
+  height: FlightHeight;
+}
+
+export type FlightSpeed = "NONE" | "MIN" | "MAX";
+
+export type FlightHeight = "NONE" | "A" | "B" | "C" | "D" | "E"| "MAX"
 
 export type Team = "BLUE" | "RED" | "NONE";
 

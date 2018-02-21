@@ -1,9 +1,9 @@
 import gql from 'graphql-tag';
 import { playerFragment } from './player.fragment';
 
-export const notifyKillMutation = gql`
-mutation notifyKill($playerId: String!) {
-    notifyKill(playerId: $playerId) {
+export const toggleFlightModeMutation = gql`
+mutation toggleFlightMode($playerId: String!, $isFlying: Boolean!) {
+    toggleFlightMode(playerId: $playerId, isFlying: $isFlying) {
       ...PlayerFields
     }
   }

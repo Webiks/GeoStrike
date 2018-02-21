@@ -1,4 +1,4 @@
-/* tslint:disable */
+
 
 export interface User {
   id: string;
@@ -27,6 +27,7 @@ export interface Player extends User {
   isFlying: boolean;
   isShooting: boolean;
   isMe: boolean;
+  flight: FlightData;
   currentLocation: PlayerLocation;
   team: Team;
   syncState: PlayerSyncState;
@@ -46,6 +47,16 @@ export interface CharacterData {
   iconDeadUrl?: string;
   fixedHeight?: number;
 }
+
+export interface FlightData {
+  remainingTime: number;
+  speed: FlightSpeed;
+  height: FlightHeight;
+}
+
+export type FlightSpeed = "NONE" | "MIN" | "MAX";
+
+export type FlightHeight = "NONE" | "A" | "B" | "C" | "D" | "E"| "MAX"
 
 export interface PlayerLocation {
   location: Location;
@@ -276,6 +287,20 @@ export namespace NotifyKill {
 
   export type NotifyKill = PlayerFields.Fragment
 }
+
+export namespace ToggleFlightMode {
+  export type Variables = {
+    playerId: string;
+    isFlying: boolean;
+  }
+
+  export type Mutation = {
+    toggleFlightMode?: ToggleFlightMode;
+  }
+
+  export type ToggleFlightMode = PlayerFields.Fragment
+}
+
 export namespace NotifyShot {
   export type Variables = {
     byPlayerId: string;
@@ -365,6 +390,7 @@ export namespace PlayerFields {
     state: PlayerState;
     isCrawling: boolean;
     isFlying: boolean;
+    flight: FlightData;
     isShooting: boolean;
     isMe: boolean;
     id: string;

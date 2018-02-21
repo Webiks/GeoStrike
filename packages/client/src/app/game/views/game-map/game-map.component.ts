@@ -112,13 +112,16 @@ export class GameMapComponent implements OnInit, OnDestroy {
         });
       }
 
+      else if(newViewState === ViewState.FLYING_SEMI_FPV){
+        this.changeToFlyModeSettings();
+      }
+
       this.lastViewState = newViewState;
     });
 
   }
 
   private startFirstPersonMode(player: PlayerFields.Fragment, initCharacter = true) {
-    debugger;
     if (initCharacter) {
       this.character.initCharacter({
         id: 'me',
@@ -157,6 +160,11 @@ export class GameMapComponent implements OnInit, OnDestroy {
     this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_START_LOCATION});
   }
 
+  private changeToFlyModeSettings() {
+    this.viewerOptions.setFreeCameraOptions(this.viewer);
+    // this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_START_LOCATION});
+
+  }
   // private startFlightMode() {
   //
   // }
