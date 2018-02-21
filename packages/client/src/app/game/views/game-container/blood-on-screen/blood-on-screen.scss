@@ -6,3 +6,27 @@
   pointer-events: none;
 }
 
+.shadow {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  pointer-events: none;
+
+  .high {
+    width: inherit;
+    height: inherit;
+    background: radial-gradient(transparent, rgba(0, 0, 0, 0.25));
+  }
+  .medium {
+    width: inherit;
+    height: inherit;
+    background: radial-gradient(transparent, rgba(0, 0, 0, 0.5));
+  }
+  .low {
+    width: inherit;
+    height: inherit;
+    background: radial-gradient(transparent, rgba(0, 0, 0, 0.75));
+  }
+}
+

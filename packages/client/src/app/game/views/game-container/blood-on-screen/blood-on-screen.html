@@ -1,3 +1,8 @@
+<div class="shadow">
+  <div class="high" *ngIf="lifePercentage  === 'HIGH' && isInShootingPosition"></div>
+  <div class="medium" *ngIf="lifePercentage === 'MEDIUM'  && isInShootingPosition"></div>
+  <div class="low" *ngIf="lifePercentage === 'LOW' && isInShootingPosition"></div>
+</div>
 <div class="life">
   <div class="img-container" *ngIf="lifePercentage  === 'HIGH' && isInShootingPosition">
     <img src="assets/effects/blood-low.png">
