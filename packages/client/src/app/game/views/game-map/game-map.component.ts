@@ -112,9 +112,9 @@ export class GameMapComponent implements OnInit, OnDestroy {
         });
       }
 
-      else if(newViewState === ViewState.FLYING_SEMI_FPV){
-        this.changeToFlyModeSettings();
-      }
+      // else if(newViewState === ViewState.FLYING_SEMI_FPV){
+      //   this.changeToFlyModeSettings();
+      // }
 
       this.lastViewState = newViewState;
     });

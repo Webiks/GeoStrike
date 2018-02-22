@@ -1,5 +1,5 @@
-import {ChangeDetectorRef, Component, Input, NgZone, OnDestroy, OnInit} from '@angular/core';
-import {CharacterService, MeModelState} from "../../../services/character.service";
+import {ChangeDetectorRef, Component, Input, NgZone, OnDestroy, OnInit, HostListener} from '@angular/core';
+import {CharacterService} from "../../../services/character.service";
 import {Subscription} from "rxjs/Subscription";
 import {FlightData} from "../../../../types";
 import {ActionType} from "angular-cesium";
@@ -19,6 +19,27 @@ export class FlightModeComponent implements OnInit, OnDestroy {
   playerId: string;
   minutes: string;
   seconds: string;
+  movingType: string = 'none';
+
+  @HostListener('document:keydown' , ['$event']) onKeydownHandler(event: KeyboardEvent) {
+    if(event.shiftKey && event.keyCode == 87) {
+      this.movingType = 'running';
+    }
+    if(event.key === 'w') {
+      this.movingType = 'walking';
+    }
+  }
+  @HostListener('document:keyup' , ['$event']) onKeyupHandler(event: KeyboardEvent) {
+    if(event.key === 'w') {
+      this.movingType = 'none';
+    }
+    if(event.shiftKey && event.keyCode == 87) {
+      this.movingType = 'none';
+    }
+    if(event.shiftKey) {
+      this.movingType = 'none';
+    }
+  }
 
   constructor(private character: CharacterService, private gameService: GameService, private ngZone: NgZone, private cd: ChangeDetectorRef) {
   }
@@ -47,14 +68,12 @@ export class FlightModeComponent implements OnInit, OnDestroy {
   }
 
   setFlightMode() {
-    // this.me.isFlying = true;
     this.character.isFlying = !this.character.isFlying;
     console.log(this.character.isFlying);
     const flightSubscription = this.gameService.toggleFlightMode(this.playerId, this.character.isFlying).subscribe(() => flightSubscription.unsubscribe());
   }
 
   ngOnDestroy() {
-    // this.flightSubscription.unsubscribe();
     this.flightDataSubscription.unsubscribe();
   }
 
@@ -63,25 +82,16 @@ export class FlightModeComponent implements OnInit, OnDestroy {
     this.seconds = (timeInSeconds - (+this.minutes * 60)).toString();
   }
 
-  isPlayerRunning(movingType: number){
-    if(this.character.state === movingType){
-      console.log("good");
+  isPlayerWalking(){
+    if(this.movingType === 'walking')
       return true;
-    }
-    else{
-      console.log("err");
+    else
       return false;
-    }
   }
-  isPlayerWalking(movingType: number){
-    if(this.character.state === movingType){
-      console.log("good");
+  isPlayerRunning(){
+    if(this.movingType === 'running')
       return true;
-    }
-    else{
-      console.log("err");
+    else
       return false;
-    }
   }
-
 }

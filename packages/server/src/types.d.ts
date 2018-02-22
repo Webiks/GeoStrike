@@ -124,8 +124,9 @@ export interface JoinAsViewerMutationArgs {
 export interface UpdatePositionMutationArgs {
   position: LocationInput; 
   heading: number; 
-  isCrawling: boolean; 
-  isShooting: boolean; 
+  isCrawling: boolean;
+  isShooting: boolean;
+  isFlying: boolean;
   enteringBuildingPosition?: LocationInput; 
   skipValidation?: boolean; 
 }

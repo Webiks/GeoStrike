@@ -17,7 +17,7 @@ export enum ViewState {
   SEMI_FPV,
   SEMI_FPV_NOT_CONTROLLED,
   OVERVIEW,
-  FLYING_SEMI_FPV
+  // FLYING_SEMI_FPV
 }
 
 export interface CharacterState {
@@ -72,9 +72,9 @@ export class CharacterService {
     return this._character.getValue().isCrawling;
   }
 
-  get isFlying() {
-    return this._character.getValue().isFlying;
-  }
+  // get isFlying() {
+  //   return this._character.getValue().isFlying;
+  // }
 
   set isCrawling(value: boolean) {
     this.modifyCurrentStateValue({
@@ -137,7 +137,9 @@ export class CharacterService {
   get state(): MeModelState {
     return this._character && this._character.getValue() && this._character.getValue().state;
   }
-
+  get isFlying(): boolean {
+    return this._character && this._character.getValue() && this._character.getValue().isFlying;
+  }
   get currentStateValue(): CharacterState {
     return this._character.getValue();
   }

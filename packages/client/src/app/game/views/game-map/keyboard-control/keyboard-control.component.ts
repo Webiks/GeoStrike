@@ -171,10 +171,10 @@ export class KeyboardControlComponent implements OnInit {
       return;
     }
     let flying = false;
-    if(this.character.viewState !== ViewState.FLYING_SEMI_FPV ) {
-      this.character.viewState = ViewState.FLYING_SEMI_FPV;
-      flying = true;
-    }
+    // if(this.character.viewState !== ViewState.FLYING_SEMI_FPV ) {
+    //   this.character.viewState = ViewState.FLYING_SEMI_FPV;
+    //   flying = true;
+    // }
     this.character.isFlying = flying;
   }
 

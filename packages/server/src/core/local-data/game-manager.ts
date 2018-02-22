@@ -160,7 +160,7 @@ export class GamesManager {
         const initFlightData: FlightData = {
           speed :"NONE",
           height : "NONE",
-          remainingTime: 300 //5 minutes in seconds
+          remainingTime: 10 //300sec =  5min minutes in seconds
         }
 
         const finalUsername = this.validateUsername(username, game);
@@ -245,6 +245,7 @@ export class GamesManager {
                          heading: number,
                          isCrawling: boolean,
                          isShooting: boolean,
+                         isFlying: boolean = false,
                          enteringBuildingPosition: ICartesian3Location,
                          skipValidation = false) {
         const game = this.getGameById(gameId);
@@ -265,6 +266,7 @@ export class GamesManager {
                 player.heading = heading;
                 player.isCrawling = isCrawling;
                 player.isShooting = isShooting;
+                player.isFlying = isFlying;
                 player.enteringBuildingPosition = enteringBuildingPosition;
             } else {
                 player.syncState = 'INVALID';

@@ -49,6 +49,7 @@ export interface CharacterData {
 }
 
 export interface FlightData {
+  isFlying: boolean;
   remainingTime: number;
   speed: FlightSpeed;
   height: FlightHeight;
@@ -136,6 +137,7 @@ export interface UpdatePositionMutationArgs {
   heading: number;
   isCrawling: boolean;
   isShooting: boolean;
+  isFlying: boolean;
   enteringBuildingPosition?: LocationInput;
   skipValidation?: boolean;
 }
@@ -352,6 +354,7 @@ export namespace UpdatePosition {
     heading: number;
     isCrawling: boolean;
     isShooting: boolean;
+    isFlying: boolean;
     enteringBuildingPosition?: LocationInput;
     skipValidation?: boolean;
   }
