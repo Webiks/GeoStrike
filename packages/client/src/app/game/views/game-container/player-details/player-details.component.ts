@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'player-details',
@@ -14,7 +14,7 @@ import {ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChan
         <div class="text">{{username}}</div>
         <div class="life-bar-wrapper">
           <div class="life-bar"
-               [ngClass]="{'life-bar--full': getlifeStateCondtion('FULL'),'life-bar--high': getlifeStateCondtion('HIGH'),'life-bar--medium': getlifeStateCondtion('MEDIUM'),'life-bar--low': getlifeStateCondtion('LOW')}" [style.width.%]="me.lifeStatePerctange">
+               [ngClass]="{'life-bar--full': getlifeStateCondition('FULL'),'life-bar--high': getlifeStateCondition('HIGH'),'life-bar--medium': getlifeStateCondition('MEDIUM'),'life-bar--low': getlifeStateCondition('LOW')}" [style.width.%]="me.lifeStatePerctange">
           </div>
         </div>
       </div>
@@ -46,7 +46,7 @@ export class PlayerDetailsComponent implements OnInit, OnChanges {
     return undefined;
   }
 
-  getlifeStateCondtion(condtion: string): Boolean {
+  getlifeStateCondition(condtion: string): Boolean {
     if (this.lifeState === condtion)
       return true;
     else

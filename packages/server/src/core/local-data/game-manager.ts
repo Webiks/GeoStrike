@@ -256,8 +256,6 @@ export class GamesManager {
         skipValidation ||
         this.validatePlayerPosition(player.currentLocation, position)
       ) {
-        // player.lifeState = 'FULL';
-        // player.lifeStatePerctange = 100;
         player.syncState = 'VALID';
         player.currentLocation = position;
         player.heading = heading;

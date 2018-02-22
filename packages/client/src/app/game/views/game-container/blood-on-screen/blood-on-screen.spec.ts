@@ -10,10 +10,8 @@ describe('PlayerBloodOnscreenEffectComponent', () => {
   let component: BloodOnScreen;
   let fixture: ComponentFixture<BloodOnScreen>;
   let characterServiceStub;
-  let characterService;
   let de;
   let el;
-  let showBlood = true;
   let me;
 
   me = {
@@ -35,18 +33,9 @@ describe('PlayerBloodOnscreenEffectComponent', () => {
         {provide: CharacterService, useValue: characterServiceStub}
       ]
     })
-
-
     fixture = TestBed.createComponent(BloodOnScreen);
 
     component = fixture.debugElement.componentInstance;
-    // component.showBlood = true;
-    // component.me = {};
-    // component.me.isShooting = true;
-
-
-
-
   });
   it('should show empty life DIV', () => {
     fixture.detectChanges();
@@ -55,10 +44,4 @@ describe('PlayerBloodOnscreenEffectComponent', () => {
     const content = el.textContent;
     expect(content).toBeTruthy();
   });
-  // it('should return FPV viewState', () => {
-  //   fixture.detectChanges();
-  //   characterService = TestBed.get(CharacterService);
-  //   spyOn(characterServiceStub.prototype, 'getViewState').and.returnValue(characterServiceStub.viewState);
-  //   // expect(characterServiceStub.getViewState).toHaveBeenCalled();
-  // });
 });

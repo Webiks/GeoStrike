@@ -12,14 +12,6 @@ export enum MeModelState {
   CONTROLLED,
 }
 
-// export enum LifeStatus {
-//   FULL,
-//   HIGH,
-//   MEDIUM,
-//   LOW,
-//   EMPTY
-// }
-
 export enum ViewState {
   FPV,
   SEMI_FPV,
@@ -166,12 +158,6 @@ export class CharacterService {
       pitch: value,
     });
   }
-
-  // set lifeState(value: PlayerLifeState) {
-  //   this.modifyCurrentStateValue({
-  //     lifeState: value,
-  //   });
-  // }
 
   set location(value: any) {
     let position = value;

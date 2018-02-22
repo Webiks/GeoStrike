@@ -1,10 +1,10 @@
-import {Component, Input, NgZone, OnDestroy} from '@angular/core';
-import {CharacterService} from "../../../services/character.service";
-import {Subscription} from "rxjs/Subscription";
-import {ActionType} from "angular-cesium";
-import {GameService} from "../../../services/game.service";
-import {Subject} from "rxjs/Subject";
-import {PlayerLifeState} from "../../../../types";
+import { Component, Input, NgZone, OnDestroy } from '@angular/core';
+import { CharacterService } from "../../../services/character.service";
+import { Subscription } from "rxjs/Subscription";
+import { ActionType } from "angular-cesium";
+import { GameService } from "../../../services/game.service";
+import { Subject } from "rxjs/Subject";
+import { PlayerLifeState } from "../../../../types";
 
 @Component({
   selector: 'blood-on-screen',
