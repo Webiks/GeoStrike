@@ -1,5 +1,5 @@
-import {IGameObject, IPlayer} from '../../../core/local-data/game-manager';
-import {IGraphQLContext} from '../../context';
+import { IGameObject, IPlayer } from '../../../core/local-data/game-manager';
+import { IGraphQLContext } from '../../context';
 
 const resolvers = {
     Game: {

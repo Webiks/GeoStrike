@@ -114,7 +114,7 @@ export class MeComponent implements OnInit, OnDestroy {
       this.cd.detectChanges();
     });
     this.showCross$ = this.character.state$.map(meState => meState && meState.state === MeModelState.SHOOTING).subscribe((value) => {
-      this.showCross = value
+      this.showCross = value;
       this.cd.detectChanges();
     });
     this.isInShootingPosition$ = this.character.viewState$.map(viewState => viewState === ViewState.FPV).subscribe((x) => {
