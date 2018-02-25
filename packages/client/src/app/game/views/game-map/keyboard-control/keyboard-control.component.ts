@@ -170,6 +170,7 @@ export class KeyboardControlComponent implements OnInit {
     if(this.character.viewState === ViewState.OVERVIEW){
       return;
     }
+    this.gameService.updateServerOnPosition(true);
     let flying = false;
     // if(this.character.viewState !== ViewState.FLYING_SEMI_FPV ) {
     //   this.character.viewState = ViewState.FLYING_SEMI_FPV;

@@ -174,11 +174,13 @@ export class GameService {
     const oldStateHeading = this.lastStateSentToServer.heading;
     const oldStateCrawling = this.lastStateSentToServer.isCrawling;
     const oldStateShooting = this.lastStateSentToServer.isShooting;
+    const oldStateFlying = this.lastStateSentToServer.isFlying;
     const oldEnteringBuildingPosition = this.lastStateSentToServer.EnteringBuildingPosition;
     const newStatePosition = state.position;
     const newStateHeading = state.heading;
     const newStateCrawling = state.isCrawling;
     const newStateShooting = state.isShooting;
+    const newStateFlying = state.isFlying;
     const newStateEnteringBuildingPosition = state.enteringBuildingPosition;
     return (
       oldStatePosition.x !== newStatePosition.x ||
@@ -187,7 +189,8 @@ export class GameService {
       oldStateHeading !== newStateHeading ||
       oldStateCrawling !== newStateCrawling ||
       oldStateShooting !== newStateShooting ||
-      oldEnteringBuildingPosition !== newStateEnteringBuildingPosition
+      oldEnteringBuildingPosition !== newStateEnteringBuildingPosition ||
+      oldStateFlying !== newStateFlying
     );
   }
 

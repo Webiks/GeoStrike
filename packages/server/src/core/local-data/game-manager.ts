@@ -245,7 +245,7 @@ export class GamesManager {
                          heading: number,
                          isCrawling: boolean,
                          isShooting: boolean,
-                         isFlying: boolean = false,
+                         // isFlying: boolean = false,
                          enteringBuildingPosition: ICartesian3Location,
                          skipValidation = false) {
         const game = this.getGameById(gameId);
@@ -266,7 +266,7 @@ export class GamesManager {
                 player.heading = heading;
                 player.isCrawling = isCrawling;
                 player.isShooting = isShooting;
-                player.isFlying = isFlying;
+                // player.isFlying = isFlying;
                 player.enteringBuildingPosition = enteringBuildingPosition;
             } else {
                 player.syncState = 'INVALID';

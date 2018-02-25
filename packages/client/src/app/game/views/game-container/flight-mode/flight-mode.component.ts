@@ -70,6 +70,7 @@ export class FlightModeComponent implements OnInit, OnDestroy {
   setFlightMode() {
     this.character.isFlying = !this.character.isFlying;
     console.log(this.character.isFlying);
+    this.gameService.updateServerOnPosition(true);
     const flightSubscription = this.gameService.toggleFlightMode(this.playerId, this.character.isFlying).subscribe(() => flightSubscription.unsubscribe());
   }
 
