@@ -1,6 +1,6 @@
 import { v4 } from 'uuid';
 import { sign } from 'jsonwebtoken';
-import { CharacterData, GameState, PlayerState, PlayerSyncState } from '../../types';
+import { CharacterData, GameState, PlayerState, PlayerSyncState, PlayerLifeState } from '../../types';
 import * as Cesium from 'cesium';
 import { config } from '../../settings/config';
 import { startClientsUpdater, stopClientsUpdater } from '../clients-updater/clients-updater';
@@ -39,6 +39,9 @@ export interface IPlayer {
   character: CharacterData;
   username: string;
   state: PlayerState;
+  lifeState: PlayerLifeState;
+  lifeStatePerctange: number;
+  numberOfShotsThatHit: number;
   isCrawling: boolean;
   isShooting: boolean;
   game: IGameObject;
@@ -163,6 +166,9 @@ export class GamesManager {
       token: playerToken,
       username: finalUsername,
       state: 'WAITING',
+      lifeState: 'FULL',
+      lifeStatePerctange: 100,
+      numberOfShotsThatHit: 0,
       game,
       currentLocation: defaultPlayerPositions[realPlayerTeamCount],
       heading: 0,
@@ -276,6 +282,22 @@ export class GamesManager {
     this.checkGameResult(game);
 
   }
+
+  updatePlayerLifeState(gameId: string, playerId: string, newState: PlayerLifeState){
+      const game = this.getGameById(gameId);
+      const player = game.controlledPlayersMap.get(playerId) || game.playersMap.get(playerId);
+      if (player) {
+          player.lifeState = newState;
+      }
+  }
+
+    updateLifeStatePerctange(gameId: string, playerId: string, newState: number){
+        const game = this.getGameById(gameId);
+        const player = game.controlledPlayersMap.get(playerId) || game.playersMap.get(playerId);
+        if (player) {
+            player.lifeStatePerctange = newState;
+        }
+    }
 
   private checkGameResult(game: IGameObject) {
     const players = Array.from(game.playersMap.values());

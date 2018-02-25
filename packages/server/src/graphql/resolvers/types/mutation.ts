@@ -7,6 +7,7 @@ import { joinAsViewer } from '../mutation/join-as-viewer';
 import { takeControlOverPlayer } from '../mutation/take-control-over-player';
 import { removeControlOverPlayer } from '../mutation/remove-control-over-player';
 import { notifyShot } from '../mutation/notify-shot';
+import { notifyBeenShot } from "../mutation/notify-been-shot";
 
 const resolvers = {
   Mutation: {
@@ -15,6 +16,7 @@ const resolvers = {
     ready,
     updatePosition,
     notifyKill,
+    notifyBeenShot,
     notifyShot,
     joinAsViewer,
     takeControlOverPlayer,

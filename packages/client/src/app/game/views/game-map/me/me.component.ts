@@ -1,13 +1,16 @@
-import { ChangeDetectorRef, Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {ChangeDetectorRef, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { ActionType, CesiumService } from 'angular-cesium';
-import { CharacterService, CharacterState, MeModelState, ViewState } from '../../../services/character.service';
+import {
+  CharacterService, CharacterState, MeModelState,
+  ViewState
+} from '../../../services/character.service';
 import { UtilsService } from '../../../services/utils.service';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
 import 'rxjs/add/observable/fromEvent';
 import { Subscription } from 'rxjs/Subscription';
 import { GameService } from '../../../services/game.service';
-import { CharacterData } from '../../../../types';
+import { CharacterData, PlayerLifeState } from '../../../../types';
 import { BasicDesc } from 'angular-cesium/src/angular-cesium/services/basic-desc/basic-desc.service';
 import { OtherPlayerEntity } from '../../game-container/game-container.component';
 import { KeyboardKeysService } from '../../../../core/services/keyboard-keys.service';
@@ -23,7 +26,7 @@ import { SoundService } from '../../../services/sound.service';
 export class MeComponent implements OnInit, OnDestroy {
 
   private meModelDrawSubscription: Subscription;
-
+  @Input() me;
   @ViewChild('cross') crossElement: ElementRef;
   @ViewChild('muzzleFlash') muzzleFlash: ElementRef;
   @ViewChild('meModel') meModel: BasicDesc;
@@ -32,6 +35,8 @@ export class MeComponent implements OnInit, OnDestroy {
   showWeapon = false;
   showCross$: Subscription;
   showCross = false;
+  isInShootingPosition$: Subscription;
+  isInShootingPosition = false;
   shootSub$: Subscription;
   buildingNearby = false;
   canExitBuilding = false;
@@ -82,10 +87,22 @@ export class MeComponent implements OnInit, OnDestroy {
         const picked = this.cesiumService.getScene().pick(crossLocation);
         if (picked && picked.id && picked.id.acEntity && picked.id.acEntity instanceof OtherPlayerEntity) {
           const shotedEntity = picked.id.acEntity;
-          const killSubscription = this.gameService.notifyKill(shotedEntity.id)
-            .subscribe(() => killSubscription.unsubscribe());
+          let killSubscription;
+          killSubscription = this.gameService.notifyBeenShot(shotedEntity.id)
+            .subscribe( beenShotData => {
+                this.setKillEvent(beenShotData.data.notifyBeenShot.lifeState,shotedEntity.id)
+                killSubscription.unsubscribe()
+            });
         }
       });
+  }
+
+  setKillEvent(lifeState:string, shotedEntityId) {
+    if(lifeState === "EMPTY")
+      {
+        let killSubscription = this.gameService.notifyKill(shotedEntityId)
+          .subscribe(() => killSubscription.unsubscribe());
+      }
   }
 
   ngOnInit(): void {
@@ -93,13 +110,17 @@ export class MeComponent implements OnInit, OnDestroy {
       this.character.viewState$.map(viewState => viewState === ViewState.FPV),
       this.character.state$.map(meState => meState && meState.state === MeModelState.SHOOTING)
     ).map((result => result[0] || result[1])).subscribe((value) => {
-        this.showWeapon = value;
-        this.cd.detectChanges();
-      });
+      this.showWeapon = value;
+      this.cd.detectChanges();
+    });
     this.showCross$ = this.character.state$.map(meState => meState && meState.state === MeModelState.SHOOTING).subscribe((value) => {
       this.showCross = value;
       this.cd.detectChanges();
     });
+    this.isInShootingPosition$ = this.character.viewState$.map(viewState => viewState === ViewState.FPV).subscribe((x) => {
+      this.isInShootingPosition = x;
+      this.cd.detectChanges();
+    })
     this.meModelDrawSubscription = this.meModel.onDraw.subscribe(entity => {
       this.character.entity = entity.cesiumEntity;
     });

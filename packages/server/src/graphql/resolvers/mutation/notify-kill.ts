@@ -10,7 +10,6 @@ export const notifyKill = (rootValue, { playerId }, { games, game, player }: IGr
   const shootingPlayer = ((game.controlledPlayersMap.get(playerId) || player) as IPlayer);
   const shotPlayer = game.playersMap.get(playerId);
   const shotPlayerState = shotPlayer.state;
-
   games.updatePlayerState(game.gameId, playerId, 'DEAD');
   pubsub.publish(ESubscriptionTopics.GAME_STATE_CHANGED, { gameData: game });
 

@@ -11,6 +11,7 @@ import {
   JoinGame,
   NotifyKill,
   NotifyShot,
+  NotifyBeenShot,
   Ready,
   Team,
   UpdatePosition
@@ -29,6 +30,7 @@ import { CharacterService, MeModelState } from './character.service';
 import { joinAsViewer } from '../../graphql/join-as-viewer.mutation';
 import { gameNotificationsSubscription } from '../../graphql/game-notifications.subscription';
 import { notifyShotMutation } from '../../graphql/notify-shot.mutation';
+import { notifyBeenShotMutation } from "../../graphql/notify-been-shot.mutation";
 
 @Injectable()
 export class GameService {
@@ -193,6 +195,15 @@ export class GameService {
       variables: {
         playerId: killedPlayerId,
       } as NotifyKill.Variables
+    });
+  }
+
+  notifyBeenShot(killedPlayerId): Observable<ApolloExecutionResult<NotifyBeenShot.Mutation>> {
+    return this.apollo.mutate<NotifyBeenShot.Mutation>({
+      mutation: notifyBeenShotMutation,
+      variables: {
+        playerId: killedPlayerId,
+      } as NotifyBeenShot.Variables
     });
   }
 

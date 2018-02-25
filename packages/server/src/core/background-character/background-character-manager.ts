@@ -75,6 +75,7 @@ export class BackgroundCharacterManager {
       playerId: v4(),
       character,
       state: 'ALIVE',
+      lifeState: 'FULL',
       game: this.game,
       currentLocation: currentPath.location,
       heading: 0,

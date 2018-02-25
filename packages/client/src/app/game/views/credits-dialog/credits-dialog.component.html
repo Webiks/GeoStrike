@@ -1,0 +1,17 @@
+<div class="container">
+  <div class="title">MORE CREDITS</div>
+  <ul class="container-credits-lines">
+    <li class="credit-line" *ngFor="let credit of creditsJson | async">
+      <span>
+        <a href="{{credit.urlOne}}" target="_blank">{{credit.nameFieldOne}}</a>
+        <span class="credit-for-lbl"> by </span>
+        <a href="{{credit.urlTwo}}" target="_blank">{{credit.nameFieldTwo}}</a>
+        <span class="credit-for-lbl">{{credit.licensed}}</span>
+        <a href="{{credit.urlThree}}" target="_blank">{{credit.nameFieldThree}}</a>
+      </span>
+    </li>
+  </ul>
+  <div class="btn-row">
+    <medium-button (click)="dialog.closeAll()" text="BACK TO THE GAME"></medium-button>
+  </div>
+</div>
