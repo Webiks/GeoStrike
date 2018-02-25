@@ -29,7 +29,11 @@ export class OtherPlayersComponent {
       return position;
     } else if (player.isCrawling) {
       return this.utils.toHeightOffset(position, 0.2);
-    } else if (player.character.fixedHeight) {
+    }
+    else if(player.isFlying) {
+      return this.utils.toHeightOffset(position, 200.0);
+    }
+    else if (player.character.fixedHeight) {
       return this.utils.toHeightOffset(position, player.character.fixedHeight);
     }
     return position;

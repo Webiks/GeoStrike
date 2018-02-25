@@ -290,6 +290,19 @@ export namespace NotifyKill {
   export type NotifyKill = PlayerFields.Fragment
 }
 
+
+export namespace NotifyCrash {
+  export type Variables = {
+    playerId: string;
+  }
+
+  export type Mutation = {
+    NotifyCrash?: NotifyCrash;
+  }
+
+  export type NotifyCrash = PlayerFields.Fragment
+}
+
 export namespace ToggleFlightMode {
   export type Variables = {
     playerId: string;

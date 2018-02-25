@@ -19,6 +19,7 @@ export class EndGameDialogComponent implements OnInit {
   }
 
   ngOnInit() {
+    debugger;
     document.onclick = undefined;
     document.exitPointerLock();
 

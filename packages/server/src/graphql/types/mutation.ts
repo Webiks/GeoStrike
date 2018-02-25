@@ -8,6 +8,7 @@ export const schema = gql`
     updatePosition(position: LocationInput!, heading: Float!,isCrawling: Boolean!,isShooting: Boolean!, isFlying: Boolean!, enteringBuildingPosition: LocationInput , skipValidation: Boolean): Player
     ready: Game
     notifyKill(playerId: String!): Player
+    notifyCrash(playerId: String!): Player
     notifyShot(byPlayerId: String!, shotPosition: LocationInput!): Boolean
     toggleFlightMode(playerId: String!, isFlying: Boolean!): Player
     takeControlOverPlayer(playerId: String!): Player

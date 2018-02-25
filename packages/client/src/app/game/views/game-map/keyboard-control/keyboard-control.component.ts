@@ -171,12 +171,17 @@ export class KeyboardControlComponent implements OnInit {
       return;
     }
     this.gameService.updateServerOnPosition(true);
-    let flying = false;
+    // let flying = false;
     // if(this.character.viewState !== ViewState.FLYING_SEMI_FPV ) {
     //   this.character.viewState = ViewState.FLYING_SEMI_FPV;
     //   flying = true;
     // }
-    this.character.isFlying = flying;
+    // this.character.isFlying = flying;
+    //this.character._meFromServer.id
+    this.character.isFlying = !this.character.isFlying;
+    console.log(this.character.isFlying);
+    this.gameService.updateServerOnPosition(true);
+    const flightSubscription = this.gameService.toggleFlightMode(this.character.meFromServer.id, this.character.isFlying).subscribe(() => flightSubscription.unsubscribe());
   }
 
   toggleInspector(inspectorClass, inspectorProp) {
