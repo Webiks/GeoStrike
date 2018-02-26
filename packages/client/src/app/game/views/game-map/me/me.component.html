@@ -14,5 +14,4 @@
 <img *ngIf="showWeapon" src="assets/gun1.png" class="gun" alt="" (click)="canvasPropagation()">
 <img #muzzleFlash src="assets/muzzle-flash.png" class="gun-flare" alt="">
 <img #cross *ngIf="showCross" src="assets/focus.png" class="gun-cross" alt="">
-
-f
+<blood-on-screen [isInShootingPosition]="isInShootingPosition"></blood-on-screen>

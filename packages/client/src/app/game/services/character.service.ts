@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { GameFields, PlayerFields, Team } from '../../types';
+import { GameFields, PlayerFields, Team, PlayerLifeState } from '../../types';
 import { BuildingsService } from './buildings.service';
 import { GameConfig } from './game-config';
 
@@ -17,7 +17,6 @@ export enum ViewState {
   SEMI_FPV,
   SEMI_FPV_NOT_CONTROLLED,
   OVERVIEW,
-  // FLYING_SEMI_FPV
 }
 
 export interface CharacterState {
@@ -26,6 +25,8 @@ export interface CharacterState {
   heading: number;
   pitch: number;
   state: MeModelState;
+  lifeState: PlayerLifeState;
+  lifeStatePerctange: number;
   isCrawling: boolean;
   isFlying: boolean;
   team: Team;
@@ -72,9 +73,9 @@ export class CharacterService {
     return this._character.getValue().isCrawling;
   }
 
-  // get isFlying() {
-  //   return this._character.getValue().isFlying;
-  // }
+  get lifeState() {
+    return this._character.getValue().lifeState;
+  }
 
   set isCrawling(value: boolean) {
     this.modifyCurrentStateValue({

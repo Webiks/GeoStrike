@@ -13,6 +13,8 @@ export const schema = gql`
     username: String
     character: CharacterData!
     state: PlayerState!
+    lifeState: PlayerLifeState
+    lifeStatePerctange: Float
     isCrawling: Boolean!
     isFlying: Boolean
     flight: FlightData
@@ -75,6 +77,14 @@ export const schema = gql`
     DEAD,
     CONTROLLED,
   }
+  
+  enum PlayerLifeState {
+    FULL,
+    HIGH,
+    MEDIUM,
+    LOW,
+    EMPTY
+  } 
 
   type Location {
     x: Float!

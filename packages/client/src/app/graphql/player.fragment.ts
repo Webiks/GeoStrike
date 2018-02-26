@@ -15,6 +15,8 @@ export const playerFragment = gql`
       fixedHeight
     }
     state
+    lifeState
+    lifeStatePerctange
     isCrawling
     isFlying
     flight {

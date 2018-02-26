@@ -1,0 +1,193 @@
+
+[
+  {
+    "symbol": "",
+    "nameFieldOne": "Building data courtesy of NYC OpenData portal",
+    "nameFieldTwo":"",
+    "nameFieldThree":"",
+    "urlOne" :"http://www1.nyc.gov/site/doitt/initiatives/3d-building.page",
+    "urlTwo": "",
+    "urlThree": "",
+    "level": "main"
+  },
+  {
+    "symbol": "",
+    "nameFieldOne": "Download this 3D Tiles tileset",
+    "nameFieldTwo":"",
+    "nameFieldThree":"",
+    "urlOne" :"https://s3.amazonaws.com/cesiumjs/3DTiles/NewYorkCityGml.zip",
+    "urlTwo": "",
+    "urlThree": "",
+    "level": "main"
+  },
+  {
+    "symbol": "&nbsp;&copy;",
+    "nameFieldOne": " • Analytical Graphics Inc.",
+    "nameFieldTwo":"",
+    "nameFieldThree":"",
+    "urlOne" :"",
+    "urlTwo": "",
+    "urlThree": "",
+    "level": "main"
+  },
+  {
+    "symbol": "&nbsp;&copy;",
+    "nameFieldOne": " CGIAR-CSI, Produced using Copernicus data and information funded by the European Union - EU-DEM layers •",
+    "nameFieldTwo":"",
+    "nameFieldThree":"",
+    "urlOne" :"",
+    "urlTwo": "",
+    "urlThree": "",
+    "level": "main"
+  },
+  {
+    "symbol": "",
+    "nameFieldOne": "2018 Microsoft Corporation •",
+    "nameFieldTwo":"",
+    "nameFieldThree":"",
+    "urlOne" :"",
+    "urlTwo": "",
+    "urlThree": "",
+    "level": "main"
+  },
+  {
+    "symbol": "&nbsp;&copy;",
+    "nameFieldOne": "2018 DigitalGlobe • ",
+    "nameFieldTwo":"",
+    "nameFieldThree":"",
+    "urlOne" :"",
+    "urlTwo": "",
+    "urlThree": "",
+    "level": "main"
+  },
+  {
+    "symbol": "&copy;",
+    "nameFieldOne": " CNES (2018) Distribution Airbus DS • ",
+    "nameFieldTwo":"",
+    "nameFieldThree":"",
+    "urlOne" :"",
+    "urlTwo": "",
+    "urlThree": "",
+    "level": "main"
+  },
+  {
+    "symbol": "",
+    "nameFieldOne": "Earthstar Geographics SIO",
+    "nameFieldTwo":"",
+    "nameFieldThree":"",
+    "urlOne" :"",
+    "urlTwo": "",
+    "urlThree": "",
+    "level": "main"
+  },
+  {
+    "symbol": "",
+    "nameFieldOne": "Logan (Wolverine)",
+    "nameFieldTwo":"SidneyMADMAX",
+    "nameFieldThree":"CC Attribution",
+    "licensed":"is licensed under",
+    "urlOne" :"https://sketchfab.com/models/af530f5b864549f5b4f9191a62a2ec91",
+    "urlTwo": "https://sketchfab.com/sidneymadmax",
+    "urlThree": "http://creativecommons.org/licenses/by/4.0/",
+    "level": "sub"
+  },
+  {
+    "symbol": "",
+    "nameFieldOne": "Iron Man Mark7",
+    "nameFieldTwo":"mwilson1",
+    "nameFieldThree":"CC Attribution",
+    "licensed":"is licensed under",
+    "urlOne" :"https://sketchfab.com/models/b8d5a0156ef04cb7800d19f6bfd9842b",
+    "urlTwo": "https://sketchfab.com/mwilson1",
+    "urlThree": "http://creativecommons.org/licenses/by/4.0/",
+    "level": "sub"
+  },
+  {
+    "symbol": "",
+    "nameFieldOne": "M-CoC - Spider-Man: Stark Enhanced",
+    "nameFieldTwo":"Ecelon",
+    "nameFieldThree":"CC Attribution",
+    "licensed":"is licensed under",
+    "urlOne" :"http://r.sketchfab.com/lnk/AEEAOlxzVdsAAAAI0OcAAAAYgtYAAAAAACMAAAAAAAR5bABZjGJsg6aTOSX3RFObL96CgPubjAAEB8A/2/eI-MMoxacn0WzvoNTQ9Nbw/aHR0cHM6Ly9za2V0Y2hmYWIuY29tL21vZGVscy8yYTAyOTZmODliOWU0NDczODU4MmUwYWMwYTAxZWY3YT91dG1fc291cmNlPXRyaWdnZXJlZC1lbWFpbHMmdXRtX21lZGl1bT1lbWFpbCZ1dG1fY2FtcGFpZ249bW9kZWwtZG93bmxvYWRlZA",
+    "urlTwo": "http://r.sketchfab.com/lnk/AEEAOlxzVdsAAAAI0OcAAAAYgtYAAAAAACMAAAAAAAR5bABZjGJsg6aTOSX3RFObL96CgPubjAAEB8A/3/3RdPBWS0LBOnr_HRl8huBQ/aHR0cHM6Ly9za2V0Y2hmYWIuY29tL0VjZWxvbj91dG1fc291cmNlPXRyaWdnZXJlZC1lbWFpbHMmdXRtX21lZGl1bT1lbWFpbCZ1dG1fY2FtcGFpZ249bW9kZWwtZG93bmxvYWRlZA",
+    "urlThree": "http://creativecommons.org/licenses/by/4.0/",
+    "level": "sub"
+  },
+  {
+    "symbol": "",
+    "nameFieldOne": "PC Computer - DC Universe Online - Batman",
+    "nameFieldTwo":"3dawesomeness",
+    "nameFieldThree":"CC Attribution",
+    "licensed":"is licensed under",
+    "urlOne" :"https://sketchfab.com/models/be964458993940d4959acce5aade79f1",
+    "urlTwo": "https://sketchfab.com/3dawesomeness",
+    "urlThree": "http://creativecommons.org/licenses/by/4.0/",
+    "level": "sub"
+  },
+  {
+    "symbol": "",
+    "nameFieldOne": "Crate model",
+    "nameFieldTwo":"Vinrax",
+    "nameFieldThree":"Attribution",
+    "licensed":"is licensed under",
+    "urlOne" :"https://opengameart.org/content/crate-model",
+    "urlTwo": "https://sketchfab.com/3dawesomeness",
+    "urlThree": "https://creativecommons.org/licenses/by/3.0/",
+    "level": "sub"
+  },
+  {
+    "symbol": "",
+    "nameFieldOne": "Low Poly tree",
+    "nameFieldTwo":"joey (runing)",
+    "nameFieldThree":"",
+    "licensed":"",
+    "urlOne" :"https://free3d.com/3d-model/tree-72460.html",
+    "urlTwo": "https://free3d.com/user/runing",
+    "urlThree": "",
+    "level": "sub"
+  },
+  {
+    "symbol": "",
+    "nameFieldOne": "Grandpa Joe",
+    "nameFieldTwo":"throast",
+    "nameFieldThree":"",
+    "licensed":"",
+    "urlOne" :"https://www.models-resource.com/gamecube/charlieandthechocolatefactory/model/14420/",
+    "urlTwo": "https://www.models-resource.com/submitter/throast/",
+    "urlThree": "",
+    "level": "sub"
+  },
+  {
+    "symbol": "",
+    "nameFieldOne": "Ground vehicle",
+    "nameFieldTwo":"Cesium",
+    "nameFieldThree":"",
+    "licensed":"",
+    "urlOne" :"https://github.com/AnalyticalGraphicsInc/cesium/tree/master/Apps/SampleData/models/CesiumGround",
+    "urlTwo": "https://cesiumjs.org/Cesium/Apps/Sandcastle/?src=Physically-Based%20Materials.html&label=Showcases",
+    "urlThree": "",
+    "level": "sub"
+  },
+  {
+    "symbol": "",
+    "nameFieldOne": "Xolonium",
+    "nameFieldTwo":"Severin Meyer",
+    "nameFieldThree":"SIL Open Font License (OFL) 1.1",
+    "licensed":"is licensed under the",
+    "urlOne" :"https://fontlibrary.org/en/font/xolonium",
+    "urlTwo": "https://github.com/Webiks/GeoStrike/issues/sev.ch@web.de",
+    "urlThree": "http://scripts.sil.org/cms/scripts/page.php?item_id=OFL_web",
+    "level": "sub"
+  },
+  {
+    "symbol": "",
+    "nameFieldOne": "Saira Extra Condensed font family",
+    "nameFieldTwo":"Omnibus-Type",
+    "nameFieldThree":"SIL Open Font License (OFL) 1.1",
+    "licensed":"is under the",
+    "urlOne" :"https://fonts.google.com/specimen/Saira+Extra+Condensed?selection.family=Saira+Extra+Condensed",
+    "urlTwo": "https://github.com/Webiks/GeoStrike/issues/sev.ch@web.de",
+    "urlThree": "http://scripts.sil.org/cms/scripts/page.php?item_id=OFL_web",
+    "level": "sub"
+  }
+]

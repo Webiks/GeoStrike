@@ -1,4 +1,4 @@
-
+/* tslint:disable */
 
 export interface User {
   id: string;
@@ -18,11 +18,23 @@ export interface Game {
   winingTeam?: Team;
 }
 
+export interface FlightData {
+  remainingTime: number;
+  speed: FlightSpeed;
+  height: FlightHeight;
+}
+
+export type FlightSpeed = "NONE" | "MIN" | "MAX";
+
+export type FlightHeight = "NONE" | "A" | "B" | "C" | "D" | "E"| "MAX"
+
 export interface Player extends User {
   id: string;
   username?: string;
   character: CharacterData;
   state: PlayerState;
+  lifeState: PlayerLifeState;
+  lifeStatePerctange: number;
   isCrawling: boolean;
   isFlying: boolean;
   isShooting: boolean;
@@ -48,17 +60,6 @@ export interface CharacterData {
   fixedHeight?: number;
 }
 
-export interface FlightData {
-  isFlying: boolean;
-  remainingTime: number;
-  speed: FlightSpeed;
-  height: FlightHeight;
-}
-
-export type FlightSpeed = "NONE" | "MIN" | "MAX";
-
-export type FlightHeight = "NONE" | "A" | "B" | "C" | "D" | "E"| "MAX"
-
 export interface PlayerLocation {
   location: Location;
   heading: number;
@@ -77,6 +78,7 @@ export interface Mutation {
   updatePosition?: Player;
   ready?: Game;
   notifyKill?: Player;
+  notifyBeenShot?: Player;
   notifyShot?: boolean;
   takeControlOverPlayer?: Player;
   removeControlOverPlayer?: Player;
@@ -165,6 +167,9 @@ export type CharacterType = "PLAYER" | "BACKGROUND_CHARACTER" | "OVERVIEW";
 
 
 export type GameState = "WAITING" | "ACTIVE" | "DONE";
+
+
+export type PlayerLifeState = "FULL" | "HIGH" | "MEDIUM" | "LOW" | "EMPTY";
 
 export namespace CreateNewGame {
   export type Variables = {
@@ -290,6 +295,19 @@ export namespace NotifyKill {
   export type NotifyKill = PlayerFields.Fragment
 }
 
+export namespace NotifyBeenShot {
+  export type Variables = {
+    playerId: string;
+  }
+
+  export type Mutation = {
+    notifyBeenShot?: NotifyBeenShot;
+  }
+
+  export type NotifyBeenShot = PlayerFields.Fragment
+}
+
+
 
 export namespace NotifyCrash {
   export type Variables = {
@@ -367,7 +385,6 @@ export namespace UpdatePosition {
     heading: number;
     isCrawling: boolean;
     isShooting: boolean;
-    isFlying: boolean;
     enteringBuildingPosition?: LocationInput;
     skipValidation?: boolean;
   }
@@ -404,6 +421,8 @@ export namespace PlayerFields {
     username?: string;
     character: Character;
     state: PlayerState;
+    lifeState: PlayerLifeState;
+    lifeStatePerctange: number;
     isCrawling: boolean;
     isFlying: boolean;
     flight: FlightData;

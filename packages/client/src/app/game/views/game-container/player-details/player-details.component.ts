@@ -10,7 +10,14 @@ import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleCha
      }">
         <img [src]="getPortrait()" alt="" class="img">
       </div>
-      <div class="text">{{username}}</div>
+      <div class="name-life-bar-container">
+        <div class="text">{{username}}</div>
+        <div class="life-bar-wrapper">
+          <div class="life-bar"
+               [ngClass]="{'life-bar--full': getlifeStateCondition('FULL'),'life-bar--high': getlifeStateCondition('HIGH'),'life-bar--medium': getlifeStateCondition('MEDIUM'),'life-bar--low': getlifeStateCondition('LOW')}" [style.width.%]="me.lifeStatePerctange">
+          </div>
+        </div>
+      </div>
     </div>
   `,
   styleUrls: ['./player-details.component.scss'],
@@ -24,21 +31,33 @@ export class PlayerDetailsComponent implements OnInit, OnChanges {
 
   @Input() username;
 
+  lifeState: string;
+  lifeStatePerctange: number;
+
   constructor() {
   }
 
-  getPortrait(){
-    const url =  this.me && this.me.character && this.me.character.portraitUrl;
-    if (url){
+  getPortrait() {
+    const url = this.me && this.me.character && this.me.character.portraitUrl;
+    if (url) {
       const urlSplit = url.split('.');
       return `${urlSplit[0]}_right.${urlSplit[1]}`;
     }
     return undefined;
   }
 
+  getlifeStateCondition(condtion: string): Boolean {
+    if (this.lifeState === condtion)
+      return true;
+    else
+      return false;
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     if (this.me) {
       this.viewer = this.me['__typename'] === 'Viewer';
+      this.lifeState = this.me.lifeState;
+      this.lifeStatePerctange = this.me.lifeStatePerctange;
     }
   }
 

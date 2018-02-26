@@ -1,0 +1,34 @@
+<div class="credits-container" #creditsContainer>
+  <div class="image-container">
+    <img id="cesium-img" src="assets/logo/credits/cesium.png">
+  </div>
+  <div class="image-container">
+    <img id="agi-img" src="assets/logo/credits/agi-logo-white.png">
+  </div>
+  <div class="image-container">
+    <img id="bing-img" src="assets/logo/credits/bing.png">
+  </div>
+  <ul class="credit-text">
+    <li title="{{credit.name}}" *ngFor="let credit of creditsJson | async">
+      <a *ngIf="credit.urlOne!=''" href="{{credit.urlOne}}" class="credit-link" target="_blank">
+        <span [innerHTML]="credit.symbol"></span>
+        <span *ngIf="creditsComponentsWidth >= 1900">{{credit.nameFieldOne}}</span>
+        <span *ngIf="creditsComponentsWidth < 1900 && creditsComponentsWidth > 1850">{{credit.nameFieldOne | slice:0:60}}...</span>
+        <span *ngIf="creditsComponentsWidth < 1850 && creditsComponentsWidth > 1800">{{credit.nameFieldOne | slice:0:50}}...</span>
+        <span *ngIf="creditsComponentsWidth < 1800">{{credit.nameFieldOne | slice:0:25}}...</span>
+      </a>
+      <span *ngIf="credit.urlOne == ''">
+        <span [innerHTML]="credit.symbol"></span>
+        <span *ngIf="creditsComponentsWidth >= 1900">{{credit.nameFieldOne}}</span>
+        <span *ngIf="creditsComponentsWidth < 1900 && creditsComponentsWidth > 1850">{{credit.nameFieldOne | slice:0:60}}...</span>
+        <span *ngIf="creditsComponentsWidth < 1850 && creditsComponentsWidth > 1800">{{credit.nameFieldOne | slice:0:50}}...</span>
+        <span *ngIf="creditsComponentsWidth < 1800">{{credit.nameFieldOne | slice:0:25}}...</span>
+      </span>
+    </li>
+  </ul>
+  <span class="more-credits" (click)="openCredits()"
+        [ngClass]="{'more-credits-open':isDialogOpen,'more-credits-close':!isDialogOpen}">More Credits
+  </span>
+</div>
+
+

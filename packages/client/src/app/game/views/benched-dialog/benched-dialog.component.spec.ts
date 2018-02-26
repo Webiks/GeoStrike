@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BanchedDialogComponent } from './banched-dialog.component';
+import { BenchedDialogComponent } from './benched-dialog.component';
 
 describe('BanchedDialogComponent', () => {
-  let component: BanchedDialogComponent;
-  let fixture: ComponentFixture<BanchedDialogComponent>;
+  let component: BenchedDialogComponent;
+  let fixture: ComponentFixture<BenchedDialogComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BanchedDialogComponent ]
+      declarations: [ BenchedDialogComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(BanchedDialogComponent);
+    fixture = TestBed.createComponent(BenchedDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

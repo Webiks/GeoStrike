@@ -8,13 +8,14 @@ import {
   GameData,
   GameNotifications,
   JoinAsViewer,
-  JoinGame, NotifyCrash,
+  JoinGame,
   NotifyKill,
   NotifyShot,
+  NotifyBeenShot,
   Ready,
   Team,
   ToggleFlightMode,
-  UpdatePosition
+  UpdatePosition, NotifyCrash
 } from '../../types';
 import { joinGameMutation } from '../../graphql/join-game.mutation';
 import { SubscriptionClient } from 'subscriptions-transport-ws-temp';
@@ -32,6 +33,7 @@ import { gameNotificationsSubscription } from '../../graphql/game-notifications.
 import { notifyShotMutation } from '../../graphql/notify-shot.mutation';
 import { toggleFlightModeMutation } from "../../graphql/toggle-flight-mode.mutation";
 import { notifyCrashMutation } from "../../graphql/notify-crash.mutation";
+import { notifyBeenShotMutation } from "../../graphql/notify-been-shot.mutation";
 
 @Injectable()
 export class GameService {
@@ -138,7 +140,7 @@ export class GameService {
     this.lastStateSentToServer = state;
     const subscription = this.apollo.mutate<UpdatePosition.Mutation>({
       mutation: updatePositionMutation,
-      variables: {...state, skipValidation},
+      variables: { ...state, skipValidation },
     }).subscribe(() => subscription.unsubscribe());
   }
 
@@ -211,6 +213,15 @@ export class GameService {
       variables: {
         playerId: killedPlayerId,
       } as NotifyKill.Variables
+    });
+  }
+
+  notifyBeenShot(killedPlayerId): Observable<ApolloExecutionResult<NotifyBeenShot.Mutation>> {
+    return this.apollo.mutate<NotifyBeenShot.Mutation>({
+      mutation: notifyBeenShotMutation,
+      variables: {
+        playerId: killedPlayerId,
+      } as NotifyBeenShot.Variables
     });
   }
 

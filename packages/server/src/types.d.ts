@@ -1,5 +1,7 @@
 /* tslint:disable */
 
+import { PlayerLifeState } from "../../client/src/app/types";
+
 export interface User {
   id: string; 
   username?: string; 
@@ -22,7 +24,8 @@ export interface Player extends User {
   id: string; 
   username?: string; 
   character: CharacterData; 
-  state: PlayerState; 
+  state: PlayerState;
+  lifeState: PlayerLifeState;
   isCrawling: boolean;
   isFlying: boolean;
   flight:FlightData;
@@ -124,9 +127,8 @@ export interface JoinAsViewerMutationArgs {
 export interface UpdatePositionMutationArgs {
   position: LocationInput; 
   heading: number; 
-  isCrawling: boolean;
-  isShooting: boolean;
-  isFlying: boolean;
+  isCrawling: boolean; 
+  isShooting: boolean; 
   enteringBuildingPosition?: LocationInput; 
   skipValidation?: boolean; 
 }
@@ -156,6 +158,7 @@ export type Team = "BLUE" | "RED" | "NONE";
 
 export type PlayerState = "WAITING" | "READY" | "ALIVE" | "DEAD" | "CONTROLLED";
 
+export type PlayerLifeState = "FULL" | "HIGH" | "MEDIUM" | "LOW" | "EMPTY";
 
 export type PlayerSyncState = "VALID" | "INVALID";
 

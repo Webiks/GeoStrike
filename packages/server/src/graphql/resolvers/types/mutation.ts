@@ -9,6 +9,7 @@ import { removeControlOverPlayer } from '../mutation/remove-control-over-player'
 import { notifyShot } from '../mutation/notify-shot';
 import { toggleFlightMode } from "../mutation/toggle-flight-mode";
 import { notifyCrash } from "../mutation/notify-crash";
+import { notifyBeenShot } from "../mutation/notify-been-shot";
 
 const resolvers = {
     Mutation: {
@@ -17,6 +18,7 @@ const resolvers = {
         ready,
         updatePosition,
         notifyKill,
+        notifyBeenShot,
         notifyCrash,
         notifyShot,
         toggleFlightMode,
