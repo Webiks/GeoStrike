@@ -10,7 +10,7 @@
   <div class="img-container" *ngIf="lifePercentage === 'MEDIUM'  && isInShootingPosition">
     <img src="assets/effects/blood-medium.png">
   </div>
-  <div class="img-container" *ngIf="lifePercentage === 'LOW' && isInShootingPosition">
+  <div class="img-container" *ngIf="(lifePercentage === 'LOW' || lifePercentage === 'EMPTY') && isInShootingPosition">
     <img src="assets/effects/blood-high.png">
   </div>
 </div>
