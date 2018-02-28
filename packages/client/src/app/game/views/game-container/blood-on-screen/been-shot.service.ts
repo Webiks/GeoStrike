@@ -13,11 +13,9 @@ export class BeenShotService {
   }
 
   public subscribeToBeenShot(): Observable<BeenShots.Subscription> {
-    // if (!this.beenShot$) {
       this.beenShots$ = this.apollo.subscribe({
         query: beenShotSubscription,
       }).share();
-    // }
     return this.beenShots$;
   }
 

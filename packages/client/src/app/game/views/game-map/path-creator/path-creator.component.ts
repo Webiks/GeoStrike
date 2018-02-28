@@ -14,7 +14,7 @@ import { GameMapComponent } from '../game-map.component';
 interface PathNode {
   location: Cartesian3;
   id: string;
-  points?: [string];
+  points?: [string] ;
 }
 
 @Component({
@@ -39,7 +39,7 @@ export class PathCreatorComponent implements OnInit {
     this.points$ = new Subject<AcNotification>();
   }
 
-  get pointPaths() {
+  get pointPaths(){
     return Array.from(this.pointsPathMap.values());
   }
 
@@ -62,7 +62,7 @@ export class PathCreatorComponent implements OnInit {
       })
   }
 
-  updatePathNode(existingPoint: PathNode) {
+  updatePathNode(existingPoint: PathNode){
     const lastPointId = this.lastPathNode.id;
     if (existingPoint.id !== lastPointId && !existingPoint.points.find(pointId => pointId === lastPointId)) {
       existingPoint.points.push(lastPointId);
@@ -111,10 +111,10 @@ export class PathCreatorComponent implements OnInit {
 
   }
 
-  reset() {
+  reset(){
     this.showJsonPanel = false;
     this.idCounter = 0;
-    this.polyLinePoints = [];
+    this.polyLinePoints =[];
     this.lastPathNode = null;
     this.pointsPathMap.forEach(value => {
       this.points$.next({

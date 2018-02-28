@@ -44,8 +44,7 @@ export const notifyBeenShot = (rootValue, {playerId}, {games, game, player}: IGr
         beenShot: {
             id: playerId,
             lifeState: lifeState,
-            gameId: game.gameId,
-            byPlayer: ShootingPlayer
+            gameId: game.gameId
         }
     });
     return shotPlayer;
