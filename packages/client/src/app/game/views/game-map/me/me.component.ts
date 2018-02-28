@@ -17,6 +17,7 @@ import { KeyboardKeysService } from '../../../../core/services/keyboard-keys.ser
 import { MatSnackBar } from '@angular/material';
 import { SnackBarContentComponent } from '../../../../shared/snack-bar-content/snack-bar-content.component';
 import { SoundService } from '../../../services/sound.service';
+import { BeenShotService } from "../../game-container/blood-on-screen/been-shot.service";
 
 @Component({
   selector: 'me',
@@ -44,7 +45,7 @@ export class MeComponent implements OnInit, OnDestroy {
   normalColor = new Cesium.Color(1, 1, 1, 1);
   ViewState = ViewState;
   Cesium = Cesium;
-
+  showBloodSubscription : Subscription;
   constructor(private character: CharacterService,
               public utils: UtilsService,
               private cesiumService: CesiumService,
@@ -53,7 +54,8 @@ export class MeComponent implements OnInit, OnDestroy {
               private ngZone: NgZone,
               private snackBar: MatSnackBar,
               private soundService: SoundService,
-              private cd: ChangeDetectorRef) {
+              private cd: ChangeDetectorRef,
+              private beenShotService: BeenShotService) {
   }
 
   get notifications$() {
@@ -90,8 +92,8 @@ export class MeComponent implements OnInit, OnDestroy {
           let killSubscription;
           killSubscription = this.gameService.notifyBeenShot(shotedEntity.id)
             .subscribe( beenShotData => {
-                this.setKillEvent(beenShotData.data.notifyBeenShot.lifeState,shotedEntity.id)
-                killSubscription.unsubscribe()
+              this.setKillEvent(beenShotData.data.notifyBeenShot.lifeState,shotedEntity.id)
+              killSubscription.unsubscribe()
             });
         }
       });
@@ -99,10 +101,10 @@ export class MeComponent implements OnInit, OnDestroy {
 
   setKillEvent(lifeState:string, shotedEntityId) {
     if(lifeState === "EMPTY")
-      {
-        let killSubscription = this.gameService.notifyKill(shotedEntityId)
-          .subscribe(() => killSubscription.unsubscribe());
-      }
+    {
+      let killSubscription = this.gameService.notifyKill(shotedEntityId)
+        .subscribe(() => killSubscription.unsubscribe());
+    }
   }
 
   ngOnInit(): void {

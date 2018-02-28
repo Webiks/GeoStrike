@@ -11,9 +11,9 @@ import { Observable } from "rxjs/Observable";
   styleUrls: ['./game-credits.component.scss']
 })
 export class GameCreditsComponent implements OnInit, AfterViewInit {
-  private creditsJson: Observable<Credit[]>;
-  private creditsComponentsWidth: number = 0;
-  private isDialogOpen: boolean = false;
+  public creditsJson: Observable<Credit[]>;
+  public creditsComponentsWidth: number = 0;
+  public isDialogOpen: boolean = false;
   @ViewChild("creditsContainer") documentRef: ElementRef;
 
   @HostListener('window:resize') onResize() {
