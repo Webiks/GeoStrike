@@ -21,7 +21,7 @@ export const playerFragment = gql`
     isFlying
     flight {
       speed
-      height
+      minHeight
       remainingTime
     }
     isShooting

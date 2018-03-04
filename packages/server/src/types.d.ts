@@ -1,6 +1,7 @@
 /* tslint:disable */
 
 import { PlayerLifeState } from "../../client/src/app/types";
+import Timer = NodeJS.Timer;
 
 export interface User {
   id: string; 
@@ -147,12 +148,13 @@ export interface TakeControlOverPlayerMutationArgs {
 export interface FlightData {
   remainingTime: number;
   speed: FlightSpeed;
-  height: FlightHeight;
+  minHeight: number;
+  maxHeight: number;
 }
 
 export type FlightSpeed = "NONE" | "MIN" | "MAX";
 
-export type FlightHeight = "NONE" | "A" | "B" | "C" | "D" | "E"| "MAX"
+// export type FlightHeight = "NONE" | "A" | "B" | "C" | "D" | "E"| "MAX"
 
 export type Team = "BLUE" | "RED" | "NONE";
 

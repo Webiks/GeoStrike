@@ -162,7 +162,8 @@ export class GamesManager {
 
         const initFlightData: FlightData = {
           speed :"NONE",
-          height : "NONE",
+          minHeight : 195,
+          maxHeight: 500,
           remainingTime: 51300 //300sec =  5min minutes in seconds
         }
 
@@ -272,12 +273,12 @@ export class GamesManager {
         player.heading = heading;
         player.isCrawling = isCrawling;
         player.isShooting = isShooting;
+        player.isFlying= isFlying;
         player.enteringBuildingPosition = enteringBuildingPosition;
       } else {
         player.syncState = 'INVALID';
       }
-
-      return player;
+        return player;
     }
 
     return null;

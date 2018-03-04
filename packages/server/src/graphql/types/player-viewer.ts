@@ -1,5 +1,6 @@
 import gql from 'graphql-tag';
-import {FlightData, FlightHeight, FlightSpeed} from "../../types";
+import {FlightData, FlightSpeed} from "../../types";
+// import {FlightData, FlightHeight, FlightSpeed} from "../../types";
 
 export const schema = gql`
 
@@ -43,7 +44,8 @@ export const schema = gql`
   type FlightData {
   remainingTime: Float
   speed: FlightSpeed
-  height: FlightHeight
+  minHeight: Int
+  maxHeight: Int
 }
 
 

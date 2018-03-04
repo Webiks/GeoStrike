@@ -41,6 +41,14 @@ export class UtilsService {
     cart.height = height;
     return Cesium.Cartesian3.fromRadians(cart.longitude, cart.latitude, cart.height);
   }
+  isFlightHeightOkForLanding(curPosition){
+    const currHeight =  Cesium.Cartographic.fromCartesian(curPosition).height;
+    return Math.floor(currHeight) === Math.floor(this.character.meFromServer.flight.minHeight);
+  }
+  getFlightHeightForGauge(curPosition){
+    const currHeight =  Cesium.Cartographic.fromCartesian(curPosition).height;
+    return Math.floor(currHeight) / Math.floor(this.character.meFromServer.flight.maxHeight);
+  }
 
   pointByLocationDistanceAndAzimuthAndHeight3d(currentLocation: any, meterDistance: number, radianAzimuth: number, isInputCartesian = true) {
     const distance = meterDistance / Cesium.Ellipsoid.WGS84.maximumRadius;
@@ -61,19 +69,26 @@ export class UtilsService {
     const pitch = Cesium.Math.toRadians(pitchDeg);
     const heading = Cesium.Math.toRadians(-180 + this.character.heading);
 
-    let destinationHeight = Math.sin(pitch) * (meterDistance);
+    const heightCalculation = Math.sin(pitch) * (meterDistance);
+    let destinationHeight;
 
-    destinationHeight += currHeight;
+    // currHeight += destinationHeight;
 
 
-    console.log("this.character.heading:"+this.character.heading);
-    // console.log("this.character.pitch:"+this.character.pitch);
-    // console.log("Math.sin(this.character.pitch):"+Math.sin(this.character.pitch));
-    console.log("Math.sin(this.character.heading):"+Math.sin(this.character.heading));
+    if((currHeight + heightCalculation) >= this.character.meFromServer.flight.minHeight)
+      destinationHeight = currHeight + heightCalculation;
+    else
+      destinationHeight = this.character.meFromServer.flight.minHeight;
 
-    console.log(" Math.sin(this.character.heading) * (meterDistance):"+ Math.sin(this.character.heading) * (meterDistance));
-    console.log("currHeight:"+currHeight)
-    console.log("destinationHeight:"+destinationHeight);
+    //
+    // console.log("this.character.heading:"+this.character.heading);
+    // // console.log("this.character.pitch:"+this.character.pitch);
+    // // console.log("Math.sin(this.character.pitch):"+Math.sin(this.character.pitch));
+    // console.log("Math.sin(this.character.heading):"+Math.sin(this.character.heading));
+    //
+    // console.log(" Math.sin(this.character.heading) * (meterDistance):"+ Math.sin(this.character.heading) * (meterDistance));
+    // console.log("currHeight:"+currHeight)
+    // console.log("destinationHeight:"+destinationHeight);
 
 
     destinationLon = (destinationLon + 3 * Math.PI) % (2 * Math.PI) - Math.PI;

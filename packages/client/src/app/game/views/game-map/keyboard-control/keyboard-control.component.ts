@@ -146,7 +146,7 @@ export class KeyboardControlComponent implements OnInit {
   }
 
   changeViewMove() {
-    if (this.character.viewState === ViewState.OVERVIEW) {
+    if (this.character.viewState === ViewState.OVERVIEW  || this.character.isFlying) {
       return;
     }
     this.character.state = MeModelState.WALKING;
@@ -159,7 +159,7 @@ export class KeyboardControlComponent implements OnInit {
   }
 
   changeMeShootState() {
-    if (this.character.viewState === ViewState.OVERVIEW) {
+    if (this.character.viewState === ViewState.OVERVIEW  || this.character.isFlying) {
       return;
     }
     let newState = MeModelState.WALKING;
@@ -171,7 +171,7 @@ export class KeyboardControlComponent implements OnInit {
   }
 
   changeCrawlingState() {
-    if (this.character.viewState === ViewState.OVERVIEW) {
+    if (this.character.viewState === ViewState.OVERVIEW || this.character.isFlying) {
       return;
     }
     let crawling = false;
@@ -181,16 +181,36 @@ export class KeyboardControlComponent implements OnInit {
     this.character.isCrawling = crawling;
   }
 
+  // changeFlyingState() {
+  //   if (this.character.viewState === ViewState.OVERVIEW) {
+  //     return;
+  //   }
+  //   this.character.isFlying = !this.character.isFlying;
+  //   if (this.character.isFlying) {
+  //     this.character.location = this.utils.toHeightOffset(this.character.location, 195);
+  //   }
+  //   else {
+  //     this.character.location = this.utils.toFixedHeight(this.character.location);
+  //   }
+  //   this.gameService.updateServerOnPosition(true);
+  //   const flightSubscription = this.gameService.toggleFlightMode(this.character.meFromServer.id, this.character.isFlying).subscribe(() => flightSubscription.unsubscribe());
+  // }
+
+
   changeFlyingState() {
     if (this.character.viewState === ViewState.OVERVIEW) {
       return;
     }
-    this.character.isFlying = !this.character.isFlying;
-    if (this.character.isFlying) {
+    if(!this.character.isFlying){
+      this.character.isFlying = true;
       this.character.location = this.utils.toHeightOffset(this.character.location, 195);
     }
-    else {
-      this.character.location = this.utils.toFixedHeight(this.character.location);
+    else
+    {
+      if(this.utils.isFlightHeightOkForLanding(this.character.location)){
+        this.character.location = this.utils.toFixedHeight(this.character.location);
+        this.character.isFlying = false;
+      }
     }
     this.gameService.updateServerOnPosition(true);
     const flightSubscription = this.gameService.toggleFlightMode(this.character.meFromServer.id, this.character.isFlying).subscribe(() => flightSubscription.unsubscribe());
