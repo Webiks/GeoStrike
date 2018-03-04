@@ -15,7 +15,6 @@ export const updatePosition = (rootValue, {position, heading, isCrawling, isShoo
   if (game.controlledPlayersMap.has(player.playerId)) {
     playerId = game.controlledPlayersMap.get(player.playerId).playerId;
   }
-console.log(isFlying);
   const updatedPlayer = games.updatePlayerPosition(game.gameId, playerId, position, heading, isCrawling, isShooting, isFlying, enteringBuildingPosition, skipValidation);
 
   return updatedPlayer;

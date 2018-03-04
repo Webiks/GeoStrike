@@ -4,6 +4,8 @@ import { Subscription } from "rxjs/Subscription";
 import { FlightData } from "../../../../types";
 import { ActionType } from "angular-cesium";
 import { GameService } from "../../../services/game.service";
+import { UtilsService } from "../../../services/utils.service";
+
 
 @Component({
   selector: 'flight-mode',
@@ -42,7 +44,8 @@ export class FlightModeComponent implements OnInit, OnDestroy {
     }
   }
 
-  constructor(private character: CharacterService, private gameService: GameService, private ngZone: NgZone, private cd: ChangeDetectorRef) {
+  constructor(private character: CharacterService, private gameService: GameService, private ngZone: NgZone, private cd: ChangeDetectorRef,
+              private utilsService:UtilsService) {
   }
 
   ngOnInit() {
@@ -78,7 +81,12 @@ export class FlightModeComponent implements OnInit, OnDestroy {
 
   setFlightMode() {
     this.character.isFlying = !this.character.isFlying;
-    console.log(this.character.isFlying);
+    if(this.character.isFlying) {
+      this.character.location = this.utilsService.toHeightOffset(this.character.location, 195);
+    }
+    else{
+      this.character.location = this.utilsService.toFixedHeight(this.character.location);
+    }
     this.gameService.updateServerOnPosition(true);
     const flightSubscription = this.gameService.toggleFlightMode(this.playerId, this.character.isFlying).subscribe(() => flightSubscription.unsubscribe());
   }

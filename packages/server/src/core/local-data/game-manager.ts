@@ -163,7 +163,7 @@ export class GamesManager {
         const initFlightData: FlightData = {
           speed :"NONE",
           height : "NONE",
-          remainingTime: 300 //300sec =  5min minutes in seconds
+          remainingTime: 51300 //300sec =  5min minutes in seconds
         }
 
         const finalUsername = this.validateUsername(username, game);
@@ -250,6 +250,7 @@ export class GamesManager {
                        position: ICartesian3Location,
                        heading: number,
                        isCrawling: boolean,
+                       isFlying: boolean,
                        isShooting: boolean,
                        enteringBuildingPosition: ICartesian3Location,
                        skipValidation = false) {

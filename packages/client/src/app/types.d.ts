@@ -385,6 +385,7 @@ export namespace UpdatePosition {
     heading: number;
     isCrawling: boolean;
     isShooting: boolean;
+    isFlying: boolean;
     enteringBuildingPosition?: LocationInput;
     skipValidation?: boolean;
   }

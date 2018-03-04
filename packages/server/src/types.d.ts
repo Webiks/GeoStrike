@@ -128,7 +128,8 @@ export interface UpdatePositionMutationArgs {
   position: LocationInput; 
   heading: number; 
   isCrawling: boolean; 
-  isShooting: boolean; 
+  isShooting: boolean;
+  isFlying: boolean;
   enteringBuildingPosition?: LocationInput; 
   skipValidation?: boolean; 
 }

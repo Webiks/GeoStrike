@@ -204,6 +204,8 @@ export class MeComponent implements OnInit, OnDestroy {
   }
 
   getPosition(position) {
+    const cart = Cesium.Cartographic.fromCartesian(position);
+    console.log("height:"+cart.height);
     if (this.character.state === MeModelState.DEAD) {
       return position;
     } else if (this.character.isCrawling) {
@@ -212,7 +214,8 @@ export class MeComponent implements OnInit, OnDestroy {
       return this.utils.toHeightOffset(position, this.characterInfo.fixedHeight);
     }
     else if(this.character.isFlying) {
-      return this.utils.toHeightOffset(position, 200.0);
+      return this.utils.toHeightOffset(position, cart.height);
+      // return this.utils.toHeightOffset(position, this.characterInfo.fixedHeight);
     }
     return position;
   }
