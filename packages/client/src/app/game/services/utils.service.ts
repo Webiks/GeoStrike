@@ -31,9 +31,13 @@ export class UtilsService {
     return new Cesium.Cartesian3(x, y, z);
   }
 
-  toHeightOffset(position: Cartesian3, offset: number){
+  toHeightOffset(position: Cartesian3, offset: number, flightHeight: number = 0){
     const cart = Cesium.Cartographic.fromCartesian(position);
-    cart.height += offset;
+    if(flightHeight === 0)
+      cart.height += offset;
+    else
+      cart.height = flightHeight + offset;
+    console.log("toHeightOffset:"+cart.height);
     return Cesium.Cartesian3.fromRadians(cart.longitude, cart.latitude, cart.height);
   }
 
@@ -93,7 +97,7 @@ export class UtilsService {
 
 
     destinationLon = (destinationLon + 3 * Math.PI) % (2 * Math.PI) - Math.PI;
-
+    console.log("destinationHeight:"+destinationHeight);
     return Cesium.Cartesian3.fromRadians(destinationLon, destinationLat, destinationHeight);
   }
 

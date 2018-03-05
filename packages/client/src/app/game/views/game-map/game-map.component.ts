@@ -195,17 +195,17 @@ export class GameMapComponent implements OnInit, OnDestroy {
     const range = isFPV || isShooting ? 0.1 : 4;
 
     const playerHeadCart = Cesium.Cartographic.fromCartesian(this.character.location);
-    // playerHeadCart.height += (isCrawling) ? 2 :((isFlying) ? (200) : 4.4);
-
 
     if(isCrawling)
     {
       playerHeadCart.height += 2;
     }
     else if(isFlying) {
-      const height = Cesium.Cartographic.fromCartesian(this.character.location).height;
+      // const height = Cesium.Cartographic.fromCartesian(this.character.location).height;
       // const defaultHeight = 200;
-      playerHeadCart.height += height;
+      // playerHeadCart.height = height;
+
+      playerHeadCart.height += 4;
     }
     else
       playerHeadCart.height += 4.4;

@@ -53,6 +53,7 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { GameCreditsComponent } from './views/game-container/game-credits/game-credits.component';
 import { CreditsDialogComponent } from './views/credits-dialog/credits-dialog.component';
 import { BloodOnScreen } from './views/game-container/blood-on-screen/blood-on-screen';
+import { FlightModeService } from './views/game-container/flight-mode/flight-mode.service';
 
 @NgModule({
   declarations: [
@@ -115,6 +116,7 @@ import { BloodOnScreen } from './views/game-container/blood-on-screen/blood-on-s
     BuildingsService,
     CollisionDetectorService,
     SoundService,
+    FlightModeService
   ],
   entryComponents: [
     EndGameDialogComponent,

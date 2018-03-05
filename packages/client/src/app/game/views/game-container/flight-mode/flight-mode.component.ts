@@ -5,18 +5,21 @@ import { FlightData, FlightHeight } from "../../../../types";
 import { ActionType } from "angular-cesium";
 import { GameService } from "../../../services/game.service";
 import { UtilsService } from "../../../services/utils.service";
+import { FlightModeService } from "./flight-mode.service";
 
 
 @Component({
   selector: 'flight-mode',
   styleUrls: ['./flight-mode.component.scss'],
-  templateUrl: './flight-mode.component.html'
+  templateUrl: './flight-mode.component.html',
+  providers: [FlightModeService]
 
 })
 export class FlightModeComponent implements OnInit, OnDestroy {
   @Input() me;
   @Input() username;
   flightDataSubscription: Subscription;
+  flightSubscription: Subscription;
   flightData: FlightData;
   playerId: string;
   minutes: string;
@@ -46,7 +49,7 @@ export class FlightModeComponent implements OnInit, OnDestroy {
   }
 
   constructor(private character: CharacterService, private gameService: GameService, private ngZone: NgZone, private cd: ChangeDetectorRef,
-              private utilsService: UtilsService) {
+              private utilsService: UtilsService, private flightModeService: FlightModeService) {
   }
 
   ngOnInit() {
@@ -65,16 +68,12 @@ export class FlightModeComponent implements OnInit, OnDestroy {
           this.flightData = player.entity.flight;
           this.playerId = player.id;
           // if (player.entity.isFlying) {
+          if (!this.character.isFlying) {
+            this.flightSubscription = this.gameService.toggleFlightMode(this.playerId, false).subscribe(() => this.flightSubscription.unsubscribe());
+            this.character.location = this.utilsService.toFixedHeight(this.character.location);
+          }
           if (this.flightData.remainingTime) {
-            // if(this.character.isFlying){
-            //   this.setFlightMode(false,true);
-            // }
-            // else{
-            //   this.setFlightMode(false,false);
-            // }
-
             this.calculateRemainingTime(this.flightData.remainingTime);
-
           }
           else {
             this.minutes = '00';
@@ -82,14 +81,9 @@ export class FlightModeComponent implements OnInit, OnDestroy {
             const crashSubscription = this.gameService.notifyCrash(this.playerId)
               .subscribe(() => crashSubscription.unsubscribe());
           }
-          // }
-          // else{
-          //   this.gameService.toggleFlightMode(this.playerId, this.character.isFlying).subscribe(() => console.log('cancecl flight timer'));
-          // }
           this.cd.detectChanges();
         })
     });
-    // this.getFlightHeightGauge();
     this.character.state$.subscribe(state => {
       if (state && state.flight) {
         this.flightHeightLevel = state.flight.heightLevel;
@@ -99,19 +93,25 @@ export class FlightModeComponent implements OnInit, OnDestroy {
     })
   }
 
-  setFlightMode(isToggleFlight: boolean = false, isFlying: boolean,) {
-    if (isToggleFlight)
-      this.character.isFlying = !this.character.isFlying;
-    else
-      this.character.isFlying = isFlying;
-    if (this.character.isFlying) {
+  setFlightMode(isToggleFlight: boolean = false, isFlying: boolean) {
+    let updateFlyState = this.flightModeService.changeFlyingState();
+    this.gameService.updateServerOnPosition(true);
+    if(updateFlyState)
+    {
+      const flightSubscription = this.gameService.toggleFlightMode(this.character.meFromServer.id, this.character.isFlying).subscribe(() => flightSubscription.unsubscribe());
+    }
+    // if (isToggleFlight)
+    //   this.character.isFlying = !this.character.isFlying;
+    // else
+    //   this.character.isFlying = isFlying;
+    // if (this.character.isFlying) {
+    //
+    //   this.character.location = this.utilsService.toHeightOffset(this.character.location, 195);
+    // }
+    // else {
+    //   this.character.location = this.utilsService.toFixedHeight(this.character.location);
+    // }
 
-      this.character.location = this.utilsService.toHeightOffset(this.character.location, 195);
-    }
-    else {
-      this.character.location = this.utilsService.toFixedHeight(this.character.location);
-    }
-    const flightSubscription = this.gameService.toggleFlightMode(this.playerId, this.character.isFlying).subscribe(() => flightSubscription.unsubscribe());
   }
 
   ngOnDestroy() {
@@ -119,15 +119,8 @@ export class FlightModeComponent implements OnInit, OnDestroy {
   }
 
   calculateRemainingTime(timeInSeconds) {
-    // if (timeInSeconds) {
     this.minutes = (Math.floor(timeInSeconds / 60)).toString();
     this.seconds = (timeInSeconds - (+this.minutes * 60)).toString();
-    // }
-    // else{
-    //   this.minutes = '00';
-    //   this.seconds = '00';
-    //   console.log(timeInSeconds);
-    // }
   }
 
   isPlayerWalking() {
@@ -143,13 +136,14 @@ export class FlightModeComponent implements OnInit, OnDestroy {
     else
       return false;
   }
-  getFlightHeightGauge(){
-    // const flightCurrentHeight = this.utilsService.getFlightHeightForGauge(this.character.location);
-    // return val === flightCurrentHeight;
-    if(this.character)
 
-      // this.flightHeightLevel = this.character.flightData.heightLevel;
-
-    this.cd.detectChanges();
-  }
+  // getFlightHeightGauge(){
+  //   // const flightCurrentHeight = this.utilsService.getFlightHeightForGauge(this.character.location);
+  //   // return val === flightCurrentHeight;
+  //   if(this.character)
+  //
+  //     // this.flightHeightLevel = this.character.flightData.heightLevel;
+  //
+  //   this.cd.detectChanges();
+  // }
 }

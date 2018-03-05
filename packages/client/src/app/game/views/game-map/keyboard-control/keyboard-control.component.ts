@@ -10,6 +10,7 @@ import { MatSnackBar } from '@angular/material';
 import { UtilsService } from "../../../services/utils.service";
 import { FlightData } from "../../../../../../../server/src/types";
 import { FlightHeight } from "../../../../types";
+import { FlightModeService } from "../../game-container/flight-mode/flight-mode.service";
 
 const LookDirection = {
   Up: 'ArrowUp',
@@ -58,7 +59,8 @@ export class KeyboardControlComponent implements OnInit {
               private ngZone: NgZone,
               private snackBar: MatSnackBar,
               private takeControlService: TakeControlService,
-              public utils: UtilsService,) {
+              public utils: UtilsService,
+              private flightModeService:FlightModeService) {
     this.viewer = cesiumService.getViewer();
   }
 
@@ -122,7 +124,7 @@ export class KeyboardControlComponent implements OnInit {
           let flightData: FlightData;
           let flightHeightLevel: FlightHeight;
           flightData = this.character.meFromServer.flight;
-          speed = environment.movement.flyingSpeed;
+          speed = environment.movement.runningSpeed;
           nextLocation = this.utils.pointByLocationDistanceAndAzimuthAndHeight3d(
             position,
             speed,
@@ -132,6 +134,7 @@ export class KeyboardControlComponent implements OnInit {
           flightHeightLevel = this.utils.calculateHeightLevel(flightData, nextLocation);
           flightData.heightLevel = flightHeightLevel;
           this.character.flightData = flightData;
+          this.character.location = nextLocation;
         }
         if (this.character.enteredBuilding) {
           if (!this.collisionDetector.detectCollision(nextLocation, true)) {
@@ -188,39 +191,30 @@ export class KeyboardControlComponent implements OnInit {
     this.character.isCrawling = crawling;
   }
 
-  // changeFlyingState() {
-  //   if (this.character.viewState === ViewState.OVERVIEW) {
-  //     return;
-  //   }
-  //   this.character.isFlying = !this.character.isFlying;
-  //   if (this.character.isFlying) {
-  //     this.character.location = this.utils.toHeightOffset(this.character.location, 195);
-  //   }
-  //   else {
-  //     this.character.location = this.utils.toFixedHeight(this.character.location);
-  //   }
-  //   this.gameService.updateServerOnPosition(true);
-  //   const flightSubscription = this.gameService.toggleFlightMode(this.character.meFromServer.id, this.character.isFlying).subscribe(() => flightSubscription.unsubscribe());
-  // }
-
 
   changeFlyingState() {
-    if (this.character.viewState === ViewState.OVERVIEW) {
-      return;
-    }
-    if(!this.character.isFlying){
-      this.character.isFlying = true;
-      this.character.location = this.utils.toHeightOffset(this.character.location, 195);
-    }
-    else
-    {
-      if(this.utils.isFlightHeightOkForLanding(this.character.location)){
-        this.character.isFlying = false;
-        this.character.location = this.utils.toFixedHeight(this.character.location);
-      }
-    }
+    let updateFlyState = this.flightModeService.changeFlyingState();
     this.gameService.updateServerOnPosition(true);
-    const flightSubscription = this.gameService.toggleFlightMode(this.character.meFromServer.id, this.character.isFlying).subscribe(() => flightSubscription.unsubscribe());
+    if(updateFlyState)
+    {
+      const flightSubscription = this.gameService.toggleFlightMode(this.character.meFromServer.id, this.character.isFlying).subscribe(() => flightSubscription.unsubscribe());
+    }
+    // if (this.character.viewState === ViewState.OVERVIEW) {
+    //   return;
+    // }
+    // if(!this.character.isFlying){
+    //   this.character.isFlying = true;
+    //   this.character.location = this.utils.toHeightOffset(this.character.location, 195);
+    // }
+    // else
+    // {
+    //   if(this.utils.isFlightHeightOkForLanding(this.character.location)){
+    //     this.character.isFlying = false;
+    //     this.character.location = this.utils.toFixedHeight(this.character.location);
+    //   }
+    // }
+    // this.gameService.updateServerOnPosition(true);
+    // const flightSubscription = this.gameService.toggleFlightMode(this.character.meFromServer.id, this.character.isFlying).subscribe(() => flightSubscription.unsubscribe());
   }
 
   toggleInspector(inspectorClass, inspectorProp) {

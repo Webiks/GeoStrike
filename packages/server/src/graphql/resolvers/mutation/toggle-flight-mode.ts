@@ -9,7 +9,7 @@ export const toggleFlightMode = (rootValue, { playerId, isFlying }, { games, gam
 
   const flyingPlayer = ((game.controlledPlayersMap.get(playerId) || player) as IPlayer);
   let intervalId;
-  console.log("before interval"+isFlying);
+  console.log("before interval"+isFlying,"this.intervalId:"+this.intervalId);
   if(isFlying)
   {
     this.intervalId =  setInterval(( ()=> flyingPlayer.flight.remainingTime-=1),1000);

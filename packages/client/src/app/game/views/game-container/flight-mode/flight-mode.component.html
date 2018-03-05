@@ -13,23 +13,23 @@
     <div class="gauge">
       <span>HEIGHT</span>
       <div class="gauge-container">
-        <span class="gauge-level" [ngClass]="{'isActive':flightHeightLevel >= 'MAX'}"></span>
-        <span class="gauge-level" [ngClass]="{'isActive':flightHeightLevel >= 'E'}"></span>
-        <span class="gauge-level" [ngClass]="{'isActive':flightHeightLevel >= 'D'}"></span>
-        <span class="gauge-level" [ngClass]="{'isActive':flightHeightLevel >= 'C'}"></span>
-        <span class="gauge-level" [ngClass]="{'isActive':flightHeightLevel >= 'B'}"></span>
-        <span class="gauge-level" [ngClass]="{'isActive':flightHeightLevel >= 'A'}"></span>
+        <span class="gauge-level" [ngClass]="{'isActive':flightHeightLevel >= 'MAX'}"><span class="divider"></span></span>
+        <span class="gauge-level" [ngClass]="{'isActive':flightHeightLevel >= 'E'}"><span class="divider"></span></span>
+        <span class="gauge-level" [ngClass]="{'isActive':flightHeightLevel >= 'D'}"><span class="divider"></span></span>
+        <span class="gauge-level" [ngClass]="{'isActive':flightHeightLevel >= 'C'}"><span class="divider"></span></span>
+        <span class="gauge-level" [ngClass]="{'isActive':flightHeightLevel >= 'B'}"><span class="divider"></span></span>
+        <span class="gauge-level" [ngClass]="{'isActive':flightHeightLevel >= 'A'}"><span class="divider"></span></span>
       </div>
     </div>
   <div class="gauge">
     <span>SPEED</span>
     <div class="gauge-container" [ngClass]="{'isActive':isPlayerRunning()}">
-      <span class="gauge-level"></span>
-      <span class="gauge-level"></span>
-      <span class="gauge-level"></span>
-      <span class="gauge-level" [ngClass]="{'isActive':isPlayerWalking()}"></span>
-      <span class="gauge-level" [ngClass]="{'isActive':isPlayerWalking()}"></span>
-      <span class="gauge-level" [ngClass]="{'isActive':isPlayerWalking()}"></span>
+      <span class="gauge-level"><span class="divider"></span></span>
+      <span class="gauge-level"><span class="divider"></span></span>
+      <span class="gauge-level"><span class="divider"></span></span>
+      <span class="gauge-level" [ngClass]="{'isActive':isPlayerWalking()}"><span class="divider"></span></span>
+      <span class="gauge-level" [ngClass]="{'isActive':isPlayerWalking()}"><span class="divider"></span></span>
+      <span class="gauge-level" [ngClass]="{'isActive':isPlayerWalking()}"><span class="divider"></span></span>
     </div>
   </div>
   </div>

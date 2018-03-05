@@ -122,7 +122,6 @@ export class GameContainerComponent implements OnInit, OnDestroy {
         this.character.state = MeModelState.WALKING;
         this.character.viewState = ViewState.OVERVIEW;
         this.character.viewState = ViewState.SEMI_FPV;
-
         this.otherPlayers$.next({
           id: this.me.id,
           actionType: ActionType.DELETE,
@@ -135,6 +134,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
           entity: this.me,
         });
       }
+
     } else {
       // if controlling set state from controlled player
       if (this.controlledService.controlledPlayer) {

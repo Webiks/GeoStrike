@@ -214,7 +214,8 @@ export class MeComponent implements OnInit, OnDestroy {
       return this.utils.toHeightOffset(position, this.characterInfo.fixedHeight);
     }
     else if(this.character.isFlying) {
-      return this.utils.toHeightOffset(position, cart.height);
+      // return this.utils.toHeightOffset(position, 5);
+      return position;
       // return this.utils.toHeightOffset(position, this.characterInfo.fixedHeight);
     }
     return position;

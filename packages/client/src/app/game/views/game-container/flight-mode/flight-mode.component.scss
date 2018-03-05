@@ -74,12 +74,20 @@
         }
         //justify-content: space-evenly;
         .gauge-level {
-          width: 24px;
-          height: 16.6%;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          width: inherit;
+          height: inherit;
           padding: 0;
           margin: 0;
-          //background-color: white;
-          border-bottom: 1px solid white;
+          .divider {
+            width: 24px;
+            height: 16.6%;
+            padding: 0;
+            margin: 0;
+            border-bottom: 1px solid white;
+          }
           &.isActive {
             background-color: rgba(111, 207, 151, 0.54);
           }
