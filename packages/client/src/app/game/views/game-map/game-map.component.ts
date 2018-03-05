@@ -228,6 +228,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
     this.lastPlayerLocation = this.character.location;
     this.lastPlayerHead = playerHeadCart;
     this.lastPlayerHPR = {heading: this.character.heading, pitch: this.character.pitch, range};
+    // this.character.flightData = this.character.meFromServer.flight;
   }
 
   ngOnDestroy(): void {

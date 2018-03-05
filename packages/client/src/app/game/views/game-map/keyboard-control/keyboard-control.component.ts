@@ -8,6 +8,8 @@ import { CollisionDetectorService } from '../../../services/collision-detector.s
 import { TakeControlService } from '../../../services/take-control.service';
 import { MatSnackBar } from '@angular/material';
 import { UtilsService } from "../../../services/utils.service";
+import { FlightData } from "../../../../../../../server/src/types";
+import { FlightHeight } from "../../../../types";
 
 const LookDirection = {
   Up: 'ArrowUp',
@@ -117,6 +119,9 @@ export class KeyboardControlComponent implements OnInit {
           );
         }
         if (this.character.isFlying) {
+          let flightData: FlightData;
+          let flightHeightLevel: FlightHeight;
+          flightData = this.character.meFromServer.flight;
           speed = environment.movement.flyingSpeed;
           nextLocation = this.utils.pointByLocationDistanceAndAzimuthAndHeight3d(
             position,
@@ -124,8 +129,10 @@ export class KeyboardControlComponent implements OnInit {
             Cesium.Math.toRadians(this.character.heading + delta),
             true
           );
+          flightHeightLevel = this.utils.calculateHeightLevel(flightData, nextLocation);
+          flightData.heightLevel = flightHeightLevel;
+          this.character.flightData = flightData;
         }
-
         if (this.character.enteredBuilding) {
           if (!this.collisionDetector.detectCollision(nextLocation, true)) {
             this.character.location = nextLocation;
@@ -208,8 +215,8 @@ export class KeyboardControlComponent implements OnInit {
     else
     {
       if(this.utils.isFlightHeightOkForLanding(this.character.location)){
-        this.character.location = this.utils.toFixedHeight(this.character.location);
         this.character.isFlying = false;
+        this.character.location = this.utils.toFixedHeight(this.character.location);
       }
     }
     this.gameService.updateServerOnPosition(true);

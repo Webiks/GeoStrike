@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { GameFields, PlayerFields, Team, PlayerLifeState } from '../../types';
+import { GameFields, PlayerFields, PlayerLifeState, Team } from '../../types';
 import { BuildingsService } from './buildings.service';
 import { GameConfig } from './game-config';
+import { FlightData, FlightHeight } from "../../../../../server/src/types";
 
 export enum MeModelState {
   WALKING,
@@ -29,6 +30,7 @@ export interface CharacterState {
   lifeStatePerctange: number;
   isCrawling: boolean;
   isFlying: boolean;
+  flight: FlightData;
   team: Team;
   characterInfo: PlayerFields.Character;
   tileBuilding: any;
@@ -84,9 +86,30 @@ export class CharacterService {
   }
 
   set isFlying(value: boolean) {
-    this.modifyCurrentStateValue( {
+    this.modifyCurrentStateValue({
       isFlying: value
     })
+  }
+
+  set flightData(value: FlightData) {
+  this.modifyCurrentStateValue({
+    flight: value
+  })
+}
+
+  get flightData() {
+    return this._character.getValue().flight;
+  }
+  get flightData$() {
+    return this._character.getValue().flight;
+  }
+
+  get maxHeight() {
+    return this._character.getValue().flight.maxHeight;
+  }
+
+  get minHeight() {
+    return this._character.getValue().flight.minHeight;
   }
 
   set viewState(value: ViewState) {
@@ -138,9 +161,11 @@ export class CharacterService {
   get state(): MeModelState {
     return this._character && this._character.getValue() && this._character.getValue().state;
   }
+
   get isFlying(): boolean {
     return this._character && this._character.getValue() && this._character.getValue().isFlying;
   }
+
   get currentStateValue(): CharacterState {
     return this._character.getValue();
   }
@@ -229,7 +254,7 @@ export class CharacterService {
       if (this.tileBuilding) {
         this.tileBuilding.show = false;
       }
-      this.enteringBuildingPosition = { location: this.location, heading: this.heading, pitch: this.pitch };
+      this.enteringBuildingPosition = {location: this.location, heading: this.heading, pitch: this.pitch};
       this.enteredBuilding = this.buildingsService.createBuilding(this.nearbyBuildingPosition);
       this.location = this.nearbyBuildingPosition;
       this.nearbyBuildingPosition = undefined;

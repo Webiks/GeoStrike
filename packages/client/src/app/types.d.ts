@@ -19,15 +19,16 @@ export interface Game {
 }
 
 export interface FlightData {
-  remainingTime: number
+  remainingTime: number;
   speed: FlightSpeed;
   minHeight: number;
   maxHeight: number;
+  heightLevel: FlightHeight;
 }
 
 export type FlightSpeed = "NONE" | "MIN" | "MAX";
 
-// export type FlightHeight = "NONE" | "A" | "B" | "C" | "D" | "E"| "MAX"
+export type FlightHeight = "NONE" | "A" | "B" | "C" | "D" | "E"| "MAX"
 
 export interface Player extends User {
   id: string;

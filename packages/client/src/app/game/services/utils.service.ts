@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CharacterService } from './character.service';
+import { FlightData } from "../../types";
 
 @Injectable()
 export class UtilsService {
@@ -45,10 +46,10 @@ export class UtilsService {
     const currHeight =  Cesium.Cartographic.fromCartesian(curPosition).height;
     return Math.floor(currHeight) === Math.floor(this.character.meFromServer.flight.minHeight);
   }
-  getFlightHeightForGauge(curPosition){
-    const currHeight =  Cesium.Cartographic.fromCartesian(curPosition).height;
-    return Math.floor(currHeight) / Math.floor(this.character.meFromServer.flight.maxHeight);
-  }
+  // getFlightHeightForGauge(curPosition){
+  //   const currHeight =  Cesium.Cartographic.fromCartesian(curPosition).height;
+  //   return Math.floor(currHeight) / Math.floor(this.character.meFromServer.flight.maxHeight);
+  // }
 
   pointByLocationDistanceAndAzimuthAndHeight3d(currentLocation: any, meterDistance: number, radianAzimuth: number, isInputCartesian = true) {
     const distance = meterDistance / Cesium.Ellipsoid.WGS84.maximumRadius;
@@ -96,4 +97,27 @@ export class UtilsService {
     return Cesium.Cartesian3.fromRadians(destinationLon, destinationLat, destinationHeight);
   }
 
+
+  calculateHeightLevel (flightData: FlightData, currentPosition: Cartesian3) {
+
+    const heightRes = flightData.maxHeight - flightData.minHeight;
+    const currHeight = Cesium.Cartographic.fromCartesian(currentPosition).height;
+    const steps = 6;
+    const heightStep = Math.ceil(heightRes / steps);
+    const currHeightPerctange = currHeight/flightData.maxHeight;
+    let currHeightLevel;
+    if(currHeightPerctange <= 0.16)
+      currHeightLevel  = 'A';
+    else if(currHeightPerctange <= 0.32)
+      currHeightLevel  = 'B';
+    else if(currHeightPerctange <= 0.48)
+      currHeightLevel  = 'C';
+    else if(currHeightPerctange <= 0.64)
+      currHeightLevel  = 'D';
+    else if(currHeightPerctange <= 0.80)
+      currHeightLevel  = 'E';
+    else
+      currHeightLevel  = 'MAX';
+    return currHeightLevel;
+  }
 }

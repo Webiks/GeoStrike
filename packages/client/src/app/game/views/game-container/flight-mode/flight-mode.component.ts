@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, HostListener, Input, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { CharacterService } from "../../../services/character.service";
 import { Subscription } from "rxjs/Subscription";
-import { FlightData } from "../../../../types";
+import { FlightData, FlightHeight } from "../../../../types";
 import { ActionType } from "angular-cesium";
 import { GameService } from "../../../services/game.service";
 import { UtilsService } from "../../../services/utils.service";
@@ -22,6 +22,7 @@ export class FlightModeComponent implements OnInit, OnDestroy {
   minutes: string;
   seconds: string;
   movingType: string = 'none';
+  flightHeightLevel: FlightHeight = 'NONE';
 
   @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
     if (event.shiftKey && event.keyCode == 87) {
@@ -64,23 +65,23 @@ export class FlightModeComponent implements OnInit, OnDestroy {
           this.flightData = player.entity.flight;
           this.playerId = player.id;
           // if (player.entity.isFlying) {
-            if (this.flightData.remainingTime) {
-              // if(this.character.isFlying){
-              //   this.setFlightMode(false,true);
-              // }
-              // else{
-              //   this.setFlightMode(false,false);
-              // }
+          if (this.flightData.remainingTime) {
+            // if(this.character.isFlying){
+            //   this.setFlightMode(false,true);
+            // }
+            // else{
+            //   this.setFlightMode(false,false);
+            // }
 
-              this.calculateRemainingTime(this.flightData.remainingTime);
+            this.calculateRemainingTime(this.flightData.remainingTime);
 
-            }
-            else {
-              this.minutes = '00';
-              this.seconds = '00';
-              const crashSubscription = this.gameService.notifyCrash(this.playerId)
-                .subscribe(() => crashSubscription.unsubscribe());
-            }
+          }
+          else {
+            this.minutes = '00';
+            this.seconds = '00';
+            const crashSubscription = this.gameService.notifyCrash(this.playerId)
+              .subscribe(() => crashSubscription.unsubscribe());
+          }
           // }
           // else{
           //   this.gameService.toggleFlightMode(this.playerId, this.character.isFlying).subscribe(() => console.log('cancecl flight timer'));
@@ -88,6 +89,14 @@ export class FlightModeComponent implements OnInit, OnDestroy {
           this.cd.detectChanges();
         })
     });
+    // this.getFlightHeightGauge();
+    this.character.state$.subscribe(state => {
+      if (state && state.flight) {
+        this.flightHeightLevel = state.flight.heightLevel;
+        console.log(this.flightHeightLevel);
+      }
+      ;
+    })
   }
 
   setFlightMode(isToggleFlight: boolean = false, isFlying: boolean,) {
@@ -96,6 +105,7 @@ export class FlightModeComponent implements OnInit, OnDestroy {
     else
       this.character.isFlying = isFlying;
     if (this.character.isFlying) {
+
       this.character.location = this.utilsService.toHeightOffset(this.character.location, 195);
     }
     else {
@@ -133,8 +143,13 @@ export class FlightModeComponent implements OnInit, OnDestroy {
     else
       return false;
   }
-  setFlightHeightGauge(val: number){
-    const flightCurrentHeight = this.utilsService.getFlightHeightForGauge(this.character.location);
-    return val === flightCurrentHeight;
+  getFlightHeightGauge(){
+    // const flightCurrentHeight = this.utilsService.getFlightHeightForGauge(this.character.location);
+    // return val === flightCurrentHeight;
+    if(this.character)
+
+      // this.flightHeightLevel = this.character.flightData.heightLevel;
+
+    this.cd.detectChanges();
   }
 }

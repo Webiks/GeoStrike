@@ -23,6 +23,8 @@ export const playerFragment = gql`
       speed
       minHeight
       remainingTime
+      maxHeight
+      heightLevel
     }
     isShooting
     isMe
