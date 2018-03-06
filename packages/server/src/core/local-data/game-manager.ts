@@ -164,7 +164,7 @@ export class GamesManager {
             speed: 'NONE',
             minHeight: 195,
             maxHeight: 500,
-            remainingTime: 51300, //300sec =  5min minutes in seconds
+            remainingTime: 300, //300sec =  5min minutes in seconds
             heightLevel: 'NONE'
         }
 

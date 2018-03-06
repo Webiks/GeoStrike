@@ -16,11 +16,12 @@ export class FlightModeService {
     }
     if(!this.character.isFlying){
       this.character.isFlying = true;
+      this.character.flightData = this.character.meFromServer.flight;
       this.character.location = this.utils.toHeightOffset(this.character.location, 195);
     }
     else
     {
-      if(this.utils.isFlightHeightOkForLanding(this.character.location)){
+      if(this.utils.isFlightHeightOkForLanding(this.character.location, this.character.flightData)){
         this.character.isFlying = false;
         this.character.location = this.utils.toFixedHeight(this.character.location)
       }

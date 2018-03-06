@@ -46,9 +46,12 @@ export class UtilsService {
     cart.height = height;
     return Cesium.Cartesian3.fromRadians(cart.longitude, cart.latitude, cart.height);
   }
-  isFlightHeightOkForLanding(curPosition){
+  isFlightHeightOkForLanding(curPosition, flightData){
     const currHeight =  Cesium.Cartographic.fromCartesian(curPosition).height;
-    return Math.floor(currHeight) === Math.floor(this.character.meFromServer.flight.minHeight);
+    const heightRes = flightData.maxHeight - flightData.minHeight;
+    const steps = 6;
+    const heightStep = Math.ceil(heightRes / steps);
+    return Math.floor(currHeight) >= Math.floor(this.character.meFromServer.flight.minHeight) && (Math.floor(currHeight) <= Math.floor(this.character.meFromServer.flight.minHeight + heightStep));
   }
   // getFlightHeightForGauge(curPosition){
   //   const currHeight =  Cesium.Cartographic.fromCartesian(curPosition).height;
@@ -79,11 +82,11 @@ export class UtilsService {
 
     // currHeight += destinationHeight;
 
-
-    if((currHeight + heightCalculation) >= this.character.meFromServer.flight.minHeight)
-      destinationHeight = currHeight + heightCalculation;
-    else
-      destinationHeight = this.character.meFromServer.flight.minHeight;
+    destinationHeight = currHeight + heightCalculation;
+    // if((currHeight + heightCalculation) >= this.character.meFromServer.flight.minHeight)
+    //   destinationHeight = currHeight + heightCalculation;
+    // else
+    //   destinationHeight = this.character.meFromServer.flight.minHeight;
 
     //
     // console.log("this.character.heading:"+this.character.heading);
@@ -105,20 +108,23 @@ export class UtilsService {
   calculateHeightLevel (flightData: FlightData, currentPosition: Cartesian3) {
 
     const heightRes = flightData.maxHeight - flightData.minHeight;
+    const minHeight = flightData.minHeight;
     const currHeight = Cesium.Cartographic.fromCartesian(currentPosition).height;
     const steps = 6;
     const heightStep = Math.ceil(heightRes / steps);
-    const currHeightPerctange = currHeight/flightData.maxHeight;
+    const currHeightPerctange = (currHeight-flightData.minHeight)/(flightData.maxHeight-flightData.minHeight);
     let currHeightLevel;
-    if(currHeightPerctange <= 0.16)
+    if(currHeight < minHeight)
+      currHeightLevel = 'NONE';
+    else if(Math.floor(currHeight) === Math.floor(minHeight) || Math.floor(currHeight) <= minHeight + heightStep)
       currHeightLevel  = 'A';
-    else if(currHeightPerctange <= 0.32)
+    else if(currHeight <= minHeight + (heightStep*2))
       currHeightLevel  = 'B';
-    else if(currHeightPerctange <= 0.48)
+    else if(currHeight <= minHeight + (heightStep*2))
       currHeightLevel  = 'C';
-    else if(currHeightPerctange <= 0.64)
+    else if(currHeight <= minHeight + (heightStep*4))
       currHeightLevel  = 'D';
-    else if(currHeightPerctange <= 0.80)
+    else if(currHeight <= minHeight + (heightStep*5))
       currHeightLevel  = 'E';
     else
       currHeightLevel  = 'MAX';

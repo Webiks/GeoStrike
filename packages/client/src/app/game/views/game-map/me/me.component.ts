@@ -1,16 +1,13 @@
-import {ChangeDetectorRef, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActionType, CesiumService } from 'angular-cesium';
-import {
-  CharacterService, CharacterState, MeModelState,
-  ViewState
-} from '../../../services/character.service';
+import { CharacterService, CharacterState, MeModelState, ViewState } from '../../../services/character.service';
 import { UtilsService } from '../../../services/utils.service';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
 import 'rxjs/add/observable/fromEvent';
 import { Subscription } from 'rxjs/Subscription';
 import { GameService } from '../../../services/game.service';
-import { CharacterData, PlayerLifeState } from '../../../../types';
+import { CharacterData } from '../../../../types';
 import { BasicDesc } from 'angular-cesium/src/angular-cesium/services/basic-desc/basic-desc.service';
 import { OtherPlayerEntity } from '../../game-container/game-container.component';
 import { KeyboardKeysService } from '../../../../core/services/keyboard-keys.service';
@@ -40,6 +37,8 @@ export class MeComponent implements OnInit, OnDestroy {
   shootSub$: Subscription;
   buildingNearby = false;
   canExitBuilding = false;
+  flightAlertDisplayedOnce = false;
+  crashAlertDisplayedOnce = false;
   transparentColor = new Cesium.Color(0, 0, 0, 0.0001);
   normalColor = new Cesium.Color(1, 1, 1, 1);
   ViewState = ViewState;
@@ -89,20 +88,19 @@ export class MeComponent implements OnInit, OnDestroy {
           const shotedEntity = picked.id.acEntity;
           let killSubscription;
           killSubscription = this.gameService.notifyBeenShot(shotedEntity.id)
-            .subscribe( beenShotData => {
-                this.setKillEvent(beenShotData.data.notifyBeenShot.lifeState,shotedEntity.id)
-                killSubscription.unsubscribe()
+            .subscribe(beenShotData => {
+              this.setKillEvent(beenShotData.data.notifyBeenShot.lifeState, shotedEntity.id)
+              killSubscription.unsubscribe()
             });
         }
       });
   }
 
-  setKillEvent(lifeState:string, shotedEntityId) {
-    if(lifeState === "EMPTY")
-      {
-        let killSubscription = this.gameService.notifyKill(shotedEntityId)
-          .subscribe(() => killSubscription.unsubscribe());
-      }
+  setKillEvent(lifeState: string, shotedEntityId) {
+    if (lifeState === "EMPTY") {
+      let killSubscription = this.gameService.notifyKill(shotedEntityId)
+        .subscribe(() => killSubscription.unsubscribe());
+    }
   }
 
   ngOnInit(): void {
@@ -158,6 +156,43 @@ export class MeComponent implements OnInit, OnDestroy {
           this.ngZone.run(() => this.snackBar.dismiss());
         }
       }
+     if (state && state.isFlying  && state.flight && state.flight.remainingTime && !this.crashAlertDisplayedOnce) {
+        if (state.flight.remainingTime <= 30) {
+          this.crashAlertDisplayedOnce = true;
+          this.ngZone.run(() => {
+            this.snackBar.dismiss();
+            this.snackBar.openFromComponent(SnackBarContentComponent, {
+              data: `<div style="display: flex;flex-direction: row;justify-content:space-between">
+                        <img src="/assets/icons/red-alert.svg" style="margin-right: 10px;">
+                        <div style="display: flex;flex-direction: column;">
+                            <div>The jetpack fuel tank is almost empty!</div>
+                            <div> Land now or you'll crash to death</div>
+                       </div>
+                    </div>`,
+              duration: 3000,
+            });
+          });
+        }
+        else if(!this.flightAlertDisplayedOnce) {
+          this.flightAlertDisplayedOnce = true;
+          this.ngZone.run(() => {
+            this.snackBar.dismiss();
+            this.snackBar.openFromComponent(SnackBarContentComponent, {
+              data: `<div style="display: flex;flex-direction: row;justify-content:space-between">
+                        <img src="/assets/icons/red-alert.svg" style="margin-right: 10px;">
+                        <div style="display: flex;flex-direction: column;">
+                            <div>Avoid crashing by reaching the ground with</div>
+                            <div> minimal speed before your flight time is over</div>
+                       </div>
+                    </div>`,
+              duration: 3000,
+            });
+          });
+        }
+        // else {
+        //   this.ngZone.run(() => this.snackBar.dismiss());
+        // }
+      }
     });
   }
 
@@ -182,7 +217,7 @@ export class MeComponent implements OnInit, OnDestroy {
       if (player.state === MeModelState.DEAD) {
         return this.utils.getOrientation(location, heading, 0, 90);
       } else {
-        const roll = this.character.isCrawling ? 90 :((this.character.isFlying) ? (45): 0);
+        const roll = this.character.isCrawling ? 90 : ((this.character.isFlying) ? (45) : 0);
         return this.utils.getOrientation(location, heading, 0, roll);
       }
     }
@@ -205,7 +240,7 @@ export class MeComponent implements OnInit, OnDestroy {
 
   getPosition(position) {
     const cart = Cesium.Cartographic.fromCartesian(position);
-    console.log("height:"+cart.height);
+    console.log("height:" + cart.height);
     if (this.character.state === MeModelState.DEAD) {
       return position;
     } else if (this.character.isCrawling) {
@@ -213,7 +248,7 @@ export class MeComponent implements OnInit, OnDestroy {
     } else if (this.characterInfo.fixedHeight) {
       return this.utils.toHeightOffset(position, this.characterInfo.fixedHeight);
     }
-    else if(this.character.isFlying) {
+    else if (this.character.isFlying) {
       // return this.utils.toHeightOffset(position, 5);
       return position;
       // return this.utils.toHeightOffset(position, this.characterInfo.fixedHeight);
