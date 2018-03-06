@@ -156,24 +156,26 @@ export class MeComponent implements OnInit, OnDestroy {
           this.ngZone.run(() => this.snackBar.dismiss());
         }
       }
-     if (state && state.isFlying  && state.flight && state.flight.remainingTime && !this.crashAlertDisplayedOnce) {
-        if (state.flight.remainingTime <= 30) {
-          this.crashAlertDisplayedOnce = true;
-          this.ngZone.run(() => {
-            this.snackBar.dismiss();
-            this.snackBar.openFromComponent(SnackBarContentComponent, {
-              data: `<div style="display: flex;flex-direction: row;justify-content:space-between">
+      if (state && state.isFlying && state.flight && state.flight.remainingTime) {
+        if (!this.crashAlertDisplayedOnce) {
+          if (state.flight.remainingTime <= 30) {
+            this.crashAlertDisplayedOnce = true;
+            this.ngZone.run(() => {
+              this.snackBar.dismiss();
+              this.snackBar.openFromComponent(SnackBarContentComponent, {
+                data: `<div style="display: flex;flex-direction: row;justify-content:space-between">
                         <img src="/assets/icons/red-alert.svg" style="margin-right: 10px;">
                         <div style="display: flex;flex-direction: column;">
                             <div>The jetpack fuel tank is almost empty!</div>
                             <div> Land now or you'll crash to death</div>
                        </div>
                     </div>`,
-              duration: 3000,
+                duration: 3000,
+              });
             });
-          });
+          }
         }
-        else if(!this.flightAlertDisplayedOnce) {
+        if (!this.flightAlertDisplayedOnce) {
           this.flightAlertDisplayedOnce = true;
           this.ngZone.run(() => {
             this.snackBar.dismiss();
@@ -189,6 +191,15 @@ export class MeComponent implements OnInit, OnDestroy {
             });
           });
         }
+          if(state.flight.heightLevel == 'A'){
+            this.ngZone.run(() => {
+              this.snackBar.dismiss();
+              this.snackBar.openFromComponent(SnackBarContentComponent, {
+                data: `Press F to land and exit flight mode`,
+                duration: 3000,
+              });
+            });
+          }
         // else {
         //   this.ngZone.run(() => this.snackBar.dismiss());
         // }

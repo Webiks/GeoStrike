@@ -26,6 +26,7 @@ export class FlightModeComponent implements OnInit, OnDestroy {
   seconds: string;
   movingType: string = 'none';
   flightHeightLevel: FlightHeight = 'NONE';
+  flightHeight: number;
 
   @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
     if (event.shiftKey && event.keyCode == 87) {
@@ -66,21 +67,22 @@ export class FlightModeComponent implements OnInit, OnDestroy {
         })
         .subscribe(player => {
           this.flightData = player.entity.flight;
+          this.flightHeight = Cesium.Cartographic.fromCartesian(this.character.location).height;
           this.playerId = player.id;
           // if (player.entity.isFlying) {
           if (!this.character.isFlying) {
             this.flightSubscription = this.gameService.toggleFlightMode(this.playerId, false).subscribe(() => this.flightSubscription.unsubscribe());
             this.character.location = this.utilsService.toFixedHeight(this.character.location);
           }
+          else if(this.flightHeight === 0){
+            this.setCrash();
+          }
           if (this.flightData.remainingTime) {
             this.calculateRemainingTime(this.flightData.remainingTime);
           }
           else {
-            this.minutes = '00';
-            this.seconds = '00';
-            const crashSubscription = this.gameService.notifyCrash(this.playerId)
-              .subscribe(() => crashSubscription.unsubscribe());
-          }
+            this.setCrash();
+            }
           this.cd.detectChanges();
         })
     });
@@ -135,6 +137,17 @@ export class FlightModeComponent implements OnInit, OnDestroy {
       return true;
     else
       return false;
+  }
+
+  setCrash(){
+    this.minutes = '00';
+    this.seconds = '00';
+    // setInterval(const crashSubscription = this.gameService.notifyCrash(this.playerId)
+    //   .subscribe(() => crashSubscription.unsubscribe()), 1000);
+    // const crashSubscription = this.gameService.notifyCrash(this.playerId);
+    let crashSubscription;
+    setTimeout(()=> crashSubscription = this.gameService.notifyCrash(this.playerId)
+      .subscribe(() => crashSubscription.unsubscribe()), 2000);
   }
 
   // getFlightHeightGauge(){

@@ -160,11 +160,22 @@ export class GameMapComponent implements OnInit, OnDestroy {
     this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_START_LOCATION});
   }
 
-  private changeToFlyModeSettings() {
-    this.viewerOptions.setFreeCameraOptions(this.viewer);
-    // this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_START_LOCATION});
+  private flightCrashSettings() {
+    // this.viewerOptions.setFreeCameraOptions(this.viewer);
+    // this.viewerOptions.setFreeCameraOptions(this.viewer);
+    // this.gameService.stopServerUpdatingLoop();
+    let speed = environment.movement.walkingSpeed;
+    let crashDestination = this.utils.pointByLocationDistanceAndAzimuthAndHeight3d(this.character.location, speed, Cesium.Math.toRadians(this.character.heading + 180), true);
+    crashDestination = this.utils.toFixedHeight(this.character.location);
+    crashDestination = this.utils.toHeightOffset(crashDestination, 4);
+    this.character.isCrawling = true;
+    this.character.location = crashDestination;
+    this.character.isFlying = false;
+    this.viewer.camera.flyTo({destination: crashDestination, duration: 2});
 
+    // this.viewer.camera.flyTo({destination: crashDestination});
   }
+
   // private startFlightMode() {
   //
   // }
@@ -196,16 +207,19 @@ export class GameMapComponent implements OnInit, OnDestroy {
 
     const playerHeadCart = Cesium.Cartographic.fromCartesian(this.character.location);
 
-    if(isCrawling)
-    {
+    if (isCrawling) {
       playerHeadCart.height += 2;
     }
-    else if(isFlying) {
-      // const height = Cesium.Cartographic.fromCartesian(this.character.location).height;
+    else if (isFlying) {
+      const height = Cesium.Cartographic.fromCartesian(this.character.location).height;
       // const defaultHeight = 200;
       // playerHeadCart.height = height;
-
-      playerHeadCart.height += 4;
+      if (this.character.meFromServer.flight.remainingTime === 0 || height <= 0) {
+        this.flightCrashSettings();
+      }
+      else {
+        playerHeadCart.height += 4;
+      }
     }
     else
       playerHeadCart.height += 4.4;
