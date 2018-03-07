@@ -1,20 +1,19 @@
 import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
-import { CharacterService, ViewState } from '../../../../../services/character.service';
+import { CharacterService, ViewState } from '../../../../services/character.service';
 import { Observable } from 'rxjs/Observable';
 import { AcNotification, ActionType } from 'angular-cesium';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
-import { GameService } from '../../../../../services/game.service';
+import { GameService } from '../../../../services/game.service';
 
 @Component({
-  selector: 'gun-indicator',
-  templateUrl: './gun-indicator.component.html',
-  styleUrls: ['./gun-indicator.component.scss']
+  selector: 'flight-indicator',
+  templateUrl: './flight-indicator.component.html',
 })
-export class GunIndicatorComponent implements OnInit, OnDestroy {
+export class FlightIndicator implements OnInit, OnDestroy {
 
-  gunShots$: Subject<AcNotification> = new Subject();
-  gunShotSubscription: Subscription;
+  flights$: Subject<AcNotification> = new Subject();
+  flightsSubscription: Subscription;
   isOverview$: Observable<boolean>;
   eyeOffset = new Cesium.Cartesian3(0.0, 0.0, -10.0 );
 
@@ -25,18 +24,18 @@ export class GunIndicatorComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.gunShots$.unsubscribe();
-    this.gunShotSubscription.unsubscribe();
+    this.flights$.unsubscribe();
+    this.flightsSubscription.unsubscribe();
   }
 
 
-  getGunImage() {
-    return '/assets/icons/gun-marker.png';
+  getJetpackImage() {
+    return '/assets/icons/spiderman.png';
   }
 
   ngOnInit() {
     this.ngZone.runOutsideAngular(() => {
-      this.gunShotSubscription = this.gameService.getCurrentGameData()
+      this.flightsSubscription = this.gameService.getCurrentGameData()
         .filter(()=> this.character.viewState === ViewState.OVERVIEW)
         .map(result => result.gameData.players)
         .flatMap(p => p)
@@ -49,7 +48,7 @@ export class GunIndicatorComponent implements OnInit, OnDestroy {
           }
         })
         .subscribe(shotEntity => {
-          this.gunShots$.next(shotEntity)
+          this.flights$.next(shotEntity)
         })
     });
   }

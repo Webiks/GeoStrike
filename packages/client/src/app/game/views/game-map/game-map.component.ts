@@ -132,6 +132,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
         state: player.state === 'DEAD' ? MeModelState.DEAD : MeModelState.WALKING,
         team: player.team,
         isCrawling: false,
+        isShooting: false,
         isFlying: false,
         characterInfo: player.character
       });
@@ -166,11 +167,11 @@ export class GameMapComponent implements OnInit, OnDestroy {
     // this.gameService.stopServerUpdatingLoop();
     let speed = environment.movement.walkingSpeed;
     let crashDestination = this.utils.pointByLocationDistanceAndAzimuthAndHeight3d(this.character.location, speed, Cesium.Math.toRadians(this.character.heading + 180), true);
-    crashDestination = this.utils.toFixedHeight(this.character.location);
+    crashDestination = this.utils.toFixedHeight(crashDestination);
     crashDestination = this.utils.toHeightOffset(crashDestination, 4);
     this.character.isCrawling = true;
     this.character.location = crashDestination;
-    this.character.isFlying = false;
+    // this.character.isFlying = false;
     this.viewer.camera.flyTo({destination: crashDestination, duration: 2});
 
     // this.viewer.camera.flyTo({destination: crashDestination});

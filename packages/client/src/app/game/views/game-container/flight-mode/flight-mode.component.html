@@ -1,6 +1,8 @@
-<div class="flight-container" *ngIf="me">
+<div class="flight-container" *ngIf="me"  [ngClass]="{'isDangerousRemainingTime': dangerousRemainingTime >= flightData?.remainingTime}">
   <div class="img-container clickable" (click)="setFlightMode(true)">
-    <img src="assets/icons/jetpack.svg">
+    <img *ngIf="!character.isFlying && flightData?.remainingTime" src="assets/icons/jetpack.svg">
+    <img *ngIf="character.isFlying" src="assets/icons/jetpack-on.svg">
+    <img *ngIf="!character.isFlying && !flightData?.remainingTime" src="assets/icons/jetpack-disabled.svg">
   </div>
   <div class="text">
     <span>00:</span>
@@ -13,23 +15,23 @@
     <div class="gauge">
       <span>HEIGHT</span>
       <div class="gauge-container">
-        <span class="gauge-level" [ngClass]="{'isActive':flightHeightLevel  >= 'MAX' && flightHeightLevel !== 'NONE'}"><span class="divider"></span></span>
-        <span class="gauge-level" [ngClass]="{'isActive':flightHeightLevel  >= 'E' && flightHeightLevel !== 'NONE'}"><span class="divider"></span></span>
-        <span class="gauge-level" [ngClass]="{'isActive':flightHeightLevel  >= 'D' && flightHeightLevel !== 'NONE'}"><span class="divider"></span></span>
-        <span class="gauge-level" [ngClass]="{'isActive':flightHeightLevel  >= 'C' && flightHeightLevel !== 'NONE'}"><span class="divider"></span></span>
-        <span class="gauge-level" [ngClass]="{'isActive':flightHeightLevel  >= 'B' && flightHeightLevel !== 'NONE'}"><span class="divider"></span></span>
-        <span class="gauge-level" [ngClass]="{'isActive':flightHeightLevel  >= 'A' && flightHeightLevel !== 'NONE'}"><span class="divider"></span></span>
+        <span class="gauge-level" [ngClass]="{'isActive':flightHeightLevel  >= 'MAX' && flightHeightLevel !== 'NONE', 'isDangerousRemainingTime': dangerousRemainingTime >= flightData.remainingTime}"><span class="divider"></span></span>
+        <span class="gauge-level" [ngClass]="{'isActive':flightHeightLevel  >= 'E' && flightHeightLevel !== 'NONE', 'isDangerousRemainingTime': dangerousRemainingTime >= flightData.remainingTime}"><span class="divider"></span></span>
+        <span class="gauge-level" [ngClass]="{'isActive':flightHeightLevel  >= 'D' && flightHeightLevel !== 'NONE', 'isDangerousRemainingTime': dangerousRemainingTime >= flightData.remainingTime}"><span class="divider"></span></span>
+        <span class="gauge-level" [ngClass]="{'isActive':flightHeightLevel  >= 'C' && flightHeightLevel !== 'NONE', 'isDangerousRemainingTime': dangerousRemainingTime >= flightData.remainingTime}"><span class="divider"></span></span>
+        <span class="gauge-level" [ngClass]="{'isActive':flightHeightLevel  >= 'B' && flightHeightLevel !== 'NONE', 'isDangerousRemainingTime': dangerousRemainingTime >= flightData.remainingTime}"><span class="divider"></span></span>
+        <span class="gauge-level" [ngClass]="{'isActive':flightHeightLevel  >= 'A' && flightHeightLevel !== 'NONE', 'isDangerousRemainingTime': dangerousRemainingTime >= flightData.remainingTime}"><span class="divider"></span></span>
       </div>
     </div>
   <div class="gauge">
     <span>SPEED</span>
     <div class="gauge-container">
-      <span class="gauge-level" [ngClass]="{'isActive':isPlayerRunning()}"><span class="divider"></span></span>
-      <span class="gauge-level" [ngClass]="{'isActive':isPlayerRunning()}"><span class="divider"></span></span>
-      <span class="gauge-level" [ngClass]="{'isActive':isPlayerRunning()}"><span class="divider"></span></span>
-      <span class="gauge-level" [ngClass]="{'isActive':isPlayerWalking() || isPlayerRunning()}"><span class="divider"></span></span>
-      <span class="gauge-level" [ngClass]="{'isActive':isPlayerWalking() || isPlayerRunning()}"><span class="divider"></span></span>
-      <span class="gauge-level" [ngClass]="{'isActive':isPlayerWalking() || isPlayerRunning()}"><span class="divider"></span></span>
+      <span class="gauge-level" [ngClass]="{'isActive':isPlayerRunning(), 'isDangerousRemainingTime': dangerousRemainingTime >= flightData.remainingTime}"><span class="divider"></span></span>
+      <span class="gauge-level" [ngClass]="{'isActive':isPlayerRunning(), 'isDangerousRemainingTime': dangerousRemainingTime >= flightData.remainingTime}"><span class="divider"></span></span>
+      <span class="gauge-level" [ngClass]="{'isActive':isPlayerRunning(), 'isDangerousRemainingTime': dangerousRemainingTime >= flightData.remainingTime}"><span class="divider"></span></span>
+      <span class="gauge-level" [ngClass]="{'isActive':isPlayerWalking() || isPlayerRunning(), 'isDangerousRemainingTime': dangerousRemainingTime >= flightData.remainingTime}"><span class="divider"></span></span>
+      <span class="gauge-level" [ngClass]="{'isActive':isPlayerWalking() || isPlayerRunning(), 'isDangerousRemainingTime': dangerousRemainingTime >= flightData.remainingTime}"><span class="divider"></span></span>
+      <span class="gauge-level" [ngClass]="{'isActive':isPlayerWalking() || isPlayerRunning(), 'isDangerousRemainingTime': dangerousRemainingTime >= flightData.remainingTime}"><span class="divider"></span></span>
     </div>
   </div>
   </div>

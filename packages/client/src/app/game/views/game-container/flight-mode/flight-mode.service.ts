@@ -17,7 +17,7 @@ export class FlightModeService {
     if(!this.character.isFlying){
       this.character.isFlying = true;
       this.character.flightData = this.character.meFromServer.flight;
-      this.character.location = this.utils.toHeightOffset(this.character.location, 195);
+      this.character.location = this.utils.toHeightOffset(this.character.location, 50);
     }
     else
     {

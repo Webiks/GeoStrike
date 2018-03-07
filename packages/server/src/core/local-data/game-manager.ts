@@ -43,9 +43,9 @@ export interface IPlayer {
     lifeStatePerctange: number;
     numberOfShotsThatHit: number;
     isCrawling: boolean;
+    isShooting: boolean;
     isFlying: boolean;
     flight: FlightData;
-    isShooting: boolean;
     game: IGameObject;
     currentLocation: ICartesian3Location;
     heading: number;
@@ -162,7 +162,7 @@ export class GamesManager {
 
         const initFlightData: FlightData = {
             speed: 'NONE',
-            minHeight: 195,
+            minHeight: 50,
             maxHeight: 500,
             remainingTime: 300, //300sec =  5min minutes in seconds
             heightLevel: 'NONE'
@@ -185,9 +185,9 @@ export class GamesManager {
             team,
             type: CharacterType.PLAYER,
             isCrawling: false,
+            isShooting: false,
             isFlying: false,
             flight: initFlightData,
-            isShooting: false,
             syncState: 'VALID',
         };
 
@@ -252,8 +252,8 @@ export class GamesManager {
                          position: ICartesian3Location,
                          heading: number,
                          isCrawling: boolean,
-                         isFlying: boolean,
                          isShooting: boolean,
+                         isFlying: boolean,
                          enteringBuildingPosition: ICartesian3Location,
                          skipValidation = false) {
         const game = this.getGameById(gameId);

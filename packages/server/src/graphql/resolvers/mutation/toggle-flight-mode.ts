@@ -9,7 +9,7 @@ export const toggleFlightMode = (rootValue, { playerId, isFlying }, { games, gam
 
   const flyingPlayer = ((game.controlledPlayersMap.get(playerId) || player) as IPlayer);
   let intervalId;
-  // console.log("before interval"+isFlying,"this.intervalId:"+this.intervalId);
+  console.log("playerId: "+playerId,"isFlying: "+isFlying);
   if(isFlying)
   {
     // notifyOtherPlayers(player, game);
@@ -22,12 +22,4 @@ export const toggleFlightMode = (rootValue, { playerId, isFlying }, { games, gam
 
     // console.log("test"+flyingPlayer.flight.remainingTime+flyingPlayer.isFlying+isFlying);
 }
-
-
-const notifyOtherPlayers = (player: IPlayer | IViewer, game: IGameObject) => {
-    const color = (player as IPlayer).team ? (player as IPlayer).team.toString().toLowerCase() : '';
-    const message =
-        `<span style="color:${color}">${player.username}</span> <span>has joined the game</span>`;
-    pubsub.publish(ESubscriptionTopics.GAME_NOTIFICATIONS, {gameNotifications: {message, gameId: game.gameId}});
-};
 

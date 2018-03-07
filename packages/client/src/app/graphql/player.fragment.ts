@@ -18,6 +18,7 @@ export const playerFragment = gql`
     lifeState
     lifeStatePerctange
     isCrawling
+    isShooting
     isFlying
     flight {
       speed
@@ -26,7 +27,6 @@ export const playerFragment = gql`
       maxHeight
       heightLevel
     }
-    isShooting
     isMe
     id
     type

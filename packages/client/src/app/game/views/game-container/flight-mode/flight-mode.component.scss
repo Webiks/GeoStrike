@@ -12,7 +12,9 @@
   left: 10px;
   width: 200px;
   background-color: rgba(0, 0, 0, 0.42);
-
+  &.isDangerousRemainingTime {
+    background-color: rgba(235, 87, 87, 0.54);
+  }
   .clickable {
     cursor: pointer;
   }
@@ -27,12 +29,15 @@
     overflow: hidden;
     border-top-right-radius: 20px;
     border-bottom-left-radius: 20px;
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.54));
+    //background: linear-gradient(180deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.54));
+    background: linear-gradient(to top, rgba(0, 0, 0, 0) 0%, #000000 100%)
+
   }
 
   .img-container:hover {
     //background-color: rgba(111, 207, 151, 0.26);
-    background: linear-gradient(180deg, black, rgba(111, 207, 151, 0.26));
+    //background: linear-gradient(180deg, black, rgba(111, 207, 151, 0.26));
+    background-color: rgba(111, 207, 151, 0.26);
   }
   .text {
     padding: 0 10px;
@@ -90,6 +95,9 @@
           }
           &.isActive {
             background-color: rgba(111, 207, 151, 0.54);
+            &.isDangerousRemainingTime {
+              background-color: rgba(235, 87, 87, 0.54);
+            }
           }
         }
       }

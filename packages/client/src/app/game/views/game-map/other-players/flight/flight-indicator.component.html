@@ -1,8 +1,8 @@
-<ac-layer acFor="let player of gunShots$" [context]="this">
+<ac-layer acFor="let player of flights$" [context]="this">
   <ac-billboard-primitive-desc *ngIf="isOverview$| async" props="{
-    show: player?.isShooting,
+    show: player?.isFlying,
     position: player?.currentLocation?.location,
-    image: getGunImage(),
+    image: getJetpackImage(),
     height: 28,
     width:  43,
     pixelOffset: [0,-50] | pixelOffset,
