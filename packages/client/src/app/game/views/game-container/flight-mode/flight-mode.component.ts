@@ -22,7 +22,6 @@ export class FlightModeComponent implements OnInit, OnDestroy {
   @Input() username;
   flightDataSubscription: Subscription;
   flightSubscription: Subscription;
-  initFlightSubscription: Subscription;
   flightData: FlightData;
   playerId: string;
   minutes: string;
@@ -98,10 +97,11 @@ export class FlightModeComponent implements OnInit, OnDestroy {
           else if (Number.isNaN(Number(this.currentFlightHeight)) || Math.floor(this.currentFlightHeight) === 0) {
             this.setCrash();
           }
-          if (this.flightData.remainingTime) {
+          if (this.flightData && this.flightData.remainingTime) {
+            console.log(this.flightData.heightLevel);
             this.calculateRemainingTime(this.flightData.remainingTime);
           }
-          else {
+          else if(this.character.isFlying) {
             this.setCrash();
           }
           this.cd.detectChanges();
@@ -115,7 +115,7 @@ export class FlightModeComponent implements OnInit, OnDestroy {
     })
   }
 
-  setFlightMode(isToggleFlight: boolean = false, isFlying: boolean) {
+  setFlightMode() {
     let updateFlyState = this.flightModeService.changeFlyingState();
     this.gameService.updateServerOnPosition(true);
     if (updateFlyState) {

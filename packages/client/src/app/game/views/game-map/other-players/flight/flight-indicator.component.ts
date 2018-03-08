@@ -30,7 +30,7 @@ export class FlightIndicator implements OnInit, OnDestroy {
 
 
   getJetpackImage() {
-    return '/assets/icons/spiderman.png';
+    return '/assets/icons/jetpack-marker.svg';
   }
 
   ngOnInit() {

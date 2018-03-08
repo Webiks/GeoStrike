@@ -37,7 +37,6 @@ export class UtilsService {
       cart.height += offset;
     else
       cart.height = flightHeight + offset;
-    console.log("toHeightOffset:"+cart.height);
     return Cesium.Cartesian3.fromRadians(cart.longitude, cart.latitude, cart.height);
   }
 
@@ -53,70 +52,41 @@ export class UtilsService {
     const heightStep = Math.ceil(heightRes / steps);
     return Math.floor(currHeight) >= Math.floor(this.character.meFromServer.flight.minHeight) && (Math.floor(currHeight) <= Math.floor(this.character.meFromServer.flight.minHeight + heightStep));
   }
-  // getFlightHeightForGauge(curPosition){
-  //   const currHeight =  Cesium.Cartographic.fromCartesian(curPosition).height;
-  //   return Math.floor(currHeight) / Math.floor(this.character.meFromServer.flight.maxHeight);
-  // }
 
   pointByLocationDistanceAndAzimuthAndHeight3d(currentLocation: any, meterDistance: number, radianAzimuth: number, isInputCartesian = true) {
     const distance = meterDistance / Cesium.Ellipsoid.WGS84.maximumRadius;
     const curLat = isInputCartesian ? Cesium.Cartographic.fromCartesian(currentLocation).latitude : currentLocation.latitude;
     const curLon = isInputCartesian ? Cesium.Cartographic.fromCartesian(currentLocation).longitude : currentLocation.longitude;
     const currHeight = isInputCartesian ? Cesium.Cartographic.fromCartesian(currentLocation).height : currentLocation.height;
-
+    const pitchDeg = this.character.pitch;
+    const pitch = Cesium.Math.toRadians(pitchDeg);
+    const heading = Cesium.Math.toRadians(-180 + this.character.heading);
+    const heightCalculation = Math.sin(pitch) * (meterDistance);
     const destinationLat = Math.asin(
       Math.sin(curLat) * Math.cos(distance) +
       Math.cos(curLat) * Math.sin(distance) * Math.cos(radianAzimuth)
     );
-
     let destinationLon = curLon + Math.atan2(Math.sin(radianAzimuth) * Math.sin(distance) * Math.cos(curLat),
       Math.cos(distance) - Math.sin(curLat) * Math.sin(destinationLat)
     );
-
-    const pitchDeg = this.character.pitch;
-    const pitch = Cesium.Math.toRadians(pitchDeg);
-    const heading = Cesium.Math.toRadians(-180 + this.character.heading);
-
-    const heightCalculation = Math.sin(pitch) * (meterDistance);
     let destinationHeight;
 
-    // currHeight += destinationHeight;
-
     destinationHeight = currHeight + heightCalculation;
-    // if((currHeight + heightCalculation) >= this.character.meFromServer.flight.minHeight)
-    //   destinationHeight = currHeight + heightCalculation;
-    // else
-    //   destinationHeight = this.character.meFromServer.flight.minHeight;
-
-    //
-    // console.log("this.character.heading:"+this.character.heading);
-    // // console.log("this.character.pitch:"+this.character.pitch);
-    // // console.log("Math.sin(this.character.pitch):"+Math.sin(this.character.pitch));
-    // console.log("Math.sin(this.character.heading):"+Math.sin(this.character.heading));
-    //
-    // console.log(" Math.sin(this.character.heading) * (meterDistance):"+ Math.sin(this.character.heading) * (meterDistance));
-    // console.log("currHeight:"+currHeight)
-    // console.log("destinationHeight:"+destinationHeight);
-
-
     destinationLon = (destinationLon + 3 * Math.PI) % (2 * Math.PI) - Math.PI;
-    console.log("destinationHeight:"+destinationHeight);
     return Cesium.Cartesian3.fromRadians(destinationLon, destinationLat, destinationHeight);
   }
 
 
   calculateHeightLevel (flightData: FlightData, currentPosition: Cartesian3) {
-
     const heightRes = flightData.maxHeight - flightData.minHeight;
     const minHeight = flightData.minHeight;
     const currHeight = Cesium.Cartographic.fromCartesian(currentPosition).height;
     const steps = 6;
     const heightStep = Math.ceil(heightRes / steps);
-    const currHeightPerctange = (currHeight-flightData.minHeight)/(flightData.maxHeight-flightData.minHeight);
     let currHeightLevel;
     if(currHeight < minHeight)
       currHeightLevel = 'NONE';
-    else if(Math.floor(currHeight) === Math.floor(minHeight) || Math.floor(currHeight) <= minHeight + heightStep)
+    else if(Math.floor(currHeight) === Math.floor(minHeight - 5) || Math.floor(currHeight) === Math.floor(minHeight ) || Math.floor(currHeight) <= minHeight + heightStep)
       currHeightLevel  = 'A';
     else if(currHeight <= minHeight + (heightStep*2))
       currHeightLevel  = 'B';

@@ -1,7 +1,6 @@
 import gql from 'graphql-tag';
 import {FlightData, FlightSpeed} from "../../types";
 import { FlightHeight } from "../../../../client/src/app/types";
-// import {FlightData, FlightHeight, FlightSpeed} from "../../types";
 
 export const schema = gql`
 

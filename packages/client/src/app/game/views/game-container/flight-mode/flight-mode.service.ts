@@ -11,7 +11,7 @@ export class FlightModeService {
 
   changeFlyingState () {
     let isFlyStateUpdated = true;
-    if (this.character.viewState === ViewState.OVERVIEW) {
+    if (this.character.viewState === ViewState.OVERVIEW || this.character.viewState === ViewState.FPV || this.character.meFromServer.flight.remainingTime <= 0) {
       return;
     }
     if(!this.character.isFlying){
@@ -30,7 +30,5 @@ export class FlightModeService {
       }
     }
     return isFlyStateUpdated;
-    // this.gameService.updateServerOnPosition(true);
-    // const flightSubscription = this.gameService.toggleFlightMode(this.character.meFromServer.id, this.character.isFlying).subscribe(() => flightSubscription.unsubscribe());
   }
 }
