@@ -39,7 +39,6 @@ export class GameContainerComponent implements OnInit, OnDestroy {
   private gameNotificationsSubscription: Subscription;
   private paramsSubscription: Subscription;
 
-
   constructor(private gameService: GameService,
               private character: CharacterService,
               private activatedRoute: ActivatedRoute,

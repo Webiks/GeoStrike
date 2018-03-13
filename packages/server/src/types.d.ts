@@ -1,7 +1,6 @@
 /* tslint:disable */
 
 import { PlayerLifeState } from "../../client/src/app/types";
-import Timer = NodeJS.Timer;
 
 export interface User {
   id: string; 
@@ -159,16 +158,13 @@ export type FlightHeight = "NONE" | "A" | "B" | "C" | "D" | "E"| "MAX"
 
 export type Team = "BLUE" | "RED" | "NONE";
 
-
 export type PlayerState = "WAITING" | "READY" | "ALIVE" | "DEAD" | "CONTROLLED";
 
 export type PlayerLifeState = "FULL" | "HIGH" | "MEDIUM" | "LOW" | "EMPTY";
 
 export type PlayerSyncState = "VALID" | "INVALID";
 
-
 export type CharacterType = "PLAYER" | "BACKGROUND_CHARACTER" | "OVERVIEW";
-
 
 export type GameState = "WAITING" | "ACTIVE" | "DONE";
 

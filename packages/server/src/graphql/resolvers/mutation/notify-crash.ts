@@ -5,9 +5,7 @@ export const notifyCrash = (rootValue, {playerId}, {games, game, player}: IGraph
     if (!game || !player) {
         return null;
     }
-
     const crashedPlayer = game.playersMap.get(playerId);
-
     games.updatePlayerState(game.gameId, playerId, 'DEAD');
     pubsub.publish(ESubscriptionTopics.GAME_STATE_CHANGED, { gameData: game });
 
@@ -17,5 +15,4 @@ export const notifyCrash = (rootValue, {playerId}, {games, game, player}: IGraph
         `<span style="color:${killedPlayerTeamColor}">${crashedPlayer.username}</span> <span>has crashed</span>`;
 
     pubsub.publish(ESubscriptionTopics.GAME_NOTIFICATIONS, {  gameNotifications: { message, gameId: game.gameId }})
-
 }

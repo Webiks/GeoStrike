@@ -100,4 +100,13 @@ export class UtilsService {
       currHeightLevel  = 'MAX';
     return currHeightLevel;
   }
+
+  getIconPosition(player, height){
+    if(this.character.isFlying){
+      return this.toHeightOffset(player.currentLocation.location, 50);
+    }
+    else{
+      return this.toFixedHeight(player.currentLocation.location, 5);
+    }
+  }
 }

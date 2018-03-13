@@ -14,5 +14,6 @@
     "client": "(cd packages/client && yarn start)",
     "server": "(cd packages/server && yarn start)",
     "postinstall": "lerna bootstrap"
-  }
+  },
+  "devDependencies": {}
 }

@@ -10,6 +10,7 @@ import { CesiumViewerOptionsService } from './viewer-options/cesium-viewer-optio
 import { CollisionDetectorService } from '../../services/collision-detector.service';
 import { TakeControlService } from '../../services/take-control.service';
 import { PitchCalculatorService } from './services/pitch-calculator.service';
+// import { MapLayerProviderOptions } from 'angular-cesium';
 
 @Component({
   selector: 'game-map',
@@ -29,6 +30,8 @@ export class GameMapComponent implements OnInit, OnDestroy {
   @Input() playersPositions: Observable<AcNotification>;
   @Input() gameData: Observable<GameFields.Fragment>;
   @ViewChild(AcMapComponent) private mapInstance: AcMapComponent;
+
+  // MapLayerProviderOptions = MapLayerProviderOptions;
 
   public createPathMode = environment.createPathMode;
   private viewer: any;
@@ -111,11 +114,6 @@ export class GameMapComponent implements OnInit, OnDestroy {
           }
         });
       }
-
-      // else if(newViewState === ViewState.FLYING_SEMI_FPV){
-      //   this.changeToFlyModeSettings();
-      // }
-
       this.lastViewState = newViewState;
     });
 
@@ -138,7 +136,6 @@ export class GameMapComponent implements OnInit, OnDestroy {
       });
     }
     this.gameService.startServerUpdatingLoop();
-
     this.viewer.scene.preRender.addEventListener(this.preRenderHandler);
 
     this.ngZone.runOutsideAngular(() => {
@@ -162,24 +159,14 @@ export class GameMapComponent implements OnInit, OnDestroy {
   }
 
   private flightCrashSettings() {
-    // this.viewerOptions.setFreeCameraOptions(this.viewer);
-    // this.viewerOptions.setFreeCameraOptions(this.viewer);
-    // this.gameService.stopServerUpdatingLoop();
     let speed = environment.movement.walkingSpeed;
     let crashDestination = this.utils.pointByLocationDistanceAndAzimuthAndHeight3d(this.character.location, speed, Cesium.Math.toRadians(this.character.heading + 180), true);
     crashDestination = this.utils.toFixedHeight(crashDestination);
     crashDestination = this.utils.toHeightOffset(crashDestination, 4);
     this.character.isCrawling = true;
     this.character.location = crashDestination;
-    // this.character.isFlying = false;
     this.viewer.camera.flyTo({destination: crashDestination, duration: 2});
-
-    // this.viewer.camera.flyTo({destination: crashDestination});
   }
-
-  // private startFlightMode() {
-  //
-  // }
 
   onMousemove(event: MouseEvent) {
     if (!this.character.initialized || !document.pointerLockElement) {
@@ -213,9 +200,8 @@ export class GameMapComponent implements OnInit, OnDestroy {
     }
     else if (isFlying) {
       const height = Cesium.Cartographic.fromCartesian(this.character.location).height;
-      // const defaultHeight = 200;
-      // playerHeadCart.height = height;
-      if (this.character.meFromServer.flight.remainingTime === 0 || height <= 0) {
+      if (this.character.flightData.remainingTime === 0 || this.character.meFromServer.flight.remainingTime === 0 || height <= 0) {
+        debugger;
         this.flightCrashSettings();
       }
       else {
@@ -243,7 +229,6 @@ export class GameMapComponent implements OnInit, OnDestroy {
     this.lastPlayerLocation = this.character.location;
     this.lastPlayerHead = playerHeadCart;
     this.lastPlayerHPR = {heading: this.character.heading, pitch: this.character.pitch, range};
-    // this.character.flightData = this.character.meFromServer.flight;
   }
 
   ngOnDestroy(): void {

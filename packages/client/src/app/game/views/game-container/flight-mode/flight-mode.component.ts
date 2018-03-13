@@ -52,15 +52,15 @@ export class FlightModeComponent implements OnInit, OnDestroy {
     }
   }
 
-  @HostListener('window:unload', [ '$event' ])
+  @HostListener('window:unload', ['$event'])
   unloadHandler(event) {
-    if(this.flightSubscription)
+    if (this.flightSubscription)
       this.flightSubscription = this.gameService.toggleFlightMode(this.character.meFromServer.id, false).subscribe(() => this.flightSubscription.unsubscribe());
   }
 
-  @HostListener('window:beforeunload', [ '$event' ])
+  @HostListener('window:beforeunload', ['$event'])
   beforeUnloadHander(event) {
-    if(this.flightSubscription)
+    if (this.flightSubscription)
       this.flightSubscription = this.gameService.toggleFlightMode(this.character.meFromServer.id, false).subscribe(() => this.flightSubscription.unsubscribe());
   }
 
@@ -89,19 +89,15 @@ export class FlightModeComponent implements OnInit, OnDestroy {
           this.currentFlightHeight = cart.height;
           this.playerId = player.id;
           if (!this.character.isFlying) {
-            // this.initFlightSubscription = this.gameService.toggleFlightMode(this.playerId, false).subscribe(() => this.initFlightSubscription.unsubscribe());
-            // if(!this.flightSubscription)
-            //   this.gameService.toggleFlightMode(this.playerId, false).subscribe( () => console.log("yay"));
             this.character.location = this.utilsService.toFixedHeight(this.character.location);
           }
           else if (Number.isNaN(Number(this.currentFlightHeight)) || Math.floor(this.currentFlightHeight) === 0) {
             this.setCrash();
           }
           if (this.flightData && this.flightData.remainingTime) {
-            console.log(this.flightData.heightLevel);
             this.calculateRemainingTime(this.flightData.remainingTime);
           }
-          else if(this.character.isFlying) {
+          else if (this.character.isFlying) {
             this.setCrash();
           }
           this.cd.detectChanges();
@@ -119,7 +115,7 @@ export class FlightModeComponent implements OnInit, OnDestroy {
     let updateFlyState = this.flightModeService.changeFlyingState();
     this.gameService.updateServerOnPosition(true);
     if (updateFlyState) {
-       this.flightSubscription = this.gameService.toggleFlightMode(this.character.meFromServer.id, this.character.isFlying).subscribe(() => this.flightSubscription.unsubscribe());
+      this.flightSubscription = this.gameService.toggleFlightMode(this.character.meFromServer.id, this.character.isFlying).subscribe(() => this.flightSubscription.unsubscribe());
     }
   }
 

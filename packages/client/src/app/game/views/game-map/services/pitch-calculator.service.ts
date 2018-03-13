@@ -11,11 +11,11 @@ export class PitchCalculatorService {
     const isSemiFpv = this.character.viewState === ViewState.SEMI_FPV;
     const isCrawling = this.character.isCrawling;
     const isFlying = this.character.isFlying;
-    let maxPitch = isFlying ? 45 :  80.0 ;
-    let minPitch = isCrawling ? (-55) : (isFlying) ? -45: -80;
+    let maxPitch = isFlying ? 25 :  80.0 ;
+    let minPitch = isCrawling ? (-55) : (isFlying) ? -25: -80;
     if (isSemiFpv){
       maxPitch = isCrawling ? 2 : 25.0;
-      minPitch = isCrawling ? -50 : -80;
+      minPitch = isCrawling ? -50: (isFlying) ? -25 : -80;
     }
 
     if (newPitch < minPitch) {

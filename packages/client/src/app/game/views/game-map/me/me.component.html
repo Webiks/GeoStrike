@@ -10,7 +10,9 @@
 					color: getColor(),
   }">
   </ac-model-desc>
+  <!--<particle-effect></particle-effect>-->
 </ac-layer>
+
 <img *ngIf="showWeapon" src="assets/gun1.png" class="gun" alt="" (click)="canvasPropagation()">
 <img #muzzleFlash src="assets/muzzle-flash.png" class="gun-flare" alt="">
 <img #cross *ngIf="showCross" src="assets/focus.png" class="gun-cross" alt="">

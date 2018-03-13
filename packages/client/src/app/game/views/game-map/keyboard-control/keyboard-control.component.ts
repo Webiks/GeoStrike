@@ -60,7 +60,7 @@ export class KeyboardControlComponent implements OnInit {
               private snackBar: MatSnackBar,
               private takeControlService: TakeControlService,
               public utils: UtilsService,
-              private flightModeService:FlightModeService) {
+              private flightModeService: FlightModeService) {
     this.viewer = cesiumService.getViewer();
   }
 
@@ -104,7 +104,8 @@ export class KeyboardControlComponent implements OnInit {
       action: () => {
         let position = this.character.location;
         let speed = environment.movement.walkingSpeed;
-
+        let flightData: FlightData;
+        let flightHeightLevel: FlightHeight;
         if (this.character.state === MeModelState.RUNNING) {
           speed = environment.movement.runningSpeed;
         }
@@ -121,8 +122,6 @@ export class KeyboardControlComponent implements OnInit {
           );
         }
         if (this.character.isFlying) {
-          let flightData: FlightData;
-          let flightHeightLevel: FlightHeight;
           flightData = this.character.meFromServer.flight;
           speed = environment.movement.runningSpeed;
           nextLocation = this.utils.pointByLocationDistanceAndAzimuthAndHeight3d(
@@ -131,12 +130,20 @@ export class KeyboardControlComponent implements OnInit {
             Cesium.Math.toRadians(this.character.heading + delta),
             true
           );
-          flightHeightLevel = this.utils.calculateHeightLevel(flightData, nextLocation);
-          flightData.heightLevel = flightHeightLevel;
-          this.character.flightData = flightData;
-          this.character.location = nextLocation;
+          if (!this.collisionDetector.detectCollision(nextLocation)){
+            flightHeightLevel = this.utils.calculateHeightLevel(flightData, nextLocation);
+            flightData.heightLevel = flightHeightLevel;
+            this.character.flightData = flightData;
+            this.character.location = nextLocation;
+          }
+          else {
+            this.character.flightData.remainingTime = 0;
+            let crashSubscription;
+            setTimeout(() => crashSubscription = this.gameService.notifyCrash(this.character.meFromServer.id)
+              .subscribe(() => crashSubscription.unsubscribe()), 2000);
+          }
         }
-        if (this.character.enteredBuilding) {
+        else if (this.character.enteredBuilding) {
           if (!this.collisionDetector.detectCollision(nextLocation, true)) {
             this.character.location = nextLocation;
           }
@@ -150,13 +157,12 @@ export class KeyboardControlComponent implements OnInit {
         else if (!this.collisionDetector.detectCollision(nextLocation)) {
           this.character.location = nextLocation;
         }
-
       },
     } as KeyboardControlParams;
   }
 
   changeViewMove() {
-    if (this.character.viewState === ViewState.OVERVIEW  || this.character.isFlying) {
+    if (this.character.viewState === ViewState.OVERVIEW || this.character.isFlying) {
       return;
     }
     this.character.state = MeModelState.WALKING;
@@ -169,7 +175,7 @@ export class KeyboardControlComponent implements OnInit {
   }
 
   changeMeShootState() {
-    if (this.character.viewState === ViewState.OVERVIEW  || this.character.isFlying) {
+    if (this.character.viewState === ViewState.OVERVIEW) {
       return;
     }
     let newState = MeModelState.WALKING;
@@ -195,8 +201,7 @@ export class KeyboardControlComponent implements OnInit {
   changeFlyingState() {
     let updateFlyState = this.flightModeService.changeFlyingState();
     this.gameService.updateServerOnPosition(true);
-    if(updateFlyState)
-    {
+    if (updateFlyState) {
       const flightSubscription = this.gameService.toggleFlightMode(this.character.meFromServer.id, this.character.isFlying).subscribe(() => flightSubscription.unsubscribe());
     }
   }
