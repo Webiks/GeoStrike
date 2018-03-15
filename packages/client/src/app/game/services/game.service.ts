@@ -31,12 +31,15 @@ import { joinAsViewer } from '../../graphql/join-as-viewer.mutation';
 import { gameNotificationsSubscription } from '../../graphql/game-notifications.subscription';
 import { notifyShotMutation } from '../../graphql/notify-shot.mutation';
 import { notifyBeenShotMutation } from "../../graphql/notify-been-shot.mutation";
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
 @Injectable()
 export class GameService {
   private socket: SubscriptionClient;
   private serverPositionUpdateInterval;
   private lastStateSentToServer;
+  private terrainEnviormentSource = new BehaviorSubject<string>('URBAN');
+  currentTerrainEnviorment = this.terrainEnviormentSource.asObservable();
 
   constructor(private apollo: Apollo,
               subscriptionClientService: ApolloService,
@@ -217,5 +220,9 @@ export class GameService {
     }).subscribe(() => {
       sub.unsubscribe();
     });
+  }
+
+  modifyTerrainEnviorment(terrainType: string){
+    this.terrainEnviormentSource.next(terrainType);
   }
 }

@@ -6,6 +6,7 @@ import { environment } from '../../../../../environments/environment';
 import { UtilsService } from '../../../services/utils.service';
 import { backgroundItemsData } from './background-data';
 import { Subject } from 'rxjs/Subject';
+import { GameService } from "../../../services/game.service";
 
 export class BackgroundEntity extends AcEntity {
 }
@@ -35,11 +36,13 @@ export class WorldComponent implements OnInit {
   };
   public hideWorld = false;
   private treesAndBoxes;
+  private terrainView: string = 'URBAN';
 
   constructor(public utils: UtilsService,
               private cesiumService: CesiumService,
               public character: CharacterService,
-              private cd: ChangeDetectorRef) {
+              private cd: ChangeDetectorRef,
+              private gameService:GameService) {
     this.drawBackgroundItems();
   }
 
@@ -64,9 +67,15 @@ export class WorldComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (environment.loadTerrain) {
-      this.loadTerrain();
-    }
+    this.setTerrainType();
+    // if (environment.loadTerrain) {
+    //   this.terrainView = true;
+    //   this.loadTerrain();
+    // }
+    // else {
+    //   this.terrainView = false;
+    // }
+
 
     this.character.viewState$.subscribe(viewState => {
       this.hideWorld = viewState === ViewState.OVERVIEW;
@@ -79,12 +88,22 @@ export class WorldComponent implements OnInit {
   }
 
   loadTerrain() {
-    this.cesiumService.getViewer().terrainProvider = new Cesium.CesiumTerrainProvider(
-      environment.terrain
-    );
+    // this.cesiumService.getViewer().terrainProvider = new Cesium.CesiumTerrainProvider(
+    //   environment.terrain
+    // );
+    this.cesiumService.getViewer().terrainProvider = new Cesium.createWorldTerrain(environment.terrain);
+
   }
 
   getTilesMatrix() {
     return Cesium.Matrix4.fromTranslation(new Cesium.Cartesian3(0, 0, 0));
+  }
+
+  setTerrainType(){
+    this.gameService.currentTerrainEnviorment.subscribe( isTerrain => {
+      this.terrainView = isTerrain;
+      if(isTerrain !== 'URBAN')
+        this.loadTerrain();
+    })
   }
 }

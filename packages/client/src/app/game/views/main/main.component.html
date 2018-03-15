@@ -10,6 +10,7 @@
         </div>
       </ng-template>
         <character-picker [selectedCharacter]="characterName" [(username)]="username" (select)="characterChanged($event)"></character-picker>
+      <medium-button (click)="toggleTerrainType()" text="CHANGE TO {{terrainType}}"></medium-button>
     </mat-tab>
     <mat-tab label="Join game" >
       <ng-template mat-tab-label>

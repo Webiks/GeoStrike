@@ -24,6 +24,8 @@ import { PitchCalculatorService } from './services/pitch-calculator.service';
 export class GameMapComponent implements OnInit, OnDestroy {
   public static readonly DEFAULT_START_LOCATION =
     Cesium.Cartesian3.fromDegrees(-73.985187, 40.758857, 1000);
+  public static readonly DEFAULT_MOUNTAINS_START_LOCATION =
+    Cesium.Cartesian3.fromDegrees(-153.369141, 66.160507, 1000);
   public static readonly DEFAULT_PITCH = -5;
   @Input() me;
   @Input() playersPositions: Observable<AcNotification>;
@@ -154,6 +156,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
   }
 
   private overviewSettings() {
+    debugger;
     this.viewerOptions.setFreeCameraOptions(this.viewer);
     this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_START_LOCATION});
   }

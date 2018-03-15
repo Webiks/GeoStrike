@@ -68,4 +68,15 @@ export const PLAYER_CHARACTERS: CharacterData[] = [
     iconUrl: '/assets/icons/grandmother-mark.png',
     iconDeadUrl: '/assets/icons/grandmother-dead-mark.png',
   },
+    {
+        name: 'boar',
+        model: '/assets/models/boar.gltf',
+        scale: 0.035,
+        description: null,
+        team: null,
+        imageUrl: null,
+        portraitUrl: null,
+        iconUrl: null,
+        iconDeadUrl: null,
+    },
 ];

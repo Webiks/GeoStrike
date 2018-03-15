@@ -18,6 +18,11 @@ const BG_CHARACTER_TYPES = [
     paths: PATHS_GRAPHS.PEOPLE,
     updateDistanceMeters: 0.1,
   },
+    {
+        characterName: 'boar',
+        paths: PATHS_GRAPHS.PEOPLE,
+        updateDistanceMeters: 0.1,
+    },
   {
     characterName: 'car',
     paths: PATHS_GRAPHS.CAR,
