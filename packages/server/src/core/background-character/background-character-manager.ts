@@ -20,8 +20,8 @@ const BG_CHARACTER_TYPES = [
   },
     {
         characterName: 'boar',
-        paths: PATHS_GRAPHS.PEOPLE,
-        updateDistanceMeters: 0.1,
+        paths: PATHS_GRAPHS.BOAR,
+        updateDistanceMeters: 0.5,
     },
   {
     characterName: 'car',
@@ -112,7 +112,6 @@ export class BackgroundCharacterManager {
             characterId,
             updateDistanceMeters
           );
-
           this.gameManager.updatePlayerPosition(
             this.gameId,
             characterId,

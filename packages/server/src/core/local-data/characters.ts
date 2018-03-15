@@ -71,7 +71,7 @@ export const PLAYER_CHARACTERS: CharacterData[] = [
     {
         name: 'boar',
         model: '/assets/models/boar.gltf',
-        scale: 0.035,
+        scale: 1,
         description: null,
         team: null,
         imageUrl: null,

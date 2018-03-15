@@ -25,7 +25,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
   public static readonly DEFAULT_START_LOCATION =
     Cesium.Cartesian3.fromDegrees(-73.985187, 40.758857, 1000);
   public static readonly DEFAULT_MOUNTAINS_START_LOCATION =
-    Cesium.Cartesian3.fromDegrees(-153.369141, 66.160507, 1000);
+    Cesium.Cartesian3.fromDegrees(-103.97688256411968, 27.23130135442793, 1000);
   public static readonly DEFAULT_PITCH = -5;
   @Input() me;
   @Input() playersPositions: Observable<AcNotification>;
@@ -156,9 +156,19 @@ export class GameMapComponent implements OnInit, OnDestroy {
   }
 
   private overviewSettings() {
-    debugger;
-    this.viewerOptions.setFreeCameraOptions(this.viewer);
-    this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_START_LOCATION});
+    // this.viewerOptions.setFreeCameraOptions(this.viewer);
+    // this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_START_LOCATION});
+    // this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_MOUNTAINS_START_LOCATION});
+    this.gameService.currentTerrainEnviorment.subscribe(terrainType => {
+      if(terrainType == "URBAN")
+      {
+        this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_START_LOCATION});
+      }
+      else
+      {
+        this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_MOUNTAINS_START_LOCATION});
+      }
+    })
   }
 
   onMousemove(event: MouseEvent) {
