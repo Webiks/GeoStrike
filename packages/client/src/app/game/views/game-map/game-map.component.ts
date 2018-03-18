@@ -158,17 +158,18 @@ export class GameMapComponent implements OnInit, OnDestroy {
   private overviewSettings() {
     // this.viewerOptions.setFreeCameraOptions(this.viewer);
     // this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_START_LOCATION});
-    // this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_MOUNTAINS_START_LOCATION});
-    this.gameService.currentTerrainEnviorment.subscribe(terrainType => {
-      if(terrainType == "URBAN")
-      {
-        this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_START_LOCATION});
-      }
-      else
-      {
-        this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_MOUNTAINS_START_LOCATION});
-      }
-    })
+    // this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_MOUNTAINS_START_LOCATION});\
+    this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_MOUNTAINS_START_LOCATION});
+    // this.gameService.currentTerrainEnviorment.subscribe(terrainType => {
+    //   if(terrainType == "URBAN")
+    //   {
+    //     this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_START_LOCATION});
+    //   }
+    //   else
+    //   {
+    //     this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_MOUNTAINS_START_LOCATION});
+    //   }
+    // })
   }
 
   onMousemove(event: MouseEvent) {
