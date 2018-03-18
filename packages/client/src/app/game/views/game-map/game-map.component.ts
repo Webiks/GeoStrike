@@ -67,7 +67,6 @@ export class GameMapComponent implements OnInit, OnDestroy {
         this.viewerOptions.setFpvCameraOptions(viewer);
       }
       this.mapLayerProviderOptions = MapLayerProviderOptions.BingMaps;
-
     };
 
     this.onMousemove = this.onMousemove.bind(this);
