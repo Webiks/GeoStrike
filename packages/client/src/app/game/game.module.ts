@@ -52,6 +52,7 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { GameCreditsComponent } from './views/game-container/game-credits/game-credits.component';
 import { CreditsDialogComponent } from './views/credits-dialog/credits-dialog.component';
 import { BloodOnScreen } from './views/game-container/blood-on-screen/blood-on-screen';
+import { MapProviderComponent } from './views/game-map/map-provider/map-provider.component';
 
 @NgModule({
   declarations: [
@@ -83,7 +84,8 @@ import { BloodOnScreen } from './views/game-container/blood-on-screen/blood-on-s
     GunIndicatorComponent,
     GameCreditsComponent,
     CreditsDialogComponent,
-    BloodOnScreen
+    BloodOnScreen,
+    MapProviderComponent
   ],
   imports: [
     BrowserModule,
