@@ -24,7 +24,7 @@ export class OtherPlayersComponent {
     this.isOverview$ = character.viewState$.map(viewState => viewState === ViewState.OVERVIEW);
   }
 
-  private fixPosition(position, player: PlayerFields.Fragment) {
+   fixPosition(position, player: PlayerFields.Fragment) {
     if (player.state === 'DEAD') {
       return position;
     } else if (player.isCrawling) {

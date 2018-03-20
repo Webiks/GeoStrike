@@ -8,6 +8,7 @@ import { BackgroundCharacterManager } from '../background-character/background-c
 import { PLAYER_CHARACTERS } from './characters';
 import { GamesTimeout } from './games-timeout';
 import Timer = NodeJS.Timer;
+import { TerrainLocation, TerrainType } from "./terrains";
 
 export interface ICartesian3Location {
   x: number;
@@ -26,6 +27,7 @@ export enum CharacterType {
   BACKGROUND_CHARACTER = 'BACKGROUND_CHARACTER',
   OVERVIEW = 'OVERVIEW',
 }
+
 
 export interface IViewer {
   token: string;
@@ -62,7 +64,8 @@ export interface IGameObject {
   clientsUpdaterId?: Timer;
   bgCharactersManager: BackgroundCharacterManager;
   winingTeam: Team,
-  controlledPlayersMap: Map<string, IPlayer>
+  controlledPlayersMap: Map<string, IPlayer>;
+  terrainType: TerrainType;
 }
 
 const TOKENS_SECRET = 'sdf43tSWDG#%Tsdfw4';
@@ -153,8 +156,11 @@ export class GamesManager {
       TOKENS_SECRET
     );
 
-    const defaultPlayerPositions = config.PLAYERS_SPAWN_POSITIONS[team];
-    const realPlayerTeamCount = Array.from(game.playersMap.values()).filter(
+    // const defaultPlayerPositions = config.PLAYERS_SPAWN_POSITIONS[team];
+      const terrainTeamTypeStr = game.terrainType + "_" + team;
+      const defaultPlayerPositions = TerrainLocation[terrainTeamTypeStr];
+
+      const realPlayerTeamCount = Array.from(game.playersMap.values()).filter(
       p => p.type === CharacterType.PLAYER && p.team === team
     ).length;
 
@@ -184,7 +190,22 @@ export class GamesManager {
     return player;
   }
 
-  createNewGame(): IGameObject {
+  changeGameTerrainType(gameId: string, gameType:TerrainType){
+      console.log("gameId:"+gameId);
+    const game = this.getGameById(gameId);
+      console.log(game.terrainType);
+      game.terrainType = gameType;
+  }
+
+  changePlayerLocation(gameId: string, playerId, gameType:TerrainType) {
+      const game = this.getGameById(gameId);
+      const player = game.playersMap.get(playerId);
+      const terrainTeamTypeStr = game.terrainType + "_" + player.team;
+      const defaultPlayerPositions = TerrainLocation[terrainTeamTypeStr];
+      player.currentLocation = defaultPlayerPositions;
+  }
+
+  createNewGame(terrainType: string): IGameObject {
     const gameId = v4();
     const gameCode = this.generateGameCode();
 
@@ -198,13 +219,13 @@ export class GamesManager {
       viewers: [],
       winingTeam: Team.NONE,
       controlledPlayersMap: new Map<string, IPlayer>(),
+      terrainType: TerrainType[terrainType]
     };
     startClientsUpdater(gameObject);
     this.activeGames.set(gameId, gameObject);
 
     bgCharactersManager.initBgCharacters();
     bgCharactersManager.startCharactersMovement();
-
     return gameObject;
   }
 

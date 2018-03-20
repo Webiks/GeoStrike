@@ -67,7 +67,7 @@ export class MainComponent {
     this.loading = true;
     const isViewer = this.characterName === VIEWER.name;
     this.gameService
-      .createNewGame(this.characterName, this.username, this.team, isViewer)
+      .createNewGame(this.characterName, this.username, this.team, isViewer, this.terrainType)
       .subscribe((result: ApolloQueryResult<CreateNewGame.Mutation>) => {
         this.loading = false;
         if (!result.loading && result.data) {
@@ -131,5 +131,11 @@ export class MainComponent {
   toggleTerrainType() {
     this.terrainType = (this.terrainType === 'URBAN') ? 'MOUNTAIN' : 'URBAN';
     this.gameService.modifyTerrainEnviorment(this.terrainType);
+    // this.gameService.changeTerrainType(this.characterName, this.gameCode, this.terrainType).subscribe(x=> console.log(x));
+  }
+  toggleSwiss(){
+    this.terrainType = 'SWISS';
+    this.gameService.modifyTerrainEnviorment(this.terrainType);
+
   }
 }

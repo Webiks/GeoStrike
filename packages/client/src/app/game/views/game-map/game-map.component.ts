@@ -25,7 +25,9 @@ export class GameMapComponent implements OnInit, OnDestroy {
   public static readonly DEFAULT_START_LOCATION =
     Cesium.Cartesian3.fromDegrees(-73.985187, 40.758857, 1000);
   public static readonly DEFAULT_MOUNTAINS_START_LOCATION =
-    Cesium.Cartesian3.fromDegrees(-103.97688256411968, 27.23130135442793, 1000);
+    new Cesium.Cartesian3(-1370653.8374654655, -5507085.922189086, 2901243.9558086237);
+  public static readonly DEFAULT_SWISS_START_LOCATION =
+    Cesium.Cartesian3.fromDegrees(8.14557, 46.81645,  1000);
   public static readonly DEFAULT_PITCH = -5;
   @Input() me;
   @Input() playersPositions: Observable<AcNotification>;
@@ -40,7 +42,12 @@ export class GameMapComponent implements OnInit, OnDestroy {
   private helperEntityPoint;
   private lastViewState: ViewState;
   mapLayerProviderOptions: MapLayerProviderOptions;
-
+  tillingscheme = new Cesium.GeographicTilingScheme({
+    numberOfLevelZeroTilesX: 2,
+    numberOfLevelZeroTilesY: 1
+  });
+  rectangle = Cesium.Rectangle.fromDegrees(
+    5.013926957923385, 45.35600133779394, 11.477436312994008, 48.27502358353741);
   constructor(private gameService: GameService,
               private character: CharacterService,
               private viewerConf: ViewerConfiguration,
@@ -68,7 +75,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
       if (!this.createPathMode) {
         this.viewerOptions.setFpvCameraOptions(viewer);
       }
-      this.mapLayerProviderOptions = MapLayerProviderOptions.BingMaps;
+      this.mapLayerProviderOptions = MapLayerProviderOptions.UrlTemplateImagery;
 
     };
 
@@ -159,17 +166,22 @@ export class GameMapComponent implements OnInit, OnDestroy {
     // this.viewerOptions.setFreeCameraOptions(this.viewer);
     // this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_START_LOCATION});
     // this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_MOUNTAINS_START_LOCATION});\
-    this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_MOUNTAINS_START_LOCATION});
-    // this.gameService.currentTerrainEnviorment.subscribe(terrainType => {
-    //   if(terrainType == "URBAN")
-    //   {
-    //     this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_START_LOCATION});
-    //   }
-    //   else
-    //   {
-    //     this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_MOUNTAINS_START_LOCATION});
-    //   }
-    // })
+    // this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_MOUNTAINS_START_LOCATION});
+    this.viewerOptions.setFreeCameraOptions(this.viewer);
+    debugger;
+    this.gameService.currentTerrainEnviorment.subscribe(terrainType => {
+      if(terrainType == "URBAN")
+      {
+        this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_START_LOCATION});
+      }
+      else if(terrainType == "MOUNTAIN")
+      {
+        this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_MOUNTAINS_START_LOCATION});
+      }
+      else {
+        this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_SWISS_START_LOCATION});
+      }
+    })
   }
 
   onMousemove(event: MouseEvent) {

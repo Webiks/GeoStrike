@@ -14,7 +14,7 @@ import {
   NotifyBeenShot,
   Ready,
   Team,
-  UpdatePosition
+  UpdatePosition, ChangeTerrainType
 } from '../../types';
 import { joinGameMutation } from '../../graphql/join-game.mutation';
 import { SubscriptionClient } from 'subscriptions-transport-ws-temp';
@@ -32,6 +32,7 @@ import { gameNotificationsSubscription } from '../../graphql/game-notifications.
 import { notifyShotMutation } from '../../graphql/notify-shot.mutation';
 import { notifyBeenShotMutation } from "../../graphql/notify-been-shot.mutation";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import { changeTerrainTypeMutation } from "../../graphql/change-terrain-type.mutation";
 
 @Injectable()
 export class GameService {
@@ -81,14 +82,27 @@ export class GameService {
     return queryRes as Observable<GameNotifications.Subscription>;
   }
 
-  createNewGame(character: string, username: string, team: Team, isViewer: boolean): Observable<ApolloExecutionResult<CreateNewGame.Mutation>> {
+  createNewGame(character: string, username: string, team: Team, isViewer: boolean, terrainType: string): Observable<ApolloExecutionResult<CreateNewGame.Mutation>> {
     return this.apollo.mutate<CreateNewGame.Mutation>({
       mutation: createNewGameMutation,
       variables: {
         character,
         username,
         team,
-        isViewer
+        isViewer,
+        terrainType
+      },
+    });
+  }
+
+  changeTerrainType(character: string, gameCode: string, terrainType: string): Observable<ApolloExecutionResult<ChangeTerrainType.Mutation>>{
+    console.log("gameCode:"+gameCode)
+    return this.apollo.mutate<ChangeTerrainType.Mutation>({
+      mutation: changeTerrainTypeMutation,
+      variables: {
+        character,
+        gameCode,
+        terrainType
       },
     });
   }
