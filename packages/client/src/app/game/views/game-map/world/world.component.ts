@@ -93,6 +93,13 @@ export class WorldComponent implements OnInit {
     // );
     this.cesiumService.getViewer().terrainProvider = new Cesium.createWorldTerrain(environment.terrain);
 
+    let scene = this.cesiumService.getScene();
+    scene.primitives.add(new Cesium.Cesium3DTileset({
+      url: 'https://vectortiles.geo.admin.ch/ch.swisstopo.swisstlm3d.3d/20161217/tileset.json'
+    }));
+    scene.primitives.add(new Cesium.Cesium3DTileset({
+      url: 'https://vectortiles.geo.admin.ch/ch.swisstopo.swisstlm3d.3d/20170425/tileset.json'
+    }));
   }
 
   getTilesMatrix() {

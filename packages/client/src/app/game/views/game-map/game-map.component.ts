@@ -42,12 +42,14 @@ export class GameMapComponent implements OnInit, OnDestroy {
   private helperEntityPoint;
   private lastViewState: ViewState;
   mapLayerProviderOptions: MapLayerProviderOptions;
+
   tillingscheme = new Cesium.GeographicTilingScheme({
     numberOfLevelZeroTilesX: 2,
     numberOfLevelZeroTilesY: 1
   });
   rectangle = Cesium.Rectangle.fromDegrees(
     5.013926957923385, 45.35600133779394, 11.477436312994008, 48.27502358353741);
+
   constructor(private gameService: GameService,
               private character: CharacterService,
               private viewerConf: ViewerConfiguration,
