@@ -47,8 +47,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
               private ngZone: NgZone,
               public controlledService: TakeControlService,
               private snackBar: MatSnackBar) {
-    Cesium.BingMapsApi.defaultKey = 'AkXEfZI-hKtZ995XgjM0XHxTiXpyS4i2Vb4w08Pjozwn-NAfVIvvHBYaP6Pgi717';
-
+    Cesium.BingMapsApi.defaultKey = 'AmzowhvWedaZu8mSrSHOwx2A52aRoYbkKvs4TeVUu_AzSXMnhvLCLFsqLFBqBS0V';
   }
 
   ngOnInit() {

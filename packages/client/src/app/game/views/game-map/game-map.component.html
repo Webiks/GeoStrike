@@ -1,14 +1,5 @@
 <ac-map>
-  <ac-map-layer-provider
-    [provider]="mapLayerProviderOptions"
-    [options]="{
-                                   url: '//wmts20.geo.admin.ch/1.0.0/ch.swisstopo.swissimage-product/default/current/4326/{z}/{x}/{y}.jpeg',
-                                    minimumLevel: 8,
-        maximumLevel: 17,
-        tilingScheme: tillingscheme,
-        rectangle: rectangle
-                            }">
-  </ac-map-layer-provider>
+  <map-provider></map-provider>
   <world></world>
   <buildings></buildings>
   <me></me>

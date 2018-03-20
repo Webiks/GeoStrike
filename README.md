@@ -4,6 +4,9 @@
  
  Play it live at [geo-strike.com](http://geo-strike.com/)
  
+ ### Technologies
+ Node, GraphQL, Angular, CesiumJS, [Angular Cesium](https://github.com/TGFTech/angular-cesium) 
+ 
  ## Getting started
  * Go to project directory
  * install
