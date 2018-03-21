@@ -42,6 +42,7 @@ export class FlightModeComponent implements OnInit, OnDestroy {
 
   @HostListener('document:keyup', ['$event']) onKeyupHandler(event: KeyboardEvent) {
     if (event.key === 'w') {
+      // this.slideToStop();
       this.movingType = 'none';
     }
     if (event.shiftKey && event.keyCode == 87) {
@@ -106,7 +107,6 @@ export class FlightModeComponent implements OnInit, OnDestroy {
     this.character.state$.subscribe(state => {
       if (state && state.flight) {
         this.flightHeightLevel = state.flight.heightLevel;
-        console.log(this.flightHeightLevel);
       }
     })
   }

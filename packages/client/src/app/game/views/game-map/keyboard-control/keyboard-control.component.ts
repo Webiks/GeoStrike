@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit } from '@angular/core';
+import { Component, HostListener, NgZone, OnInit } from '@angular/core';
 import { CesiumService, GeoUtilsService, KeyboardControlParams, KeyboardControlService, } from 'angular-cesium';
 import { CharacterService, MeModelState, ViewState, } from '../../../services/character.service';
 import { environment } from '../../../../../environments/environment';
@@ -49,6 +49,32 @@ export class KeyboardControlComponent implements OnInit {
   private viewer;
   private lookFactor = 0;
   private lastLook;
+  private increase = true;
+  private intervalId;
+
+  @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
+    if (event.keyCode == 70 && !this.character.isFlying) {
+     this.setFlightVibrations();
+    }
+    if (event.keyCode == 70 && this.character.isFlying) {
+      clearInterval(this.intervalId);
+    }
+    if (event.shiftKey && event.keyCode == 87) {
+      clearInterval(this.intervalId);
+    }
+    if (event.key === 'w') {
+      clearInterval(this.intervalId);
+    }
+  }
+
+  @HostListener('document:keyup', ['$event']) onKeyupHandler(event: KeyboardEvent) {
+    if (event.key === 'w'  && this.character.isFlying) {
+      this.setFlightVibrations();
+    }
+    if (event.shiftKey && event.keyCode == 87  && this.character.isFlying) {
+      this.setFlightVibrations();
+    }
+  }
 
   constructor(private character: CharacterService,
               private keyboardControlService: KeyboardControlService,
@@ -123,7 +149,7 @@ export class KeyboardControlComponent implements OnInit {
         }
         if (this.character.isFlying) {
           flightData = this.character.meFromServer.flight;
-          speed = environment.movement.runningSpeed;
+          speed = environment.movement.flyingSpeed;
           nextLocation = this.utils.pointByLocationDistanceAndAzimuthAndHeight3d(
             position,
             speed,
@@ -342,6 +368,17 @@ export class KeyboardControlComponent implements OnInit {
 
     this.keyboardKeysService.registerKeyBoardEventDescription('LookAroundMouse', 'Look around');
     this.keyboardKeysService.registerKeyBoardEventDescription('arrows', 'Look around');
+  }
+
+  setFlightVibrations(){
+    this.intervalId =  setInterval(()=>{
+      this.increase = !this.increase;
+      let location = this.character.location;
+      if(this.increase)
+        this.character.location = this.utils.toHeightOffset(location,0.05, 0)
+      else
+        this.character.location = this.utils.toHeightOffset(location,-0.05, 0)
+    },500)
   }
 
 }

@@ -6,15 +6,17 @@ export const toggleFlightMode = (rootValue, { playerId, isFlying }, { games, gam
     return null;
   }
 
-  const flyingPlayer = ((game.controlledPlayersMap.get(playerId) || player) as IPlayer);
-  let intervalId;
+  let flyingPlayer = ((game.controlledPlayersMap.get(playerId) || player) as IPlayer);
+  // flyingPlayer.flight.flightId =
+  console.log(isFlying);
+  console.log(flyingPlayer.flight.flightId);
   if(isFlying)
   {
-    this.intervalId =  setInterval(( ()=> flyingPlayer.flight.remainingTime-=1),1000);
+      flyingPlayer.flight.flightId =  setInterval(( ()=> flyingPlayer.flight.remainingTime-=1),1000);
   }
   else
   {
-    clearInterval(this.intervalId);
+    clearInterval(flyingPlayer.flight.flightId);
   }
 }
 

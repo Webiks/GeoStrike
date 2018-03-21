@@ -159,13 +159,15 @@ export class GamesManager {
         const realPlayerTeamCount = Array.from(game.playersMap.values()).filter(
             p => p.type === CharacterType.PLAYER && p.team === team
         ).length;
-
+        let timer:Timer = setTimeout(()=>console.log('yay'),0);
         const initFlightData: FlightData = {
             speed: 'NONE',
             minHeight: 50,
             maxHeight: 500,
             remainingTime: 300, //300sec =  5min minutes in seconds
-            heightLevel: 'NONE'
+            heightLevel: 'NONE',
+            flightId: timer
+
         }
 
         const finalUsername = this.validateUsername(username, game);

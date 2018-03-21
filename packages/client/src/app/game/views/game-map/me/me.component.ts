@@ -251,7 +251,6 @@ export class MeComponent implements OnInit, OnDestroy {
 
   getPosition(position) {
     const cart = Cesium.Cartographic.fromCartesian(position);
-    // console.log("height:" + cart.height);
     if (this.character.state === MeModelState.DEAD) {
       return position;
     } else if (this.character.isCrawling) {

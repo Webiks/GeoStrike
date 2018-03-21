@@ -1,6 +1,7 @@
 /* tslint:disable */
 
 import { PlayerLifeState } from "../../client/src/app/types";
+import Timer = NodeJS.Timer;
 
 export interface User {
   id: string; 
@@ -150,6 +151,7 @@ export interface FlightData {
   minHeight: number;
   maxHeight: number;
   heightLevel: FlightHeight;
+  flightId: Timer;
 }
 
 export type FlightSpeed = "NONE" | "MIN" | "MAX";
