@@ -191,9 +191,7 @@ export class GamesManager {
   }
 
   changeGameTerrainType(gameId: string, gameType:TerrainType){
-      console.log("gameId:"+gameId);
     const game = this.getGameById(gameId);
-      console.log(game.terrainType);
       game.terrainType = gameType;
   }
 

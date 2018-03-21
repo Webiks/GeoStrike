@@ -35,6 +35,10 @@ export class CesiumViewerOptionsService {
     viewer.scene.fog.enabled = GameConfig.fog;
   }
 
+  toggleDepthTestAgainstTerrain(viewer){
+    viewer.scene.globe.depthTestAgainstTerrain = viewer.scene.globe.depthTestAgainstTerrain === true? false:true;
+  }
+
   setFpvCameraOptions(viewer) {
     const screenSpaceCameraController = viewer.scene.screenSpaceCameraController;
     screenSpaceCameraController.enableTilt = false;

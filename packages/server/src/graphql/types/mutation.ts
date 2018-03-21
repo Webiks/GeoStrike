@@ -2,7 +2,6 @@ import gql from 'graphql-tag';
 
 export const schema = gql`
   type Mutation {
-    changeTerrainType(character: String, gameCode: String,terrainType: String): CreateOrJoinResult
     createNewGame(character: String, username: String!, team: Team!, isViewer: Boolean!, terrainType: String!): CreateOrJoinResult
     joinGame(gameCode: String!, character: String!, username: String!, team: Team!): CreateOrJoinResult
     joinAsViewer(gameCode: String, username: String): CreateOrJoinResult

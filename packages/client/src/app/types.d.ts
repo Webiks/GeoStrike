@@ -179,26 +179,6 @@ export namespace CreateNewGame {
   export type Game = GameFields.Fragment
 }
 
-export namespace ChangeTerrainType {
-  export type Variables = {
-    character: string;
-    gameCode: string;
-    terrainType: string;
-  }
-
-  export type Mutation = {
-    changeTerrainType?: ChangeTerrainType;
-  }
-
-  export type ChangeTerrainType = {
-    game: Game;
-    playerToken: string;
-  }
-
-  export type Game = GameFields.Fragment
-}
-
-
 export namespace CurrentGame {
   export type Variables = {
   }

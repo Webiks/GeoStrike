@@ -1,6 +1,9 @@
 import { ChangeDetectorRef, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { AcMapComponent, AcNotification, MapLayerProviderOptions, ViewerConfiguration } from 'angular-cesium';
+import {
+  AcMapComponent, AcNotification, CesiumService, MapLayerProviderOptions,
+  ViewerConfiguration
+} from 'angular-cesium';
 import { GameFields, PlayerFields } from '../../../types';
 import { CharacterService, MeModelState, ViewState } from '../../services/character.service';
 import { UtilsService } from '../../services/utils.service';
@@ -18,6 +21,7 @@ import { PitchCalculatorService } from './services/pitch-calculator.service';
     ViewerConfiguration,
     CesiumViewerOptionsService,
     PitchCalculatorService,
+    CesiumService
   ],
   styleUrls: ['./game-map.component.scss'],
 })
@@ -27,7 +31,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
   public static readonly DEFAULT_MOUNTAINS_START_LOCATION =
     new Cesium.Cartesian3(-1370653.8374654655, -5507085.922189086, 2901243.9558086237);
   public static readonly DEFAULT_SWISS_START_LOCATION =
-    Cesium.Cartesian3.fromDegrees(8.14557, 46.81645,  1000);
+    Cesium.Cartesian3.fromDegrees(8.14557, 46.81645,  5);
   public static readonly DEFAULT_PITCH = -5;
   @Input() me;
   @Input() playersPositions: Observable<AcNotification>;
@@ -43,12 +47,8 @@ export class GameMapComponent implements OnInit, OnDestroy {
   private lastViewState: ViewState;
   mapLayerProviderOptions: MapLayerProviderOptions;
 
-  tillingscheme = new Cesium.GeographicTilingScheme({
-    numberOfLevelZeroTilesX: 2,
-    numberOfLevelZeroTilesY: 1
-  });
-  rectangle = Cesium.Rectangle.fromDegrees(
-    5.013926957923385, 45.35600133779394, 11.477436312994008, 48.27502358353741);
+
+
 
   constructor(private gameService: GameService,
               private character: CharacterService,
@@ -60,7 +60,8 @@ export class GameMapComponent implements OnInit, OnDestroy {
               private viewerOptions: CesiumViewerOptionsService,
               private collisionDetector: CollisionDetectorService,
               private pitchCalculatorService: PitchCalculatorService,
-              private takeControlService: TakeControlService) {
+              private takeControlService: TakeControlService,
+              private cesiumService: CesiumService) {
     viewerConf.viewerOptions = viewerOptions.getViewerOption();
 
     viewerConf.viewerModifier = (viewer) => {
@@ -77,7 +78,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
       if (!this.createPathMode) {
         this.viewerOptions.setFpvCameraOptions(viewer);
       }
-      this.mapLayerProviderOptions = MapLayerProviderOptions.BingMaps;
+      // this.mapLayerProviderOptions = MapLayerProviderOptions.BingMaps;
     };
 
     this.onMousemove = this.onMousemove.bind(this);
@@ -105,7 +106,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
       if (this.lastViewState !== ViewState.OVERVIEW && newViewState === ViewState.OVERVIEW) {
         this.changeToOverview();
       } else if (this.lastViewState === ViewState.OVERVIEW && newViewState !== ViewState.OVERVIEW) {
-
+        // this.viewerOptions.toggleDepthTestAgainstTerrain(this.viewer);
         const controlledPlayer = this.takeControlService.controlledPlayer || this.character.meFromServer;
         const posWithHeight = Cesium.Cartographic.fromCartesian(controlledPlayer.currentLocation.location);
         posWithHeight.height = 5;
@@ -169,7 +170,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
     // this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_MOUNTAINS_START_LOCATION});\
     // this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_MOUNTAINS_START_LOCATION});
     this.viewerOptions.setFreeCameraOptions(this.viewer);
-    debugger;
+    // this.cesiumService.getViewer().terrainProvider = new Cesium.createWorldTerrain(environment.terrain);
     this.gameService.currentTerrainEnviorment.subscribe(terrainType => {
       if(terrainType == "URBAN")
       {
@@ -177,10 +178,15 @@ export class GameMapComponent implements OnInit, OnDestroy {
       }
       else if(terrainType == "MOUNTAIN")
       {
-        this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_MOUNTAINS_START_LOCATION});
+        this.viewerOptions.toggleDepthTestAgainstTerrain(this.viewer);
+        const alpinsOverviewPosition = this.utils.toHeightOffset(new Cesium.Cartesian3(-1370653.8374654655, -5507085.922189086, 2901243.9558086237),3000)
+        // new Cesium.Cartesian3(-1370653.8374654655, -5507085.922189086, 2901243.9558086237);
+        this.viewer.camera.flyTo({destination: alpinsOverviewPosition});
       }
       else {
-        this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_SWISS_START_LOCATION});
+        // this.viewerOptions.toggleDepthTestAgainstTerrain(this.viewer);
+        const swissOverviewPosition = this.utils.toHeightOffset(new Cesium.Cartesian3(4309721.894436319, 722340.3126254319, 4630405.385935379),3000)
+        this.viewer.camera.flyTo({destination: swissOverviewPosition});
       }
     })
   }

@@ -8,11 +8,9 @@ import { takeControlOverPlayer } from '../mutation/take-control-over-player';
 import { removeControlOverPlayer } from '../mutation/remove-control-over-player';
 import { notifyShot } from '../mutation/notify-shot';
 import { notifyBeenShot } from "../mutation/notify-been-shot";
-import { changeTerrainType } from "../mutation/change-terrain-type";
 
 const resolvers = {
   Mutation: {
-    changeTerrainType,
     createNewGame,
     joinGame,
     ready,

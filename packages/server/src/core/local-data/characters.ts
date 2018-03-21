@@ -70,8 +70,8 @@ export const PLAYER_CHARACTERS: CharacterData[] = [
   },
     {
         name: 'boar',
-        model: '/assets/models/boar.gltf',
-        scale: 1,
+        model: '/assets/models/grandpa.gltf',
+        scale: 0.035,
         description: null,
         team: null,
         imageUrl: null,

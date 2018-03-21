@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { CharacterService, ViewState, } from '../../../services/character.service';
 import { GameConfig } from '../../../services/game-config';
 import { AcEntity, AcNotification, AcTileset3dComponent, ActionType, CesiumService, } from 'angular-cesium';
@@ -17,7 +17,7 @@ export class BackgroundEntity extends AcEntity {
 })
 export class WorldComponent implements OnInit {
   @ViewChild('tiles') tiles: AcTileset3dComponent;
-  public tilesUrl = environment.tiles.url;
+  public tilesUrl;
   public loadTiles = environment.load3dTiles;
   public treesAndBoxes$: Subject<AcNotification> = new Subject();
   public tilesStyle = {
@@ -42,7 +42,7 @@ export class WorldComponent implements OnInit {
               private cesiumService: CesiumService,
               public character: CharacterService,
               private cd: ChangeDetectorRef,
-              private gameService:GameService) {
+              private gameService: GameService) {
     this.drawBackgroundItems();
   }
 
@@ -68,20 +68,14 @@ export class WorldComponent implements OnInit {
 
   ngOnInit() {
     this.setTerrainType();
-    // if (environment.loadTerrain) {
-    //   this.terrainView = true;
-    //   this.loadTerrain();
-    // }
-    // else {
-    //   this.terrainView = false;
-    // }
-
-
     this.character.viewState$.subscribe(viewState => {
       this.hideWorld = viewState === ViewState.OVERVIEW;
       if (this.tiles && this.tiles.tilesetInstance) {
         this.tiles.tilesetInstance.show = !this.hideWorld;
       }
+      // if(viewState === ViewState.OVERVIEW){
+      //   this.cesiumService.getViewer().terrainProvider = ;
+      // }
       this.cd.detectChanges();
       this.drawBackgroundItems();
     });
@@ -92,24 +86,27 @@ export class WorldComponent implements OnInit {
     //   environment.terrain
     // );
     this.cesiumService.getViewer().terrainProvider = new Cesium.createWorldTerrain(environment.terrain);
-
-    let scene = this.cesiumService.getScene();
-    scene.primitives.add(new Cesium.Cesium3DTileset({
-      url: 'https://vectortiles.geo.admin.ch/ch.swisstopo.swisstlm3d.3d/20161217/tileset.json'
-    }));
-    scene.primitives.add(new Cesium.Cesium3DTileset({
-      url: 'https://vectortiles.geo.admin.ch/ch.swisstopo.swisstlm3d.3d/20170425/tileset.json'
-    }));
+    if (this.terrainView == 'SWISS') {
+      let scene = this.cesiumService.getScene();
+      scene.primitives.add(new Cesium.Cesium3DTileset({
+        url: 'https://vectortiles.geo.admin.ch/ch.swisstopo.swisstlm3d.3d/20161217/tileset.json'
+      }));
+      // scene.primitives.add(new Cesium.Cesium3DTileset({
+      //   url: 'https://vectortiles.geo.admin.ch/ch.swisstopo.swisstlm3d.3d/20170425/tileset.json'
+      // }));
+    }
   }
 
   getTilesMatrix() {
     return Cesium.Matrix4.fromTranslation(new Cesium.Cartesian3(0, 0, 0));
   }
 
-  setTerrainType(){
-    this.gameService.currentTerrainEnviorment.subscribe( isTerrain => {
-      this.terrainView = isTerrain;
-      if(isTerrain !== 'URBAN')
+  setTerrainType() {
+    this.gameService.currentTerrainEnviorment.subscribe(terrainType => {
+      this.terrainView = terrainType;
+      let tilesStr = terrainType.toLowerCase()+"_url";
+      this.tilesUrl = environment.tiles[tilesStr];
+      if (terrainType !== 'URBAN')
         this.loadTerrain();
     })
   }

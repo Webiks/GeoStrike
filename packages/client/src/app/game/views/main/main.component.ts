@@ -36,9 +36,9 @@ export class MainComponent {
   constructor(private snackBar: MatSnackBar,
               private router: Router,
               private gameService: GameService) {
-    this.gameService.currentTerrainEnviorment.subscribe(isTerrain => {
+    this.gameService.currentTerrainEnviorment.subscribe(terrainType => {
       // this.terrainType = isTerrain ? 'URBAN' : 'MOUNTAIN';
-      this.terrainType = isTerrain;
+      this.terrainType = terrainType;
     })
   }
 
@@ -131,7 +131,6 @@ export class MainComponent {
   toggleTerrainType() {
     this.terrainType = (this.terrainType === 'URBAN') ? 'MOUNTAIN' : 'URBAN';
     this.gameService.modifyTerrainEnviorment(this.terrainType);
-    // this.gameService.changeTerrainType(this.characterName, this.gameCode, this.terrainType).subscribe(x=> console.log(x));
   }
   toggleSwiss(){
     this.terrainType = 'SWISS';
