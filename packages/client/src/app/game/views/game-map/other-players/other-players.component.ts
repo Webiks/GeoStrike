@@ -64,7 +64,7 @@ export class OtherPlayersComponent {
       return this.utils.getOrientation(location, heading, 0, roll);
     } else {
       const playerHeading = player.type === 'PLAYER' ? heading : heading + 90;
-      const roll = player.isCrawling ? 90 : 0;
+      const roll = player.isCrawling ? 90 :((player.isFlying) ? (45) : 0);
       return this.utils.getOrientation(location, playerHeading, 0, roll);
     }
   }

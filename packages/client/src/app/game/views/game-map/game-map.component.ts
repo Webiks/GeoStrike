@@ -203,7 +203,6 @@ export class GameMapComponent implements OnInit, OnDestroy {
     else if (isFlying) {
       const height = Cesium.Cartographic.fromCartesian(this.character.location).height;
       if (this.character.flightData.remainingTime === 0 || this.character.meFromServer.flight.remainingTime === 0 || height <= 0) {
-        debugger;
         this.flightCrashSettings();
       }
       else {

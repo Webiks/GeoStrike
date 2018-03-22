@@ -188,7 +188,7 @@ export class KeyboardControlComponent implements OnInit {
   }
 
   changeViewMove() {
-    if (this.character.viewState === ViewState.OVERVIEW || this.character.isFlying) {
+    if (this.character.viewState === ViewState.OVERVIEW) {
       return;
     }
     this.character.state = MeModelState.WALKING;
@@ -371,15 +371,15 @@ export class KeyboardControlComponent implements OnInit {
   }
 
   setFlightVibrations(){
-    this.intervalId =  setInterval(()=>{
+    let vibrationHeightMeters = this.character.viewState === ViewState.SEMI_FPV ? 0.05 : 0.2;
+      this.intervalId =  setInterval(()=>{
       this.increase = !this.increase;
       let location = this.character.location;
       if(this.increase)
-        this.character.location = this.utils.toHeightOffset(location,0.05, 0)
+        this.character.location = this.utils.toHeightOffset(location,vibrationHeightMeters, 0)
       else
-        this.character.location = this.utils.toHeightOffset(location,-0.05, 0)
+        this.character.location = this.utils.toHeightOffset(location,-vibrationHeightMeters, 0)
     },500)
   }
-
 }
 
