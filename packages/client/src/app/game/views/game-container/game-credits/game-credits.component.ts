@@ -12,7 +12,7 @@ import { Observable } from "rxjs/Observable";
 })
 export class GameCreditsComponent implements OnInit, AfterViewInit {
   public creditsJson: Observable<Credit[]>;
-  public creditsComponentsWidth: number = 0;
+  private creditsComponentsWidth: number = 0;
   public isDialogOpen: boolean = false;
   @ViewChild("creditsContainer") documentRef: ElementRef;
 

@@ -53,6 +53,7 @@ import { GameCreditsComponent } from './views/game-container/game-credits/game-c
 import { CreditsDialogComponent } from './views/credits-dialog/credits-dialog.component';
 import { BloodOnScreen } from './views/game-container/blood-on-screen/blood-on-screen';
 import { BeenShotService } from "./views/game-container/blood-on-screen/been-shot.service";
+import { MapProviderComponent } from './views/game-map/map-provider/map-provider.component';
 
 @NgModule({
   declarations: [
@@ -84,7 +85,8 @@ import { BeenShotService } from "./views/game-container/blood-on-screen/been-sho
     GunIndicatorComponent,
     GameCreditsComponent,
     CreditsDialogComponent,
-    BloodOnScreen
+    BloodOnScreen,
+    MapProviderComponent
   ],
   imports: [
     BrowserModule,
