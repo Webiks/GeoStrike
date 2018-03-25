@@ -78,7 +78,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
       if (!this.createPathMode) {
         this.viewerOptions.setFpvCameraOptions(viewer);
       }
-      // this.mapLayerProviderOptions = MapLayerProviderOptions.BingMaps;
+      this.mapLayerProviderOptions = MapLayerProviderOptions.BingMaps;
     };
 
     this.onMousemove = this.onMousemove.bind(this);
@@ -106,7 +106,8 @@ export class GameMapComponent implements OnInit, OnDestroy {
       if (this.lastViewState !== ViewState.OVERVIEW && newViewState === ViewState.OVERVIEW) {
         this.changeToOverview();
       } else if (this.lastViewState === ViewState.OVERVIEW && newViewState !== ViewState.OVERVIEW) {
-        // this.viewerOptions.toggleDepthTestAgainstTerrain(this.viewer);
+        debugger;
+        this.viewerOptions.toggleDepthTestAgainstTerrain(this.viewer,true);
         const controlledPlayer = this.takeControlService.controlledPlayer || this.character.meFromServer;
         const posWithHeight = Cesium.Cartographic.fromCartesian(controlledPlayer.currentLocation.location);
         posWithHeight.height = 5;
@@ -178,13 +179,13 @@ export class GameMapComponent implements OnInit, OnDestroy {
       }
       else if(terrainType == "MOUNTAIN")
       {
-        this.viewerOptions.toggleDepthTestAgainstTerrain(this.viewer);
+        this.viewerOptions.toggleDepthTestAgainstTerrain(this.viewer, false);
         const alpinsOverviewPosition = this.utils.toHeightOffset(new Cesium.Cartesian3(-1370653.8374654655, -5507085.922189086, 2901243.9558086237),3000)
         // new Cesium.Cartesian3(-1370653.8374654655, -5507085.922189086, 2901243.9558086237);
         this.viewer.camera.flyTo({destination: alpinsOverviewPosition});
       }
       else {
-        // this.viewerOptions.toggleDepthTestAgainstTerrain(this.viewer);
+        // this.viewerOptions.toggleDepthTestAgainstTerrain(this.viewer, false);
         const swissOverviewPosition = this.utils.toHeightOffset(new Cesium.Cartesian3(4309721.894436319, 722340.3126254319, 4630405.385935379),3000)
         this.viewer.camera.flyTo({destination: swissOverviewPosition});
       }
