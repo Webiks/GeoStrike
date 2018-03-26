@@ -76,7 +76,7 @@ export const PLAYER_CHARACTERS: CharacterData[] = [
         team: null,
         imageUrl: null,
         portraitUrl: null,
-        iconUrl: null,
-        iconDeadUrl: null,
+        iconUrl: '/assets/icons/deer-mark.png',
+        iconDeadUrl: '/assets/icons/deer-dead-mark.png',
     },
 ];
