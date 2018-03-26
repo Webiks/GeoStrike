@@ -43,19 +43,21 @@ export class OtherPlayersComponent {
     const playerId = player.id;
     const fixedPosition = this.fixPosition(playerPosition, player);
     const positionProperty = this.playersPositionMap.get(playerId);
+    let result;
     if (!positionProperty) {
-      const result = InterpolationService.interpolate({
+      result = InterpolationService.interpolate({
         data: fixedPosition,
       }, InterpolationType.POSITION);
       this.playersPositionMap.set(playerId, result);
       return result;
     }
     else {
-      return InterpolationService.interpolate({
+      result =  InterpolationService.interpolate({
         data: fixedPosition,
         cesiumSampledProperty: positionProperty,
       });
     }
+    return result;
   }
 
   getOrientation(location, heading: number, player: PlayerFields.Fragment) {

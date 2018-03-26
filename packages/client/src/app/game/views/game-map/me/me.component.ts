@@ -38,6 +38,7 @@ export class MeComponent implements OnInit, OnDestroy {
   buildingNearby = false;
   canExitBuilding = false;
   flightAlertDisplayedOnce = false;
+  flightLandAlertDisplayedOnce = false;
   crashAlertDisplayedOnce = false;
   transparentColor = new Cesium.Color(0, 0, 0, 0.0001);
   normalColor = new Cesium.Color(1, 1, 1, 1);
@@ -191,15 +192,19 @@ export class MeComponent implements OnInit, OnDestroy {
             });
           });
         }
-          if(state.flight.heightLevel == 'A'){
-            this.ngZone.run(() => {
-              this.snackBar.dismiss();
-              this.snackBar.openFromComponent(SnackBarContentComponent, {
-                data: `Press F to land and exit flight mode`,
-                duration: 3000,
-              });
+        if (state.flight.heightLevel === 'A' && !this.flightLandAlertDisplayedOnce) {
+          this.flightLandAlertDisplayedOnce = true;
+          this.ngZone.run(() => {
+            this.snackBar.dismiss();
+            this.snackBar.openFromComponent(SnackBarContentComponent, {
+              data: `Press F to land and exit flight mode`,
+              duration: 3000,
             });
-          }
+          });
+        }
+        if (state.flight.heightLevel !== 'A') {
+          this.flightLandAlertDisplayedOnce = false;
+        }
         // else {
         //   this.ngZone.run(() => this.snackBar.dismiss());
         // }

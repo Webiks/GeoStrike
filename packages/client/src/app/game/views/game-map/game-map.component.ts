@@ -226,6 +226,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
     const heading = Cesium.Math.toRadians(-180 + this.character.heading);
     this.helperEntityPoint.position =
       Cesium.Cartesian3.fromRadians(playerHeadCart.longitude, playerHeadCart.latitude, playerHeadCart.height);
+
     this.viewer.zoomTo([this.character.entity, this.helperEntityPoint], new Cesium.HeadingPitchRange(heading, pitch, range));
     this.lastPlayerLocation = this.character.location;
     this.lastPlayerHead = playerHeadCart;
