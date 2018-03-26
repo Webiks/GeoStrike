@@ -12,5 +12,7 @@ export const schema = gql`
     notifyShot(byPlayerId: String!, shotPosition: LocationInput!): Boolean
     takeControlOverPlayer(playerId: String!): Player
     removeControlOverPlayer: Player
+    addMessage(message: String!): [String!]!
+
   }
 `;

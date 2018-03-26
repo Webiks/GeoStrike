@@ -74,7 +74,6 @@ export class GameService {
     const queryRes = this.apollo.subscribe({
       query: gameNotificationsSubscription,
     });
-
     return queryRes as Observable<GameNotifications.Subscription>;
   }
 

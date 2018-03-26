@@ -32,6 +32,7 @@
     "express-session": "^1.15.5",
     "graphql": "^0.10.1",
     "graphql-code-generator": "^0.8.10",
+    "graphql-redis-subscriptions": "^1.4.0",
     "graphql-subscriptions": "^0.5.4",
     "graphql-tag": "^2.4.2",
     "graphql-tools": "^2.2.1",

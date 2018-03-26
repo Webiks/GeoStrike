@@ -1,0 +1,19 @@
+<ac-layer acFor="let flight of flights$" [context]="this">
+  <ac-model-desc *ngIf="!(isOverview$ | async)" props="{
+          heightReference: utils.getAbsoluteToGroundHeightReference(),
+          scale: flight.scale,
+          uri: flight.model,
+          heading: flight.orientation,
+					position: movingModle(flight),
+  }">
+  </ac-model-desc>
+
+  <ac-billboard-primitive-desc *ngIf="isOverview$| async" props="{
+    position: flight.position,
+    heightReference: utils.getClampedToGroundHeightReference(),
+    image: flight.image,
+
+  }">
+  </ac-billboard-primitive-desc>
+
+</ac-layer>

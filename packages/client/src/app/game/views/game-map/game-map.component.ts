@@ -1,16 +1,15 @@
-import { ChangeDetectorRef, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { AcMapComponent, AcNotification, ViewerConfiguration } from 'angular-cesium';
-import { GameFields, PlayerFields } from '../../../types';
-import { CharacterService, MeModelState, ViewState } from '../../services/character.service';
-import { UtilsService } from '../../services/utils.service';
-import { GameService } from '../../services/game.service';
-import { environment } from '../../../../environments/environment';
-import { CesiumViewerOptionsService } from './viewer-options/cesium-viewer-options.service';
-import { CollisionDetectorService } from '../../services/collision-detector.service';
-import { TakeControlService } from '../../services/take-control.service';
-import { PitchCalculatorService } from './services/pitch-calculator.service';
-
+import {ChangeDetectorRef, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Observable} from 'rxjs/Observable';
+import {AcMapComponent, AcNotification, ViewerConfiguration, MapLayerProviderOptions} from 'angular-cesium';
+import {GameFields, PlayerFields} from '../../../types';
+import {CharacterService, MeModelState, ViewState} from '../../services/character.service';
+import {UtilsService} from '../../services/utils.service';
+import {GameService} from '../../services/game.service';
+import {environment} from '../../../../environments/environment';
+import {CesiumViewerOptionsService} from './viewer-options/cesium-viewer-options.service';
+import {CollisionDetectorService} from '../../services/collision-detector.service';
+import {TakeControlService} from '../../services/take-control.service';
+import {PitchCalculatorService} from './services/pitch-calculator.service';
 @Component({
   selector: 'game-map',
   templateUrl: './game-map.component.html',
@@ -23,11 +22,12 @@ import { PitchCalculatorService } from './services/pitch-calculator.service';
 })
 export class GameMapComponent implements OnInit, OnDestroy {
   public static readonly DEFAULT_START_LOCATION =
-    Cesium.Cartesian3.fromDegrees(-73.985187, 40.758857, 1000);
+    Cesium.Cartesian3.fromDegrees(-73.784482, 40.635052, 1000);
   public static readonly DEFAULT_PITCH = -5;
   @Input() me;
   @Input() playersPositions: Observable<AcNotification>;
   @Input() gameData: Observable<GameFields.Fragment>;
+  @Input() flights: Observable<AcNotification>;
   @ViewChild(AcMapComponent) private mapInstance: AcMapComponent;
 
   public createPathMode = environment.createPathMode;
@@ -37,6 +37,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
   private lastPlayerHead;
   private helperEntityPoint;
   private lastViewState: ViewState;
+  mapLayerProviderOptions: MapLayerProviderOptions;
 
   constructor(private gameService: GameService,
               private character: CharacterService,
@@ -65,6 +66,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
       if (!this.createPathMode) {
         this.viewerOptions.setFpvCameraOptions(viewer);
       }
+      this.mapLayerProviderOptions = MapLayerProviderOptions.BingMaps;
     };
 
     this.onMousemove = this.onMousemove.bind(this);
