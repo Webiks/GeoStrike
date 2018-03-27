@@ -164,7 +164,7 @@ export class GamesManager {
             speed: 'NONE',
             minHeight: 50,
             maxHeight: 500,
-            remainingTime: 300, //300sec =  5min minutes in seconds
+            remainingTime: 1300, //300sec =  5min minutes in seconds
             heightLevel: 'NONE',
             flightId: timer
 

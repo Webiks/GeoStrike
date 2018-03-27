@@ -130,7 +130,6 @@ export class GameService {
     clearInterval(this.serverPositionUpdateInterval);
   }
 
-
   updateServerOnPosition(skipValidation = true) {
     const state = this.createState();
     if (!state || !this.isDifferentFromLastState(state)) {
@@ -246,3 +245,4 @@ export class GameService {
     });
   }
 }
+

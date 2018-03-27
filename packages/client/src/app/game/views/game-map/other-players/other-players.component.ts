@@ -29,11 +29,7 @@ export class OtherPlayersComponent {
       return position;
     } else if (player.isCrawling) {
       return this.utils.toHeightOffset(position, 0.2);
-    }
-    else if(player.isFlying) {
-      return position;
-    }
-    else if (player.character.fixedHeight) {
+    } else if (player.character.fixedHeight) {
       return this.utils.toHeightOffset(position, player.character.fixedHeight);
     }
     return position;
@@ -43,21 +39,19 @@ export class OtherPlayersComponent {
     const playerId = player.id;
     const fixedPosition = this.fixPosition(playerPosition, player);
     const positionProperty = this.playersPositionMap.get(playerId);
-    let result;
     if (!positionProperty) {
-      result = InterpolationService.interpolate({
+      const result = InterpolationService.interpolate({
         data: fixedPosition,
       }, InterpolationType.POSITION);
       this.playersPositionMap.set(playerId, result);
       return result;
     }
     else {
-      result =  InterpolationService.interpolate({
+      return InterpolationService.interpolate({
         data: fixedPosition,
         cesiumSampledProperty: positionProperty,
       });
     }
-    return result;
   }
 
   getOrientation(location, heading: number, player: PlayerFields.Fragment) {
@@ -66,7 +60,7 @@ export class OtherPlayersComponent {
       return this.utils.getOrientation(location, heading, 0, roll);
     } else {
       const playerHeading = player.type === 'PLAYER' ? heading : heading + 90;
-      const roll = player.isCrawling ? 90 :((player.isFlying) ? (45) : 0);
+      const roll = player.isCrawling ? 90 : 0;
       return this.utils.getOrientation(location, playerHeading, 0, roll);
     }
   }

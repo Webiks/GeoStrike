@@ -4,7 +4,7 @@
           heightReference: utils.getRelativeToGroundHeightReference(),
           scale: characterInfo.scale,
 					uri: characterInfo.model,
-					position: getPosition(me.location),
+					position: interpolatePlayerPosition(me, me.location),
 					orientation: getOrientation(me.location, me.heading,me),
 					shadows: Cesium.ShadowMode.DISABLED,
 					color: getColor(),
@@ -17,3 +17,4 @@
 <img #muzzleFlash src="assets/muzzle-flash.png" class="gun-flare" alt="">
 <img #cross *ngIf="showCross" src="assets/focus.png" class="gun-cross" alt="">
 <blood-on-screen [isInShootingPosition]="isInShootingPosition"></blood-on-screen>
+<!--          position: interpolatePlayerPosition(me, utils.getPosition(me.location), position: getPosition(me.location),-->
