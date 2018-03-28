@@ -12,7 +12,7 @@ export const environment = {
     walkingSpeed: 0.25,
     crawlingSpeed: 0.1,
   },
-  createPathMode: true,
+  createPathMode: false,
   loadTerrain: false,
   load3dTiles: true,
   tiles: {

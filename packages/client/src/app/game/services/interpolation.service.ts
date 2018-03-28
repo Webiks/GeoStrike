@@ -15,7 +15,7 @@ export enum InterpolationType {
 @Injectable()
 export class InterpolationService {
   static interpolate(input: InterpolationInput, interpolationType = InterpolationType.GENERAL) {
-    const time = input.time ? Cesium.JulianDate.fromDate(input.time) : Cesium.JulianDate.now();
+    const time = input.time ? input.time : Cesium.JulianDate.now();
     // console.log(input);
     const cesiumSampledProperty = input.cesiumSampledProperty || new (interpolationType as any)();
     if (!input.cesiumSampledProperty) {

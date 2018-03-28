@@ -1,142 +1,142 @@
 /* tslint:disable */
 
 export interface User {
-  id: string; 
-  username?: string; 
+    id: string;
+    username?: string;
 }
 
 export interface Query {
-  currentGame?: Game; 
+    currentGame?: Game;
 }
 
 export interface Game {
-  id: string; 
-  players: Player[]; 
-  gameCode: string; 
-  state: GameState; 
-  me?: User; 
-  winingTeam?: Team; 
+    id: string;
+    players: Player[];
+    gameCode: string;
+    state: GameState;
+    me?: User;
+    winingTeam?: Team;
 }
 
 export interface Player extends User {
-  id: string; 
-  username?: string; 
-  character: CharacterData; 
-  state: PlayerState;
-  lifeState: PlayerLifeState;
-  isCrawling: boolean; 
-  isShooting: boolean; 
-  isMe: boolean; 
-  currentLocation: PlayerLocation; 
-  team: Team; 
-  syncState: PlayerSyncState; 
-  type: CharacterType; 
-  enteringBuildingPosition?: PlayerLocation; 
+    id: string;
+    username?: string;
+    character: CharacterData;
+    state: PlayerState;
+    lifeState: PlayerLifeState;
+    isCrawling: boolean;
+    isShooting: boolean;
+    isMe: boolean;
+    currentLocation: PlayerLocation;
+    team: Team;
+    syncState: PlayerSyncState;
+    type: CharacterType;
+    enteringBuildingPosition?: PlayerLocation;
 }
 
 export interface CharacterData {
-  name: string; 
-  model?: string; 
-  scale?: number; 
-  team?: Team; 
-  imageUrl?: string; 
-  description?: string; 
-  portraitUrl?: string; 
-  iconUrl?: string; 
-  iconDeadUrl?: string; 
-  fixedHeight?: number; 
+    name: string;
+    model?: string;
+    scale?: number;
+    team?: Team;
+    imageUrl?: string;
+    description?: string;
+    portraitUrl?: string;
+    iconUrl?: string;
+    iconDeadUrl?: string;
+    fixedHeight?: number;
 }
 
 export interface PlayerLocation {
-  location: Location; 
-  heading: number; 
+    location: Location;
+    heading: number;
 }
 
 export interface Location {
-  x: number; 
-  y: number; 
-  z: number; 
+    x: number;
+    y: number;
+    z: number;
 }
 
 export interface Mutation {
-  createNewGame?: CreateOrJoinResult; 
-  joinGame?: CreateOrJoinResult; 
-  joinAsViewer?: CreateOrJoinResult; 
-  updatePosition?: Player; 
-  ready?: Game; 
-  notifyKill?: Player; 
-  notifyShot?: boolean; 
-  takeControlOverPlayer?: Player; 
-  removeControlOverPlayer?: Player; 
+    createNewGame?: CreateOrJoinResult;
+    joinGame?: CreateOrJoinResult;
+    joinAsViewer?: CreateOrJoinResult;
+    updatePosition?: Player;
+    ready?: Game;
+    notifyKill?: Player;
+    notifyShot?: boolean;
+    takeControlOverPlayer?: Player;
+    removeControlOverPlayer?: Player;
 }
 
 export interface CreateOrJoinResult {
-  game: Game; 
-  player: User; 
-  playerToken: string; 
+    game: Game;
+    player: User;
+    playerToken: string;
 }
 
 export interface Subscription {
-  gameData?: Game; 
-  gameNotifications?: Notification; 
-  gunShot?: ShotData; 
+    gameData?: Game;
+    gameNotifications?: Notification;
+    gunShot?: ShotData;
 }
 
 export interface Notification {
-  gameId?: string; 
-  message?: string; 
+    gameId?: string;
+    message?: string;
 }
 
 export interface ShotData {
-  id?: string; 
-  byPlayer?: Player; 
-  shotPosition?: Location; 
-  time?: number; 
+    id?: string;
+    byPlayer?: Player;
+    shotPosition?: Location;
+    time?: number;
 }
 
 export interface Viewer extends User {
-  id: string; 
-  username?: string; 
+    id: string;
+    username?: string;
 }
 
 export interface LocationInput {
-  x: number; 
-  y: number; 
-  z: number; 
+    x: number;
+    y: number;
+    z: number;
 }
 export interface CreateNewGameMutationArgs {
-  character?: string; 
-  username: string; 
-  team: Team; 
-  isViewer: boolean; 
+    character?: string;
+    username: string;
+    team: Team;
+    isViewer: boolean;
 }
 export interface JoinGameMutationArgs {
-  gameCode: string; 
-  character: string; 
-  username: string; 
-  team: Team; 
+    gameCode: string;
+    character: string;
+    username: string;
+    team: Team;
 }
 export interface JoinAsViewerMutationArgs {
-  gameCode?: string; 
-  username?: string; 
+    gameCode?: string;
+    username?: string;
 }
 export interface UpdatePositionMutationArgs {
-  position: LocationInput; 
-  heading: number; 
-  isCrawling: boolean; 
-  isShooting: boolean; 
-  enteringBuildingPosition?: LocationInput; 
-  skipValidation?: boolean; 
+    position: LocationInput;
+    heading: number;
+    isCrawling: boolean;
+    isShooting: boolean;
+    enteringBuildingPosition?: LocationInput;
+    skipValidation?: boolean;
 }
 export interface NotifyKillMutationArgs {
-  playerId: string; 
+    playerId: string;
 }
 export interface NotifyShotMutationArgs {
-  byPlayerId: string; 
-  shotPosition: LocationInput; 
+    byPlayerId: string;
+    shotPosition: LocationInput;
 }
 export interface TakeControlOverPlayerMutationArgs {
-  playerId: string; 
+    playerId: string;
 }
 
 export type Team = "BLUE" | "RED" | "NONE";

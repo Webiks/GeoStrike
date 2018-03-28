@@ -22,7 +22,7 @@ import {PitchCalculatorService} from './services/pitch-calculator.service';
 })
 export class GameMapComponent implements OnInit, OnDestroy {
   public static readonly DEFAULT_START_LOCATION =
-    Cesium.Cartesian3.fromDegrees(-73.784482, 40.635052, 1000);
+    Cesium.Cartesian3.fromDegrees(-73.985187, 40.758857, 1000);
   public static readonly DEFAULT_PITCH = -5;
   @Input() me;
   @Input() playersPositions: Observable<AcNotification>;

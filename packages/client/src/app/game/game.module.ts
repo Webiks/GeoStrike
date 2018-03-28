@@ -52,8 +52,8 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { GameCreditsComponent } from './views/game-container/game-credits/game-credits.component';
 import { CreditsDialogComponent } from './views/credits-dialog/credits-dialog.component';
 import { BloodOnScreen } from './views/game-container/blood-on-screen/blood-on-screen';
-import {FlightService} from './views/game-map/other-players/flight.service'
-import {FlightComponent} from './views/game-map/other-players/flight/flight.component'
+import {FlightService} from './views/game-map/other-players/flight.service';
+import {FlightComponent} from './views/game-map/other-players/flight/flight.component';
 @NgModule({
   declarations: [
     MainComponent,
