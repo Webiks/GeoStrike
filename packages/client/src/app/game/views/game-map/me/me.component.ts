@@ -334,18 +334,15 @@ export class MeComponent implements OnInit, OnDestroy {
     return position;
   }
 
-
   interpolatePlayerPosition(player, playerPosition) {
     if (this.character.isFlying && this.playerInFlightModeNotFlying) {
       const playerId = player.id;
-      // const fixedPosition = this.fixPosition(playerPosition, player);
       const positionProperty = this.playersPositionMap.get(playerId);
       if (!positionProperty) {
         const result = InterpolationService.interpolate({
           data: playerPosition,
         }, InterpolationType.POSITION);
         this.playersPositionMap.set(playerId, result);
-        // this.setFlightVibrations();
         return result;
       }
       else {
@@ -360,7 +357,6 @@ export class MeComponent implements OnInit, OnDestroy {
       return this.getPosition(playerPosition);
     }
   }
-
 
   setFlightVibrations() {
     let vibrationHeightMeters = this.character.viewState === ViewState.SEMI_FPV ? 0.75 : 5.0;

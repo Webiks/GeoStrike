@@ -47,10 +47,11 @@ export class OtherPlayersComponent {
       return result;
     }
     else {
-      return InterpolationService.interpolate({
+      const result = InterpolationService.interpolate({
         data: fixedPosition,
         cesiumSampledProperty: positionProperty,
       });
+      return result;
     }
   }
 
