@@ -8,6 +8,7 @@ import { BackgroundCharacterManager } from '../background-character/background-c
 import { PLAYER_CHARACTERS } from './characters';
 import { GamesTimeout } from './games-timeout';
 import Timer = NodeJS.Timer;
+import { TerrainLocation, TerrainType } from "./terrains";
 
 export interface ICartesian3Location {
     x: number;
@@ -26,6 +27,7 @@ export enum CharacterType {
     BACKGROUND_CHARACTER = 'BACKGROUND_CHARACTER',
     OVERVIEW = 'OVERVIEW',
 }
+
 
 export interface IViewer {
     token: string;
@@ -64,7 +66,8 @@ export interface IGameObject {
     clientsUpdaterId?: Timer;
     bgCharactersManager: BackgroundCharacterManager;
     winingTeam: Team,
-    controlledPlayersMap: Map<string, IPlayer>
+    controlledPlayersMap: Map<string, IPlayer>,
+    terrainType: TerrainType;
 }
 
 const TOKENS_SECRET = 'sdf43tSWDG#%Tsdfw4';
@@ -100,8 +103,99 @@ export class GamesManager {
         game.playersMap.set(player.playerId, playerToAdd);
 
         return player;
-    }
+  }
 
+  // addRealPlayerToGame(gameId: string,
+  //                     characterName: string,
+  //                     username: string,
+  //                     team: Team): IPlayer {
+  //   const game = this.getGameById(gameId);
+  //   const playerId = v4();
+  //   const playerToken = sign(
+  //     {
+  //       gameId: game.gameId,
+  //       playerId,
+  //       username,
+  //     },
+  //     TOKENS_SECRET
+  //   );
+  //
+  //   // const defaultPlayerPositions = config.PLAYERS_SPAWN_POSITIONS[team];
+  //     const terrainTeamTypeStr = game.terrainType + "_" + team;
+  //     const defaultPlayerPositions = TerrainLocation[terrainTeamTypeStr];
+  //
+  //     const realPlayerTeamCount = Array.from(game.playersMap.values()).filter(
+  //     p => p.type === CharacterType.PLAYER && p.team === team
+  //   ).length;
+  //
+  //   const finalUsername = this.validateUsername(username, game);
+  //   const character = PLAYER_CHARACTERS.find(p => p.name === characterName);
+  //   const player: IPlayer = {
+  //     playerId,
+  //     character,
+  //     token: playerToken,
+  //     username: finalUsername,
+  //     state: 'WAITING',
+  //     lifeState: 'FULL',
+  //     lifeStatePerctange: 100,
+  //     numberOfShotsThatHit: 0,
+  //     game,
+  //     currentLocation: defaultPlayerPositions[realPlayerTeamCount],
+  //     heading: 0,
+  //     team,
+  //     type: CharacterType.PLAYER,
+  //     isCrawling: false,
+  //     isShooting: false,
+  //     syncState: 'VALID',
+  //   };
+  //
+  //   game.playersMap.set(playerId, player);
+  //
+  //   return player;
+  // }
+
+  changeGameTerrainType(gameId: string, gameType:TerrainType){
+    const game = this.getGameById(gameId);
+      game.terrainType = gameType;
+  }
+
+  changePlayerLocation(gameId: string, playerId, gameType:TerrainType) {
+      const game = this.getGameById(gameId);
+      const player = game.playersMap.get(playerId);
+      const terrainTeamTypeStr = game.terrainType + "_" + player.team;
+      const defaultPlayerPositions = TerrainLocation[terrainTeamTypeStr];
+      player.currentLocation = defaultPlayerPositions;
+  }
+
+  createNewGame(terrainType: string): IGameObject {
+    const gameId = v4();
+    const gameCode = this.generateGameCode();
+
+    const bgCharactersManager = new BackgroundCharacterManager(gameId, this);
+    const gameObject: IGameObject = {
+      gameId,
+      gameCode,
+      playersMap: new Map<string, IPlayer>(),
+      state: 'WAITING',
+      bgCharactersManager,
+      viewers: [],
+      winingTeam: Team.NONE,
+      controlledPlayersMap: new Map<string, IPlayer>(),
+      terrainType: TerrainType[terrainType]
+    };
+    startClientsUpdater(gameObject);
+    this.activeGames.set(gameId, gameObject);
+
+    bgCharactersManager.initBgCharacters();
+    bgCharactersManager.startCharactersMovement();
+    return gameObject;
+  }
+
+  // getGameById(id: string): IGameObject {
+  //     if (this.activeGames.has(id)) {
+  //         return this.activeGames.get(id);
+  //     }
+  // }
     addViewerToGame(gameId: string, username: string): IViewer {
         const game = this.getGameById(gameId);
         const playerId = v4();
@@ -155,7 +249,10 @@ export class GamesManager {
             TOKENS_SECRET
         );
 
-        const defaultPlayerPositions = config.PLAYERS_SPAWN_POSITIONS[team];
+          // const defaultPlayerPositions = config.PLAYERS_SPAWN_POSITIONS[team];
+          const terrainTeamTypeStr = game.terrainType + "_" + team;
+          const defaultPlayerPositions = TerrainLocation[terrainTeamTypeStr];
+
         const realPlayerTeamCount = Array.from(game.playersMap.values()).filter(
             p => p.type === CharacterType.PLAYER && p.team === team
         ).length;
@@ -198,29 +295,29 @@ export class GamesManager {
         return player;
     }
 
-    createNewGame(): IGameObject {
-        const gameId = v4();
-        const gameCode = this.generateGameCode();
-
-        const bgCharactersManager = new BackgroundCharacterManager(gameId, this);
-        const gameObject: IGameObject = {
-            gameId,
-            gameCode,
-            playersMap: new Map<string, IPlayer>(),
-            state: 'WAITING',
-            bgCharactersManager,
-            viewers: [],
-            winingTeam: Team.NONE,
-            controlledPlayersMap: new Map<string, IPlayer>(),
-        };
-        startClientsUpdater(gameObject);
-        this.activeGames.set(gameId, gameObject);
-
-        bgCharactersManager.initBgCharacters();
-        bgCharactersManager.startCharactersMovement();
-
-        return gameObject;
-    }
+    // createNewGame(): IGameObject {
+    //     const gameId = v4();
+    //     const gameCode = this.generateGameCode();
+    //
+    //     const bgCharactersManager = new BackgroundCharacterManager(gameId, this);
+    //     const gameObject: IGameObject = {
+    //         gameId,
+    //         gameCode,
+    //         playersMap: new Map<string, IPlayer>(),
+    //         state: 'WAITING',
+    //         bgCharactersManager,
+    //         viewers: [],
+    //         winingTeam: Team.NONE,
+    //         controlledPlayersMap: new Map<string, IPlayer>(),
+    //     };
+    //     startClientsUpdater(gameObject);
+    //     this.activeGames.set(gameId, gameObject);
+    //
+    //     bgCharactersManager.initBgCharacters();
+    //     bgCharactersManager.startCharactersMovement();
+    //
+    //     return gameObject;
+    // }
 
     getGameById(id: string): IGameObject {
         if (this.activeGames.has(id)) {

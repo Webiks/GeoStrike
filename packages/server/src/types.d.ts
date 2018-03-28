@@ -113,7 +113,8 @@ export interface CreateNewGameMutationArgs {
   character?: string; 
   username: string; 
   team: Team; 
-  isViewer: boolean; 
+  isViewer: boolean;
+  terrainType: string;
 }
 export interface JoinGameMutationArgs {
   gameCode: string; 

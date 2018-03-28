@@ -27,7 +27,6 @@ export class UtilsService {
 
   getPosition(location) {
     const {x, y, z} = location;
-
     return new Cesium.Cartesian3(x, y, z);
   }
 

@@ -16,7 +16,7 @@ export async function initServer() {
   const env = process.env.NODE_ENV || 'development';
   const PORT = process.env.PORT || 3000;
   const server: Express = express();
-
+  server.get('/test', (req, res) => res.send('server working'));
   server.use(morgan(env === 'development' ? 'dev' : 'combined'));
   server.use(cors());
   server.use(
@@ -64,6 +64,7 @@ export async function initServer() {
   );
 
   const httpServer = createServer(server);
+
 
   httpServer.listen(PORT, () => {
     logger.info(`Server started on port ${PORT}...`);

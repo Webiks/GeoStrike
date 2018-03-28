@@ -10,6 +10,7 @@ import {
 } from 'angular-cesium';
 import { Subject } from 'rxjs/Subject';
 import { GameMapComponent } from '../game-map.component';
+import { GameService } from "../../../services/game.service";
 
 interface PathNode {
   location: Cartesian3;
@@ -35,7 +36,8 @@ export class PathCreatorComponent implements OnInit {
 
   constructor(private mapEventManager: MapEventsManagerService,
               private geoConverter: CoordinateConverter,
-              private cameraService: CameraService) {
+              private cameraService: CameraService,
+              private gameService: GameService) {
     this.points$ = new Subject<AcNotification>();
   }
 
@@ -44,7 +46,20 @@ export class PathCreatorComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.cameraService.cameraFlyTo({destination: GameMapComponent.DEFAULT_START_LOCATION});
+    this.gameService.currentTerrainEnviorment.subscribe(terrainType => {
+      if(terrainType == "URBAN")
+      {
+        this.cameraService.cameraFlyTo(({destination: GameMapComponent.DEFAULT_START_LOCATION}));
+      }
+      else if(terrainType == "MOUNTAIN")
+      {
+        this.cameraService.cameraFlyTo(({destination: GameMapComponent.DEFAULT_MOUNTAINS_START_LOCATION}));
+      }
+      else {
+        this.cameraService.cameraFlyTo(({destination: GameMapComponent.DEFAULT_SWISS_START_LOCATION}));
+      }
+    })
+
     this.mapEventManager
       .register({event: CesiumEvent.LEFT_CLICK, pick: PickOptions.PICK_FIRST})
       .subscribe((result) => {

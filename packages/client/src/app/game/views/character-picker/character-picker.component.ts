@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AVAILABLE_CHARACTERS, VIEWER } from '../../../shared/characters.const';
 import { DEFAULT_USERNAME } from '../main/main.component';
+import { GameService } from "../../services/game.service";
 
 @Component({
   selector: 'character-picker',
@@ -22,10 +23,13 @@ export class CharacterPickerComponent implements OnInit {
   availableCharacters = AVAILABLE_CHARACTERS;
   viewer = VIEWER;
 
-  constructor() {
+  terrains = [{'name': 'NY City (Urban)', 'value': 'URBAN'},{'name': 'Alpins (Nature)', 'value': 'MOUNTAIN'},{'name': 'Swiss (Nature)', 'value':'SWISS'}];
+  selectedTerrain;
+  constructor(private gameService: GameService) {
   }
 
   ngOnInit() {
+    this.selectedTerrain = this.terrains[0];
   }
 
   clearDefaultValue(){
@@ -38,6 +42,10 @@ export class CharacterPickerComponent implements OnInit {
     if ( this.username === '') {
       this.username = DEFAULT_USERNAME;
     }
+  }
+
+  onChange(terrain){
+    this.gameService.modifyTerrainEnviorment(terrain.value);
   }
 
 }
