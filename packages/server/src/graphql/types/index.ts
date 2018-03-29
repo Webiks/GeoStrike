@@ -5,6 +5,7 @@ import * as game from './game';
 import * as player from './player-viewer';
 import * as notification from './notification';
 import * as shotData from './shot-data';
+import * as flight from './flight'
 
 export default {
   query,
@@ -14,4 +15,5 @@ export default {
   shotData,
   subscription,
   mutation,
+  flight,
 };

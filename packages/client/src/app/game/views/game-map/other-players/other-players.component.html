@@ -7,12 +7,13 @@
     orientation: getOrientation(player.currentLocation.location, player.currentLocation.heading, player),
     shadows: Cesium.ShadowMode.DISABLED,
     runAnimations: player.state !== 'DEAD',
+
 	}">
   </ac-model-desc>
   <ac-billboard-primitive-desc *ngIf="isOverview$| async" props="{
     position: player.isFlying? player.currentLocation.location : utils.toFixedHeight(player.currentLocation.location, 5),
     heightReference: utils.getClampedToGroundHeightReference(),
-    image: getPlayerIcon(player)
+    image: getPlayerIcon(player),
   }">
   </ac-billboard-primitive-desc>
   <ac-label-primitive-desc *ngIf="isOverview$ | async" props="{
@@ -25,9 +26,10 @@
     pixelOffset: getLabelPixelOffset(player) | pixelOffset,
     showBackground: true
   }">
-  </ac-label-primitive-desc>
-</ac-layer>
+  </ac-label-primitive-desc >
+ </ac-layer>
 <other-players-gun-sound></other-players-gun-sound>
 <gun-indicator></gun-indicator>
 <flight-indicator></flight-indicator>
 <!--position: interpolatePlayerPosition(player, utils.getPosition(player.currentLocation.location)),-->
+

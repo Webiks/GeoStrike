@@ -8,6 +8,9 @@ import { CharacterService, ViewState } from '../../../services/character.service
 import { TakeControlService } from '../../../services/take-control.service';
 import { OtherPlayersShotService } from './gun-shot/other-players-shot.service';
 
+
+
+
 @Component({
   selector: 'other-players',
   templateUrl: './other-players.component.html',
@@ -20,8 +23,10 @@ export class OtherPlayersComponent {
 
   isOverview$: Observable<boolean>;
 
-  constructor(public utils: UtilsService, public character: CharacterService, private takeControlService: TakeControlService) {
+  constructor(public utils: UtilsService, public character: CharacterService,
+              private takeControlService: TakeControlService) {
     this.isOverview$ = character.viewState$.map(viewState => viewState === ViewState.OVERVIEW);
+
   }
 
    fixPosition(position, player: PlayerFields.Fragment) {
@@ -37,13 +42,16 @@ export class OtherPlayersComponent {
 
   interpolatePlayerPosition(player: PlayerFields.Fragment, playerPosition) {
     const playerId = player.id;
+
     const fixedPosition = this.fixPosition(playerPosition, player);
     const positionProperty = this.playersPositionMap.get(playerId);
+    // console.log(positionProperty);
     if (!positionProperty) {
       const result = InterpolationService.interpolate({
         data: fixedPosition,
       }, InterpolationType.POSITION);
       this.playersPositionMap.set(playerId, result);
+      // console.log(positionProperty);
       return result;
     }
     else {
@@ -108,5 +116,9 @@ export class OtherPlayersComponent {
 
   getPlayerName(player) {
     return player.username ? player.username : '';
+  }
+
+  test(player){
+    console.log(player);
   }
 }

@@ -252,6 +252,48 @@ export namespace GunShots {
     z: number;
   }
 }
+export namespace Flights {
+
+  export type Subscription = {
+    flight?: Flight;
+  }
+  export type FlightDetails = {
+    location: Location;
+    icao24: string;
+    heading: string;
+    geo_altitude: string;
+    velocity: string;
+  }
+
+  export type Flight = {
+    messageAdded: {
+    icao24: string;
+    callsign: string;
+    origin_country: string;
+    time_position: string;
+    last_contact: string;
+    longitude: string;
+    latitude: string;
+    geo_altitude: string;
+    on_ground: string;
+    velocity: string;
+    heading: string;
+    vertical_rate: string;
+    sensors: string;
+    baro_altitude: string;
+    squawk: string;
+    spi: string;
+    position_source: string;
+  }
+
+  }
+  export type Location = {
+    x: number;
+    y: number;
+    z: number;
+  }
+
+}
 export namespace JoinAsViewer {
   export type Variables = {
     gameCode?: string;

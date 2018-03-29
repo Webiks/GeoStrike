@@ -10,6 +10,7 @@ import { notifyShot } from '../mutation/notify-shot';
 import { toggleFlightMode } from "../mutation/toggle-flight-mode";
 import { notifyCrash } from "../mutation/notify-crash";
 import { notifyBeenShot } from "../mutation/notify-been-shot";
+import {  } from "../mutation/flight";
 
 const resolvers = {
     Mutation: {

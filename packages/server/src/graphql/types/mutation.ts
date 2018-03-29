@@ -14,5 +14,7 @@ export const schema = gql`
     toggleFlightMode(playerId: String!, isFlying: Boolean!): Player
     takeControlOverPlayer(playerId: String!): Player
     removeControlOverPlayer: Player
+    addMessage(message: String!): [String!]!
+
   }
 `;

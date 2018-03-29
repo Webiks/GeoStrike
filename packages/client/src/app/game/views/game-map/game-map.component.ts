@@ -14,16 +14,15 @@ import {
   AcMapComponent, AcNotification, CesiumService, MapLayerProviderOptions,
   ViewerConfiguration
 } from 'angular-cesium';
-import { GameFields, PlayerFields } from '../../../types';
-import { CharacterService, MeModelState, ViewState } from '../../services/character.service';
-import { UtilsService } from '../../services/utils.service';
-import { GameService } from '../../services/game.service';
-import { environment } from '../../../../environments/environment';
-import { CesiumViewerOptionsService } from './viewer-options/cesium-viewer-options.service';
-import { CollisionDetectorService } from '../../services/collision-detector.service';
-import { TakeControlService } from '../../services/take-control.service';
-import { PitchCalculatorService } from './services/pitch-calculator.service';
-// import { MapLayerProviderOptions } from 'angular-cesium';
+import {GameFields, PlayerFields} from '../../../types';
+import {CharacterService, MeModelState, ViewState} from '../../services/character.service';
+import {UtilsService} from '../../services/utils.service';
+import {GameService} from '../../services/game.service';
+import {environment} from '../../../../environments/environment';
+import {CesiumViewerOptionsService} from './viewer-options/cesium-viewer-options.service';
+import {CollisionDetectorService} from '../../services/collision-detector.service';
+import {TakeControlService} from '../../services/take-control.service';
+import {PitchCalculatorService} from './services/pitch-calculator.service';
 
 @Component({
   selector: 'game-map',
@@ -61,6 +60,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
   @Input() me;
   @Input() playersPositions: Observable<AcNotification>;
   @Input() gameData: Observable<GameFields.Fragment>;
+  @Input() flights:  Observable<GameFields.Fragment>;
   @ViewChild(AcMapComponent) private mapInstance: AcMapComponent;
 
   // MapLayerProviderOptions = MapLayerProviderOptions;
@@ -74,7 +74,6 @@ export class GameMapComponent implements OnInit, OnDestroy {
   private lastViewState: ViewState;
   mapLayerProviderOptions: MapLayerProviderOptions;
   private isFlyingInFlyingMode = false;
-
 
   constructor(private gameService: GameService,
               private character: CharacterService,
@@ -230,33 +229,17 @@ export class GameMapComponent implements OnInit, OnDestroy {
 
 
   private flightInPlace() {
-    // let speed = environment.movement.walkingSpeed;
-    // let location = Cesium.Cartographic.fromCartesian(this.character.location);
-    // location.height +=200;
-    // let destinatedLocation = Cesium.Cartesian3.fromRadians(location.longitude, location.latitude, location.height);
-    // this.character.location = destinatedLocation;
     let flag = true;
     let degree;
-    setInterval(()=> {
+    setInterval(() => {
 
-      if(flag)
+      if (flag)
         degree = 0.75
       else
         degree = -0.75
       this.viewer.camera.moveUp(degree);
-    },1000);
-
-
-
-    // this.viewer.camera.flyTo({destination: destinatedLocation, duration: 2, orientation : {
-    //     direction : new Cesium.Cartesian3(destinatedLocation.x, destinatedLocation.y, destinatedLocation.z),
-    //     up : new Cesium.Cartesian3(destinatedLocation.x, destinatedLocation.y, destinatedLocation.z)
-    //   }});
+    }, 1000);
   }
-
-
-
-
 
   onMousemove(event: MouseEvent) {
     if (!this.character.initialized || !document.pointerLockElement) {
@@ -293,9 +276,6 @@ export class GameMapComponent implements OnInit, OnDestroy {
       if (this.character.flightData.remainingTime === 0 || this.character.meFromServer.flight.remainingTime === 0 || height <= 0) {
         this.flightCrashSettings();
       }
-      // else if(!this.isFlyingInFlyingMode) {
-      //   this.viewer.camera.flyTo({destination: this.utils.toHeightOffset(this.character.location, 0.1, 0)});
-      // }
       else {
         playerHeadCart.height += 4;
       }
