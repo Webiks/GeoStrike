@@ -1,7 +1,10 @@
 import { ChangeDetectorRef, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import {
-  AcMapComponent, AcNotification, CesiumService, MapLayerProviderOptions,
+  AcMapComponent,
+  AcNotification,
+  CesiumService,
+  MapLayerProviderOptions,
   ViewerConfiguration
 } from 'angular-cesium';
 import { GameFields, PlayerFields } from '../../../types';
@@ -31,7 +34,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
   public static readonly DEFAULT_MOUNTAINS_START_LOCATION =
     new Cesium.Cartesian3(-1370653.8374654655, -5507085.922189086, 2901243.9558086237);
   public static readonly DEFAULT_SWISS_START_LOCATION =
-    Cesium.Cartesian3.fromDegrees(8.14557, 46.81645,  5);
+    new Cesium.Cartesian3(4327254.413025279, 621509.1085193334, 4628696.864167333);
   public static readonly DEFAULT_PITCH = -5;
   @Input() me;
   @Input() playersPositions: Observable<AcNotification>;
@@ -46,9 +49,6 @@ export class GameMapComponent implements OnInit, OnDestroy {
   private helperEntityPoint;
   private lastViewState: ViewState;
   mapLayerProviderOptions: MapLayerProviderOptions;
-  terrainType;
-
-
 
   constructor(private gameService: GameService,
               private character: CharacterService,
@@ -83,7 +83,6 @@ export class GameMapComponent implements OnInit, OnDestroy {
 
     this.onMousemove = this.onMousemove.bind(this);
     this.preRenderHandler = this.preRenderHandler.bind(this);
-    // this.gameService.getCurrentGameData().subscribe(gameData => this.terrainType = this.gameData)
   }
 
   ngOnInit() {
@@ -108,7 +107,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
       if (this.lastViewState !== ViewState.OVERVIEW && newViewState === ViewState.OVERVIEW) {
         this.changeToOverview();
       } else if (this.lastViewState === ViewState.OVERVIEW && newViewState !== ViewState.OVERVIEW) {
-        this.viewerOptions.toggleDepthTestAgainstTerrain(this.viewer,true);
+        this.viewerOptions.toggleDepthTestAgainstTerrain(this.viewer, true);
         const controlledPlayer = this.takeControlService.controlledPlayer || this.character.meFromServer;
         const posWithHeight = Cesium.Cartographic.fromCartesian(controlledPlayer.currentLocation.location);
         posWithHeight.height = 5;
@@ -167,27 +166,19 @@ export class GameMapComponent implements OnInit, OnDestroy {
   }
 
   private overviewSettings() {
-    // this.viewerOptions.setFreeCameraOptions(this.viewer);
-    // this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_START_LOCATION});
-    // this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_MOUNTAINS_START_LOCATION});\
-    // this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_MOUNTAINS_START_LOCATION});
     this.viewerOptions.setFreeCameraOptions(this.viewer);
-    // this.cesiumService.getViewer().terrainProvider = new Cesium.createWorldTerrain(environment.terrain);
     this.gameService.currentTerrainEnviorment.subscribe(terrainType => {
-      if(terrainType == "URBAN")
-      {
+      if (terrainType == "URBAN") {
         this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_START_LOCATION});
       }
-      else if(terrainType == "MOUNTAIN")
-      {
+      else if (terrainType == "MOUNTAIN") {
         this.viewerOptions.toggleDepthTestAgainstTerrain(this.viewer, false);
-        const alpinsOverviewPosition = this.utils.toHeightOffset(new Cesium.Cartesian3(-1370653.8374654655, -5507085.922189086, 2901243.9558086237),3000)
-        // new Cesium.Cartesian3(-1370653.8374654655, -5507085.922189086, 2901243.9558086237);
+        const alpinsOverviewPosition = this.utils.toHeightOffset(new Cesium.Cartesian3(-1370653.8374654655, -5507085.922189086, 2901243.9558086237), 3000)
         this.viewer.camera.flyTo({destination: alpinsOverviewPosition});
       }
       else {
         this.viewerOptions.toggleDepthTestAgainstTerrain(this.viewer, false);
-        const swissOverviewPosition = this.utils.toHeightOffset(new Cesium.Cartesian3(4309721.894436319, 722340.3126254319, 4630405.385935379),3000)
+        const swissOverviewPosition = this.utils.toHeightOffset(new Cesium.Cartesian3(4327254.413025279, 621509.1085193334, 4628696.864167333), 3000)
         this.viewer.camera.flyTo({destination: swissOverviewPosition});
       }
     })
