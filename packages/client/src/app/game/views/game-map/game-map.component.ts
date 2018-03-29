@@ -46,7 +46,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
   private helperEntityPoint;
   private lastViewState: ViewState;
   mapLayerProviderOptions: MapLayerProviderOptions;
-
+  terrainType;
 
 
 
@@ -83,6 +83,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
 
     this.onMousemove = this.onMousemove.bind(this);
     this.preRenderHandler = this.preRenderHandler.bind(this);
+    // this.gameService.getCurrentGameData().subscribe(gameData => this.terrainType = this.gameData)
   }
 
   ngOnInit() {
@@ -92,6 +93,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
     }
 
     this.gameData.first().subscribe(game => {
+      this.gameService.modifyTerrainEnviorment(game.terrainType);
       const overviewMode = game.me['__typename'] === 'Viewer' || game.me.type === 'OVERVIEW';
       if (overviewMode) {
         this.character.viewState = ViewState.OVERVIEW;
@@ -106,7 +108,6 @@ export class GameMapComponent implements OnInit, OnDestroy {
       if (this.lastViewState !== ViewState.OVERVIEW && newViewState === ViewState.OVERVIEW) {
         this.changeToOverview();
       } else if (this.lastViewState === ViewState.OVERVIEW && newViewState !== ViewState.OVERVIEW) {
-        debugger;
         this.viewerOptions.toggleDepthTestAgainstTerrain(this.viewer,true);
         const controlledPlayer = this.takeControlService.controlledPlayer || this.character.meFromServer;
         const posWithHeight = Cesium.Cartographic.fromCartesian(controlledPlayer.currentLocation.location);
@@ -185,7 +186,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
         this.viewer.camera.flyTo({destination: alpinsOverviewPosition});
       }
       else {
-        // this.viewerOptions.toggleDepthTestAgainstTerrain(this.viewer, false);
+        this.viewerOptions.toggleDepthTestAgainstTerrain(this.viewer, false);
         const swissOverviewPosition = this.utils.toHeightOffset(new Cesium.Cartesian3(4309721.894436319, 722340.3126254319, 4630405.385935379),3000)
         this.viewer.camera.flyTo({destination: swissOverviewPosition});
       }

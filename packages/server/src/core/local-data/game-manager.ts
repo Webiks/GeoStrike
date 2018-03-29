@@ -57,7 +57,7 @@ export interface IPlayer {
 
 export interface IGameObject {
   gameId: string;
-  gameCode: string;
+    gameCode: string;
   playersMap: Map<string, IPlayer>;
   viewers: IViewer[];
   state: GameState;

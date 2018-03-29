@@ -47,7 +47,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
               private ngZone: NgZone,
               public controlledService: TakeControlService,
               private snackBar: MatSnackBar) {
-    // Cesium.BingMapsApi.defaultKey = 'AmzowhvWedaZu8mSrSHOwx2A52aRoYbkKvs4TeVUu_AzSXMnhvLCLFsqLFBqBS0V';
+    Cesium.BingMapsApi.defaultKey = 'AmzowhvWedaZu8mSrSHOwx2A52aRoYbkKvs4TeVUu_AzSXMnhvLCLFsqLFBqBS0V';
   }
 
   ngOnInit() {
@@ -75,7 +75,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
           this.me = currentGame.me;
           this.gameResult$.next(currentGame.winingTeam);
           const players = this.game.players.filter(p => p.state !== 'WAITING');
-
+          // this.gameService.modifyTerrainEnviorment(currentGame.terrainType);
           const allPlayers = [...players];
           if (this.me) {
             this.isViewer = this.me.type === 'OVERVIEW' || this.me['__typename'] === 'Viewer';

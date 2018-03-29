@@ -366,6 +366,7 @@ export namespace GameFields {
     winingTeam?: Team;
     players: Players[];
     me?: Me;
+    terrainType: string;
   }
 
   export type Players = {

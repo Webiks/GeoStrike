@@ -15,7 +15,8 @@ export interface Game {
   gameCode: string; 
   state: GameState; 
   me?: User; 
-  winingTeam?: Team; 
+  winingTeam?: Team;
+  terrainType: string;
 }
 
 export interface Player extends User {
@@ -115,7 +116,7 @@ export interface JoinGameMutationArgs {
   gameCode: string; 
   character: string; 
   username: string; 
-  team: Team; 
+  team: Team;
 }
 export interface JoinAsViewerMutationArgs {
   gameCode?: string; 
