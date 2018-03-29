@@ -42,8 +42,10 @@ export class OtherPlayersComponent {
 
   interpolatePlayerPosition(player: PlayerFields.Fragment, playerPosition) {
     const playerId = player.id;
+
     const fixedPosition = this.fixPosition(playerPosition, player);
     const positionProperty = this.playersPositionMap.get(playerId);
+    // console.log(positionProperty);
     if (!positionProperty) {
       const result = InterpolationService.interpolate({
         data: fixedPosition,

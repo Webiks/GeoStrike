@@ -7,10 +7,12 @@
     heading: flight.orientation,
     position: interpolatePosition(flight),
     orientation: getOrientation(flight),
+    test: myTest(flight),
   }">
   </ac-model-desc>
   <ac-billboard-desc *ngIf="(isOverview$ | async)" props="{
   image: flight.image,
+  scale: 0.5,
   position: interpolatePosition(flight),
   orientation: getOrientation(flight),
   heading: flight.orientation,

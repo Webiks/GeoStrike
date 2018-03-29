@@ -1,9 +1,9 @@
-import {Component, OnInit, NgZone, OnDestroy, ChangeDetectorRef} from "@angular/core";
+import {Component, OnInit, NgZone, OnDestroy, ChangeDetectorRef, Input} from "@angular/core";
 import {Subscription} from 'rxjs/Subscription';
 import {Subject} from "rxjs/Subject";
 import {Observable} from "rxjs/Observable";
 
-import {AcEntity, AcNotification, ActionType} from "angular-cesium";
+import {AcEntity, AcNotification, ActionType,CesiumService} from "angular-cesium";
 import {FlightService} from "../flight.service";
 import {CharacterService, ViewState} from '../../../../services/character.service';
 import {UtilsService} from "../../../../services/utils.service";
@@ -19,16 +19,17 @@ const config = {
 })
 export class FlightComponent implements OnInit, OnDestroy {
   flightSubscription: Subscription;
-  flights$: Subject<AcNotification> = new Subject<AcNotification>();
+  @Input() flights$: Subject<AcNotification> = new Subject<AcNotification>();
   isOverview$: Observable<boolean>;
   tempData;
-  listPlanteMap = new Map<string, any>();
+  listPlaneMap = new Map<string, any>();
 
   constructor(private flightService: FlightService,
               public character: CharacterService,
               private ngZone: NgZone,
               public utils: UtilsService,
-              private cd: ChangeDetectorRef) {
+              private cd: ChangeDetectorRef,
+              private cesiumService: CesiumService) {
     this.isOverview$ = character.viewState$.map(viewState => viewState === ViewState.OVERVIEW);
 
   }
@@ -46,11 +47,12 @@ export class FlightComponent implements OnInit, OnDestroy {
             }
             let mapping = {
               id: flight.icao24,
-              model: '/assets/models/plane.gltf',
+              model: this.planeTypeModel(2),
+              // model: '/assets/models/planes/plane.gltf',
               scale: 1,
               orientation : this.utils.getOrientation(this.degreesToCartesian(location), 0),
               position: this.degreesToCartesian(location),
-              image : '/assets/icons/plane.png',
+              image : '/assets/icons/plane-mark.png',
               heading: flight.heading,
               state: "ALIVE",
             };
@@ -73,6 +75,17 @@ export class FlightComponent implements OnInit, OnDestroy {
      return new Cesium.Cartesian3.fromDegrees(location.x, location.y, location.z);
    }
 
+   planeTypeModel(typeModel){
+      switch (typeModel){
+        case 1:
+          return '/assets/models/planes/a318.glb';
+        case 2:
+          return '/assets/models/planes/atr42.glb';
+        default:
+          return '/assets/models/planes/plane.gltf';
+      }
+   }
+
   getOrientation(flight) {
 
     if (flight.state === 'DEAD') {
@@ -83,17 +96,17 @@ export class FlightComponent implements OnInit, OnDestroy {
   }
 
   interpolatePosition (flight) {
-    const flightId = flight.icao24;
-    const positionProperty = this.listPlanteMap.get(flightId);
-
+    const flightId = flight.id;
+    const positionProperty = this.listPlaneMap.get(flightId);
     if (!positionProperty) {
       const result = InterpolationService.interpolate({
         data: flight.position,
       }, InterpolationType.POSITION);
-      this.listPlanteMap.set(flightId, result);
+      this.listPlaneMap.set(flightId, result);
       return result;
     }
     else {
+      // console.log(positionProperty);
       let newTime = Cesium.JulianDate.addSeconds(Cesium.JulianDate.now(),config.updateIntervalMs, new Cesium.JulianDate());
       const result = InterpolationService.interpolate({
         time: newTime,
@@ -103,7 +116,10 @@ export class FlightComponent implements OnInit, OnDestroy {
       return result;
     }
   };
-
+  myTest(flight){
+    // const scene = this.cesiumService.getScene();
+    // console.log(scene.primitives._primitives);
+  }
 
   ngOnDestroy(): void {
     this.flightSubscription.unsubscribe();

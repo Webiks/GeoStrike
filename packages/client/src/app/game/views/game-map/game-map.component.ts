@@ -10,6 +10,7 @@ import {CesiumViewerOptionsService} from './viewer-options/cesium-viewer-options
 import {CollisionDetectorService} from '../../services/collision-detector.service';
 import {TakeControlService} from '../../services/take-control.service';
 import {PitchCalculatorService} from './services/pitch-calculator.service';
+import {Subject} from "rxjs/Subject";
 @Component({
   selector: 'game-map',
   templateUrl: './game-map.component.html',
@@ -27,7 +28,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
   @Input() me;
   @Input() playersPositions: Observable<AcNotification>;
   @Input() gameData: Observable<GameFields.Fragment>;
-  @Input() flights: Observable<AcNotification>;
+  @Input() flights:  Observable<GameFields.Fragment>;
   @ViewChild(AcMapComponent) private mapInstance: AcMapComponent;
 
   public createPathMode = environment.createPathMode;
