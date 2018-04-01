@@ -37,7 +37,6 @@ export class MainComponent {
               private router: Router,
               private gameService: GameService) {
     this.gameService.currentTerrainEnviorment.subscribe(terrainType => {
-      // this.terrainType = isTerrain ? 'URBAN' : 'MOUNTAIN';
       this.terrainType = terrainType;
     })
   }
@@ -94,7 +93,7 @@ export class MainComponent {
     if (!this.validate(true)) {
       return;
     }
-
+    debugger;
     this.loading = true;
     this.error = '';
 
@@ -126,15 +125,5 @@ export class MainComponent {
 
   setActiveTab(tabChange: MatTabChangeEvent) {
     this.activeTab = tabChange.tab.textLabel === 'New game' ? GameTabs.CREATE_GAME : GameTabs.JOIN_GAME;
-  }
-
-  toggleTerrainType() {
-    this.terrainType = (this.terrainType === 'URBAN') ? 'MOUNTAIN' : 'URBAN';
-    this.gameService.modifyTerrainEnviorment(this.terrainType);
-  }
-  toggleSwiss(){
-    this.terrainType = 'SWISS';
-    this.gameService.modifyTerrainEnviorment(this.terrainType);
-
   }
 }

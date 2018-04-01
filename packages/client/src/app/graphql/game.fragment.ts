@@ -18,6 +18,7 @@ export const gameFragment = gql`
       ...PlayerFields
       ...ViewerFields
     }
+    terrainType
   }
   
   ${playerFragment}

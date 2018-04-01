@@ -13,12 +13,12 @@ export interface Query {
 }
 
 export interface Game {
-    id: string;
-    players: Player[];
-    gameCode: string;
-    state: GameState;
-    me?: User;
-    winingTeam?: Team;
+  id: string; 
+  players: Player[]; 
+  gameCode: string; 
+  state: GameState; 
+  me?: User; 
+  winingTeam?: Team; terrainType: string;
 }
 
 export interface Player extends User {

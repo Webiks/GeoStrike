@@ -1,4 +1,4 @@
-import { Component, HostListener, NgZone, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { CesiumService, GeoUtilsService, KeyboardControlParams, KeyboardControlService, } from 'angular-cesium';
 import { CharacterService, MeModelState, ViewState, } from '../../../services/character.service';
 import { environment } from '../../../../../environments/environment';

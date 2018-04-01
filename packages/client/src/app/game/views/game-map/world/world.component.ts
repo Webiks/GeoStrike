@@ -73,9 +73,6 @@ export class WorldComponent implements OnInit {
       if (this.tiles && this.tiles.tilesetInstance) {
         this.tiles.tilesetInstance.show = !this.hideWorld;
       }
-      // if(viewState === ViewState.OVERVIEW){
-      //   this.cesiumService.getViewer().terrainProvider = ;
-      // }
       this.cd.detectChanges();
       this.drawBackgroundItems();
     });
@@ -90,7 +87,8 @@ export class WorldComponent implements OnInit {
       }));
     }
     else {
-         this.cesiumService.getViewer().terrainProvider = new Cesium.createWorldTerrain(environment.terrain);
+         // this.cesiumService.getViewer().terrainProvider = new Cesium.CesiumTerrainProvider(environment.terrain);
+      this.cesiumService.getViewer().terrainProvider = new Cesium.createWorldTerrain();
     }
   }
 

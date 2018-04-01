@@ -14,6 +14,7 @@ export const schema = gql`
         state: GameState!
         me: User
         winingTeam: Team
+        terrainType: String!
     }
 
     type CreateOrJoinResult {

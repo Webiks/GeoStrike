@@ -26,6 +26,8 @@ const resolvers = {
             return 'ACTIVE';
         },
         me: (game: IGameObject, args, {player}: IGraphQLContext) => player || null,
+        terrainType: (game: IGameObject) => game.terrainType,
+
     },
     CreateOrJoinResult: {
         game: result => result.game,
