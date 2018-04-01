@@ -96,6 +96,7 @@ export interface Subscription {
   gameData?: Game;
   gameNotifications?: Notification;
   gunShot?: ShotData;
+  beenShot?: BeenShotData;
 }
 
 export interface Notification {
@@ -108,6 +109,10 @@ export interface ShotData {
   byPlayer?: Player;
   shotPosition?: Location;
   time?: number;
+}
+
+export interface BeenShotData {
+  id?: string;
 }
 
 export interface Viewer extends User {
@@ -294,6 +299,24 @@ export namespace Flights {
   }
 
 }
+
+export namespace BeenShots {
+  export type Variables = {
+  }
+  export type Subscription = {
+    beenShot?: BeenShot;
+  }
+
+  export type BeenShot = {
+    id?: string;
+    lifeState?: string;
+  }
+
+  export type PlayerLifeState = {
+    lifeState: string;
+  }
+}
+
 export namespace JoinAsViewer {
   export type Variables = {
     gameCode?: string;

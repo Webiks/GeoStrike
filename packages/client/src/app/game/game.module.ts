@@ -55,6 +55,7 @@ import { CreditsDialogComponent } from './views/credits-dialog/credits-dialog.co
 import { BloodOnScreen } from './views/game-container/blood-on-screen/blood-on-screen';
 import { FlightModeService } from './views/game-container/flight-mode/flight-mode.service';
 import { FlightIndicator } from "./views/game-map/other-players/flight-indicator/flight-indicator.component";
+import { BeenShotService } from "./views/game-container/blood-on-screen/been-shot.service";
 import { MapProviderComponent } from './views/game-map/map-provider/map-provider.component';
 import { FlightService } from './views/game-map/other-players/flight.service';
 import { FlightComponent } from './views/game-map/other-players/flight/flight.component';
@@ -123,8 +124,9 @@ import { FlightComponent } from './views/game-map/other-players/flight/flight.co
     BuildingsService,
     CollisionDetectorService,
     SoundService,
+    BeenShotService,
     FlightModeService,
-    FlightService,
+    FlightService
   ],
   entryComponents: [
     EndGameDialogComponent,

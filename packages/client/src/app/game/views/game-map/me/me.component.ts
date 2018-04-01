@@ -26,6 +26,7 @@ import { SnackBarContentComponent } from '../../../../shared/snack-bar-content/s
 import { SoundService } from '../../../services/sound.service';
 import { InterpolationService, InterpolationType } from "../../../services/interpolation.service";
 import { environment } from "../../../../../environments/environment";
+import { BeenShotService } from "../../game-container/blood-on-screen/been-shot.service";
 
 @Component({
   selector: 'me',
@@ -97,6 +98,7 @@ export class MeComponent implements OnInit, OnDestroy {
   // }
 
 
+  showBloodSubscription : Subscription;
   constructor(private character: CharacterService,
               public utils: UtilsService,
               private cesiumService: CesiumService,
@@ -105,7 +107,8 @@ export class MeComponent implements OnInit, OnDestroy {
               private ngZone: NgZone,
               private snackBar: MatSnackBar,
               private soundService: SoundService,
-              private cd: ChangeDetectorRef) {
+              private cd: ChangeDetectorRef,
+              private beenShotService: BeenShotService) {
   }
 
   get notifications$() {
@@ -149,11 +152,12 @@ export class MeComponent implements OnInit, OnDestroy {
       });
   }
 
-  setKillEvent(lifeState: string, shotedEntityId) {
-    if (lifeState === "EMPTY") {
-      let killSubscription = this.gameService.notifyKill(shotedEntityId)
-        .subscribe(() => killSubscription.unsubscribe());
-    }
+  setKillEvent(lifeState:string, shotedEntityId) {
+    if(lifeState === "EMPTY"){
+
+        let killSubscription = this.gameService.notifyKill(shotedEntityId)
+          .subscribe(() => killSubscription.unsubscribe());
+      }
   }
 
   ngOnInit(): void {
