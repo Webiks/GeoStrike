@@ -77,7 +77,6 @@ export class GameContainerComponent implements OnInit, OnDestroy {
           this.me = currentGame.me;
           this.gameResult$.next(currentGame.winingTeam);
           const players = this.game.players.filter(p => p.state !== 'WAITING');
-          // this.gameService.modifyTerrainEnviorment(currentGame.terrainType);
           const allPlayers = [...players];
           if (this.me) {
             this.isViewer = this.me.type === 'OVERVIEW' || this.me['__typename'] === 'Viewer';

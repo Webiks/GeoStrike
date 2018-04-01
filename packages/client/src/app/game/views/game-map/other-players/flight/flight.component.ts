@@ -31,7 +31,6 @@ export class FlightComponent implements OnInit, OnDestroy {
               private cd: ChangeDetectorRef,
               private cesiumService: CesiumService) {
     this.isOverview$ = character.viewState$.map(viewState => viewState === ViewState.OVERVIEW);
-
   }
 
   ngOnInit() {

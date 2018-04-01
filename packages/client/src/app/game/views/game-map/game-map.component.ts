@@ -66,8 +66,6 @@ export class GameMapComponent implements OnInit, OnDestroy {
   @Input() flights:  Observable<GameFields.Fragment>;
   @ViewChild(AcMapComponent) private mapInstance: AcMapComponent;
 
-  // MapLayerProviderOptions = MapLayerProviderOptions;
-
   public createPathMode = environment.createPathMode;
   private viewer: any;
   private lastPlayerLocation;
