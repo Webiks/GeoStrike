@@ -4,13 +4,12 @@
           heightReference: utils.getRelativeToGroundHeightReference(),
           scale: characterInfo.scale,
 					uri: characterInfo.model,
-					position: interpolatePlayerPosition(me, me.location),
+					position: utils.getPosition(me.location),
 					orientation: getOrientation(me.location, me.heading,me),
 					shadows: Cesium.ShadowMode.DISABLED,
 					color: getColor(),
   }">
   </ac-model-desc>
-  <!--<particle-effect></particle-effect>-->
 </ac-layer>
 
 <img *ngIf="showWeapon" src="assets/gun1.png" class="gun" alt="" (click)="canvasPropagation()">

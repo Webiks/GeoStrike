@@ -64,37 +64,37 @@ export class MeComponent implements OnInit, OnDestroy {
   increaseHeight = true;
   interpolateFinish = true;
 
-  @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
-    if (event.keyCode == 70 && !this.character.isFlying) {
-      this.playerInFlightModeNotFlying = true;
-      this.setFlightVibrations();
-    }
-    if (event.keyCode == 70 && this.character.isFlying) {
-      this.playerInFlightModeNotFlying = false;
-      clearInterval(this.intervalId);
-    }
-    if (event.shiftKey && event.keyCode == 87) {
-      this.playerInFlightModeNotFlying = false;
-      clearInterval(this.intervalId);
-    }
-    if (event.key === 'w') {
-      this.playerInFlightModeNotFlying = false;
-      clearInterval(this.intervalId);
-    }
-  }
+  // @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
+  //   if (event.keyCode == 70 && !this.character.isFlying) {
+  //     this.playerInFlightModeNotFlying = true;
+  //     this.setFlightVibrations();
+  //   }
+  //   if (event.keyCode == 70 && this.character.isFlying) {
+  //     this.playerInFlightModeNotFlying = false;
+  //     clearInterval(this.intervalId);
+  //   }
+  //   if (event.shiftKey && event.keyCode == 87) {
+  //     this.playerInFlightModeNotFlying = false;
+  //     clearInterval(this.intervalId);
+  //   }
+  //   if (event.key === 'w') {
+  //     this.playerInFlightModeNotFlying = false;
+  //     clearInterval(this.intervalId);
+  //   }
+  // }
 
-  @HostListener('document:keyup', ['$event']) onKeyupHandler(event: KeyboardEvent) {
-    if (event.key === 'w' && this.character.isFlying) {
-      this.playerInFlightModeNotFlying = true;
-      // this.character.location = this.utils.pointByLocationDistanceAndAzimuthAndHeight3d(this.character.location, environment.movement.flyingSpeed, Cesium.Math.toRadians(this.character.heading + 180), true);
-      this.setFlightVibrations();
-    }
-    if (event.shiftKey && event.keyCode == 87 && this.character.isFlying) {
-      // this.character.location = this.utils.pointByLocationDistanceAndAzimuthAndHeight3d(this.character.location, environment.movement.flyingSpeed, Cesium.Math.toRadians(this.character.heading + 180), true);
-      this.setFlightVibrations();
-      this.playerInFlightModeNotFlying = true;
-    }
-  }
+  // @HostListener('document:keyup', ['$event']) onKeyupHandler(event: KeyboardEvent) {
+  //   if (event.key === 'w' && this.character.isFlying) {
+  //     this.playerInFlightModeNotFlying = true;
+  //     // this.character.location = this.utils.pointByLocationDistanceAndAzimuthAndHeight3d(this.character.location, environment.movement.flyingSpeed, Cesium.Math.toRadians(this.character.heading + 180), true);
+  //     this.setFlightVibrations();
+  //   }
+  //   if (event.shiftKey && event.keyCode == 87 && this.character.isFlying) {
+  //     // this.character.location = this.utils.pointByLocationDistanceAndAzimuthAndHeight3d(this.character.location, environment.movement.flyingSpeed, Cesium.Math.toRadians(this.character.heading + 180), true);
+  //     this.setFlightVibrations();
+  //     this.playerInFlightModeNotFlying = true;
+  //   }
+  // }
 
 
   constructor(private character: CharacterService,
