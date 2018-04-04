@@ -3,7 +3,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { GameFields, PlayerFields, PlayerLifeState, Team } from '../../types';
 import { BuildingsService } from './buildings.service';
 import { GameConfig } from './game-config';
-import { FlightData, FlightHeight } from "../../../../../server/src/types";
+import { FlightData } from "../../../../../server/src/types";
 
 export enum MeModelState {
   WALKING,
@@ -92,14 +92,15 @@ export class CharacterService {
   }
 
   set flightData(value: FlightData) {
-  this.modifyCurrentStateValue({
-    flight: value
-  })
-}
+    this.modifyCurrentStateValue({
+      flight: value
+    })
+  }
 
   get flightData() {
     return this._character.getValue().flight;
   }
+
   get flightData$() {
     return this._character.getValue().flight;
   }
@@ -254,7 +255,7 @@ export class CharacterService {
       if (this.tileBuilding) {
         this.tileBuilding.show = false;
       }
-      this.enteringBuildingPosition = {location: this.location, heading: this.heading, pitch: this.pitch};
+      this.enteringBuildingPosition = { location: this.location, heading: this.heading, pitch: this.pitch };
       this.enteredBuilding = this.buildingsService.createBuilding(this.nearbyBuildingPosition);
       this.location = this.nearbyBuildingPosition;
       this.nearbyBuildingPosition = undefined;

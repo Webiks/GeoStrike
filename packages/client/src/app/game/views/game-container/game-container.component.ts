@@ -55,7 +55,6 @@ export class GameContainerComponent implements OnInit, OnDestroy {
         if (!params.playerToken) {
           this.router.navigate(['/']);
           this.paramsSubscription.unsubscribe();
-
           return;
         }
 
@@ -74,7 +73,6 @@ export class GameContainerComponent implements OnInit, OnDestroy {
           this.me = currentGame.me;
           this.gameResult$.next(currentGame.winingTeam);
           const players = this.game.players.filter(p => p.state !== 'WAITING');
-
           const allPlayers = [...players];
           if (this.me) {
             this.isViewer = this.me.type === 'OVERVIEW' || this.me['__typename'] === 'Viewer';
@@ -83,7 +81,6 @@ export class GameContainerComponent implements OnInit, OnDestroy {
               this.character.syncState(this.me);
               allPlayers.push(this.me);
             }
-
             if (this.character.initialized) {
               this.setCharacterStateFromServer();
             }
@@ -177,5 +174,4 @@ export class GameContainerComponent implements OnInit, OnDestroy {
         });
       });
   }
-
 }

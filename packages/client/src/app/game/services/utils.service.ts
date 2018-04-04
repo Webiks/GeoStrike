@@ -60,7 +60,6 @@ export class UtilsService {
     const currHeight = isInputCartesian ? Cesium.Cartographic.fromCartesian(currentLocation).height : currentLocation.height;
     const pitchDeg = this.character.pitch;
     const pitch = Cesium.Math.toRadians(pitchDeg);
-    const heading = Cesium.Math.toRadians(-180 + this.character.heading);
     const heightCalculation = Math.sin(pitch) * (meterDistance);
     const destinationLat = Math.asin(
       Math.sin(curLat) * Math.cos(distance) +
