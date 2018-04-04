@@ -159,12 +159,12 @@ export class GamesManager {
         const realPlayerTeamCount = Array.from(game.playersMap.values()).filter(
             p => p.type === CharacterType.PLAYER && p.team === team
         ).length;
-        let timer:Timer;// = setTimeout(()=> console.log('yay'),0);
+        let timer:Timer;
         const initFlightData: FlightData = {
             speed: 'NONE',
             minHeight: 50,
             maxHeight: 500,
-            remainingTime: 1300, //300sec =  5min minutes in seconds
+            remainingTime: 300,
             heightLevel: 'NONE',
             flightId: timer
 
