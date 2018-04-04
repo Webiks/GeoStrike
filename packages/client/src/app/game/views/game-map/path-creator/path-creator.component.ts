@@ -46,18 +46,8 @@ export class PathCreatorComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.gameService.currentTerrainEnviorment.subscribe(terrainType => {
-      if(terrainType == "URBAN")
-      {
-        this.cameraService.cameraFlyTo(({destination: GameMapComponent.DEFAULT_START_LOCATION}));
-      }
-      else if(terrainType == "MOUNTAIN")
-      {
-        this.cameraService.cameraFlyTo(({destination: GameMapComponent.DEFAULT_MOUNTAINS_START_LOCATION}));
-      }
-      else {
-        this.cameraService.cameraFlyTo(({destination: GameMapComponent.DEFAULT_SWISS_START_LOCATION}));
-      }
+    this.gameService.currentTerrainEnviorment.subscribe(() => {
+      this.cameraService.cameraFlyTo(({destination: GameMapComponent.gameStartLocation}));
     })
 
     this.mapEventManager

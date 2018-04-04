@@ -12,10 +12,8 @@ export class CharacterPickerComponent implements OnInit {
   @Input() selectedCharacter: string = null;
   @Input() joinGameMode = false;
   @Output() select: EventEmitter<any> = new EventEmitter();
-
   @Input() username = 'Anonymous User';
   @Output() usernameChange = new EventEmitter<string>();
-
   @Input()
   gamecode: string;
   @Output() gamecodeChange = new EventEmitter<string>();
@@ -23,8 +21,12 @@ export class CharacterPickerComponent implements OnInit {
   availableCharacters = AVAILABLE_CHARACTERS;
   viewer = VIEWER;
 
-  terrains = [{'name': 'NY City (Urban)', 'value': 'URBAN'},{'name': 'Alpins (Nature)', 'value': 'MOUNTAIN'},{'name': 'Swiss (Nature)', 'value':'SWISS'}];
+  terrains = [{'name': 'NY City (Urban)', 'value': 'URBAN'}, {
+    'name': 'Alpins (Nature)',
+    'value': 'MOUNTAIN'
+  }, {'name': 'Swiss (Nature)', 'value': 'SWISS'}];
   selectedTerrain;
+
   constructor(private gameService: GameService) {
   }
 
@@ -32,19 +34,19 @@ export class CharacterPickerComponent implements OnInit {
     this.selectedTerrain = this.terrains[0];
   }
 
-  clearDefaultValue(){
-    if ( this.username === DEFAULT_USERNAME) {
+  clearDefaultValue() {
+    if (this.username === DEFAULT_USERNAME) {
       this.username = '';
     }
   }
 
-  validateDefaultValue(){
-    if ( this.username === '') {
+  validateDefaultValue() {
+    if (this.username === '') {
       this.username = DEFAULT_USERNAME;
     }
   }
 
-  onChange(terrain){
+  onChange(terrain) {
     this.gameService.modifyTerrainEnviorment(terrain.value);
   }
 

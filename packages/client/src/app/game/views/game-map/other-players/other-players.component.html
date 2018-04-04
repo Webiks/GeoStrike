@@ -10,7 +10,7 @@
 	}">
   </ac-model-desc>
   <ac-billboard-primitive-desc *ngIf="isOverview$| async" props="{
-    position: utils.toFixedHeight(player.currentLocation.location, 200),
+    position:  utils.toFixedHeight(player.currentLocation.location, 5),
     heightReference: utils.getClampedToGroundHeightReference(),
     image: getPlayerIcon(player)
   }">

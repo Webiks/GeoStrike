@@ -7,7 +7,7 @@ import { VIEWER } from '../../../shared/characters.const';
 import { GameService } from '../../services/game.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import { Subscription } from "rxjs/Subscription";
+
 
 enum GameTabs {
   JOIN_GAME,
@@ -31,7 +31,6 @@ export class MainComponent {
   gameCode = '';
   activeTab: GameTabs = GameTabs.CREATE_GAME;
   terrainType: string = 'URBAN';
-  terrainSubsription: Subscription;
 
   constructor(private snackBar: MatSnackBar,
               private router: Router,
@@ -58,7 +57,6 @@ export class MainComponent {
     return true;
   }
 
-
   createGame() {
     if (!this.validate()) {
       return;
@@ -79,7 +77,6 @@ export class MainComponent {
         this.loading = false;
       });
   }
-
 
   getViewerOrPlayerJoin(): Observable<ApolloExecutionResult<any>> {
     if (this.characterName === VIEWER.name) {
@@ -127,3 +124,4 @@ export class MainComponent {
     this.activeTab = tabChange.tab.textLabel === 'New game' ? GameTabs.CREATE_GAME : GameTabs.JOIN_GAME;
   }
 }
+
