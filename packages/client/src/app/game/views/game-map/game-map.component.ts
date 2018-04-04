@@ -2,7 +2,6 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
-  HostListener,
   Input,
   NgZone,
   OnDestroy,
@@ -20,7 +19,6 @@ import { CesiumViewerOptionsService } from './viewer-options/cesium-viewer-optio
 import { CollisionDetectorService } from '../../services/collision-detector.service';
 import { TakeControlService } from '../../services/take-control.service';
 import { PitchCalculatorService } from './services/pitch-calculator.service';
-// import { MapLayerProviderOptions } from 'angular-cesium';
 
 @Component({
   selector: 'game-map',
@@ -34,19 +32,6 @@ import { PitchCalculatorService } from './services/pitch-calculator.service';
 })
 export class GameMapComponent implements OnInit, OnDestroy {
 
-  @HostListener('document:keyup', ['$event']) onKeyupHandler(event: KeyboardEvent) {
-    if ((event.key === 'w' || event.shiftKey && event.keyCode == 87) && this.character.isFlying) {
-      this.isFlyingInFlyingMode = false;
-    }
-    else {
-      this.isFlyingInFlyingMode = true;
-    }
-    if (event.key === 'y') {
-      this.flightInPlace();
-    }
-  }
-
-
   public static readonly DEFAULT_START_LOCATION =
     Cesium.Cartesian3.fromDegrees(-73.985187, 40.758857, 1000);
   public static readonly DEFAULT_PITCH = -5;
@@ -54,8 +39,6 @@ export class GameMapComponent implements OnInit, OnDestroy {
   @Input() playersPositions: Observable<AcNotification>;
   @Input() gameData: Observable<GameFields.Fragment>;
   @ViewChild(AcMapComponent) private mapInstance: AcMapComponent;
-
-  // MapLayerProviderOptions = MapLayerProviderOptions;
 
   public createPathMode = environment.createPathMode;
   private viewer: any;
@@ -195,36 +178,6 @@ export class GameMapComponent implements OnInit, OnDestroy {
     this.viewer.camera.flyTo({destination: crashDestination, duration: 2});
   }
 
-
-  private flightInPlace() {
-    // let speed = environment.movement.walkingSpeed;
-    // let location = Cesium.Cartographic.fromCartesian(this.character.location);
-    // location.height +=200;
-    // let destinatedLocation = Cesium.Cartesian3.fromRadians(location.longitude, location.latitude, location.height);
-    // this.character.location = destinatedLocation;
-    let flag = true;
-    let degree;
-    setInterval(()=> {
-
-      if(flag)
-        degree = 0.75
-      else
-        degree = -0.75
-      this.viewer.camera.moveUp(degree);
-    },1000);
-
-
-
-    // this.viewer.camera.flyTo({destination: destinatedLocation, duration: 2, orientation : {
-    //     direction : new Cesium.Cartesian3(destinatedLocation.x, destinatedLocation.y, destinatedLocation.z),
-    //     up : new Cesium.Cartesian3(destinatedLocation.x, destinatedLocation.y, destinatedLocation.z)
-    //   }});
-  }
-
-
-
-
-
   onMousemove(event: MouseEvent) {
     if (!this.character.initialized || !document.pointerLockElement) {
       return;
@@ -260,16 +213,12 @@ export class GameMapComponent implements OnInit, OnDestroy {
       if (this.character.flightData.remainingTime === 0 || this.character.meFromServer.flight.remainingTime === 0 || height <= 0) {
         this.flightCrashSettings();
       }
-      // else if(!this.isFlyingInFlyingMode) {
-      //   this.viewer.camera.flyTo({destination: this.utils.toHeightOffset(this.character.location, 0.1, 0)});
-      // }
       else {
         playerHeadCart.height += 4;
       }
     }
     else
       playerHeadCart.height += 4.4;
-
 
     if (this.lastPlayerLocation === this.character.location &&
       this.lastPlayerHPR.heading === this.character.heading &&
@@ -290,8 +239,6 @@ export class GameMapComponent implements OnInit, OnDestroy {
     this.lastPlayerHead = playerHeadCart;
     this.lastPlayerHPR = {heading: this.character.heading, pitch: this.character.pitch, range};
   }
-
-
 
   ngOnDestroy(): void {
     this.elementRef.nativeElement.removeEventListener('mousemove', this.onMousemove);

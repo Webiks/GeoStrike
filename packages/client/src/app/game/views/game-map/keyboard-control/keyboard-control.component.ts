@@ -52,30 +52,6 @@ export class KeyboardControlComponent implements OnInit {
   private increase = true;
   private intervalId;
 
-  // @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
-  //   if (event.keyCode == 70 && !this.character.isFlying) {
-  //    this.setFlightVibrations();
-  //   }
-  //   if (event.keyCode == 70 && this.character.isFlying) {
-  //     clearInterval(this.intervalId);
-  //   }
-  //   if (event.shiftKey && event.keyCode == 87) {
-  //     clearInterval(this.intervalId);
-  //   }
-  //   if (event.key === 'w') {
-  //     clearInterval(this.intervalId);
-  //   }
-  // }
-  //
-  // @HostListener('document:keyup', ['$event']) onKeyupHandler(event: KeyboardEvent) {
-  //   if (event.key === 'w'  && this.character.isFlying) {
-  //     this.setFlightVibrations();
-  //   }
-  //   if (event.shiftKey && event.keyCode == 87  && this.character.isFlying) {
-  //     this.setFlightVibrations();
-  //   }
-  // }
-
   constructor(private character: CharacterService,
               private keyboardControlService: KeyboardControlService,
               private cesiumService: CesiumService,

@@ -39,6 +39,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
   private gameNotificationsSubscription: Subscription;
   private paramsSubscription: Subscription;
 
+
   constructor(private gameService: GameService,
               private character: CharacterService,
               private activatedRoute: ActivatedRoute,
@@ -46,7 +47,8 @@ export class GameContainerComponent implements OnInit, OnDestroy {
               private ngZone: NgZone,
               public controlledService: TakeControlService,
               private snackBar: MatSnackBar) {
-    Cesium.BingMapsApi.defaultKey = 'AkXEfZI-hKtZ995XgjM0XHxTiXpyS4i2Vb4w08Pjozwn-NAfVIvvHBYaP6Pgi717';
+    Cesium.BingMapsApi.defaultKey = 'AmzowhvWedaZu8mSrSHOwx2A52aRoYbkKvs4TeVUu_AzSXMnhvLCLFsqLFBqBS0V';
+    // Cesium.BingMapsApi.defaultKey = 'AkXEfZI-hKtZ995XgjM0XHxTiXpyS4i2Vb4w08Pjozwn-NAfVIvvHBYaP6Pgi717';
   }
 
   ngOnInit() {
@@ -55,6 +57,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
         if (!params.playerToken) {
           this.router.navigate(['/']);
           this.paramsSubscription.unsubscribe();
+
           return;
         }
 
@@ -73,6 +76,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
           this.me = currentGame.me;
           this.gameResult$.next(currentGame.winingTeam);
           const players = this.game.players.filter(p => p.state !== 'WAITING');
+
           const allPlayers = [...players];
           if (this.me) {
             this.isViewer = this.me.type === 'OVERVIEW' || this.me['__typename'] === 'Viewer';
@@ -131,7 +135,6 @@ export class GameContainerComponent implements OnInit, OnDestroy {
           entity: this.me,
         });
       }
-
     } else {
       // if controlling set state from controlled player
       if (this.controlledService.controlledPlayer) {

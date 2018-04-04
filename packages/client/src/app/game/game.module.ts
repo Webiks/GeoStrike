@@ -55,7 +55,7 @@ import { CreditsDialogComponent } from './views/credits-dialog/credits-dialog.co
 import { BloodOnScreen } from './views/game-container/blood-on-screen/blood-on-screen';
 import { FlightModeService } from './views/game-container/flight-mode/flight-mode.service';
 import { FlightIndicator } from "./views/game-map/other-players/flight/flight-indicator.component";
-
+import { MapProviderComponent } from './views/game-map/map-provider/map-provider.component';
 
 @NgModule({
   declarations: [
@@ -89,7 +89,9 @@ import { FlightIndicator } from "./views/game-map/other-players/flight/flight-in
     CreditsDialogComponent,
     BloodOnScreen,
     FlightModeComponent,
-    FlightIndicator
+    FlightIndicator,
+    BloodOnScreen,
+    MapProviderComponent
   ],
   imports: [
     BrowserModule,
