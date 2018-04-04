@@ -99,8 +99,6 @@ export class GameRoomComponent implements OnInit, OnDestroy {
   }
 
   ready() {
-    this.gameService.currentTerrainEnviorment.subscribe(terrainType => {
-      console.log("terrainType:"+terrainType)});
     this.gameService.readyToPlay().subscribe();
   }
 

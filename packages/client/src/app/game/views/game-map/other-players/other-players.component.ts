@@ -35,23 +35,33 @@ export class OtherPlayersComponent {
     return position;
   }
 
+  // interpolatePlayerPosition(player: PlayerFields.Fragment, playerPosition) {
+  //   const playerId = player.id;
+  //   const fixedPosition = this.fixPosition(playerPosition, player);
+  //   const positionProperty = this.playersPositionMap.get(playerId);
+  //   if (!positionProperty) {
+  //     const result = InterpolationService.interpolate({
+  //       data: fixedPosition,
+  //     }, InterpolationType.POSITION);
+  //     this.playersPositionMap.set(playerId, result);
+  //     return result;
+  //   }
+  //   else {
+  //     return InterpolationService.interpolate({
+  //       data: fixedPosition,
+  //       cesiumSampledProperty: positionProperty,
+  //     });
+  //   }
+  // }
+
   interpolatePlayerPosition(player: PlayerFields.Fragment, playerPosition) {
     const playerId = player.id;
     const fixedPosition = this.fixPosition(playerPosition, player);
-    const positionProperty = this.playersPositionMap.get(playerId);
-    if (!positionProperty) {
-      const result = InterpolationService.interpolate({
-        data: fixedPosition,
-      }, InterpolationType.POSITION);
-      this.playersPositionMap.set(playerId, result);
-      return result;
-    }
-    else {
-      return InterpolationService.interpolate({
-        data: fixedPosition,
-        cesiumSampledProperty: positionProperty,
-      });
-    }
+    const result = InterpolationService.interpolate({
+      data: fixedPosition,
+    }, InterpolationType.POSITION);
+    this.playersPositionMap.set(playerId, result);
+    return result;
   }
 
   getOrientation(location, heading: number, player: PlayerFields.Fragment) {
