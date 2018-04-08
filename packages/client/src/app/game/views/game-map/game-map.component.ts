@@ -1,7 +1,7 @@
 import {
   ChangeDetectorRef,
   Component,
-  ElementRef,
+  ElementRef, HostListener,
   Input,
   NgZone,
   OnDestroy,
@@ -31,7 +31,6 @@ import { PitchCalculatorService } from './services/pitch-calculator.service';
   styleUrls: ['./game-map.component.scss'],
 })
 export class GameMapComponent implements OnInit, OnDestroy {
-
   public static readonly DEFAULT_START_LOCATION =
     Cesium.Cartesian3.fromDegrees(-73.985187, 40.758857, 1000);
   public static readonly DEFAULT_PITCH = -5;
@@ -48,7 +47,6 @@ export class GameMapComponent implements OnInit, OnDestroy {
   private helperEntityPoint;
   private lastViewState: ViewState;
   mapLayerProviderOptions: MapLayerProviderOptions;
-  private isFlyingInFlyingMode = false;
 
   constructor(private gameService: GameService,
               private character: CharacterService,
@@ -172,10 +170,10 @@ export class GameMapComponent implements OnInit, OnDestroy {
     let speed = environment.movement.walkingSpeed;
     let crashDestination = this.utils.pointByLocationDistanceAndAzimuthAndHeight3d(this.character.location, speed, Cesium.Math.toRadians(this.character.heading + 180), true);
     crashDestination = this.utils.toFixedHeight(crashDestination);
-    crashDestination = this.utils.toHeightOffset(crashDestination, 4);
-    this.character.isCrawling = true;
+    crashDestination = this.utils.toHeightOffset(crashDestination, 1);
     this.character.location = crashDestination;
     this.viewer.camera.flyTo({destination: crashDestination, duration: 2});
+    this.character.isCrawling = true;
   }
 
   onMousemove(event: MouseEvent) {
@@ -201,13 +199,14 @@ export class GameMapComponent implements OnInit, OnDestroy {
     const isShooting = this.character.state === MeModelState.SHOOTING;
     const isCrawling = this.character.isCrawling;
     const isFlying = this.character.isFlying;
-    const range = isFPV || isShooting ? 0.1 : 4;
+    const range = isFlying ? (7) :  (isFPV) ? (0.1) : (4);
 
     const playerHeadCart = Cesium.Cartographic.fromCartesian(this.character.location);
 
     if (isCrawling) {
       playerHeadCart.height += 2;
     }
+
     else if (isFlying) {
       const height = Cesium.Cartographic.fromCartesian(this.character.location).height;
       if (this.character.flightData.remainingTime === 0 || this.character.meFromServer.flight.remainingTime === 0 || height <= 0) {
@@ -233,7 +232,6 @@ export class GameMapComponent implements OnInit, OnDestroy {
     const heading = Cesium.Math.toRadians(-180 + this.character.heading);
     this.helperEntityPoint.position =
       Cesium.Cartesian3.fromRadians(playerHeadCart.longitude, playerHeadCart.latitude, playerHeadCart.height);
-
     this.viewer.zoomTo([this.character.entity, this.helperEntityPoint], new Cesium.HeadingPitchRange(heading, pitch, range));
     this.lastPlayerLocation = this.character.location;
     this.lastPlayerHead = playerHeadCart;

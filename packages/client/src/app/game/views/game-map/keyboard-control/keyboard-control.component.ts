@@ -52,6 +52,7 @@ export class KeyboardControlComponent implements OnInit {
   private increase = true;
   private intervalId;
 
+
   constructor(private character: CharacterService,
               private keyboardControlService: KeyboardControlService,
               private cesiumService: CesiumService,
