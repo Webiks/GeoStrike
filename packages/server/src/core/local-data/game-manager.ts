@@ -164,7 +164,7 @@ export class GamesManager {
             speed: 'NONE',
             minHeight: 50,
             maxHeight: 500,
-            remainingTime: 300,
+            remainingTime: 3000,
             heightLevel: 'NONE',
             flightId: timer
 

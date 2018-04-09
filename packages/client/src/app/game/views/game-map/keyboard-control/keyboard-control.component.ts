@@ -346,17 +346,5 @@ export class KeyboardControlComponent implements OnInit {
     this.keyboardKeysService.registerKeyBoardEventDescription('LookAroundMouse', 'Look around');
     this.keyboardKeysService.registerKeyBoardEventDescription('arrows', 'Look around');
   }
-
-  setFlightVibrations(){
-    let vibrationHeightMeters = this.character.viewState === ViewState.SEMI_FPV ? 2 : 2;
-      this.intervalId =  setInterval(()=>{
-      this.increase = !this.increase;
-      let location = this.character.location;
-      if(this.increase)
-        this.character.location = this.utils.toHeightOffset(location,vibrationHeightMeters, 0)
-      else
-        this.character.location = this.utils.toHeightOffset(location,-vibrationHeightMeters, 0)
-    },1200)
-  }
 }
 

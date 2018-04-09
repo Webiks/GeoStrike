@@ -352,7 +352,7 @@ export class MeComponent implements OnInit, OnDestroy {
         clearInterval(this.intervalId);
         return;
       }
-      let vibrationHeightMeters = this.character.viewState === ViewState.SEMI_FPV ? 0.75 : 10;
+      let vibrationHeightMeters = this.character.viewState === ViewState.SEMI_FPV ? 0.3 : 1;
       let location = this.character.location;
       if (this.increase) {
         this.character.location = this.utils.toHeightOffset(location, vibrationHeightMeters)
