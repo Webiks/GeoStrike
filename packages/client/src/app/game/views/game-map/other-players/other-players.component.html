@@ -9,23 +9,24 @@
     runAnimations: player.state !== 'DEAD',
 	}">
   </ac-model-desc>
-  <ac-billboard-primitive-desc *ngIf="isOverview$| async" props="{
-    position:  utils.toFixedHeight(player.currentLocation.location, 5),
-    heightReference: utils.getClampedToGroundHeightReference(),
+  <ac-billboard-desc *ngIf="isOverview$ | async" props="{
+    position:  utils.toFixedHeight(player.currentLocation.location, 7),
+    heightReference: utils.getRelativeToGroundHeightReference(),
     image: getPlayerIcon(player)
   }">
-  </ac-billboard-primitive-desc>
-  <ac-label-primitive-desc *ngIf="isOverview$ | async" props="{
+  </ac-billboard-desc>
+  <ac-label-desc *ngIf="isOverview$ | async" props="{
     show: player.type === 'PLAYER',
-    position: utils.toFixedHeight(player.currentLocation.location, 5),
-    heightReference: utils.getClampedToGroundHeightReference(),
+    position: utils.toFixedHeight(player.currentLocation.location, 7),
+    heightReference: utils.getRelativeToGroundHeightReference(),
     text: getPlayerName(player),
     font: '15px sans-serif',
     scale: 0.9,
     pixelOffset: getLabelPixelOffset(player) | pixelOffset,
     showBackground: true
   }">
-  </ac-label-primitive-desc>
+  </ac-label-desc>
 </ac-layer>
 <other-players-gun-sound></other-players-gun-sound>
 <gun-indicator></gun-indicator>
+<!--<terrain-billboard [playersPositions]="playersPositions"></terrain-billboard>-->

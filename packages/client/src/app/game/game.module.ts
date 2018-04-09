@@ -53,6 +53,7 @@ import { GameCreditsComponent } from './views/game-container/game-credits/game-c
 import { CreditsDialogComponent } from './views/credits-dialog/credits-dialog.component';
 import { BloodOnScreen } from './views/game-container/blood-on-screen/blood-on-screen';
 import { MapProviderComponent } from './views/game-map/map-provider/map-provider.component';
+import { TerrainBillboardComponent } from "./views/game-map/other-players/terrain-billboard/terrain-billboard.component";
 
 @NgModule({
   declarations: [
@@ -85,7 +86,8 @@ import { MapProviderComponent } from './views/game-map/map-provider/map-provider
     GameCreditsComponent,
     CreditsDialogComponent,
     BloodOnScreen,
-    MapProviderComponent
+    MapProviderComponent,
+    TerrainBillboardComponent
   ],
   imports: [
     BrowserModule,

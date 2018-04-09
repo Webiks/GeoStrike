@@ -87,7 +87,8 @@ export class WorldComponent implements OnInit {
       }));
     }
     else {
-         this.cesiumService.getViewer().terrainProvider = new Cesium.createWorldTerrain(environment.terrain);
+      debugger;
+         this.cesiumService.getViewer().terrainProvider = new Cesium.createWorldTerrain(environment.terrain.url);
     }
   }
 

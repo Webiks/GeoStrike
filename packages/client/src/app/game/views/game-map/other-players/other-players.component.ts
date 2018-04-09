@@ -1,16 +1,22 @@
-import { Component, Input } from '@angular/core';
-import { AcNotification } from 'angular-cesium';
-import { Observable } from 'rxjs/Observable';
-import { UtilsService } from '../../../services/utils.service';
-import { InterpolationService, InterpolationType } from '../../../services/interpolation.service';
-import { PlayerFields, } from '../../../../types';
-import { CharacterService, ViewState } from '../../../services/character.service';
-import { TakeControlService } from '../../../services/take-control.service';
-import { OtherPlayersShotService } from './gun-shot/other-players-shot.service';
+import { Component, Input } from "@angular/core";
+import { AcNotification, CesiumService } from "angular-cesium";
+import { Observable } from "rxjs/Observable";
+import { UtilsService } from "../../../services/utils.service";
+import {
+  InterpolationService,
+  InterpolationType
+} from "../../../services/interpolation.service";
+import { PlayerFields } from "../../../../types";
+import {
+  CharacterService,
+  ViewState
+} from "../../../services/character.service";
+import { TakeControlService } from "../../../services/take-control.service";
+import { OtherPlayersShotService } from "./gun-shot/other-players-shot.service";
 
 @Component({
-  selector: 'other-players',
-  templateUrl: './other-players.component.html',
+  selector: "other-players",
+  templateUrl: "./other-players.component.html",
   providers: [OtherPlayersShotService]
 })
 export class OtherPlayersComponent {
@@ -19,13 +25,32 @@ export class OtherPlayersComponent {
   Cesium = Cesium;
 
   isOverview$: Observable<boolean>;
+  // isTerrainReady: Promise<boolean>;
 
-  constructor(public utils: UtilsService, public character: CharacterService, private takeControlService: TakeControlService) {
-    this.isOverview$ = character.viewState$.map(viewState => viewState === ViewState.OVERVIEW);
+  constructor(
+    public utils: UtilsService,
+    public character: CharacterService,
+    private takeControlService: TakeControlService,
+    private cesiumService: CesiumService
+  ) {
+    this.isOverview$ = character.viewState$.map(
+      viewState => viewState === ViewState.OVERVIEW
+    );
+    // this.isTerrainReady = this.cesiumService
+    //   .getViewer()
+    //   .terrainProvider.readyPromise
+      // .then(
+      //   isReady => {
+      //   this.isTerrainReady = isReady;1
+      // });
+
+    // setTimeout(this.testTerrainIsReady, 30000);
   }
-
-   fixPosition(position, player: PlayerFields.Fragment) {
-    if (player.state === 'DEAD') {
+  // testTerrainIsReady(){
+  //   this.isTerrainReady = true
+  // }
+  fixPosition(position, player: PlayerFields.Fragment) {
+    if (player.state === "DEAD") {
       return position;
     } else if (player.isCrawling) {
       return this.utils.toHeightOffset(position, 0.2);
@@ -57,19 +82,22 @@ export class OtherPlayersComponent {
   interpolatePlayerPosition(player: PlayerFields.Fragment, playerPosition) {
     const playerId = player.id;
     const fixedPosition = this.fixPosition(playerPosition, player);
-    const result = InterpolationService.interpolate({
-      data: fixedPosition,
-    }, InterpolationType.POSITION);
+    const result = InterpolationService.interpolate(
+      {
+        data: fixedPosition
+      },
+      InterpolationType.POSITION
+    );
     this.playersPositionMap.set(playerId, result);
     return result;
   }
 
   getOrientation(location, heading: number, player: PlayerFields.Fragment) {
-    if (player.state === 'DEAD') {
-      const roll = player.character.name !== 'car' ? 90 : 10;
+    if (player.state === "DEAD") {
+      const roll = player.character.name !== "car" ? 90 : 10;
       return this.utils.getOrientation(location, heading, 0, roll);
     } else {
-      const playerHeading = player.type === 'PLAYER' ? heading : heading + 90;
+      const playerHeading = player.type === "PLAYER" ? heading : heading + 90;
       const roll = player.isCrawling ? 90 : 0;
       return this.utils.getOrientation(location, playerHeading, 0, roll);
     }
@@ -84,28 +112,30 @@ export class OtherPlayersComponent {
   }
 
   getPlayerIcon(player: PlayerFields.Fragment) {
-    const url =  player.character && player.character.iconUrl;
-    if (url){
-      const urlSplit = url.split('.');
-      let postfix = '';
-      if (player.state === 'DEAD' ) {
-        postfix = '-dead'
-      }
-      else if (this.takeControlService.selectedPlayerToControl && player.id === this.takeControlService.selectedPlayerToControl.id) {
-        postfix += '-chosen'
+    const url = player.character && player.character.iconUrl;
+    if (url) {
+      const urlSplit = url.split(".");
+      let postfix = "";
+      if (player.state === "DEAD") {
+        postfix = "-dead";
+      } else if (
+        this.takeControlService.selectedPlayerToControl &&
+        player.id === this.takeControlService.selectedPlayerToControl.id
+      ) {
+        postfix += "-chosen";
       }
       if (player.isMe) {
-        postfix += '-me'
+        postfix += "-me";
       }
 
       return `${urlSplit[0]}${postfix}.${urlSplit[1]}`;
     } else {
-      return '/assets/icons/grey-mark.png';
+      return "/assets/icons/grey-mark.png";
     }
   }
 
   runAnimation(player: PlayerFields.Fragment) {
-    return player.state === 'DEAD';
+    return player.state === "DEAD";
   }
 
   getLabelPixelOffset(player: PlayerFields.Fragment) {
@@ -116,6 +146,6 @@ export class OtherPlayersComponent {
   }
 
   getPlayerName(player) {
-    return player.username ? player.username : '';
+    return player.username ? player.username : "";
   }
 }
