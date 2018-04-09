@@ -1,12 +1,21 @@
-import { v4 } from 'uuid';
-import { sign } from 'jsonwebtoken';
-import { CharacterData, GameState, PlayerState, PlayerSyncState, PlayerLifeState } from '../../types';
-import * as Cesium from 'cesium';
-import { config } from '../../settings/config';
-import { startClientsUpdater, stopClientsUpdater } from '../clients-updater/clients-updater';
-import { BackgroundCharacterManager } from '../background-character/background-character-manager';
-import { PLAYER_CHARACTERS } from './characters';
-import { GamesTimeout } from './games-timeout';
+import { v4 } from "uuid";
+import { sign } from "jsonwebtoken";
+import {
+  CharacterData,
+  GameState,
+  PlayerState,
+  PlayerSyncState,
+  PlayerLifeState
+} from "../../types";
+import * as Cesium from "cesium";
+import { config } from "../../settings/config";
+import {
+  startClientsUpdater,
+  stopClientsUpdater
+} from "../clients-updater/clients-updater";
+import { BackgroundCharacterManager } from "../background-character/background-character-manager";
+import { PLAYER_CHARACTERS } from "./characters";
+import { GamesTimeout } from "./games-timeout";
 import Timer = NodeJS.Timer;
 import { TerrainLocation, TerrainType } from "./terrains";
 
@@ -17,17 +26,16 @@ export interface ICartesian3Location {
 }
 
 export enum Team {
-  RED = 'RED',
-  BLUE = 'BLUE',
-  NONE = 'NONE',
+  RED = "RED",
+  BLUE = "BLUE",
+  NONE = "NONE"
 }
 
 export enum CharacterType {
-  PLAYER = 'PLAYER',
-  BACKGROUND_CHARACTER = 'BACKGROUND_CHARACTER',
-  OVERVIEW = 'OVERVIEW',
+  PLAYER = "PLAYER",
+  BACKGROUND_CHARACTER = "BACKGROUND_CHARACTER",
+  OVERVIEW = "OVERVIEW"
 }
-
 
 export interface IViewer {
   token: string;
@@ -57,21 +65,24 @@ export interface IPlayer {
 
 export interface IGameObject {
   gameId: string;
-    gameCode: string;
+  gameCode: string;
   playersMap: Map<string, IPlayer>;
   viewers: IViewer[];
   state: GameState;
   clientsUpdaterId?: Timer;
   bgCharactersManager: BackgroundCharacterManager;
-  winingTeam: Team,
+  winingTeam: Team;
   controlledPlayersMap: Map<string, IPlayer>;
   terrainType: TerrainType;
 }
 
-const TOKENS_SECRET = 'sdf43tSWDG#%Tsdfw4';
+const TOKENS_SECRET = "sdf43tSWDG#%Tsdfw4";
 
 export class GamesManager {
-  private activeGames: Map<string, IGameObject> = new Map<string, IGameObject>();
+  private activeGames: Map<string, IGameObject> = new Map<
+    string,
+    IGameObject
+  >();
   private gamesTimeouts: GamesTimeout;
 
   constructor() {
@@ -95,7 +106,7 @@ export class GamesManager {
     const game = this.getGameById(gameId);
     const playerToAdd = {
       ...player,
-      game,
+      game
     } as IPlayer;
 
     game.playersMap.set(player.playerId, playerToAdd);
@@ -111,7 +122,7 @@ export class GamesManager {
       {
         gameId: game.gameId,
         playerId,
-        username: finalUsername,
+        username: finalUsername
       },
       TOKENS_SECRET
     );
@@ -119,18 +130,24 @@ export class GamesManager {
     const viewer = {
       token: playerToken,
       playerId,
-      username: finalUsername,
+      username: finalUsername
     };
     game.viewers.push(viewer);
     return viewer;
   }
 
-  private validateUsername(username: string, game: IGameObject, isFirst = true): string {
-    const exists = Array.from(game.playersMap.values()).find(p => p.username === username);
+  private validateUsername(
+    username: string,
+    game: IGameObject,
+    isFirst = true
+  ): string {
+    const exists = Array.from(game.playersMap.values()).find(
+      p => p.username === username
+    );
     if (exists) {
       let newUsername = null;
       if (isFirst) {
-        newUsername = username + '1'
+        newUsername = username + "1";
       } else {
         const count = +username.slice(-1);
         newUsername = username.slice(0, -1) + (count + 1);
@@ -141,26 +158,28 @@ export class GamesManager {
     }
   }
 
-  addRealPlayerToGame(gameId: string,
-                      characterName: string,
-                      username: string,
-                      team: Team): IPlayer {
+  addRealPlayerToGame(
+    gameId: string,
+    characterName: string,
+    username: string,
+    team: Team
+  ): IPlayer {
     const game = this.getGameById(gameId);
     const playerId = v4();
     const playerToken = sign(
       {
         gameId: game.gameId,
         playerId,
-        username,
+        username
       },
       TOKENS_SECRET
     );
 
     // const defaultPlayerPositions = config.PLAYERS_SPAWN_POSITIONS[team];
-      const terrainTeamTypeStr = game.terrainType + "_" + team;
-      const defaultPlayerPositions = TerrainLocation[terrainTeamTypeStr];
+    const terrainTeamTypeStr = game.terrainType + "_" + team;
+    const defaultPlayerPositions = TerrainLocation[terrainTeamTypeStr];
 
-      const realPlayerTeamCount = Array.from(game.playersMap.values()).filter(
+    const realPlayerTeamCount = Array.from(game.playersMap.values()).filter(
       p => p.type === CharacterType.PLAYER && p.team === team
     ).length;
 
@@ -171,8 +190,8 @@ export class GamesManager {
       character,
       token: playerToken,
       username: finalUsername,
-      state: 'WAITING',
-      lifeState: 'FULL',
+      state: "WAITING",
+      lifeState: "FULL",
       lifeStatePerctange: 100,
       numberOfShotsThatHit: 0,
       game,
@@ -182,7 +201,7 @@ export class GamesManager {
       type: CharacterType.PLAYER,
       isCrawling: false,
       isShooting: false,
-      syncState: 'VALID',
+      syncState: "VALID"
     };
 
     game.playersMap.set(playerId, player);
@@ -190,18 +209,18 @@ export class GamesManager {
     return player;
   }
 
-  changeGameTerrainType(gameId: string, gameType:TerrainType){
-    const game = this.getGameById(gameId);
-      game.terrainType = gameType;
-  }
+  // changeGameTerrainType(gameId: string, gameType: TerrainType) {
+  //   const game = this.getGameById(gameId);
+  //   game.terrainType = gameType;
+  // }
 
-  changePlayerLocation(gameId: string, playerId, gameType:TerrainType) {
-      const game = this.getGameById(gameId);
-      const player = game.playersMap.get(playerId);
-      const terrainTeamTypeStr = game.terrainType + "_" + player.team;
-      const defaultPlayerPositions = TerrainLocation[terrainTeamTypeStr];
-      player.currentLocation = defaultPlayerPositions;
-  }
+  // changePlayerLocation(gameId: string, playerId) {
+  //   const game = this.getGameById(gameId);
+  //   const player = game.playersMap.get(playerId);
+  //   const terrainTeamTypeStr = game.terrainType + "_" + player.team;
+  //   const defaultPlayerPositions = TerrainLocation[terrainTeamTypeStr];
+  //   player.currentLocation = defaultPlayerPositions;
+  // }
 
   createNewGame(terrainType: string): IGameObject {
     const gameId = v4();
@@ -212,7 +231,7 @@ export class GamesManager {
       gameId,
       gameCode,
       playersMap: new Map<string, IPlayer>(),
-      state: 'WAITING',
+      state: "WAITING",
       bgCharactersManager,
       viewers: [],
       winingTeam: Team.NONE,
@@ -232,7 +251,7 @@ export class GamesManager {
       return this.activeGames.get(id);
     }
 
-    throw new Error('Game does not exists');
+    throw new Error("Game does not exists");
   }
 
   getGameByCode(code: string): IGameObject {
@@ -242,7 +261,7 @@ export class GamesManager {
       }
     }
 
-    throw new Error('Game does not exists');
+    throw new Error("Game does not exists");
   }
 
   playerReady(gameId: string, playerId: string) {
@@ -250,18 +269,20 @@ export class GamesManager {
     const player = game.playersMap.get(playerId);
 
     if (player) {
-      player.state = 'READY';
+      player.state = "READY";
     }
   }
 
-  updatePlayerPosition(gameId: string,
-                       playerId: string,
-                       position: ICartesian3Location,
-                       heading: number,
-                       isCrawling: boolean,
-                       isShooting: boolean,
-                       enteringBuildingPosition: ICartesian3Location,
-                       skipValidation = false) {
+  updatePlayerPosition(
+    gameId: string,
+    playerId: string,
+    position: ICartesian3Location,
+    heading: number,
+    isCrawling: boolean,
+    isShooting: boolean,
+    enteringBuildingPosition: ICartesian3Location,
+    skipValidation = false
+  ) {
     const game = this.getGameById(gameId);
     const player = game.playersMap.get(playerId);
 
@@ -275,14 +296,14 @@ export class GamesManager {
         skipValidation ||
         this.validatePlayerPosition(player.currentLocation, position)
       ) {
-        player.syncState = 'VALID';
+        player.syncState = "VALID";
         player.currentLocation = position;
         player.heading = heading;
         player.isCrawling = isCrawling;
         player.isShooting = isShooting;
         player.enteringBuildingPosition = enteringBuildingPosition;
       } else {
-        player.syncState = 'INVALID';
+        player.syncState = "INVALID";
       }
 
       return player;
@@ -293,40 +314,46 @@ export class GamesManager {
 
   updatePlayerState(gameId: string, playerId: string, newState: PlayerState) {
     const game = this.getGameById(gameId);
-    const player = game.controlledPlayersMap.get(playerId) || game.playersMap.get(playerId);
+    const player =
+      game.controlledPlayersMap.get(playerId) || game.playersMap.get(playerId);
     if (player) {
       player.state = newState;
     }
 
     this.checkGameResult(game);
-
   }
 
-  updatePlayerLifeState(gameId: string, playerId: string, newState: PlayerLifeState){
-      const game = this.getGameById(gameId);
-      const player = game.controlledPlayersMap.get(playerId) || game.playersMap.get(playerId);
-      if (player) {
-          player.lifeState = newState;
-      }
-  }
-
-    updateLifeStatePerctange(gameId: string, playerId: string, newState: number){
-        const game = this.getGameById(gameId);
-        const player = game.controlledPlayersMap.get(playerId) || game.playersMap.get(playerId);
-        if (player) {
-            player.lifeStatePerctange = newState;
-        }
+  updatePlayerLifeState(
+    gameId: string,
+    playerId: string,
+    newState: PlayerLifeState
+  ) {
+    const game = this.getGameById(gameId);
+    const player =
+      game.controlledPlayersMap.get(playerId) || game.playersMap.get(playerId);
+    if (player) {
+      player.lifeState = newState;
     }
+  }
+
+  updateLifeStatePerctange(gameId: string, playerId: string, newState: number) {
+    const game = this.getGameById(gameId);
+    const player =
+      game.controlledPlayersMap.get(playerId) || game.playersMap.get(playerId);
+    if (player) {
+      player.lifeStatePerctange = newState;
+    }
+  }
 
   private checkGameResult(game: IGameObject) {
     const players = Array.from(game.playersMap.values());
 
     const bluePlayers = players.filter(p => p.team === Team.BLUE);
-    const deadBlues = bluePlayers.filter(p => p.state === 'DEAD').length;
+    const deadBlues = bluePlayers.filter(p => p.state === "DEAD").length;
     const bluePlayersCount = bluePlayers.length;
 
     const redPlayers = players.filter(p => p.team === Team.RED);
-    const deadReds = redPlayers.filter(p => p.state === 'DEAD').length;
+    const deadReds = redPlayers.filter(p => p.state === "DEAD").length;
     const redPlayersCount = redPlayers.length;
 
     let winingTeam = null;
@@ -338,12 +365,17 @@ export class GamesManager {
 
     if (winingTeam) {
       game.winingTeam = winingTeam;
-      setTimeout(() => this.endGame(game.gameId), config.clientsUpdateRate * 10);
+      setTimeout(
+        () => this.endGame(game.gameId),
+        config.clientsUpdateRate * 10
+      );
     }
   }
 
-  validatePlayerPosition(currentLocation: ICartesian3Location,
-                         newLocation: ICartesian3Location): boolean {
+  validatePlayerPosition(
+    currentLocation: ICartesian3Location,
+    newLocation: ICartesian3Location
+  ): boolean {
     const currentPosition = new Cesium.Cartesian3(
       currentLocation.x,
       currentLocation.y,
@@ -365,9 +397,13 @@ export class GamesManager {
     this.activeGames.delete(gameId);
   }
 
-  takeControlOverPlayer(game, playerId: string, controlledPlayerId: string): IPlayer {
+  takeControlOverPlayer(
+    game,
+    playerId: string,
+    controlledPlayerId: string
+  ): IPlayer {
     const controlledPlayer: IPlayer = game.playersMap.get(controlledPlayerId);
-    controlledPlayer.state = 'CONTROLLED';
+    controlledPlayer.state = "CONTROLLED";
     game.controlledPlayersMap.set(playerId, controlledPlayer);
     return controlledPlayer;
   }
@@ -375,14 +411,19 @@ export class GamesManager {
   removeControlOverPlayer(game, playerId: string): IPlayer {
     const controlledPlayer: IPlayer = game.controlledPlayersMap.get(playerId);
     if (controlledPlayer) {
-      controlledPlayer.state = controlledPlayer.state === 'CONTROLLED' ? 'ALIVE' : controlledPlayer.state;
+      controlledPlayer.state =
+        controlledPlayer.state === "CONTROLLED"
+          ? "ALIVE"
+          : controlledPlayer.state;
       game.controlledPlayersMap.delete(playerId);
     }
     return controlledPlayer;
   }
 
   isControlled(game: IGameObject, playerId): boolean {
-    return !!Array.from(game.controlledPlayersMap.values()).find(p => p.playerId === playerId);
+    return !!Array.from(game.controlledPlayersMap.values()).find(
+      p => p.playerId === playerId
+    );
   }
 
   isController(game: IGameObject, playerId): boolean {

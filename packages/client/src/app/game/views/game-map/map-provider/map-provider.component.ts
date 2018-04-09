@@ -13,7 +13,10 @@ const tillingScheme = new Cesium.GeographicTilingScheme({
 const terrainTypeProvider = {
   'SWISS': MapLayerProviderOptions.UrlTemplateImagery,
   'MOUNTAIN': MapLayerProviderOptions.BingMaps,
-  'URBAN': MapLayerProviderOptions.BingMaps
+  'URBAN': MapLayerProviderOptions.BingMaps,
+  'AUSTRALIA': MapLayerProviderOptions.BingMaps,
+  'NEWZEALAND': MapLayerProviderOptions.BingMaps
+
 }
 
 const terrainTypeProviderOptions = {
@@ -25,6 +28,14 @@ const terrainTypeProviderOptions = {
     rectangle: rectangle
   },
   'MOUNTAIN': {
+    url: 'https://dev.virtualearth.net',
+    key: 'AkXEfZI-hKtZ995XgjM0XHxTiXpyS4i2Vb4w08Pjozwn-NAfVIvvHBYaP6Pgi717'
+  },
+  'AUSTRALIA': {
+    url: 'https://dev.virtualearth.net',
+    key: 'AkXEfZI-hKtZ995XgjM0XHxTiXpyS4i2Vb4w08Pjozwn-NAfVIvvHBYaP6Pgi717'
+  },
+  'NEWZEALAND': {
     url: 'https://dev.virtualearth.net',
     key: 'AkXEfZI-hKtZ995XgjM0XHxTiXpyS4i2Vb4w08Pjozwn-NAfVIvvHBYaP6Pgi717'
   },
