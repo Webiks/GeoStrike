@@ -13,6 +13,7 @@ import {
 } from "../../../services/character.service";
 import { TakeControlService } from "../../../services/take-control.service";
 import { OtherPlayersShotService } from "./gun-shot/other-players-shot.service";
+import { GameService } from "../../../services/game.service";
 
 @Component({
   selector: "other-players",
@@ -25,17 +26,20 @@ export class OtherPlayersComponent {
   Cesium = Cesium;
 
   isOverview$: Observable<boolean>;
-  // isTerrainReady: Promise<boolean>;
+  terrainType: string;
+
 
   constructor(
     public utils: UtilsService,
     public character: CharacterService,
     private takeControlService: TakeControlService,
-    private cesiumService: CesiumService
+    private cesiumService: CesiumService,
+    private gameService: GameService
   ) {
     this.isOverview$ = character.viewState$.map(
       viewState => viewState === ViewState.OVERVIEW
     );
+    this.gameService.currentTerrainEnviorment.subscribe(terrainType => this.terrainType = terrainType);
     // this.isTerrainReady = this.cesiumService
     //   .getViewer()
     //   .terrainProvider.readyPromise
@@ -143,6 +147,12 @@ export class OtherPlayersComponent {
     xOffset -= player.character.name.length * 2.5;
 
     return [xOffset, 45];
+  }
+
+  getPositiveInfinity(){
+   let num= new Number();
+   num = Number.POSITIVE_INFINITY;
+   return num;
   }
 
   getPlayerName(player) {
