@@ -46,8 +46,9 @@ export class PathCreatorComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.gameService.currentTerrainEnviorment.subscribe(() => {
-      this.cameraService.cameraFlyTo(({destination: GameMapComponent.gameStartLocation}));
+    this.gameService.currentTerrainEnviorment.subscribe((terrainType) => {
+      this.gameService.setDefaultStartLocation(terrainType);
+      this.cameraService.cameraFlyTo(({destination: this.gameService.gameStartLocation}));
     })
 
     this.mapEventManager
@@ -103,7 +104,7 @@ export class PathCreatorComponent implements OnInit {
   getLinePositions() {
     return this.polyLinePoints
       .map(location => Cesium.Cartographic.fromCartesian(location))
-      .map(locationCart => {
+      .map(locationCart => {F
         locationCart.height = +10;
         return locationCart;
       })

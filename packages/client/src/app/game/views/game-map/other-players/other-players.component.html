@@ -13,6 +13,7 @@
     position:  utils.toFixedHeight(player.currentLocation.location, 5),
     heightReference: utils.getClampedToGroundHeightReference(),
     verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+    disableDepthTestDistance: 0,
     image: getPlayerIcon(player)
   }">
   </ac-billboard-desc>
@@ -21,6 +22,7 @@
     position: utils.toFixedHeight(player.currentLocation.location, 5),
     heightReference: utils.getClampedToGroundHeightReference(),
     verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+    disableDepthTestDistance:500,
     text: getPlayerName(player),
     font: '15px sans-serif',
     scale: 0.9,

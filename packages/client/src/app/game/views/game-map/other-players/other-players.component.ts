@@ -40,15 +40,7 @@ export class OtherPlayersComponent {
       viewState => viewState === ViewState.OVERVIEW
     );
     this.gameService.currentTerrainEnviorment.subscribe(terrainType => this.terrainType = terrainType);
-    // this.isTerrainReady = this.cesiumService
-    //   .getViewer()
-    //   .terrainProvider.readyPromise
-      // .then(
-      //   isReady => {
-      //   this.isTerrainReady = isReady;1
-      // });
-
-    // setTimeout(this.testTerrainIsReady, 30000);
+   // this.modelsAnimation();
   }
   // testTerrainIsReady(){
   //   this.isTerrainReady = true
@@ -63,6 +55,15 @@ export class OtherPlayersComponent {
     }
     return position;
   }
+
+  // modelsAnimation(){
+  //   const scene = this.cesiumService.getScene();
+  //   Cesium.when(scene.readyPromise).then((model)=>{
+  //     model.activeAnimations.addAll({
+  //       loop : Cesium.ModelAnimationLoop.REPEAT
+  //     });
+  //   })
+  // }
 
   // interpolatePlayerPosition(player: PlayerFields.Fragment, playerPosition) {
   //   const playerId = player.id;
