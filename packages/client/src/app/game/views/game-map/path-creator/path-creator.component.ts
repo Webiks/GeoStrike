@@ -104,7 +104,7 @@ export class PathCreatorComponent implements OnInit {
   getLinePositions() {
     return this.polyLinePoints
       .map(location => Cesium.Cartographic.fromCartesian(location))
-      .map(locationCart => {F
+      .map(locationCart => {
         locationCart.height = +10;
         return locationCart;
       })
