@@ -1,6 +1,7 @@
+console.log("env stage")
 export const environment = {
   production: true,
-  serverUrl: `${process.env.AWS_SERVER_URL}:${process.env.PORT_STABLE} `||'35.156.14.39:3000',
+  serverUrl: `35.156.14.39:3001`,
   wsSchema: 'ws',
   movement: {
     runningSpeed: 1.0,

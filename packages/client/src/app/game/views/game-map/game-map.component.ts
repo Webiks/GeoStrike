@@ -1,4 +1,7 @@
-import {ChangeDetectorRef, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {
+  ChangeDetectorRef, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, Output,
+  ViewChild
+} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {AcMapComponent, AcNotification, ViewerConfiguration, MapLayerProviderOptions} from 'angular-cesium';
 import {GameFields, PlayerFields} from '../../../types';
@@ -23,12 +26,12 @@ import {Subject} from "rxjs/Subject";
 })
 export class GameMapComponent implements OnInit, OnDestroy {
   public static readonly DEFAULT_START_LOCATION =
-    Cesium.Cartesian3.fromDegrees(-73.985187, 40.758857, 1000);
+    // Cesium.Cartesian3.fromDegrees(-73.985187, 40.758857, 1000);
+    Cesium.Cartesian3.fromDegrees(-73.78726, 40.63497, 10000);
   public static readonly DEFAULT_PITCH = -5;
   @Input() me;
   @Input() playersPositions: Observable<AcNotification>;
   @Input() gameData: Observable<GameFields.Fragment>;
-  @Input() flights:  Observable<GameFields.Fragment>;
   @ViewChild(AcMapComponent) private mapInstance: AcMapComponent;
 
   public createPathMode = environment.createPathMode;

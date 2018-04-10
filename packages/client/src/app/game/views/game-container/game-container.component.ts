@@ -1,4 +1,4 @@
-import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
+import {Component, Input, NgZone, OnDestroy, OnInit} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GameService } from '../../services/game.service';
 import { AuthorizationMiddleware } from '../../../core/configured-apollo/network/authorization-middleware';
@@ -14,6 +14,7 @@ import { SnackBarContentComponent } from '../../../shared/snack-bar-content/snac
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/map';
 import * as _ from 'lodash';
+import {FlightService} from "../game-map/other-players/flight.service";
 
 export class OtherPlayerEntity extends AcEntity {
 }
@@ -26,6 +27,7 @@ export class OtherPlayerEntity extends AcEntity {
 })
 export class GameContainerComponent implements OnInit, OnDestroy {
   isViewer: boolean;
+  flights: any;
   otherPlayers$: Subject<AcNotification> = new Subject<AcNotification>();
   allPlayers$: Subject<PlayerFields.Fragment[]> = new Subject<PlayerFields.Fragment[]>();
   gameResult$: Subject<Team> = new Subject();
@@ -46,7 +48,8 @@ export class GameContainerComponent implements OnInit, OnDestroy {
               private router: Router,
               private ngZone: NgZone,
               public controlledService: TakeControlService,
-              private snackBar: MatSnackBar) {
+              private snackBar: MatSnackBar,
+              private flightService: FlightService) {
     Cesium.BingMapsApi.defaultKey = 'AkXEfZI-hKtZ995XgjM0XHxTiXpyS4i2Vb4w08Pjozwn-NAfVIvvHBYaP6Pgi717';
   }
 
@@ -75,7 +78,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
           this.me = currentGame.me;
           this.gameResult$.next(currentGame.winingTeam);
           const players = this.game.players.filter(p => p.state !== 'WAITING');
-
+          // console.log(players);
           const allPlayers = [...players];
           if (this.me) {
             this.isViewer = this.me.type === 'OVERVIEW' || this.me['__typename'] === 'Viewer';
@@ -89,6 +92,8 @@ export class GameContainerComponent implements OnInit, OnDestroy {
               this.setCharacterStateFromServer();
             }
           }
+          // this.flightService.subscribeAirTrafic()
+          //   .subscribe((data)=>console.log(data))
 
           const controlledPlayer = this.controlledService.controlledPlayer;
           this.allPlayers$.next(allPlayers);
@@ -167,6 +172,9 @@ export class GameContainerComponent implements OnInit, OnDestroy {
     return this.allPlayers$.map((players) => players.filter(p => p.team === team)).distinctUntilChanged((a, b) => _.isEqual(a, b));
   }
 
+   setPlayers(flight:PlayerFields.Fragment){
+    this.allPlayers$.next()
+  }
   gameStarted() {
     this.gameNotificationsSubscription = this.gameNotifications$
       .subscribe(notification => {

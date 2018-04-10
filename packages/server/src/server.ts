@@ -9,13 +9,17 @@ import schema from './graphql/schema';
 import { graphiqlExpress, graphqlExpress } from 'apollo-server-express';
 import { createContext, resolveGameAndPlayer } from './graphql/context';
 import { createServer } from 'http';
-import { SubscriptionServer } from 'subscriptions-transport-ws-temp';
+import {     SubscriptionServer } from 'subscriptions-transport-ws-temp';
 import { execute, subscribe } from 'graphql';
 
 export async function initServer() {
   const env = process.env.NODE_ENV || 'development';
   const PORT = process.env.PORT || 3000;
   const server: Express = express();
+
+
+server.get('/test', (req, res) => res.send('Hello ohad!'))
+
 
   server.use(morgan(env === 'development' ? 'dev' : 'combined'));
   server.use(cors());
