@@ -65,7 +65,6 @@ export async function initServer() {
 
   const httpServer = createServer(server);
 
-
   httpServer.listen(PORT, () => {
     logger.info(`Server started on port ${PORT}...`);
     logger.info(`GraphQL HTTP: http://localhost:${PORT}/graphql`);

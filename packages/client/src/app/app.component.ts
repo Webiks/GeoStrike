@@ -25,6 +25,7 @@ export class AppComponent implements DoCheck{
     this.addIcon('arrow-right');
     this.addIcon('arrow-up');
     this.addIcon('arrow-down');
+    console.log("new version")
   }
 
   addIcon(iconName: string){

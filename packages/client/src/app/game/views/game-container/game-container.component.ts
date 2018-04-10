@@ -1,4 +1,4 @@
-import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
+import {Component, Input, NgZone, OnDestroy, OnInit} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GameService } from '../../services/game.service';
 import { AuthorizationMiddleware } from '../../../core/configured-apollo/network/authorization-middleware';
@@ -14,6 +14,7 @@ import { SnackBarContentComponent } from '../../../shared/snack-bar-content/snac
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/map';
 import * as _ from 'lodash';
+import {FlightService} from "../game-map/other-players/flight.service";
 
 export class OtherPlayerEntity extends AcEntity {
 }
@@ -46,7 +47,8 @@ export class GameContainerComponent implements OnInit, OnDestroy {
               private router: Router,
               private ngZone: NgZone,
               public controlledService: TakeControlService,
-              private snackBar: MatSnackBar) {
+              private snackBar: MatSnackBar,
+              private flightService: FlightService) {
     Cesium.BingMapsApi.defaultKey = 'AmzowhvWedaZu8mSrSHOwx2A52aRoYbkKvs4TeVUu_AzSXMnhvLCLFsqLFBqBS0V';
     // Cesium.BingMapsApi.defaultKey = 'AmzowhvWedaZu8mSrSHOwx2A52aRoYbkKvs4TeVUu_AzSXMnhvLCLFsqLFBqBS0V';
     // Cesium.BingMapsApi.defaultKey = 'AkXEfZI-hKtZ995XgjM0XHxTiXpyS4i2Vb4w08Pjozwn-NAfVIvvHBYaP6Pgi717';
@@ -167,6 +169,9 @@ export class GameContainerComponent implements OnInit, OnDestroy {
     return this.allPlayers$.map((players) => players.filter(p => p.team === team)).distinctUntilChanged((a, b) => _.isEqual(a, b));
   }
 
+   setPlayers(flight:PlayerFields.Fragment){
+    this.allPlayers$.next()
+  }
   gameStarted() {
     this.gameNotificationsSubscription = this.gameNotifications$
       .subscribe(notification => {

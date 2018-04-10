@@ -1,15 +1,10 @@
 import {RedisPubSub} from 'graphql-redis-subscriptions';
+import {config} from '../settings/config'
+export const CHANNEL = config.channel;
 
-export const CHANNEL = `messageAdded`;
-
-const Config = {
-    serverPort:  3002,
-    redisHost:  'localhost',
-    redisPort:  6379
-}
 const options = {
-    host: Config.redisHost,
-    port: Config.redisPort,
+    host: config.host,
+    port: config.port,
     retry_strategy: options => {
         // reconnect after
         return Math.max(options.attempt * 100, 3000);
