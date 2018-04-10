@@ -36,7 +36,7 @@ export class FlightComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.ngZone.runOutsideAngular(() => {
-      this.flightSubscription = this.flightService.subscribeAirTrafic()
+      this.flightSubscription = this.flightService.subscribeAirTraffic()
         .subscribe((data) => {
           this.tempData = data;
           this.tempData.messageAdded.forEach(flight => {

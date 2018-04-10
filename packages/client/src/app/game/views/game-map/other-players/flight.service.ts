@@ -10,7 +10,7 @@ export class FlightService {
   constructor(private apollo:Apollo){
 
   }
-  public subscribeAirTrafic(): Observable<Flights.Subscription> {
+  public subscribeAirTraffic(): Observable<Flights.Subscription> {
     if (!this.flights$){
       this.flights$ = this.apollo.subscribe( {
         query: flightSubscription

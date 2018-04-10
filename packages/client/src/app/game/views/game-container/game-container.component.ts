@@ -92,7 +92,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
               this.setCharacterStateFromServer();
             }
           }
-          // this.flightService.subscribeAirTrafic()
+          // this.flightService.subscribeAirTraffic()
           //   .subscribe((data)=>console.log(data))
 
           const controlledPlayer = this.controlledService.controlledPlayer;
