@@ -53,6 +53,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
   @Input() me;
   @Input() playersPositions: Observable<AcNotification>;
   @Input() gameData: Observable<GameFields.Fragment>;
+  @Input() flights:  Observable<GameFields.Fragment>;
   @ViewChild(AcMapComponent) private mapInstance: AcMapComponent;
 
   public createPathMode = environment.createPathMode;
@@ -64,6 +65,9 @@ export class GameMapComponent implements OnInit, OnDestroy {
   private lastViewState: ViewState;
   mapLayerProviderOptions: MapLayerProviderOptions;
 
+
+
+private isFlyingInFlyingMode = false;
   constructor(private gameService: GameService,
               private character: CharacterService,
               private viewerConf: ViewerConfiguration,
@@ -186,30 +190,36 @@ export class GameMapComponent implements OnInit, OnDestroy {
       if (terrainType === 'URBAN')
         this.viewer.camera.flyTo({destination: this.gameService.gameStartLocation});
       else {
-        const overviewPosition = this.utils.toHeightOffset(this.gameService.gameStartLocation, 3000)
-        this.viewer.camera.flyTo({destination: overviewPosition});
+        // this.viewerOptions.toggleDepthTestAgainstTerrain(this.viewer, false);
+        const swissOverviewPosition = this.utils.toHeightOffset(new Cesium.Cartesian3(4327254.413025279, 621509.1085193334, 4628696.864167333), 3000)
+        this.viewer.camera.flyTo({destination: swissOverviewPosition});
       }
     })
   }
 
-  // private overviewSettings() {
-  //   this.viewerOptions.setFreeCameraOptions(this.viewer);
-  //   this.gameService.currentTerrainEnviorment.subscribe(terrainType => {
-  //     if (terrainType == "URBAN") {
-  //       this.viewer.camera.flyTo({destination: GameMapComponent.gameStartLocation});
-  //     }
-  //     else if (terrainType == "MOUNTAIN") {
-  //       this.viewerOptions.toggleDepthTestAgainstTerrain(this.viewer, false);
-  //       const alpinsOverviewPosition = this.utils.toHeightOffset(new Cesium.Cartesian3(-1370653.8374654655, -5507085.922189086, 2901243.9558086237), 3000)
-  //       this.viewer.camera.flyTo({destination: alpinsOverviewPosition});
-  //     }
-  //     else {
-  //       this.viewerOptions.toggleDepthTestAgainstTerrain(this.viewer, false);
-  //       const swissOverviewPosition = this.utils.toHeightOffset(new Cesium.Cartesian3(4327254.413025279, 621509.1085193334, 4628696.864167333), 3000)
-  //       this.viewer.camera.flyTo({destination: swissOverviewPosition});
-  //     }
-  //   })
-  // }
+  private flightCrashSettings() {
+    let speed = environment.movement.walkingSpeed;
+    let crashDestination = this.utils.pointByLocationDistanceAndAzimuthAndHeight3d(this.character.location, speed, Cesium.Math.toRadians(this.character.heading + 180), true);
+    crashDestination = this.utils.toFixedHeight(crashDestination);
+    crashDestination = this.utils.toHeightOffset(crashDestination, 4);
+    this.character.isCrawling = true;
+    this.character.location = crashDestination;
+    this.viewer.camera.flyTo({destination: crashDestination, duration: 2});
+  }
+
+
+  private flightInPlace() {
+    let flag = true;
+    let degree;
+    setInterval(() => {
+
+      if (flag)
+        degree = 0.75
+      else
+        degree = -0.75
+      this.viewer.camera.moveUp(degree);
+    }, 1000);
+  }
 
   onMousemove(event: MouseEvent) {
     if (!this.character.initialized || !document.pointerLockElement) {
@@ -233,6 +243,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
     const isFPV = this.character.viewState === ViewState.FPV;
     const isShooting = this.character.state === MeModelState.SHOOTING;
     const isCrawling = this.character.isCrawling;
+    const isFlying = this.character.isFlying;
     const range = isFPV || isShooting ? 0.1 : 4;
 
     const playerHeadCart = Cesium.Cartographic.fromCartesian(this.character.location);
