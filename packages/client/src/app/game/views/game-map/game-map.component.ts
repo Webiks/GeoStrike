@@ -39,31 +39,20 @@ import {PitchCalculatorService} from './services/pitch-calculator.service';
   styleUrls: ['./game-map.component.scss'],
 })
 export class GameMapComponent implements OnInit, OnDestroy {
-
-  // @HostListener('document:keyup', ['$event']) onKeyupHandler(event: KeyboardEvent) {
-  //   if ((event.key === 'w' || event.shiftKey && event.keyCode == 87) && this.character.isFlying) {
-  //     this.isFlyingInFlyingMode = false;
-  //   }
-  //   else {
-  //     this.isFlyingInFlyingMode = true;
-  //   }
-  //   if (event.key === 'y') {
-  //     this.flightInPlace();
-  //   }
-  // }
-
-
-  public static readonly DEFAULT_START_LOCATION =
-    Cesium.Cartesian3.fromDegrees(-73.985187, 40.758857, 1000);
-  public static readonly DEFAULT_MOUNTAINS_START_LOCATION =
-    new Cesium.Cartesian3(-1370653.8374654655, -5507085.922189086, 2901243.9558086237);
-  public static readonly DEFAULT_SWISS_START_LOCATION =
-    new Cesium.Cartesian3(4327254.413025279, 621509.1085193334, 4628696.864167333);
+  // public static readonly DEFAULT_START_LOCATION =
+  //   Cesium.Cartesian3.fromDegrees(-73.985187, 40.758857, 1000);
+  // public static readonly DEFAULT_MOUNTAINS_START_LOCATION =
+  //   new Cesium.Cartesian3(-1370653.8374654655, -5507085.922189086, 2901243.9558086237);
+  // public static readonly DEFAULT_AUSTRALIA_START_LOCATION =
+  //   new Cesium.Cartesian3(-3787298.0827794825, 4351128.063305529, -2713957.9001589464);
+  // public static readonly DEFAULT_NEWZEALAND_START_LOCATION =
+  //   new Cesium.Cartesian3(-4361556.164988852, 978059.7002869517, -4534895.227650116);
+  // public static readonly DEFAULT_SWISS_START_LOCATION =
+  //   new Cesium.Cartesian3(4327254.413025279, 621509.1085193334, 4628696.864167333);
   public static readonly DEFAULT_PITCH = -5;
   @Input() me;
   @Input() playersPositions: Observable<AcNotification>;
   @Input() gameData: Observable<GameFields.Fragment>;
-  @Input() flights:  Observable<GameFields.Fragment>;
   @ViewChild(AcMapComponent) private mapInstance: AcMapComponent;
 
   public createPathMode = environment.createPathMode;
@@ -75,9 +64,6 @@ export class GameMapComponent implements OnInit, OnDestroy {
   private lastViewState: ViewState;
   mapLayerProviderOptions: MapLayerProviderOptions;
 
-
-
-private isFlyingInFlyingMode = false;
   constructor(private gameService: GameService,
               private character: CharacterService,
               private viewerConf: ViewerConfiguration,
@@ -121,6 +107,7 @@ private isFlyingInFlyingMode = false;
 
     this.gameData.first().subscribe(game => {
       this.gameService.modifyTerrainEnviorment(game.terrainType);
+      this.gameService.setDefaultStartLocation(game.terrainType);
       const overviewMode = game.me['__typename'] === 'Viewer' || game.me.type === 'OVERVIEW';
       if (overviewMode) {
         this.character.viewState = ViewState.OVERVIEW;
@@ -135,7 +122,7 @@ private isFlyingInFlyingMode = false;
       if (this.lastViewState !== ViewState.OVERVIEW && newViewState === ViewState.OVERVIEW) {
         this.changeToOverview();
       } else if (this.lastViewState === ViewState.OVERVIEW && newViewState !== ViewState.OVERVIEW) {
-        // this.viewerOptions.toggleDepthTestAgainstTerrain(this.viewer, true);
+        this.viewerOptions.toggleDepthTestAgainstTerrain(this.viewer, true);
         const controlledPlayer = this.takeControlService.controlledPlayer || this.character.meFromServer;
         const posWithHeight = Cesium.Cartographic.fromCartesian(controlledPlayer.currentLocation.location);
         posWithHeight.height = 5;
@@ -154,6 +141,7 @@ private isFlyingInFlyingMode = false;
           }
         });
       }
+
       this.lastViewState = newViewState;
     });
 
@@ -170,12 +158,11 @@ private isFlyingInFlyingMode = false;
         state: player.state === 'DEAD' ? MeModelState.DEAD : MeModelState.WALKING,
         team: player.team,
         isCrawling: false,
-        isShooting: false,
-        isFlying: false,
         characterInfo: player.character
       });
     }
     this.gameService.startServerUpdatingLoop();
+
     this.viewer.scene.preRender.addEventListener(this.preRenderHandler);
 
     this.ngZone.runOutsideAngular(() => {
@@ -195,46 +182,34 @@ private isFlyingInFlyingMode = false;
 
   private overviewSettings() {
     this.viewerOptions.setFreeCameraOptions(this.viewer);
-    this.gameService.currentTerrainEnviorment.subscribe(terrainType => {
-      if (terrainType == "URBAN") {
-        this.viewer.camera.flyTo({destination: GameMapComponent.DEFAULT_START_LOCATION});
-      }
-      else if (terrainType == "MOUNTAIN") {
-        // this.viewerOptions.toggleDepthTestAgainstTerrain(this.viewer, false);
-        const alpinsOverviewPosition = this.utils.toHeightOffset(new Cesium.Cartesian3(-1370653.8374654655, -5507085.922189086, 2901243.9558086237), 3000)
-        this.viewer.camera.flyTo({destination: alpinsOverviewPosition});
-      }
+    this.gameService.currentTerrainEnviorment.subscribe( (terrainType) => {
+      if (terrainType === 'URBAN')
+        this.viewer.camera.flyTo({destination: this.gameService.gameStartLocation});
       else {
-        // this.viewerOptions.toggleDepthTestAgainstTerrain(this.viewer, false);
-        const swissOverviewPosition = this.utils.toHeightOffset(new Cesium.Cartesian3(4327254.413025279, 621509.1085193334, 4628696.864167333), 3000)
-        this.viewer.camera.flyTo({destination: swissOverviewPosition});
+        const overviewPosition = this.utils.toHeightOffset(this.gameService.gameStartLocation, 3000)
+        this.viewer.camera.flyTo({destination: overviewPosition});
       }
     })
   }
 
-  private flightCrashSettings() {
-    let speed = environment.movement.walkingSpeed;
-    let crashDestination = this.utils.pointByLocationDistanceAndAzimuthAndHeight3d(this.character.location, speed, Cesium.Math.toRadians(this.character.heading + 180), true);
-    crashDestination = this.utils.toFixedHeight(crashDestination);
-    crashDestination = this.utils.toHeightOffset(crashDestination, 4);
-    this.character.isCrawling = true;
-    this.character.location = crashDestination;
-    this.viewer.camera.flyTo({destination: crashDestination, duration: 2});
-  }
-
-
-  private flightInPlace() {
-    let flag = true;
-    let degree;
-    setInterval(() => {
-
-      if (flag)
-        degree = 0.75
-      else
-        degree = -0.75
-      this.viewer.camera.moveUp(degree);
-    }, 1000);
-  }
+  // private overviewSettings() {
+  //   this.viewerOptions.setFreeCameraOptions(this.viewer);
+  //   this.gameService.currentTerrainEnviorment.subscribe(terrainType => {
+  //     if (terrainType == "URBAN") {
+  //       this.viewer.camera.flyTo({destination: GameMapComponent.gameStartLocation});
+  //     }
+  //     else if (terrainType == "MOUNTAIN") {
+  //       this.viewerOptions.toggleDepthTestAgainstTerrain(this.viewer, false);
+  //       const alpinsOverviewPosition = this.utils.toHeightOffset(new Cesium.Cartesian3(-1370653.8374654655, -5507085.922189086, 2901243.9558086237), 3000)
+  //       this.viewer.camera.flyTo({destination: alpinsOverviewPosition});
+  //     }
+  //     else {
+  //       this.viewerOptions.toggleDepthTestAgainstTerrain(this.viewer, false);
+  //       const swissOverviewPosition = this.utils.toHeightOffset(new Cesium.Cartesian3(4327254.413025279, 621509.1085193334, 4628696.864167333), 3000)
+  //       this.viewer.camera.flyTo({destination: swissOverviewPosition});
+  //     }
+  //   })
+  // }
 
   onMousemove(event: MouseEvent) {
     if (!this.character.initialized || !document.pointerLockElement) {
@@ -258,7 +233,6 @@ private isFlyingInFlyingMode = false;
     const isFPV = this.character.viewState === ViewState.FPV;
     const isShooting = this.character.state === MeModelState.SHOOTING;
     const isCrawling = this.character.isCrawling;
-    const isFlying = this.character.isFlying;
     const range = isFPV || isShooting ? 0.1 : 4;
 
     const playerHeadCart = Cesium.Cartographic.fromCartesian(this.character.location);
@@ -292,14 +266,11 @@ private isFlyingInFlyingMode = false;
     const heading = Cesium.Math.toRadians(-180 + this.character.heading);
     this.helperEntityPoint.position =
       Cesium.Cartesian3.fromRadians(playerHeadCart.longitude, playerHeadCart.latitude, playerHeadCart.height);
-
     this.viewer.zoomTo([this.character.entity, this.helperEntityPoint], new Cesium.HeadingPitchRange(heading, pitch, range));
     this.lastPlayerLocation = this.character.location;
     this.lastPlayerHead = playerHeadCart;
     this.lastPlayerHPR = {heading: this.character.heading, pitch: this.character.pitch, range};
   }
-
-
 
   ngOnDestroy(): void {
     this.elementRef.nativeElement.removeEventListener('mousemove', this.onMousemove);

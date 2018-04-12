@@ -23,6 +23,11 @@ const BG_CHARACTER_TYPES = [
         paths: PATHS_GRAPHS.DEER,
         updateDistanceMeters: 0.2,
     },
+    {
+        characterName: 'rhino',
+        paths: PATHS_GRAPHS.RHINO,
+        updateDistanceMeters: 0.2,
+    },
   {
     characterName: 'car',
     paths: PATHS_GRAPHS.CAR,

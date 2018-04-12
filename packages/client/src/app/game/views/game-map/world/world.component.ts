@@ -80,15 +80,14 @@ export class WorldComponent implements OnInit {
 
   loadTerrain() {
     if (this.terrainView == 'SWISS') {
-      this.cesiumService.getViewer().terrainProvider = new Cesium.CesiumTerrainProvider(environment.terrain);
+      this.cesiumService.getViewer().terrainProvider = new Cesium.CesiumTerrainProvider(environment.swiss_terrain);
       let scene = this.cesiumService.getScene();
       scene.primitives.add(new Cesium.Cesium3DTileset({
         url: 'https://vectortiles.geo.admin.ch/ch.swisstopo.swisstlm3d.3d/20161217/tileset.json'
       }));
     }
     else {
-         // this.cesiumService.getViewer().terrainProvider = new Cesium.CesiumTerrainProvider(environment.terrain);
-      this.cesiumService.getViewer().terrainProvider = new Cesium.createWorldTerrain();
+         this.cesiumService.getViewer().terrainProvider = new Cesium.createWorldTerrain(environment.terrain.url);
     }
   }
 

@@ -3,20 +3,40 @@
     heightReference: utils.getRelativeToGroundHeightReference(),
     uri: getModel(player),
     scale: getModelScale(player),
-    position: player.currentLocation.location,
+    position: interpolatePlayerPosition(player, player.currentLocation.location),
     orientation: getOrientation(player.currentLocation.location, player.currentLocation.heading, player),
     shadows: Cesium.ShadowMode.DISABLED,
     runAnimations: player.state !== 'DEAD',
-
 	}">
   </ac-model-desc>
-  <ac-billboard-primitive-desc *ngIf="isOverview$| async" props="{
-    position: player.isFlying? player.currentLocation.location : utils.toFixedHeight(player.currentLocation.location, 200),
+  <ac-billboard-desc *ngIf="(isOverview$ | async) &&  (terrainType !== 'URBAN')" props="{
+    position:  utils.toFixedHeight(player.currentLocation.location, 5),
     heightReference: utils.getClampedToGroundHeightReference(),
-    image: getPlayerIcon(player),
+    verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+    disableDepthTestDistance: 0,
+    image: getPlayerIcon(player)
+  }">
+  </ac-billboard-desc>
+  <ac-label-desc *ngIf="(isOverview$ | async) &&  (terrainType !== 'URBAN')" props="{
+    show: player.type === 'PLAYER',
+    position: utils.toFixedHeight(player.currentLocation.location, 5),
+    heightReference: utils.getClampedToGroundHeightReference(),
+    verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+    disableDepthTestDistance:500,
+    text: getPlayerName(player),
+    font: '15px sans-serif',
+    scale: 0.9,
+    pixelOffset: getLabelPixelOffset(player) | pixelOffset,
+    showBackground: true
+  }">
+  </ac-label-desc>
+  <ac-billboard-primitive-desc *ngIf="(isOverview$ | async) &&  (terrainType === 'URBAN')" props="{
+    position:  utils.toFixedHeight(player.currentLocation.location, 5),
+    heightReference: utils.getClampedToGroundHeightReference(),
+    image: getPlayerIcon(player)
   }">
   </ac-billboard-primitive-desc>
-  <ac-label-primitive-desc *ngIf="isOverview$ | async" props="{
+  <ac-label-primitive-desc *ngIf="(isOverview$ | async) &&  (terrainType === 'URBAN')" props="{
     show: player.type === 'PLAYER',
     position: utils.toFixedHeight(player.currentLocation.location, 5),
     heightReference: utils.getClampedToGroundHeightReference(),
@@ -26,10 +46,9 @@
     pixelOffset: getLabelPixelOffset(player) | pixelOffset,
     showBackground: true
   }">
-  </ac-label-primitive-desc >
- </ac-layer>
+  </ac-label-primitive-desc>
+</ac-layer>
 <other-players-gun-sound></other-players-gun-sound>
 <gun-indicator></gun-indicator>
-<flight-indicator></flight-indicator>
-<!--position: interpolatePlayerPosition(player, utils.getPosition(player.currentLocation.location)),-->
-
+<!--<terrain-billboard [playersPositions]="playersPositions"></terrain-billboard>-->
+<!--disableDepthTestDistance : getPositiveInfinity(),-->

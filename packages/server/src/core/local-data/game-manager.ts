@@ -1,12 +1,12 @@
-import { v4 } from 'uuid';
-import { sign } from 'jsonwebtoken';
-import { CharacterData, FlightData, GameState, PlayerLifeState, PlayerState, PlayerSyncState } from '../../types';
-import * as Cesium from 'cesium';
-import { config } from '../../settings/config';
-import { startClientsUpdater, stopClientsUpdater } from '../clients-updater/clients-updater';
-import { BackgroundCharacterManager } from '../background-character/background-character-manager';
-import { PLAYER_CHARACTERS } from './characters';
-import { GamesTimeout } from './games-timeout';
+import { v4 } from "uuid";
+import { sign } from "jsonwebtoken";
+import { CharacterData,FlightData, GameState,PlayerLifeState, PlayerState, PlayerSyncState } from "../../types";
+import * as Cesium from "cesium";
+import { config } from "../../settings/config";
+import { startClientsUpdater, stopClientsUpdater } from "../clients-updater/clients-updater";
+import { BackgroundCharacterManager } from "../background-character/background-character-manager";
+import { PLAYER_CHARACTERS } from "./characters";
+import { GamesTimeout } from "./games-timeout";
 import Timer = NodeJS.Timer;
 import { TerrainLocation, TerrainType } from "./terrains";
 
@@ -17,17 +17,16 @@ export interface ICartesian3Location {
 }
 
 export enum Team {
-    RED = 'RED',
-    BLUE = 'BLUE',
-    NONE = 'NONE',
+    RED = "RED",
+    BLUE = "BLUE",
+    NONE = "NONE"
 }
 
 export enum CharacterType {
-    PLAYER = 'PLAYER',
-    BACKGROUND_CHARACTER = 'BACKGROUND_CHARACTER',
-    OVERVIEW = 'OVERVIEW',
+    PLAYER = "PLAYER",
+    BACKGROUND_CHARACTER = "BACKGROUND_CHARACTER",
+    OVERVIEW = "OVERVIEW"
 }
-
 
 export interface IViewer {
     token: string;
@@ -58,21 +57,24 @@ export interface IPlayer {
 
 export interface IGameObject {
     gameId: string;
-    gameCode: string;
+  gameCode: string;
     playersMap: Map<string, IPlayer>;
     viewers: IViewer[];
     state: GameState;
     clientsUpdaterId?: Timer;
     bgCharactersManager: BackgroundCharacterManager;
-    winingTeam: Team,
+    winingTeam: Team;
     controlledPlayersMap: Map<string, IPlayer>,
     terrainType: TerrainType;
 }
 
-const TOKENS_SECRET = 'sdf43tSWDG#%Tsdfw4';
+const TOKENS_SECRET = "sdf43tSWDG#%Tsdfw4";
 
 export class GamesManager {
-    private activeGames: Map<string, IGameObject> = new Map<string, IGameObject>();
+    private activeGames: Map<string, IGameObject> = new Map<
+    string,
+    IGameObject
+  >();
     private gamesTimeouts: GamesTimeout;
 
     constructor() {
@@ -96,7 +98,7 @@ export class GamesManager {
         const game = this.getGameById(gameId);
         const playerToAdd = {
             ...player,
-            game,
+            game
         } as IPlayer;
 
         game.playersMap.set(player.playerId, playerToAdd);
@@ -198,7 +200,7 @@ addViewerToGame(gameId: string, username: string): IViewer {
       {
         gameId: game.gameId,
         playerId,
-        username: finalUsername,
+        username: finalUsername
       },
       TOKENS_SECRET
     );
@@ -206,18 +208,24 @@ addViewerToGame(gameId: string, username: string): IViewer {
         const viewer = {
             token: playerToken,
             playerId,
-            username: finalUsername,
+            username: finalUsername
         };
         game.viewers.push(viewer);
         return viewer;
     }
 
-    private validateUsername(username: string, game: IGameObject, isFirst = true): string {
-        const exists = Array.from(game.playersMap.values()).find(p => p.username === username);
+    private validateUsername(
+    username: string,
+    game: IGameObject,
+    isFirst = true
+  ): string {
+        const exists = Array.from(game.playersMap.values()).find(
+      p => p.username === username
+    );
         if (exists) {
             let newUsername = null;
             if (isFirst) {
-                newUsername = username + '1'
+                newUsername = username + "1";
             } else {
                 const count = +username.slice(-1);
                 newUsername = username.slice(0, -1) + (count + 1);
@@ -228,26 +236,26 @@ addViewerToGame(gameId: string, username: string): IViewer {
         }
     }
 
-    addRealPlayerToGame(gameId: string,
-                        characterName: string,
-                        username: string,
-                        team: Team): IPlayer {
-        const game = this.getGameById(gameId);
-        const playerId = v4();
-        const playerToken = sign(
-            {
-                gameId: game.gameId,
-                playerId,
-                username,
-            },
-            TOKENS_SECRET
-        );
+  addRealPlayerToGame(gameId: string,
+                      characterName: string,
+                      username: string,
+                      team: Team): IPlayer {
+    const game = this.getGameById(gameId);
+    const playerId = v4();
+    const playerToken = sign(
+      {
+        gameId: game.gameId,
+        playerId,
+        username
+      },
+      TOKENS_SECRET
+    );
 
-    //const defaultPlayerPositions = config.PLAYERS_SPAWN_POSITIONS[team];
-    const terrainTeamTypeStr = game.terrainType + "_" + team;
-          const defaultPlayerPositions = TerrainLocation[terrainTeamTypeStr];
+    // const defaultPlayerPositions = config.PLAYERS_SPAWN_POSITIONS[team];
+      const terrainTeamTypeStr = game.terrainType + "_" + team;
+      const defaultPlayerPositions = TerrainLocation[terrainTeamTypeStr];
 
-        const realPlayerTeamCount = Array.from(game.playersMap.values()).filter(
+      const realPlayerTeamCount = Array.from(game.playersMap.values()).filter(
       p => p.type === CharacterType.PLAYER && p.team === team
     ).length;let timer:Timer;// = setTimeout(()=> console.log('yay'),0);
         const initFlightData: FlightData = {
@@ -267,8 +275,8 @@ addViewerToGame(gameId: string, username: string): IViewer {
       character,
       token: playerToken,
       username: finalUsername,
-      state: 'WAITING',
-      lifeState: 'FULL',
+      state: "WAITING",
+      lifeState: "FULL",
       lifeStatePerctange: 100,
       numberOfShotsThatHit: 0,
       game,
@@ -279,7 +287,7 @@ addViewerToGame(gameId: string, username: string): IViewer {
       isCrawling: false,
       isShooting: false,
       isFlying: false,
-            flight: initFlightData,syncState: 'VALID',
+            flight: initFlightData,syncState: "VALID"
     };
 
         game.playersMap.set(playerId, player);
@@ -287,6 +295,42 @@ addViewerToGame(gameId: string, username: string): IViewer {
         return player;
     }
 
+  // changeGameTerrainType(gameId: string, gameType: TerrainType) {
+  //   const game = this.getGameById(gameId);
+  //   game.terrainType = gameType;
+  // }
+
+  // changePlayerLocation(gameId: string, playerId) {
+  //   const game = this.getGameById(gameId);
+  //   const player = game.playersMap.get(playerId);
+  //   const terrainTeamTypeStr = game.terrainType + "_" + player.team;
+  //   const defaultPlayerPositions = TerrainLocation[terrainTeamTypeStr];
+  //   player.currentLocation = defaultPlayerPositions;
+  // }
+
+  createNewGame(terrainType: string): IGameObject {
+    const gameId = v4();
+    const gameCode = this.generateGameCode();
+
+    const bgCharactersManager = new BackgroundCharacterManager(gameId, this);
+    const gameObject: IGameObject = {
+      gameId,
+      gameCode,
+      playersMap: new Map<string, IPlayer>(),
+      state: "WAITING",
+      bgCharactersManager,
+      viewers: [],
+      winingTeam: Team.NONE,
+      controlledPlayersMap: new Map<string, IPlayer>(),
+      terrainType: TerrainType[terrainType]
+    };
+    startClientsUpdater(gameObject);
+    this.activeGames.set(gameId, gameObject);
+
+    bgCharactersManager.initBgCharacters();
+    bgCharactersManager.startCharactersMovement();
+    return gameObject;
+  }
   //createNewGame(): IGameObject {
     //const gameId = v4();
     //const gameCode = this.generateGameCode();
@@ -316,7 +360,7 @@ addViewerToGame(gameId: string, username: string): IViewer {
             return this.activeGames.get(id);
         }
 
-        throw new Error('Game does not exists');
+        throw new Error("Game does not exists");
     }
 
     getGameByCode(code: string): IGameObject {
@@ -326,7 +370,7 @@ addViewerToGame(gameId: string, username: string): IViewer {
             }
         }
 
-        throw new Error('Game does not exists');
+        throw new Error("Game does not exists");
     }
 
     playerReady(gameId: string, playerId: string) {
@@ -334,7 +378,7 @@ addViewerToGame(gameId: string, username: string): IViewer {
         const player = game.playersMap.get(playerId);
 
         if (player) {
-            player.state = 'READY';
+            player.state = "READY";
         }
     }
 
@@ -359,14 +403,14 @@ addViewerToGame(gameId: string, username: string): IViewer {
         skipValidation ||
         this.validatePlayerPosition(player.currentLocation, position)
       ) {
-        player.syncState = 'VALID';
+        player.syncState = "VALID";
         player.currentLocation = position;
         player.heading = heading;
         player.isCrawling = isCrawling;
         player.isShooting = isShooting;
         player.isFlying = isFlying;player.enteringBuildingPosition = enteringBuildingPosition;
       } else {
-        player.syncState = 'INVALID';
+        player.syncState = "INVALID";
 
 }
       return player;
@@ -377,30 +421,32 @@ addViewerToGame(gameId: string, username: string): IViewer {
 
     updatePlayerState(gameId: string, playerId: string, newState: PlayerState) {
         const game = this.getGameById(gameId);
-        const player = game.controlledPlayersMap.get(playerId) || game.playersMap.get(playerId);
+        const player =
+      game.controlledPlayersMap.get(playerId) || game.playersMap.get(playerId);
         if (player) {
             player.state = newState;
         }
 
-        this.checkGameResult(game);
+    this.checkGameResult(game);
 
-    }
+  }
 
-    updatePlayerLifeState(gameId: string, playerId: string, newState: PlayerLifeState) {
-        const game = this.getGameById(gameId);
-        const player = game.controlledPlayersMap.get(playerId) || game.playersMap.get(playerId);
-        if (player) {
-            player.lifeState = newState;
-        }
-    }
+  updatePlayerLifeState(gameId: string, playerId: string, newState: PlayerLifeState
+  ) {    const game = this.getGameById(gameId);
+      const player = game.controlledPlayersMap.get(playerId) || game.playersMap.get(playerId);
+      if (player) {
+          player.lifeState = newState;
+      }
+  }
 
-    updateLifeStatePerctange(gameId: string, playerId: string, newState: number) {
-        const game = this.getGameById(gameId);
-        const player = game.controlledPlayersMap.get(playerId) || game.playersMap.get(playerId);
-        if (player) {
-            player.lifeStatePerctange = newState;
-        }
+  updateLifeStatePerctange(gameId: string, playerId: string, newState: number) {
+    const game = this.getGameById(gameId);
+    const player =
+      game.controlledPlayersMap.get(playerId) || game.playersMap.get(playerId);
+    if (player) {
+      player.lifeStatePerctange = newState;
     }
+  }
 
   updatePlayerFlightData(gameId: string, playerId: string, newState: FlightData){
         const game = this.getGameById(gameId);
@@ -412,11 +458,11 @@ addViewerToGame(gameId: string, username: string): IViewer {
     const players = Array.from(game.playersMap.values());
 
         const bluePlayers = players.filter(p => p.team === Team.BLUE);
-        const deadBlues = bluePlayers.filter(p => p.state === 'DEAD').length;
+        const deadBlues = bluePlayers.filter(p => p.state === "DEAD").length;
         const bluePlayersCount = bluePlayers.length;
 
         const redPlayers = players.filter(p => p.team === Team.RED);
-        const deadReds = redPlayers.filter(p => p.state === 'DEAD').length;
+        const deadReds = redPlayers.filter(p => p.state === "DEAD").length;
         const redPlayersCount = redPlayers.length;
 
         let winingTeam = null;
@@ -426,27 +472,27 @@ addViewerToGame(gameId: string, username: string): IViewer {
             winingTeam = Team.BLUE;
         }
 
-        if (winingTeam) {
-            game.winingTeam = winingTeam;
-            setTimeout(() => this.endGame(game.gameId), config.clientsUpdateRate * 10);
-        }
-    }
+    if (winingTeam) {
+      game.winingTeam = winingTeam;
+      setTimeout(() => this.endGame(game.gameId), config.clientsUpdateRate * 10
+    );
+  }}
 
-    validatePlayerPosition(currentLocation: ICartesian3Location,
-                           newLocation: ICartesian3Location): boolean {
-        const currentPosition = new Cesium.Cartesian3(
-            currentLocation.x,
-            currentLocation.y,
-            currentLocation.z
-        );
-        const newPosition = new Cesium.Cartesian3(
-            newLocation.x,
-            newLocation.y,
-            newLocation.z
-        );
-        const distance = Cesium.Cartesian3.distance(currentPosition, newPosition);
-        return distance < config.serverClientDistanceThreshold;
-    }
+  validatePlayerPosition(currentLocation: ICartesian3Location,
+                         newLocation: ICartesian3Location): boolean {
+    const currentPosition = new Cesium.Cartesian3(
+      currentLocation.x,
+      currentLocation.y,
+      currentLocation.z
+    );
+    const newPosition = new Cesium.Cartesian3(
+      newLocation.x,
+      newLocation.y,
+      newLocation.z
+    );
+    const distance = Cesium.Cartesian3.distance(currentPosition, newPosition);
+    return distance < config.serverClientDistanceThreshold;
+  }
 
     endGame(gameId: string) {
         const game = this.getGameById(gameId);
@@ -455,9 +501,13 @@ addViewerToGame(gameId: string, username: string): IViewer {
         this.activeGames.delete(gameId);
     }
 
-    takeControlOverPlayer(game, playerId: string, controlledPlayerId: string): IPlayer {
+    takeControlOverPlayer(
+    game,
+    playerId: string,
+    controlledPlayerId: string
+  ): IPlayer {
         const controlledPlayer: IPlayer = game.playersMap.get(controlledPlayerId);
-        controlledPlayer.state = 'CONTROLLED';
+        controlledPlayer.state = "CONTROLLED";
         game.controlledPlayersMap.set(playerId, controlledPlayer);
         return controlledPlayer;
     }
@@ -465,15 +515,18 @@ addViewerToGame(gameId: string, username: string): IViewer {
     removeControlOverPlayer(game, playerId: string): IPlayer {
         const controlledPlayer: IPlayer = game.controlledPlayersMap.get(playerId);
         if (controlledPlayer) {
-            controlledPlayer.state = controlledPlayer.state === 'CONTROLLED' ? 'ALIVE' : controlledPlayer.state;
+            controlledPlayer.state =
+        controlledPlayer.state === "CONTROLLED"
+          ? "ALIVE"
+          : controlledPlayer.state;
             game.controlledPlayersMap.delete(playerId);
         }
         return controlledPlayer;
     }
 
-    isControlled(game: IGameObject, playerId): boolean {
-        return !!Array.from(game.controlledPlayersMap.values()).find(p => p.playerId === playerId);
-    }
+  isControlled(game: IGameObject, playerId): boolean {
+    return !!Array.from(game.controlledPlayersMap.values()).find(p => p.playerId === playerId
+  );}
 
     isController(game: IGameObject, playerId): boolean {
         return game.controlledPlayersMap.has(playerId);

@@ -35,13 +35,15 @@
       }
       transition: all 0.5s;
     }
-
     .selected-viewer {
       padding: 5px 10px;
       border: solid 2px var(--light-green);
       border-radius: 10px;
     }
-    .game-terrain-div{
+    .game-code {
+      width: 260px
+    }
+    .game-terrain-div {
       margin: 0 30px;
       .game-terrain-title {
         display: inline-block;
@@ -66,19 +68,14 @@
       }
     }
   }
-
   .username-input {
     margin: 0 30px;
     color: white;
     font-size: 22px;
   }
-
   .gamecode-input {
     margin: 0 30px;
     color: white;
     font-size: 22px;
   }
-
-
-
 }

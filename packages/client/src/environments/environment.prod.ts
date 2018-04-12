@@ -7,7 +7,6 @@ export const environment = {
     runningSpeed: 1.0,
     walkingSpeed: 0.25,
     crawlingSpeed: 0.1,
-    flyingSpeed: 3.0
   },
   createPathMode: false,
   loadTerrain: true,
@@ -18,8 +17,8 @@ export const environment = {
     swiss_url: 'https://vectortiles.geo.admin.ch/ch.swisstopo.swisstlm3d.3d/20161217/tileset.json'
   },
   terrain: {
+    url: 'https://assets.agi.com/stk-terrain/v1/tilesets/world/tiles',
     // url: 'https://assets.agi.com/stk-terrain/v1/tilesets/world/tiles',
-    url: '//3d.geo.admin.ch/1.0.0/ch.swisstopo.terrain.3d/default/20160115/4326/',
     // url : 'https://assets.agi.com/stk-terrain/v1/tilesets/PAMAP/tiles',
     requestWaterMask: true,
     requestVertexNormals: true

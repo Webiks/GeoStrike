@@ -79,4 +79,15 @@ export const PLAYER_CHARACTERS: CharacterData[] = [
         iconUrl: '/assets/icons/deer-mark.png',
         iconDeadUrl: '/assets/icons/deer-dead-mark.png',
     },
+    {
+        name: 'rhino',
+        model: '/assets/models/rhino.gltf',
+        scale: 2,
+        description: null,
+        team: null,
+        imageUrl: null,
+        portraitUrl: null,
+        iconUrl: '/assets/icons/deer-mark.png',
+        iconDeadUrl: '/assets/icons/deer-dead-mark.png',
+    }
 ];
