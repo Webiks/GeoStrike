@@ -26,7 +26,7 @@
     "@types/ws": "^3.0.2",
     "apollo-server-express": "^1.1.2",
     "body-parser": "^1.17.2",
-    "cesium": "^1.37.0",
+    "cesium": "^1.43.0",
     "cors": "^2.8.4",
     "express": "^4.15.3",
     "express-session": "^1.15.5",
