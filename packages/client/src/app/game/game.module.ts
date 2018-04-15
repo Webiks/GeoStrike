@@ -95,6 +95,10 @@ import { FlightComponent } from './views/game-map/other-players/flight/flight.co
     FlightIndicator,
     MapProviderComponent,
     FlightComponent,
+    FlightModeComponent,
+    FlightIndicator,
+    BloodOnScreen,
+    MapProviderComponent
   ],
   imports: [
     BrowserModule,

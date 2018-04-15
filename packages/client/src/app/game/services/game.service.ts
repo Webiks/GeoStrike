@@ -9,13 +9,14 @@ import {
   GameNotifications,
   JoinAsViewer,
   JoinGame,
+  NotifyBeenShot,
+  NotifyCrash,
   NotifyKill,
   NotifyShot,
-  NotifyBeenShot,
   Ready,
   Team,
   ToggleFlightMode,
-  UpdatePosition, NotifyCrash
+  UpdatePosition
 } from '../../types';
 import { joinGameMutation } from '../../graphql/join-game.mutation';
 import { SubscriptionClient } from 'subscriptions-transport-ws-temp';
@@ -152,11 +153,10 @@ export class GameService {
     if (!state || !this.isDifferentFromLastState(state)) {
       return;
     }
-
     this.lastStateSentToServer = state;
     const subscription = this.apollo.mutate<UpdatePosition.Mutation>({
       mutation: updatePositionMutation,
-      variables: { ...state, skipValidation },
+      variables: {...state, skipValidation},
     }).subscribe(() => subscription.unsubscribe());
   }
 
@@ -241,8 +241,8 @@ export class GameService {
     });
   }
 
-  notifyCrash (crashedPlayerId) : Observable<ApolloExecutionResult<NotifyCrash.Mutation>> {
-    return this.apollo.mutate<NotifyCrash.Mutation>( {
+  notifyCrash(crashedPlayerId): Observable<ApolloExecutionResult<NotifyCrash.Mutation>> {
+    return this.apollo.mutate<NotifyCrash.Mutation>({
       mutation: notifyCrashMutation,
       variables: {
         playerId: crashedPlayerId,
@@ -288,4 +288,3 @@ export class GameService {
     }
   }
 }
-

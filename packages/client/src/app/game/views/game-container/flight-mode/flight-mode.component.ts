@@ -42,7 +42,6 @@ export class FlightModeComponent implements OnInit, OnDestroy {
 
   @HostListener('document:keyup', ['$event']) onKeyupHandler(event: KeyboardEvent) {
     if (event.key === 'w') {
-      // this.slideToStop();
       this.movingType = 'none';
     }
     if (event.shiftKey && event.keyCode == 87) {

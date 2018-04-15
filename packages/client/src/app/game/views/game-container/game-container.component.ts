@@ -77,6 +77,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
           this.me = currentGame.me;
           this.gameResult$.next(currentGame.winingTeam);
           const players = this.game.players.filter(p => p.state !== 'WAITING');
+
           const allPlayers = [...players];
           if (this.me) {
             this.isViewer = this.me.type === 'OVERVIEW' || this.me['__typename'] === 'Viewer';
@@ -136,6 +137,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
           entity: this.me,
         });
       }
+
     } else {
       // if controlling set state from controlled player
       if (this.controlledService.controlledPlayer) {

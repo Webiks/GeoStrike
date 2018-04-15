@@ -58,12 +58,9 @@ export class MeComponent implements OnInit, OnDestroy {
   ViewState = ViewState;
   Cesium = Cesium;
   playersPositionMap = new Map<string, any>();
-
   increase = true;
   intervalId;
   playerInFlightModeNotFlying = false;
-  increaseHeight = true;
-  interpolateFinish = true;
 
   // @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
   //   if (event.keyCode == 70 && !this.character.isFlying) {
@@ -99,6 +96,17 @@ export class MeComponent implements OnInit, OnDestroy {
 
 
   showBloodSubscription : Subscription;
+  @HostListener('document:keyup', ['$event']) onKeyupHandler(event: KeyboardEvent) {
+    if (event.key === 'w' && this.character.isFlying) {
+      this.playerInFlightModeNotFlying = true;
+      this.setFlightVibrations();
+    }
+    if (event.shiftKey && event.keyCode == 87 && this.character.isFlying) {
+      this.playerInFlightModeNotFlying = true;
+      this.setFlightVibrations();
+    }
+  }
+
   constructor(private character: CharacterService,
               public utils: UtilsService,
               private cesiumService: CesiumService,
@@ -261,9 +269,6 @@ export class MeComponent implements OnInit, OnDestroy {
         if (state.flight.heightLevel !== 'A') {
           this.flightLandAlertDisplayedOnce = false;
         }
-        // else {
-        //   this.ngZone.run(() => this.snackBar.dismiss());
-        // }
       }
     });
   }
@@ -320,9 +325,7 @@ export class MeComponent implements OnInit, OnDestroy {
       return this.utils.toHeightOffset(position, this.characterInfo.fixedHeight);
     }
     else if (this.character.isFlying) {
-      // return this.utils.toHeightOffset(position, 5);
       return position;
-      // return this.utils.toHeightOffset(position, this.characterInfo.fixedHeight);
     }
     return position;
   }
@@ -363,20 +366,21 @@ export class MeComponent implements OnInit, OnDestroy {
   }
 
   setFlightVibrations() {
-    let vibrationHeightMeters = this.character.viewState === ViewState.SEMI_FPV ? 0.75 : 5.0;
     this.intervalId = setInterval(() => {
+      if(this.character.state === MeModelState.DEAD){
+        clearInterval(this.intervalId);
+        return;
+      }
+      let vibrationHeightMeters = this.character.viewState === ViewState.SEMI_FPV ? 0.3 : 1;
       let location = this.character.location;
       if (this.increase) {
-        // this.character.location = this.utils.pointByLocationDistanceAndAzimuthAndHeight3d(this.character.location, environment.movement.flyingSpeed, Cesium.Math.toRadians(this.character.heading + 180), true);
-          this.character.location = this.utils.toHeightOffset(location, vibrationHeightMeters)
-          this.increase = !this.increase;
+        this.character.location = this.utils.toHeightOffset(location, vibrationHeightMeters)
+        this.increase = !this.increase;
       }
       else {
-        // this.character.location = this.utils.pointByLocationDistanceAndAzimuthAndHeight3d(this.character.location, environment.movement.flyingSpeed, Cesium.Math.toRadians(this.character.heading + 180), true);
-          this.character.location = this.utils.toHeightOffset(location, -vibrationHeightMeters)
-          this.increase = !this.increase;
+        this.character.location = this.utils.toHeightOffset(location, -vibrationHeightMeters)
+        this.increase = !this.increase;
       }
-
-    }, 1400)
+    }, 750)
   }
 }

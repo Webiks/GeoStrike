@@ -257,7 +257,7 @@ addViewerToGame(gameId: string, username: string): IViewer {
 
       const realPlayerTeamCount = Array.from(game.playersMap.values()).filter(
       p => p.type === CharacterType.PLAYER && p.team === team
-    ).length;let timer:Timer;// = setTimeout(()=> console.log('yay'),0);
+    ).length;let timer:Timer;
         const initFlightData: FlightData = {
             speed: 'NONE',
             minHeight: 50,

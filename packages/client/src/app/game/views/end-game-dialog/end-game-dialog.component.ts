@@ -14,7 +14,7 @@ export class EndGameDialogComponent implements OnInit {
   causeOfDeath: string;
 
   constructor(private modal: MatDialogRef<EndGameDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) data: { losingTeam: Team,causeOfDeath: string, gameOver: boolean,  }) {
+              @Inject(MAT_DIALOG_DATA) data: { losingTeam: Team,causeOfDeath: string, gameOver: boolean}) {
     this.losingTeam = data.losingTeam;
     this.causeOfDeath = data.causeOfDeath;
     this.gameOver = data.gameOver;
