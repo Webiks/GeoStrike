@@ -200,5 +200,16 @@
     "urlTwo": "https://www.turbosquid.com/Search/Artists/mnphmnmn",
     "urlThree": "https://blog.turbosquid.com/royalty-free-license/?p=7952",
     "level": "sub"
+  },
+  {
+    "symbol": "",
+    "nameFieldOne": "Indian Rhino",
+    "nameFieldTwo":"by Thomas Flynn",
+    "nameFieldThree":"CC Attribution",
+    "licensed":"is licensed under",
+    "urlOne" :"https://sketchfab.com/models/7e9695868ed64f419e09efdfe3120cb4",
+    "urlTwo": "https://sketchfab.com/nebulousflynn",
+    "urlThree": "http://creativecommons.org/licenses/by/4.0/",
+    "level": "sub"
   }
 ]
