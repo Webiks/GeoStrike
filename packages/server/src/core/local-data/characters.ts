@@ -60,7 +60,7 @@ export const PLAYER_CHARACTERS: CharacterData[] = [
     {
         name: 'grandpa',
         model: '/assets/models/grandpa.gltf',
-        scale: 0.035,
+        scale: 10,
         description: null,
         team: null,
         imageUrl: null,
@@ -81,13 +81,24 @@ export const PLAYER_CHARACTERS: CharacterData[] = [
     },
     {
         name: 'rhino',
-        model: '/assets/models/rhino.gltf',
+        model: '/assets/models/indianWoman.gltf',
         scale: 2,
         description: null,
         team: null,
         imageUrl: null,
         portraitUrl: null,
-        iconUrl: '/assets/icons/deer-mark.png',
-        iconDeadUrl: '/assets/icons/deer-dead-mark.png',
+        iconUrl: '/assets/icons/rhino-mark.png',
+        iconDeadUrl: '/assets/icons/rhino-dead-mark.png',
+    },
+    {
+        name: 'indianWoman',
+        model: '/assets/models/indianWoman.gltf',
+        scale: 0.5,
+        description: null,
+        team: null,
+        imageUrl: null,
+        portraitUrl: null,
+        iconUrl: '/assets/icons/rhino-mark.png',
+        iconDeadUrl: '/assets/icons/rhino-dead-mark.png',
     }
 ];
