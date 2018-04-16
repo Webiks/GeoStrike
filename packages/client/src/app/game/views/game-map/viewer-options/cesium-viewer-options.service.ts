@@ -11,6 +11,7 @@ export class CesiumViewerOptionsService {
 
   getViewerOption() {
     return {
+      shouldAnimate: true,
       selectionIndicator: false,
       timeline: false,
       infoBox: false,
