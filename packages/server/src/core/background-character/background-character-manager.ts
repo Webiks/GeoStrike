@@ -31,6 +31,12 @@ const BG_CHARACTER_TYPES = [
     updateDistanceMeters: 0.2,
     terrainType: "AUSTRALIA"
   },
+    {
+        characterName: "kangaroo",
+        paths: PATHS_GRAPHS.RHINO,
+        updateDistanceMeters: 0.2,
+        terrainType: "AUSTRALIA"
+    },
   {
     characterName: "indianWoman",
     paths: PATHS_GRAPHS.INDIANWOMAN,
