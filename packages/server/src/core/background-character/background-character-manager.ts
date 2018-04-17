@@ -67,7 +67,6 @@ export class BackgroundCharacterManager {
     BG_CHARACTER_TYPES.forEach(c => {
         if(c.terrainType === terrainType)
         {
-          console.log("c.characterName:"+c.characterName)
           this.initialLocationId.set(c.characterName, []);
           this.backgroundCharactersFiltered.push(c);
         }
