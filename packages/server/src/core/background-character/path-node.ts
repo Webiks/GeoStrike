@@ -4,7 +4,8 @@ enum JsonType {
     CAR = 'car',
     PEOPLE = 'people',
     DEER = 'deer',
-    RHINO = 'rhino'
+    RHINO = 'rhino',
+    INDIANWOMAN = 'indianWoman'
 }
 
 export class PathNode {
@@ -30,11 +31,13 @@ const peoplePathsGraph: [PathNode] = loadPath(JsonType.PEOPLE);
 const carsPathsGraph: [PathNode] = loadPath(JsonType.CAR);
 const deerssPathsGraph: [PathNode] = loadPath(JsonType.DEER);
 const rhinosPathsGraph: [PathNode] = loadPath(JsonType.RHINO);
+const indinanWomanPathsGraph: [PathNode] = loadPath(JsonType.INDIANWOMAN);
 
 
 export const PATHS_GRAPHS = {
     CAR: carsPathsGraph,
     PEOPLE: peoplePathsGraph,
     DEER: deerssPathsGraph,
-    RHINO: rhinosPathsGraph
+    RHINO: rhinosPathsGraph,
+    INDIANWOMAN: indinanWomanPathsGraph
 };

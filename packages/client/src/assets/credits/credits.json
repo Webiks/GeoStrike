@@ -200,5 +200,49 @@
     "urlTwo": "https://www.turbosquid.com/Search/Artists/mnphmnmn",
     "urlThree": "https://blog.turbosquid.com/royalty-free-license/?p=7952",
     "level": "sub"
+  },
+  {
+    "symbol": "",
+    "nameFieldOne": "Indian Rhino",
+    "nameFieldTwo":"by Thomas Flynn",
+    "nameFieldThree":"CC Attribution",
+    "licensed":"is licensed under",
+    "urlOne" :"https://sketchfab.com/models/7e9695868ed64f419e09efdfe3120cb4",
+    "urlTwo": "https://sketchfab.com/nebulousflynn",
+    "urlThree": "http://creativecommons.org/licenses/by/4.0/",
+    "level": "sub"
+  },
+  {
+    "symbol": "",
+    "nameFieldOne": "Woman Indian Kathiaby",
+    "nameFieldTwo":"by kathiastaff ",
+    "nameFieldThree":"CC Attribution",
+    "licensed":"is licensed under",
+    "urlOne" :"https://sketchfab.com/models/ed95055ebeb141da84e9dc7bf3710930#",
+    "urlTwo": "https://sketchfab.com/kathiastaff",
+    "urlThree": "http://creativecommons.org/licenses/by/4.0/",
+    "level": "sub"
+  },
+  {
+    "symbol": "",
+    "nameFieldOne": "Kangaroo!",
+    "nameFieldTwo":"by Kenji Marcio ",
+    "nameFieldThree":"CC Attribution",
+    "licensed":"is licensed under",
+    "urlOne" :"https://sketchfab.com/models/fdf2ee0297f745e6b1dae65733b0f987#",
+    "urlTwo": "https://sketchfab.com/kenjimarcio",
+    "urlThree": "http://creativecommons.org/licenses/by/4.0/",
+    "level": "sub"
+  },
+  {
+    "symbol": "",
+    "nameFieldOne": "Mask free icon",
+    "nameFieldTwo":"designed by Those Icons ",
+    "nameFieldThree":"Flaticon",
+    "licensed":"from ",
+    "urlOne" :"https://www.flaticon.com/free-icon/mask_812237#term=native&page=1&position=3",
+    "urlTwo": "https://www.flaticon.com/authors/those-icons",
+    "urlThree": "https://www.flaticon.com/",
+    "level": "sub"
   }
 ]

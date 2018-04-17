@@ -312,7 +312,7 @@ addViewerToGame(gameId: string, username: string): IViewer {
   //   const gameId = v4();
   //   const gameCode = this.generateGameCode();
   //
-  //   const bgCharactersManager = new BackgroundCharacterManager(gameId, this);
+    const bgCharactersManager = new BackgroundCharacterManager(gameId, this, terrainType);
   //   const gameObject: IGameObject = {
   //     gameId,
   //     gameCode,
