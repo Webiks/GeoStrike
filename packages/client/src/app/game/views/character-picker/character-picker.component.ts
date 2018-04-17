@@ -24,8 +24,7 @@ export class CharacterPickerComponent implements OnInit {
     { name: "NY City (Urban)", value: "URBAN" },
     { name: "Alpins (Nature)", value: "MOUNTAIN" },
     { name: "Australia (Nature)", value: "AUSTRALIA" },
-    { name: "NewZealand (Nature)", value: "NEWZEALAND" },
-    { name: "Swiss (Nature)", value: "SWISS" }
+    { name: "NewZealand (Nature)", value: "NEWZEALAND" }
   ];
   selectedTerrain;
 

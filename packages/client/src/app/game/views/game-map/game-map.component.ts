@@ -29,18 +29,7 @@ import { PitchCalculatorService } from './services/pitch-calculator.service';
   styleUrls: ['./game-map.component.scss'],
 })
 export class GameMapComponent implements OnInit, OnDestroy {
-  // public static readonly DEFAULT_START_LOCATION =
-  //   Cesium.Cartesian3.fromDegrees(-73.985187, 40.758857, 1000);
-  // public static readonly DEFAULT_MOUNTAINS_START_LOCATION =
-  //   new Cesium.Cartesian3(-1370653.8374654655, -5507085.922189086, 2901243.9558086237);
-  // public static readonly DEFAULT_AUSTRALIA_START_LOCATION =
-  //   new Cesium.Cartesian3(-3787298.0827794825, 4351128.063305529, -2713957.9001589464);
-  // public static readonly DEFAULT_NEWZEALAND_START_LOCATION =
-  //   new Cesium.Cartesian3(-4361556.164988852, 978059.7002869517, -4534895.227650116);
-  // public static readonly DEFAULT_SWISS_START_LOCATION =
-  //   new Cesium.Cartesian3(4327254.413025279, 621509.1085193334, 4628696.864167333);
   public static readonly DEFAULT_PITCH = -5;
-  // public static gameStartLocation;
   @Input() me;
   @Input() playersPositions: Observable<AcNotification>;
   @Input() gameData: Observable<GameFields.Fragment>;
@@ -182,25 +171,6 @@ export class GameMapComponent implements OnInit, OnDestroy {
     })
   }
 
-  // private overviewSettings() {
-  //   this.viewerOptions.setFreeCameraOptions(this.viewer);
-  //   this.gameService.currentTerrainEnviorment.subscribe(terrainType => {
-  //     if (terrainType == "URBAN") {
-  //       this.viewer.camera.flyTo({destination: GameMapComponent.gameStartLocation});
-  //     }
-  //     else if (terrainType == "MOUNTAIN") {
-  //       this.viewerOptions.toggleDepthTestAgainstTerrain(this.viewer, false);
-  //       const alpinsOverviewPosition = this.utils.toHeightOffset(new Cesium.Cartesian3(-1370653.8374654655, -5507085.922189086, 2901243.9558086237), 3000)
-  //       this.viewer.camera.flyTo({destination: alpinsOverviewPosition});
-  //     }
-  //     else {
-  //       this.viewerOptions.toggleDepthTestAgainstTerrain(this.viewer, false);
-  //       const swissOverviewPosition = this.utils.toHeightOffset(new Cesium.Cartesian3(4327254.413025279, 621509.1085193334, 4628696.864167333), 3000)
-  //       this.viewer.camera.flyTo({destination: swissOverviewPosition});
-  //     }
-  //   })
-  // }
-
   onMousemove(event: MouseEvent) {
     if (!this.character.initialized || !document.pointerLockElement) {
       return;
@@ -250,27 +220,5 @@ export class GameMapComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.elementRef.nativeElement.removeEventListener('mousemove', this.onMousemove);
   }
-
-  // setDefaultStartLocation(terrainType:string){
-  //   if(terrainType == "URBAN")
-  //   {
-  //     GameMapComponent.gameStartLocation = GameMapComponent.DEFAULT_START_LOCATION;
-  //   }
-  //   else if(terrainType == "MOUNTAIN")
-  //   {
-  //     GameMapComponent.gameStartLocation = GameMapComponent.DEFAULT_MOUNTAINS_START_LOCATION;
-  //   }
-  //   else if(terrainType == "AUSTRALIA")
-  //   {
-  //     GameMapComponent.gameStartLocation = GameMapComponent.DEFAULT_AUSTRALIA_START_LOCATION;
-  //   }
-  //   else if(terrainType == "NEWZEALAND")
-  //   {
-  //     GameMapComponent.gameStartLocation = GameMapComponent.DEFAULT_NEWZEALAND_START_LOCATION;
-  //   }
-  //   else if(terrainType == "SWISS"){
-  //     GameMapComponent.gameStartLocation = GameMapComponent.DEFAULT_SWISS_START_LOCATION;
-  //   }
-  // }
 }
 

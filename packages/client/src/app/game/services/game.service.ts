@@ -32,7 +32,6 @@ import { gameNotificationsSubscription } from '../../graphql/game-notifications.
 import { notifyShotMutation } from '../../graphql/notify-shot.mutation';
 import { notifyBeenShotMutation } from "../../graphql/notify-been-shot.mutation";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
-import { GameMapComponent } from "../views/game-map/game-map.component";
 
 @Injectable()
 export class GameService {
@@ -42,7 +41,6 @@ export class GameService {
   private terrainEnviormentSource = new BehaviorSubject<string>('URBAN');
   public currentTerrainEnviorment = this.terrainEnviormentSource.asObservable();
 
-  // private terrainEnviormentSource = new BehaviorSubject<string>('URBAN');
   public gameStartLocation;
   public  DEFAULT_START_LOCATION =
     Cesium.Cartesian3.fromDegrees(-73.985187, 40.758857, 1000);
@@ -52,8 +50,6 @@ export class GameService {
     new Cesium.Cartesian3(-3787298.0827794825, 4351128.063305529, -2713957.9001589464);
   public  DEFAULT_NEWZEALAND_START_LOCATION =
     new Cesium.Cartesian3(-4361556.164988852, 978059.7002869517, -4534895.227650116);
-  public  DEFAULT_SWISS_START_LOCATION =
-    new Cesium.Cartesian3(4327254.413025279, 621509.1085193334, 4628696.864167333);
 
   constructor(private apollo: Apollo,
               subscriptionClientService: ApolloService,
@@ -257,9 +253,6 @@ export class GameService {
     else if(terrainType == "NEWZEALAND")
     {
       this.gameStartLocation = this.DEFAULT_NEWZEALAND_START_LOCATION;
-    }
-    else if(terrainType == "SWISS"){
-      this.gameStartLocation = this.DEFAULT_SWISS_START_LOCATION;
     }
   }
 }
