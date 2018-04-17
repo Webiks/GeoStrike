@@ -295,12 +295,102 @@ addViewerToGame(gameId: string, username: string): IViewer {
         return player;
     }
 
+  // changeGameTerrainType(gameId: string, gameType: TerrainType) {
+  //   const game = this.getGameById(gameId);
+  //   game.terrainType = gameType;
+  // }
+
+  // changePlayerLocation(gameId: string, playerId) {
+  //   const game = this.getGameById(gameId);
+  //   const player = game.playersMap.get(playerId);
+  //   const terrainTeamTypeStr = game.terrainType + "_" + player.team;
+  //   const defaultPlayerPositions = TerrainLocation[terrainTeamTypeStr];
+  //   player.currentLocation = defaultPlayerPositions;
+  // }
+
+<<<<<<< HEAD
+  // createNewGame(terrainType: string): IGameObject {
+  //   const gameId = v4();
+  //   const gameCode = this.generateGameCode();
+  //
+  //   const bgCharactersManager = new BackgroundCharacterManager(gameId, this);
+  //   const gameObject: IGameObject = {
+  //     gameId,
+  //     gameCode,
+  //     playersMap: new Map<string, IPlayer>(),
+  //     state: "WAITING",
+  //     bgCharactersManager,
+  //     viewers: [],
+  //     winingTeam: Team.NONE,
+  //     controlledPlayersMap: new Map<string, IPlayer>(),
+  //     terrainType: TerrainType[terrainType]
+  //   };
+  //   startClientsUpdater(gameObject);
+  //   this.activeGames.set(gameId, gameObject);
+  //
+  //   bgCharactersManager.initBgCharacters();
+  //   bgCharactersManager.startCharactersMovement();
+  //   return gameObject;
+  // }
+  //createNewGame(): IGameObject {
+    //const gameId = v4();
+    //const gameCode = this.generateGameCode();
+//
+    //const bgCharactersManager = new BackgroundCharacterManager(gameId, this);
+    //const gameObject: IGameObject = {
+    //  gameId,
+    //  gameCode,
+    //  playersMap: new Map<string, IPlayer>(),
+    //  state: 'WAITING',
+    //  bgCharactersManager,
+    //  viewers: [],
+    //  winingTeam: Team.NONE,
+    //  controlledPlayersMap: new Map<string, IPlayer>(),
+    //};
+    //startClientsUpdater(gameObject);
+    //this.activeGames.set(gameId, gameObject);
+//
+    //bgCharactersManager.initBgCharacters();
+    //bgCharactersManager.startCharactersMovement();
+//
+    //return gameObject;
+  //}
+
     getGameById(id: string): IGameObject {
         if (this.activeGames.has(id)) {
             return this.activeGames.get(id);
         }
 
         throw new Error("Game does not exists");
+=======
+  createNewGame(terrainType: string): IGameObject {
+    const gameId = v4();
+    const gameCode = this.generateGameCode();
+
+    const bgCharactersManager = new BackgroundCharacterManager(gameId, this, terrainType);
+    const gameObject: IGameObject = {
+      gameId,
+      gameCode,
+      playersMap: new Map<string, IPlayer>(),
+      state: "WAITING",
+      bgCharactersManager,
+      viewers: [],
+      winingTeam: Team.NONE,
+      controlledPlayersMap: new Map<string, IPlayer>(),
+      terrainType: TerrainType[terrainType]
+    };
+    startClientsUpdater(gameObject);
+    this.activeGames.set(gameId, gameObject);
+
+    bgCharactersManager.initBgCharacters();
+    bgCharactersManager.startCharactersMovement();
+    return gameObject;
+  }
+
+  getGameById(id: string): IGameObject {
+    if (this.activeGames.has(id)) {
+      return this.activeGames.get(id);
+>>>>>>> issue177
     }
 
     getGameByCode(code: string): IGameObject {

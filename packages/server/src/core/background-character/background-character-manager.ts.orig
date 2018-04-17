@@ -67,7 +67,6 @@ export class BackgroundCharacterManager {
     BG_CHARACTER_TYPES.forEach(c => {
         if(c.terrainType === terrainType)
         {
-          console.log("c.characterName:"+c.characterName)
           this.initialLocationId.set(c.characterName, []);
           this.backgroundCharactersFiltered.push(c);
         }
@@ -109,17 +108,25 @@ export class BackgroundCharacterManager {
     const bgPlayer = {
       playerId: v4(),
       character,
+<<<<<<< HEAD
+      state: 'ALIVE',
+=======
       state: "ALIVE",
-      lifeState: 'FULL',
+      lifeState: "FULL",
+>>>>>>> issue177
       game: this.game,
       currentLocation: currentPath.location,
       heading: 0,
       team: Team.NONE,
       type: CharacterType.BACKGROUND_CHARACTER,
-      syncState: 'VALID',
+      syncState: "VALID",
       isCrawling: false,
+<<<<<<< HEAD
       isShooting: false,
       isFlying: false,
+=======
+      isShooting: false
+>>>>>>> issue177
     } as IPlayer;
 
     const nextLocationNode = this.getRandomLocation(currentPath.points);
