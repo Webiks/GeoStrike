@@ -1,22 +1,7 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  HostListener,
-  Input,
-  NgZone,
-  OnDestroy,
-  OnInit,
-  ViewChild
-} from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import {
-  AcMapComponent,
-  AcNotification,
-  CesiumService,
-  MapLayerProviderOptions,
-  ViewerConfiguration
-} from 'angular-cesium';
+import {ChangeDetectorRef, Component, ElementRef,HostListener, Input, NgZone, OnDestroy, OnInit,Output, ViewChild} from '@angular/core';
+import {Observable} from 'rxjs/Observable';
+import {AcMapComponent, AcNotification, CesiumService, MapLayerProviderOptions,
+  ViewerConfiguration} from 'angular-cesium';
 import {GameFields, PlayerFields} from '../../../types';
 import {CharacterService, MeModelState, ViewState} from '../../services/character.service';
 import {UtilsService} from '../../services/utils.service';
@@ -26,7 +11,7 @@ import {CesiumViewerOptionsService} from './viewer-options/cesium-viewer-options
 import {CollisionDetectorService} from '../../services/collision-detector.service';
 import {TakeControlService} from '../../services/take-control.service';
 import {PitchCalculatorService} from './services/pitch-calculator.service';
-
+import {Subject} from "rxjs/Subject";
 @Component({
   selector: 'game-map',
   templateUrl: './game-map.component.html',
@@ -53,7 +38,6 @@ export class GameMapComponent implements OnInit, OnDestroy {
   @Input() me;
   @Input() playersPositions: Observable<AcNotification>;
   @Input() gameData: Observable<GameFields.Fragment>;
-  @Input() flights:  Observable<GameFields.Fragment>;
   @ViewChild(AcMapComponent) private mapInstance: AcMapComponent;
 
   public createPathMode = environment.createPathMode;

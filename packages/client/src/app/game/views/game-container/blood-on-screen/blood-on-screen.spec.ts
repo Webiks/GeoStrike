@@ -13,7 +13,7 @@ const entity = {
     speed: 'NONE',
     minHeight: 50,
     maxHeight: 500,
-    remainingTime: 300, //300sec =  5min minutes in seconds
+    remainingTime: 3000, //300sec =  5min minutes in seconds
     heightLevel: 'NONE'
   }
 }

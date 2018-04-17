@@ -5,13 +5,13 @@
 
 export const environment = {
   production: false,
-  serverUrl: 'localhost:3000',
+    serverUrl: 'localhost:3000',
   wsSchema: 'ws',
   movement: {
     runningSpeed: 1.0,
     walkingSpeed: 0.25,
     crawlingSpeed: 0.1,
-    flyingSpeed: 3.0
+    flyingSpeed: 3.0,
   },
   createPathMode: false,
   loadTerrain: true,
