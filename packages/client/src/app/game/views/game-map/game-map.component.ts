@@ -208,19 +208,6 @@ private isFlyingInFlyingMode = false;
   }
 
 
-  private flightInPlace() {
-    let flag = true;
-    let degree;
-    setInterval(() => {
-
-      if (flag)
-        degree = 0.75
-      else
-        degree = -0.75
-      this.viewer.camera.moveUp(degree);
-    }, 1000);
-  }
-
   onMousemove(event: MouseEvent) {
     if (!this.character.initialized || !document.pointerLockElement) {
       return;
