@@ -231,7 +231,7 @@ private isFlyingInFlyingMode = false;
     const isShooting = this.character.state === MeModelState.SHOOTING;
     const isCrawling = this.character.isCrawling;
     const isFlying = this.character.isFlying;
-    const range = isFPV || isShooting ? 0.1 : 4;
+    const range = isFlying ? 7 : isFPV ? 0.1 : 4;
 
     const playerHeadCart = Cesium.Cartographic.fromCartesian(this.character.location);
 
