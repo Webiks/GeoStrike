@@ -295,7 +295,7 @@ amdefine@>=0.0.4:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
 
-angular-cesium@^0.0.28:
+angular-cesium@0.0.28:
   version "0.0.28"
   resolved "https://registry.yarnpkg.com/angular-cesium/-/angular-cesium-0.0.28.tgz#7e9ae1e6e96d4af9f5d97efc27b27f50644a69f7"
   dependencies:
@@ -916,9 +916,9 @@ center-align@^0.1.1:
     align-text "^0.1.3"
     lazy-cache "^1.0.3"
 
-cesium@^1.43.0:
-  version "1.43.0"
-  resolved "https://registry.yarnpkg.com/cesium/-/cesium-1.43.0.tgz#9d3b76634bbce4374a827a4d75ead37fe543de0d"
+"cesium@http://cesium-dev.s3-website-us-east-1.amazonaws.com/cesium/master/cesium-1.44.0-master26380.tgz":
+  version "1.44.0-master26380"
+  resolved "http://cesium-dev.s3-website-us-east-1.amazonaws.com/cesium/master/cesium-1.44.0-master26380.tgz#b0762966956e51843a44ed2c39227c21f18d00fe"
   dependencies:
     requirejs "^2.3.2"
 
