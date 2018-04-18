@@ -271,16 +271,10 @@ export class GameMapComponent implements OnInit, OnDestroy {
       playerHeadCart.latitude,
       playerHeadCart.height
     );
-    if (!(this.character.isFlying))
-      this.viewer.zoomTo(
-        [this.character.entity, this.helperEntityPoint],
-        new Cesium.HeadingPitchRange(heading, pitch, range)
-      );
-    else
-      this.viewer.zoomTo(
-        [this.character.entity, this.character.location],
-        new Cesium.HeadingPitchRange(heading, pitch, range)
-      );
+    this.viewer.zoomTo(
+      [this.character.entity, this.helperEntityPoint],
+      new Cesium.HeadingPitchRange(heading, pitch, range)
+    );
     this.lastPlayerLocation = this.character.location;
     this.lastPlayerHead = playerHeadCart;
     this.lastPlayerHPR = {
