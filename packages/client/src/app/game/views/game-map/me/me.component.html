@@ -4,7 +4,7 @@
           heightReference: utils.getRelativeToGroundHeightReference(),
           scale: characterInfo.scale,
 					uri: characterInfo.model,
-					position: interpolatePlayerPosition(me, me.location),
+					position: isPlayerInFlightModeNotFlying(me),
 					orientation: getOrientation(me.location, me.heading,me),
 					shadows: Cesium.ShadowMode.DISABLED,
 					color: getColor(),
