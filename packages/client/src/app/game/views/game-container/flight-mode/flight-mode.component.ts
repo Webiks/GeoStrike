@@ -110,11 +110,14 @@ export class FlightModeComponent implements OnInit, OnDestroy {
     })
   }
 
-  setFlightMode() {
+  changeFlyingState() {
     let updateFlyState = this.flightModeService.changeFlyingState();
     this.gameService.updateServerOnPosition(true);
     if (updateFlyState) {
-      this.flightSubscription = this.gameService.toggleFlightMode(this.character.meFromServer.id, this.character.isFlying).subscribe(() => this.flightSubscription.unsubscribe());
+      this.flightData = this.character.meFromServer.flight;
+      this.flightHeightLevel = this.utilsService.calculateHeightLevel(this.character.meFromServer.flight, this.character.meFromServer.currentLocation.location, 50);
+      this.flightData.heightLevel = this.flightHeightLevel;
+      const flightSubscription = this.gameService.toggleFlightMode(this.character.meFromServer.id, this.character.isFlying).subscribe(() => flightSubscription.unsubscribe());
     }
   }
 

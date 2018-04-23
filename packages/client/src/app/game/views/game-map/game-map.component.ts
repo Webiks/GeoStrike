@@ -301,25 +301,6 @@ export class GameMapComponent implements OnInit, OnDestroy {
     };
   }
 
-  setFlightVibrations() {
-    this.intervalId = setInterval(() => {
-      if(this.character.state === MeModelState.DEAD){
-        clearInterval(this.intervalId);
-        return;
-      }
-      let vibrationHeightMeters = this.character.viewState === ViewState.SEMI_FPV ? 0.3 : 1;
-      let location = this.character.location;
-      if (this.increase) {
-        this.character.location = this.utils.toHeightOffset(location, vibrationHeightMeters)
-        this.increase = !this.increase;
-      }
-      else {
-        this.character.location = this.utils.toHeightOffset(location, -vibrationHeightMeters)
-        this.increase = !this.increase;
-      }
-    }, 750)
-  }
-
   ngOnDestroy(): void {
     this.elementRef.nativeElement.removeEventListener(
       "mousemove",

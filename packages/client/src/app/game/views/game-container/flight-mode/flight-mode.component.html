@@ -1,5 +1,5 @@
 <div class="flight-container" *ngIf="me"  [ngClass]="{'isDangerousRemainingTime': dangerousRemainingTime >= flightData?.remainingTime}">
-  <div class="img-container clickable" (click)="setFlightMode(true)">
+  <div class="img-container clickable" (click)="changeFlyingState(true)">
     <img *ngIf="!character?.isFlying && flightData?.remainingTime" src="assets/icons/jetpack.svg">
     <img *ngIf="character?.isFlying" src="assets/icons/jetpack-on.svg">
     <img *ngIf="!character?.isFlying && !flightData?.remainingTime" src="assets/icons/jetpack-disabled.svg">

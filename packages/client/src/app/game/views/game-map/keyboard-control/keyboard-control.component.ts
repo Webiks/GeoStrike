@@ -54,7 +54,6 @@ export class KeyboardControlComponent implements OnInit {
   private flightData: FlightData;
   private flightHeightLevel: FlightHeight;
   private nextLocation;
-  isFlightInPlace;
 
   constructor(private character: CharacterService,
               private keyboardControlService: KeyboardControlService,
