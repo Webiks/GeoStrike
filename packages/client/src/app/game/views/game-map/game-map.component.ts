@@ -194,7 +194,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
   }
 
   private flightCrashSettings() {
-    let speed = environment.movement.flyingSpeed;
+    let speed = environment.movement.flyingLowSpeed;
     let crashDestination = this.utils.pointByLocationDistanceAndAzimuthAndHeight3d(
       this.character.location,
       speed,
@@ -270,14 +270,14 @@ export class GameMapComponent implements OnInit, OnDestroy {
     if(this.character.isFlying && (Cesium.Cartographic.fromCartesian(this.character.location).longitude === Cesium.Cartographic.fromCartesian(this.lastPlayerLocation).longitude) &&
       (Cesium.Cartographic.fromCartesian(this.character.location).latitude === Cesium.Cartographic.fromCartesian(this.lastPlayerLocation).latitude) ) {
       if(!this.intervalId){
-        this.setFlightVibrations();
+        // this.setFlightVibrations();
         this.flightService.isInFlightModeNotMoving.next(true);
       }
     }
     else {
       this.flightService.isInFlightModeNotMoving.next(false);
-      clearInterval(this.intervalId);
-      this.intervalId = false;
+      // clearInterval(this.intervalId);
+      // this.intervalId = false;
     }
 
     const pitchDeg = this.character.pitch;

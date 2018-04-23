@@ -54,6 +54,7 @@ export class KeyboardControlComponent implements OnInit {
   private flightData: FlightData;
   private flightHeightLevel: FlightHeight;
   private nextLocation;
+  isFlightInPlace;
 
   constructor(private character: CharacterService,
               private keyboardControlService: KeyboardControlService,
@@ -127,7 +128,12 @@ export class KeyboardControlComponent implements OnInit {
         }
         if (this.character.isFlying) {
           this.flightData = this.character.meFromServer.flight;
-          speed = environment.movement.flyingSpeed;
+          if (this.character.state === MeModelState.RUNNING) {
+            speed = environment.movement.flyingHighSpeed;
+          }
+          else{
+            speed = environment.movement.flyingLowSpeed;
+          }
           this.nextLocation = this.utils.pointByLocationDistanceAndAzimuthAndHeight3d(
             position,
             speed,

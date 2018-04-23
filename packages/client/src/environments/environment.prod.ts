@@ -6,7 +6,8 @@ export const environment = {
     runningSpeed: 1.0,
     walkingSpeed: 0.25,
     crawlingSpeed: 0.1,
-    flyingSpeed: 3.0
+    flyingLowSpeed: 2.0,
+    flyingHighSpeed: 4.0
   },
   createPathMode: false,
   loadTerrain: false,

@@ -1,14 +1,4 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  HostListener,
-  Input,
-  NgZone,
-  OnDestroy,
-  OnInit,
-  ViewChild
-} from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActionType, CesiumService } from 'angular-cesium';
 import { CharacterService, CharacterState, MeModelState, ViewState } from '../../../services/character.service';
 import { UtilsService } from '../../../services/utils.service';
@@ -26,6 +16,7 @@ import { SnackBarContentComponent } from '../../../../shared/snack-bar-content/s
 import { SoundService } from '../../../services/sound.service';
 import { InterpolationService, InterpolationType } from "../../../services/interpolation.service";
 import { FlightModeService } from "../../game-container/flight-mode/flight-mode.service";
+import { environment } from "../../../../../environments/environment";
 
 @Component({
   selector: 'me',
@@ -65,7 +56,7 @@ export class MeComponent implements OnInit, OnDestroy {
   // @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
   //   if (event.keyCode == 70 && !this.character.isFlying) {
   //     this.playerInFlightModeNotFlying = true;
-  //     this.setFlightVibrations();
+  //     this.setSlowlyMovingForward();
   //   }
   //   if (event.keyCode == 70 && this.character.isFlying) {
   //     this.playerInFlightModeNotFlying = false;
@@ -84,11 +75,11 @@ export class MeComponent implements OnInit, OnDestroy {
   // @HostListener('document:keyup', ['$event']) onKeyupHandler(event: KeyboardEvent) {
   //   if (event.key === 'w' && this.character.isFlying) {
   //     this.playerInFlightModeNotFlying = true;
-  //     this.setFlightVibrations();
+  //     this.setSlowlyMovingForward();
   //   }
   //   if (event.shiftKey && event.keyCode == 87 && this.character.isFlying) {
   //     this.playerInFlightModeNotFlying = true;
-  //     this.setFlightVibrations();
+  //     this.setSlowlyMovingForward();
   //   }
   // }
 
@@ -138,7 +129,7 @@ export class MeComponent implements OnInit, OnDestroy {
           let killSubscription;
           killSubscription = this.gameService.notifyBeenShot(shotedEntity.id)
             .subscribe(beenShotData => {
-                this.setKillEvent(beenShotData.data.notifyBeenShot.lifeState,shotedEntity.id)
+              this.setKillEvent(beenShotData.data.notifyBeenShot.lifeState, shotedEntity.id)
               killSubscription.unsubscribe()
             });
         }
@@ -256,7 +247,13 @@ export class MeComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.flightService.currentFlightMode.subscribe(isFlightInPlace => this.isFlightInPlace = isFlightInPlace);
+    this.flightService.currentFlightMode.subscribe(isFlightInPlace => {
+      this.isFlightInPlace = isFlightInPlace;
+      if (this.isFlightInPlace)
+        this.setSlowlyMovingForward();
+      // else
+      //   clearInterval(this.intervalId);
+    });
   }
 
   ngOnDestroy(): void {
@@ -338,7 +335,6 @@ export class MeComponent implements OnInit, OnDestroy {
       return result;
     }
     else {
-      // this.setFlightVibrations();
       return InterpolationService.interpolate({
         data: playerPosition,
         cesiumSampledProperty: positionProperty,
@@ -347,11 +343,6 @@ export class MeComponent implements OnInit, OnDestroy {
   }
 
   setFlightVibrations() {
-    this.intervalId = setInterval(() => {
-      if (this.character.state === MeModelState.DEAD) {
-        clearInterval(this.intervalId);
-        return;
-      }
       let vibrationHeightMeters = this.character.viewState === ViewState.SEMI_FPV ? 0.3 : 1;
       let location = this.character.location;
       if (this.increase) {
@@ -362,15 +353,27 @@ export class MeComponent implements OnInit, OnDestroy {
         this.character.location = this.utils.toHeightOffset(location, -vibrationHeightMeters)
         this.increase = !this.increase;
       }
-    }, 750)
+  }
+
+  setSlowlyMovingForward() {
+    if (this.character.location) {
+      const speed = environment.movement.walkingSpeed;
+      const nextLocation = this.utils.pointByLocationDistanceAndAzimuthAndHeight3d(
+        this.character.location,
+        speed,
+        Cesium.Math.toRadians(this.character.heading + 180),
+        true
+      );
+      this.character.location = nextLocation;
+    }
   }
 
   isPlayerInFlightModeNotFlying(me) {
-    if(this.character.isFlying && this.isFlightInPlace) {
-          return this.interpolatePlayerPosition(me, me.location);
+    if (this.character.isFlying && this.isFlightInPlace) {
+      return this.interpolatePlayerPosition(me, me.location);
     }
-      else {
-        return this.getPosition(me.location);
-      }
+    else {
+      return this.getPosition(me.location);
+    }
   }
 }
