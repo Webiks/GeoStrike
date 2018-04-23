@@ -24,8 +24,12 @@ import { KeyboardKeysService } from '../../../../core/services/keyboard-keys.ser
 import { MatSnackBar } from '@angular/material';
 import { SnackBarContentComponent } from '../../../../shared/snack-bar-content/snack-bar-content.component';
 import { SoundService } from '../../../services/sound.service';
+<<<<<<< HEAD
 import { InterpolationService, InterpolationType } from "../../../services/interpolation.service";
 import { FlightModeService } from "../../game-container/flight-mode/flight-mode.service";
+=======
+import { BeenShotService } from "../../game-container/blood-on-screen/been-shot.service";
+>>>>>>> issue166v2
 
 @Component({
   selector: 'me',
@@ -56,6 +60,7 @@ export class MeComponent implements OnInit, OnDestroy {
   normalColor = new Cesium.Color(1, 1, 1, 1);
   ViewState = ViewState;
   Cesium = Cesium;
+<<<<<<< HEAD
   playersPositionMap = new Map<string, any>();
   increase = true;
   intervalId;
@@ -92,6 +97,9 @@ export class MeComponent implements OnInit, OnDestroy {
   //   }
   // }
 
+=======
+  showBloodSubscription : Subscription;
+>>>>>>> issue166v2
   constructor(private character: CharacterService,
               public utils: UtilsService,
               private cesiumService: CesiumService,
@@ -101,7 +109,11 @@ export class MeComponent implements OnInit, OnDestroy {
               private snackBar: MatSnackBar,
               private soundService: SoundService,
               private cd: ChangeDetectorRef,
+<<<<<<< HEAD
               private flightService: FlightModeService) {
+=======
+              private beenShotService: BeenShotService) {
+>>>>>>> issue166v2
   }
 
   get notifications$() {
@@ -137,16 +149,27 @@ export class MeComponent implements OnInit, OnDestroy {
           const shotedEntity = picked.id.acEntity;
           let killSubscription;
           killSubscription = this.gameService.notifyBeenShot(shotedEntity.id)
+<<<<<<< HEAD
             .subscribe(beenShotData => {
-                this.setKillEvent(beenShotData.data.notifyBeenShot.lifeState,shotedEntity.id)
+              this.setKillEvent(beenShotData.data.notifyBeenShot.lifeState, shotedEntity.id)
+=======
+            .subscribe( beenShotData => {
+              this.setKillEvent(beenShotData.data.notifyBeenShot.lifeState,shotedEntity.id)
+>>>>>>> issue166v2
               killSubscription.unsubscribe()
             });
         }
       });
   }
 
+<<<<<<< HEAD
   setKillEvent(lifeState: string, shotedEntityId) {
     if (lifeState === "EMPTY") {
+=======
+  setKillEvent(lifeState:string, shotedEntityId) {
+    if(lifeState === "EMPTY")
+    {
+>>>>>>> issue166v2
       let killSubscription = this.gameService.notifyKill(shotedEntityId)
         .subscribe(() => killSubscription.unsubscribe());
     }

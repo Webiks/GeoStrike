@@ -44,8 +44,11 @@ export interface IPlayer {
     numberOfShotsThatHit: number;
     isCrawling: boolean;
     isShooting: boolean;
+<<<<<<< HEAD
     isFlying: boolean;
     flight: FlightData;
+=======
+>>>>>>> issue166v2
     game: IGameObject;
     currentLocation: ICartesian3Location;
     heading: number;
@@ -76,6 +79,7 @@ export class GamesManager {
     constructor() {
         this.gamesTimeouts = new GamesTimeout(this);
         this.gamesTimeouts.startTimeoutChecks();
+<<<<<<< HEAD
     }
 
     private generateGameCode(): string {
@@ -146,15 +150,52 @@ export class GamesManager {
                         team: Team): IPlayer {
         const game = this.getGameById(gameId);
         const playerId = v4();
+=======
+    }
+
+    private generateGameCode(): string {
+        const min = 1000;
+        const max = 9999;
+        let gameCode: string;
+
+        do {
+            gameCode = String(Math.floor(Math.random() * (max - min) + min));
+        } while (this.activeGames.has(gameCode));
+
+        return gameCode;
+    }
+
+    addPlayerToGame(gameId: string, player: IPlayer) {
+        const game = this.getGameById(gameId);
+        const playerToAdd = {
+            ...player,
+            game,
+        } as IPlayer;
+
+        game.playersMap.set(player.playerId, playerToAdd);
+
+        return player;
+    }
+
+    addViewerToGame(gameId: string, username: string): IViewer {
+        const game = this.getGameById(gameId);
+        const playerId = v4();
+        const finalUsername = this.validateUsername(username, game);
+>>>>>>> issue166v2
         const playerToken = sign(
             {
                 gameId: game.gameId,
                 playerId,
+<<<<<<< HEAD
                 username,
+=======
+                username: finalUsername,
+>>>>>>> issue166v2
             },
             TOKENS_SECRET
         );
 
+<<<<<<< HEAD
         const defaultPlayerPositions = config.PLAYERS_SPAWN_POSITIONS[team];
         const realPlayerTeamCount = Array.from(game.playersMap.values()).filter(
             p => p.type === CharacterType.PLAYER && p.team === team
@@ -170,6 +211,53 @@ export class GamesManager {
 
         }
 
+=======
+        const viewer = {
+            token: playerToken,
+            playerId,
+            username: finalUsername,
+        };
+        game.viewers.push(viewer);
+        return viewer;
+    }
+
+    private validateUsername(username: string, game: IGameObject, isFirst = true): string {
+        const exists = Array.from(game.playersMap.values()).find(p => p.username === username);
+        if (exists) {
+            let newUsername = null;
+            if (isFirst) {
+                newUsername = username + '1'
+            } else {
+                const count = +username.slice(-1);
+                newUsername = username.slice(0, -1) + (count + 1);
+            }
+            return this.validateUsername(newUsername, game, false);
+        } else {
+            return username;
+        }
+    }
+
+    addRealPlayerToGame(gameId: string,
+                        characterName: string,
+                        username: string,
+                        team: Team): IPlayer {
+        const game = this.getGameById(gameId);
+        const playerId = v4();
+        const playerToken = sign(
+            {
+                gameId: game.gameId,
+                playerId,
+                username,
+            },
+            TOKENS_SECRET
+        );
+
+        const defaultPlayerPositions = config.PLAYERS_SPAWN_POSITIONS[team];
+        const realPlayerTeamCount = Array.from(game.playersMap.values()).filter(
+            p => p.type === CharacterType.PLAYER && p.team === team
+        ).length;
+
+>>>>>>> issue166v2
         const finalUsername = this.validateUsername(username, game);
         const character = PLAYER_CHARACTERS.find(p => p.name === characterName);
         const player: IPlayer = {
@@ -188,8 +276,11 @@ export class GamesManager {
             type: CharacterType.PLAYER,
             isCrawling: false,
             isShooting: false,
+<<<<<<< HEAD
             isFlying: false,
             flight: initFlightData,
+=======
+>>>>>>> issue166v2
             syncState: 'VALID',
         };
 
@@ -255,11 +346,62 @@ export class GamesManager {
                          heading: number,
                          isCrawling: boolean,
                          isShooting: boolean,
+<<<<<<< HEAD
                          isFlying: boolean,
+=======
+>>>>>>> issue166v2
                          enteringBuildingPosition: ICartesian3Location,
                          skipValidation = false) {
         const game = this.getGameById(gameId);
         const player = game.playersMap.get(playerId);
+<<<<<<< HEAD
+=======
+
+        // Update game active time
+        if (player.type === CharacterType.PLAYER) {
+            this.gamesTimeouts.setGameLastActiveTime(gameId);
+        }
+
+        if (player && position) {
+            if (
+                skipValidation ||
+                this.validatePlayerPosition(player.currentLocation, position)
+            ) {
+                player.syncState = 'VALID';
+                player.currentLocation = position;
+                player.heading = heading;
+                player.isCrawling = isCrawling;
+                player.isShooting = isShooting;
+                player.enteringBuildingPosition = enteringBuildingPosition;
+            } else {
+                player.syncState = 'INVALID';
+            }
+
+            return player;
+        }
+
+        return null;
+    }
+
+    updatePlayerState(gameId: string, playerId: string, newState: PlayerState) {
+        const game = this.getGameById(gameId);
+        const player = game.controlledPlayersMap.get(playerId) || game.playersMap.get(playerId);
+        if (player) {
+            player.state = newState;
+        }
+
+        this.checkGameResult(game);
+
+    }
+
+    updatePlayerLifeState(gameId: string, playerId: string, newState: PlayerLifeState){
+        const game = this.getGameById(gameId);
+        const player = game.controlledPlayersMap.get(playerId) || game.playersMap.get(playerId);
+        if (player) {
+            player.lifeState = newState;
+        }
+    }
+>>>>>>> issue166v2
 
         // Update game active time
         if (player.type === CharacterType.PLAYER) {
@@ -298,7 +440,7 @@ export class GamesManager {
 
     }
 
-  updatePlayerLifeState(gameId: string, playerId: string, newState: PlayerLifeState){
+    updatePlayerLifeState(gameId: string, playerId: string, newState: PlayerLifeState) {
         const game = this.getGameById(gameId);
         const player = game.controlledPlayersMap.get(playerId) || game.playersMap.get(playerId);
         if (player) {
@@ -314,6 +456,7 @@ export class GamesManager {
         }
     }
 
+<<<<<<< HEAD
     updatePlayerFlightData(gameId: string, playerId: string, newState: FlightData){
         const game = this.getGameById(gameId);
         const player = game.controlledPlayersMap.get(playerId) || game.playersMap.get(playerId);
@@ -340,6 +483,26 @@ export class GamesManager {
             winingTeam = Team.BLUE;
         }
 
+=======
+    private checkGameResult(game: IGameObject) {
+        const players = Array.from(game.playersMap.values());
+
+        const bluePlayers = players.filter(p => p.team === Team.BLUE);
+        const deadBlues = bluePlayers.filter(p => p.state === 'DEAD').length;
+        const bluePlayersCount = bluePlayers.length;
+
+        const redPlayers = players.filter(p => p.team === Team.RED);
+        const deadReds = redPlayers.filter(p => p.state === 'DEAD').length;
+        const redPlayersCount = redPlayers.length;
+
+        let winingTeam = null;
+        if (bluePlayersCount && deadBlues === bluePlayersCount) {
+            winingTeam = Team.RED;
+        } else if (redPlayersCount && deadReds === redPlayersCount) {
+            winingTeam = Team.BLUE;
+        }
+
+>>>>>>> issue166v2
         if (winingTeam) {
             game.winingTeam = winingTeam;
             setTimeout(() => this.endGame(game.gameId), config.clientsUpdateRate * 10);
@@ -375,6 +538,7 @@ export class GamesManager {
         game.controlledPlayersMap.set(playerId, controlledPlayer);
         return controlledPlayer;
     }
+<<<<<<< HEAD
 
     removeControlOverPlayer(game, playerId: string): IPlayer {
         const controlledPlayer: IPlayer = game.controlledPlayersMap.get(playerId);
@@ -385,6 +549,18 @@ export class GamesManager {
         return controlledPlayer;
     }
 
+=======
+
+    removeControlOverPlayer(game, playerId: string): IPlayer {
+        const controlledPlayer: IPlayer = game.controlledPlayersMap.get(playerId);
+        if (controlledPlayer) {
+            controlledPlayer.state = controlledPlayer.state === 'CONTROLLED' ? 'ALIVE' : controlledPlayer.state;
+            game.controlledPlayersMap.delete(playerId);
+        }
+        return controlledPlayer;
+    }
+
+>>>>>>> issue166v2
     isControlled(game: IGameObject, playerId): boolean {
         return !!Array.from(game.controlledPlayersMap.values()).find(p => p.playerId === playerId);
     }
@@ -392,4 +568,8 @@ export class GamesManager {
     isController(game: IGameObject, playerId): boolean {
         return game.controlledPlayersMap.has(playerId);
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> issue166v2

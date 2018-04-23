@@ -84,7 +84,8 @@ export interface CreateOrJoinResult {
 export interface Subscription {
   gameData?: Game; 
   gameNotifications?: Notification; 
-  gunShot?: ShotData; 
+  gunShot?: ShotData;
+  beenShot?: BeenShotData;
 }
 
 export interface Notification {
@@ -98,7 +99,10 @@ export interface ShotData {
   shotPosition?: Location; 
   time?: number; 
 }
-
+export interface BeenShotData {
+    id?: string;
+    lifeState?: string;
+}
 export interface Viewer extends User {
   id: string; 
   username?: string; 
