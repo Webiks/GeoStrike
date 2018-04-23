@@ -10,6 +10,7 @@ import { CesiumViewerOptionsService } from "./viewer-options/cesium-viewer-optio
 import { CollisionDetectorService } from "../../services/collision-detector.service";
 import { TakeControlService } from "../../services/take-control.service";
 import { PitchCalculatorService } from "./services/pitch-calculator.service";
+import { FlightModeService } from "../game-container/flight-mode/flight-mode.service";
 
 @Component({
   selector: "game-map",
@@ -41,6 +42,8 @@ export class GameMapComponent implements OnInit, OnDestroy {
   private helperEntityPoint;
   private lastViewState: ViewState;
   mapLayerProviderOptions: MapLayerProviderOptions;
+  increase = true;
+  intervalId;
 
   constructor(
     private gameService: GameService,
@@ -53,7 +56,9 @@ export class GameMapComponent implements OnInit, OnDestroy {
     private viewerOptions: CesiumViewerOptionsService,
     private collisionDetector: CollisionDetectorService,
     private pitchCalculatorService: PitchCalculatorService,
-    private takeControlService: TakeControlService
+    private takeControlService: TakeControlService,
+    private flightService: FlightModeService
+
   ) {
     viewerConf.viewerOptions = viewerOptions.getViewerOption();
 
@@ -245,7 +250,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
       if (
         this.character.flightData.remainingTime === 0 ||
         this.character.meFromServer.flight.remainingTime === 0 ||
-        height <= 0
+        height <= 0 || this.character.state === MeModelState.DEAD
       ) {
         this.flightCrashSettings();
       } else {
@@ -261,6 +266,18 @@ export class GameMapComponent implements OnInit, OnDestroy {
       this.lastPlayerHead === playerHeadCart
     ) {
       return;
+    }
+    if(this.character.isFlying && (Cesium.Cartographic.fromCartesian(this.character.location).longitude === Cesium.Cartographic.fromCartesian(this.lastPlayerLocation).longitude) &&
+      (Cesium.Cartographic.fromCartesian(this.character.location).latitude === Cesium.Cartographic.fromCartesian(this.lastPlayerLocation).latitude) ) {
+      if(!this.intervalId){
+        this.setFlightVibrations();
+        this.flightService.isInFlightModeNotMoving.next(true);
+      }
+    }
+    else {
+      this.flightService.isInFlightModeNotMoving.next(false);
+      clearInterval(this.intervalId);
+      this.intervalId = false;
     }
 
     const pitchDeg = this.character.pitch;
@@ -282,6 +299,25 @@ export class GameMapComponent implements OnInit, OnDestroy {
       pitch: this.character.pitch,
       range
     };
+  }
+
+  setFlightVibrations() {
+    this.intervalId = setInterval(() => {
+      if(this.character.state === MeModelState.DEAD){
+        clearInterval(this.intervalId);
+        return;
+      }
+      let vibrationHeightMeters = this.character.viewState === ViewState.SEMI_FPV ? 0.3 : 1;
+      let location = this.character.location;
+      if (this.increase) {
+        this.character.location = this.utils.toHeightOffset(location, vibrationHeightMeters)
+        this.increase = !this.increase;
+      }
+      else {
+        this.character.location = this.utils.toHeightOffset(location, -vibrationHeightMeters)
+        this.increase = !this.increase;
+      }
+    }, 750)
   }
 
   ngOnDestroy(): void {

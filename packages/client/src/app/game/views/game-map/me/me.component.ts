@@ -25,6 +25,7 @@ import { MatSnackBar } from '@angular/material';
 import { SnackBarContentComponent } from '../../../../shared/snack-bar-content/snack-bar-content.component';
 import { SoundService } from '../../../services/sound.service';
 import { InterpolationService, InterpolationType } from "../../../services/interpolation.service";
+import { FlightModeService } from "../../game-container/flight-mode/flight-mode.service";
 
 @Component({
   selector: 'me',
@@ -59,36 +60,37 @@ export class MeComponent implements OnInit, OnDestroy {
   increase = true;
   intervalId;
   playerInFlightModeNotFlying = false;
+  isFlightInPlace: boolean = false;
 
-  @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
-    if (event.keyCode == 70 && !this.character.isFlying) {
-      this.playerInFlightModeNotFlying = true;
-      this.setFlightVibrations();
-    }
-    if (event.keyCode == 70 && this.character.isFlying) {
-      this.playerInFlightModeNotFlying = false;
-      clearInterval(this.intervalId);
-    }
-    if (event.shiftKey && event.keyCode == 87) {
-      this.playerInFlightModeNotFlying = false;
-      clearInterval(this.intervalId);
-    }
-    if (event.key === 'w') {
-      this.playerInFlightModeNotFlying = false;
-      clearInterval(this.intervalId);
-    }
-  }
-
-  @HostListener('document:keyup', ['$event']) onKeyupHandler(event: KeyboardEvent) {
-    if (event.key === 'w' && this.character.isFlying) {
-      this.playerInFlightModeNotFlying = true;
-      this.setFlightVibrations();
-    }
-    if (event.shiftKey && event.keyCode == 87 && this.character.isFlying) {
-      this.playerInFlightModeNotFlying = true;
-      this.setFlightVibrations();
-    }
-  }
+  // @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
+  //   if (event.keyCode == 70 && !this.character.isFlying) {
+  //     this.playerInFlightModeNotFlying = true;
+  //     this.setFlightVibrations();
+  //   }
+  //   if (event.keyCode == 70 && this.character.isFlying) {
+  //     this.playerInFlightModeNotFlying = false;
+  //     clearInterval(this.intervalId);
+  //   }
+  //   if (event.shiftKey && event.keyCode == 87) {
+  //     this.playerInFlightModeNotFlying = false;
+  //     clearInterval(this.intervalId);
+  //   }
+  //   if (event.key === 'w') {
+  //     this.playerInFlightModeNotFlying = false;
+  //     clearInterval(this.intervalId);
+  //   }
+  // }
+  //
+  // @HostListener('document:keyup', ['$event']) onKeyupHandler(event: KeyboardEvent) {
+  //   if (event.key === 'w' && this.character.isFlying) {
+  //     this.playerInFlightModeNotFlying = true;
+  //     this.setFlightVibrations();
+  //   }
+  //   if (event.shiftKey && event.keyCode == 87 && this.character.isFlying) {
+  //     this.playerInFlightModeNotFlying = true;
+  //     this.setFlightVibrations();
+  //   }
+  // }
 
   constructor(private character: CharacterService,
               public utils: UtilsService,
@@ -98,7 +100,8 @@ export class MeComponent implements OnInit, OnDestroy {
               private ngZone: NgZone,
               private snackBar: MatSnackBar,
               private soundService: SoundService,
-              private cd: ChangeDetectorRef) {
+              private cd: ChangeDetectorRef,
+              private flightService: FlightModeService) {
   }
 
   get notifications$() {
@@ -252,6 +255,8 @@ export class MeComponent implements OnInit, OnDestroy {
         }
       }
     });
+
+    this.flightService.currentFlightMode.subscribe(isFlightInPlace => this.isFlightInPlace = isFlightInPlace);
   }
 
   ngOnDestroy(): void {
@@ -323,32 +328,27 @@ export class MeComponent implements OnInit, OnDestroy {
   }
 
   interpolatePlayerPosition(player, playerPosition) {
-    if (this.character.isFlying && this.playerInFlightModeNotFlying) {
-      const playerId = player.id;
-      const positionProperty = this.playersPositionMap.get(playerId);
-      if (!positionProperty) {
-        const result = InterpolationService.interpolate({
-          data: playerPosition,
-        }, InterpolationType.POSITION);
-        this.playersPositionMap.set(playerId, result);
-        return result;
-      }
-      else {
-        // this.setFlightVibrations();
-        return InterpolationService.interpolate({
-          data: playerPosition,
-          cesiumSampledProperty: positionProperty,
-        });
-      }
+    const playerId = player.id;
+    const positionProperty = this.playersPositionMap.get(playerId);
+    if (!positionProperty) {
+      const result = InterpolationService.interpolate({
+        data: playerPosition,
+      }, InterpolationType.POSITION);
+      this.playersPositionMap.set(playerId, result);
+      return result;
     }
     else {
-      return this.getPosition(playerPosition);
+      // this.setFlightVibrations();
+      return InterpolationService.interpolate({
+        data: playerPosition,
+        cesiumSampledProperty: positionProperty,
+      });
     }
   }
 
   setFlightVibrations() {
     this.intervalId = setInterval(() => {
-      if(this.character.state === MeModelState.DEAD){
+      if (this.character.state === MeModelState.DEAD) {
         clearInterval(this.intervalId);
         return;
       }
@@ -365,12 +365,12 @@ export class MeComponent implements OnInit, OnDestroy {
     }, 750)
   }
 
-  isPlayerInFlightModeNotFlying(me){
-    if(this.playerInFlightModeNotFlying){
-      return this.interpolatePlayerPosition(me, me.location);
+  isPlayerInFlightModeNotFlying(me) {
+    if(this.character.isFlying && this.isFlightInPlace) {
+          return this.interpolatePlayerPosition(me, me.location);
     }
-    else{
-      return this.getPosition(me.location);
-    }
+      else {
+        return this.getPosition(me.location);
+      }
   }
 }
