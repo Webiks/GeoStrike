@@ -37,8 +37,10 @@ export class GameMapComponent implements OnInit, OnDestroy {
   public static readonly DEFAULT_PITCH = -5;
   @Input() me;
   @Input() playersPositions: Observable<AcNotification>;
+  @Input() flights: Observable<AcNotification>;
   @Input() gameData: Observable<GameFields.Fragment>;
   @ViewChild(AcMapComponent) private mapInstance: AcMapComponent;
+
 
   public createPathMode = environment.createPathMode;
   private viewer: any;

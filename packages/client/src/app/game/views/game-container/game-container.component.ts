@@ -15,6 +15,8 @@ import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/map';
 import * as _ from 'lodash';
 import {FlightService} from "../game-map/other-players/flight.service";
+import {Player, CharacterData, PlayerLocation, Location} from '../../../types'
+
 
 export class OtherPlayerEntity extends AcEntity {
 }
@@ -40,6 +42,10 @@ export class GameContainerComponent implements OnInit, OnDestroy {
   private gameNotificationsSubscription: Subscription;
   private paramsSubscription: Subscription;
 
+  flights_test$: Subject<AcNotification> = new Subject<AcNotification>();
+  private flightSubscription: Subscription;
+  private tempData;
+  private flightMap$ = new Map<string, any>();
 
   constructor(private gameService: GameService,
               private character: CharacterService,
@@ -111,6 +117,60 @@ export class GameContainerComponent implements OnInit, OnDestroy {
         }, () => {
           console.log('subscription complete');
         });
+      });
+      this.ngZone.runOutsideAngular(() => {
+        this.flightSubscription = this.flightService.subscribeAirTraffic()
+          .subscribe((data) => {
+            this.tempData = data;
+            this.tempData.messageAdded.forEach(flight => {
+              // console.log(flight)
+              let character: CharacterData = {
+                name: 'plane',
+                model: '/assets/models/planes/plane.gltf',
+                scale: 1,
+                team: null,
+                imageUrl: null,
+                description: null,
+                portraitUrl: null,
+                iconUrl: '/assets/icons/plane-mark2-big.png',
+                iconDeadUrl: '/assets/icons/plane-mark-dead.png',
+                fixedHeight: null,
+              };
+              let location = {
+                x: Number(flight.longitude),
+                y: Number(flight.latitude),
+                z: Number(flight.geo_altitude)
+              };
+
+              let mapping: Player = {
+                id: flight.icao24,
+                username: null,
+                character: character,
+                state: 'ALIVE',
+                lifeState: 'FULL',
+                lifeStatePerctange: 100,
+                isCrawling: false,
+                isFlying: false,
+                isShooting: false,
+                isMe: false,
+                flight: null,
+                currentLocation: {
+                  location: this.degreesToCartesian(location),
+                  heading: flight.heading,
+                },
+                team: 'NONE',
+                syncState: 'VALID',
+                type: 'BACKGROUND_CHARACTER',
+              };
+              const acMap = {
+                id: flight.icao24,
+                actionType: ActionType.ADD_UPDATE,
+                entity: new AcEntity(mapping),
+              };
+              this.flights_test$.next(acMap);
+              // this.flightMap$.set(flight.icao24, mapping);
+            });
+          });
       });
     });
   }
@@ -185,5 +245,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
         });
       });
   }
-
+  degreesToCartesian(location) {
+    return new Cesium.Cartesian3.fromDegrees(location.x, location.y, location.z);
+  }
 }

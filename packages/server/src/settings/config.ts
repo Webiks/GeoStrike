@@ -42,8 +42,8 @@ export const config = {
     RED: process.env.TERRAIN ? TERRAIN_PLAYERS_LOCATION : DEFAULT_RED_PLAYERS_LOCATION,
     BLUE: process.env.TERRAIN ? TERRAIN_PLAYERS_LOCATION : DEFAULT_BULE_PLAYERS_LOCATION,
   },
-    host: process.env.REDIS_HOST || '172.0.0.2',
-    // host: '127.0.0.1',
+    // host: process.env.REDIS_HOST || '172.0.0.2',
+    host: '127.0.0.1',
     port: process.env.PORT_STAGE || 6379,
     channel: process.env.CHANNEL ||  `messageAdded`,
 };
