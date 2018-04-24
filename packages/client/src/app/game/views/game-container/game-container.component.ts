@@ -42,7 +42,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
   private gameNotificationsSubscription: Subscription;
   private paramsSubscription: Subscription;
 
-  flights_test$: Subject<AcNotification> = new Subject<AcNotification>();
+  flights$: Subject<AcNotification> = new Subject<AcNotification>();
   private flightSubscription: Subscription;
   private tempData;
   private flightMap$ = new Map<string, any>();
@@ -167,7 +167,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
                 actionType: ActionType.ADD_UPDATE,
                 entity: new AcEntity(mapping),
               };
-              this.flights_test$.next(acMap);
+              this.flights$.next(acMap);
               // this.flightMap$.set(flight.icao24, mapping);
             });
           });

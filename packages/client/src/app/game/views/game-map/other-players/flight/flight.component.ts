@@ -9,6 +9,7 @@ import {CharacterService, ViewState} from '../../../../services/character.servic
 import {UtilsService} from '../../../../services/utils.service';
 import {InterpolationService, InterpolationType} from '../../../../services/interpolation.service';
 import {Player, CharacterData, PlayerLocation, Location} from '../../../../../types'
+import "rxjs/add/operator/take";
 
 
 const config = {
@@ -36,7 +37,11 @@ export class FlightComponent implements OnDestroy, OnInit {
 
   ngOnInit() {
     // console.log(this.cesiumService.getScene()._primitives._primitives)
-
+    console.log("init flight component");
+    this.flightService.airTrafficQuery()
+      .subscribe( ( data) => {
+        console.log(data.data.airTraffic);
+        });
   }
 
   planeTypeModel(typeModel) {
@@ -76,7 +81,7 @@ export class FlightComponent implements OnDestroy, OnInit {
       }, InterpolationType.POSITION);
       this.listPlaneMap.set(flightId, result);
       // console.log(result);
-      // return result;
+      return result;
     }
     else {
       // console.log(this.listPlaneMap.get(flightId));

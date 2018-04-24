@@ -46,4 +46,9 @@ export const config = {
     host: '127.0.0.1',
     port: process.env.PORT_STAGE || 6379,
     channel: process.env.CHANNEL ||  `messageAdded`,
+    KEY: process.env.REDIS_KEY || '',
+    SIMULATION_KEY:  process.env.REDIS_SIMULATION_KEY ||'jfk2',
+    START: process.env.START || 0,
+    END : process.env.END || 1,
+
 };
