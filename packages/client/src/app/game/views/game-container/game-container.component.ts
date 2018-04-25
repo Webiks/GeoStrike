@@ -16,6 +16,7 @@ import 'rxjs/add/operator/map';
 import * as _ from 'lodash';
 import {FlightService} from "../game-map/other-players/flight.service";
 import {Player, CharacterData, PlayerLocation, Location} from '../../../types'
+import { environment } from '../../../../environments/environment';
 
 
 export class OtherPlayerEntity extends AcEntity {
@@ -122,6 +123,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
         this.flightSubscription = this.flightService.subscribeAirTraffic()
           .subscribe((data) => {
             this.tempData = data;
+
             this.tempData.messageAdded.forEach(flight => {
               // console.log(flight)
               let character: CharacterData = {
@@ -141,8 +143,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
                 y: Number(flight.latitude),
                 z: Number(flight.geo_altitude)
               };
-
-              let mapping: Player = {
+              let mapping: any = {
                 id: flight.icao24,
                 username: null,
                 character: character,
@@ -155,8 +156,10 @@ export class GameContainerComponent implements OnInit, OnDestroy {
                 isMe: false,
                 flight: null,
                 currentLocation: {
-                  location: this.degreesToCartesian(location),
+                  location: location,
                   heading: flight.heading,
+                  velocity: flight.velocity,
+                  distance: (flight.velocity *(environment.config.updateFlightIntervalMs*0.001))
                 },
                 team: 'NONE',
                 syncState: 'VALID',
@@ -167,8 +170,17 @@ export class GameContainerComponent implements OnInit, OnDestroy {
                 actionType: ActionType.ADD_UPDATE,
                 entity: new AcEntity(mapping),
               };
-              this.flights$.next(acMap);
-              // this.flightMap$.set(flight.icao24, mapping);
+
+              if(!this.flightMap$.get(flight.icao24)){
+                this.flights$.next(acMap);
+                this.flightMap$.set(flight.icao24, mapping);
+                this.nextLocation(flight.icao24);
+              }
+              else {
+                this.flightMap$.set(flight.icao24, mapping);
+                this.nextLocation(flight.icao24);
+              }
+
             });
           });
       });
@@ -245,7 +257,46 @@ export class GameContainerComponent implements OnInit, OnDestroy {
         });
       });
   }
+
   degreesToCartesian(location) {
     return new Cesium.Cartesian3.fromDegrees(location.x, location.y, location.z);
+  }
+
+  nextLocation (id) {
+    // currentLocation,velocity, heading
+    const plane = this.flightMap$.get(id);
+    console.log(plane.currentLocation.location);
+
+    // let newLocation = this.destinationPoint(plane.currentLocation.location.y, plane.currentLocation.location.x,50,300)
+    let newLocation = this.destinationPoint(plane.currentLocation.location.y, plane.currentLocation.location.x,plane.currentLocation.distance,plane.currentLocation.heading)
+    console.log(newLocation);
+    const newPosition = {
+      ...plane,
+      currentLocation : {
+        ...plane.currentLocation,
+        location: {
+          ...plane.currentLocation.location,
+          x: newLocation.nextLon,
+          y: newLocation.nextLat,
+        }
+      }
+    };
+    console.log(newPosition);
+
+    const acMap = {
+      id: plane.icao24,
+      actionType: ActionType.ADD_UPDATE,
+      entity: new AcEntity(newPosition),
+    };
+    this.flights$.next(acMap);
+  }
+
+  destinationPoint(lat, lon, distance, bearing) {
+    let R = 6371e3; // (Mean) radius of earth
+    // console.log(`locationData: ${lat}, ${lon}, ${distance}, ${bearing}`)
+    const lat2 = Math.asin(Math.sin(Math.PI / 180 * lat) * Math.cos(distance / R) + Math.cos(Math.PI / 180 * lat) * Math.sin(distance / R) * Math.cos(Math.PI / 180 * bearing));
+    const lon2 = Math.PI / 180 * lon + Math.atan2(Math.sin( Math.PI / 180 * bearing) * Math.sin(distance / R) * Math.cos( Math.PI / 180 * lat ), Math.cos(distance / R) - Math.sin( Math.PI / 180 * lat) * Math.sin(lat2));
+
+    return {'nextLat':(180 / Math.PI * lat2).toFixed(5) , 'nextLon':(180 / Math.PI * lon2).toFixed(5)};
   }
 }

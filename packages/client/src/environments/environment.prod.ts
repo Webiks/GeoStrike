@@ -28,5 +28,8 @@ export const environment = {
     disableBackward: true,
     disableLeft: true,
     disableRight: true,
+  },
+  config: {
+    updateFlightIntervalMs: 50,
   }
 };

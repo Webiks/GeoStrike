@@ -1,16 +1,16 @@
 
 <ac-layer acFor="let flight of flights$" [context]="this">
-  <ac-model-desc *ngIf="!(isOverview$ | async)" props="{
-    heightReference: utils.getRelativeToGroundHeightReference(),
-    scale: flight.character.scale,
-    uri: flight.character.model,
-    heading: flight.currentLocation.heading,
-    position: interpolatePosition(flight),
-    orientation: getOrientation(flight),
-    test: test(flight),
-  }">
-  </ac-model-desc>
-  <ac-billboard-desc *ngIf="(isOverview$ | async)" props="{
+  <!--<ac-model-desc *ngIf="!(isOverview$ | async)" props="{-->
+    <!--heightReference: utils.getRelativeToGroundHeightReference(),-->
+    <!--scale: flight.character.scale,-->
+    <!--uri: flight.character.model,-->
+    <!--heading: flight.currentLocation.heading,-->
+    <!--position: interpolatePosition(flight),-->
+    <!--orientation: getOrientation(flight),-->
+    <!--test: test(flight),-->
+  <!--}">-->
+  <!--</ac-model-desc>-->
+  <ac-billboard-desc *ngIf="(isOverview$ | async) ||!(isOverview$ | async) " props="{
   heightReference: utils.getRelativeToGroundHeightReference(),
   image: flight.character.iconUrl,
   scale: flight.character.scale,

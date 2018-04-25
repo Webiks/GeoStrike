@@ -8,7 +8,7 @@ const client = redis.createClient(config.port, config.host);
 
 export const airTraffic = (root, {args}, context) => {
     let message = [];
-    client.lrange(config.SIMULATION_KEY, config.START, config.END, (err, chunks) => {
+    client.lrange(config.KEY, config.START, config.END, (err, chunks) => {
         chunks.forEach(
             chunk => {
                 chunk = JSON.parse(chunk);

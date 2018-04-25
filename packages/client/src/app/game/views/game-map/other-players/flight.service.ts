@@ -18,7 +18,7 @@ export class FlightService {
     if (!this.flights$) {
       this.flights$ = this.apollo.subscribe({
         query: flightSubscription
-      }).share();
+      });
     }
 
     return this.flights$;

@@ -10,11 +10,9 @@ import {UtilsService} from '../../../../services/utils.service';
 import {InterpolationService, InterpolationType} from '../../../../services/interpolation.service';
 import {Player, CharacterData, PlayerLocation, Location} from '../../../../../types'
 import "rxjs/add/operator/take";
+import { environment } from '../../../../../../environments/environment';
 
 
-const config = {
-  updateIntervalMs: 50,
-};
 
 @Component({
   selector: 'flight',
@@ -39,9 +37,7 @@ export class FlightComponent implements OnDestroy, OnInit {
     // console.log(this.cesiumService.getScene()._primitives._primitives)
     console.log("init flight component");
     this.flightService.airTrafficQuery()
-      .subscribe( (x) => {
-        console.log(x);
-        });
+      .subscribe();
   }
 
   planeTypeModel(typeModel) {
@@ -62,7 +58,7 @@ export class FlightComponent implements OnDestroy, OnInit {
     if (flight.state === 'DEAD') {
       // TODO: kill the Plane.
     } else {
-      return this.utils.getOrientation(flight.currentLocation.location, flight.currentLocation.heading, 0, 0);
+      return this.utils.getOrientation(this.degreesToCartesian(flight.currentLocation.location), flight.currentLocation.heading, 0, 0);
     }
   }
 
@@ -77,17 +73,17 @@ export class FlightComponent implements OnDestroy, OnInit {
     const positionProperty = this.listPlaneMap.get(flightId);
     if (!positionProperty) {
       const result = InterpolationService.interpolate({
-        data: flight.currentLocation.location,
+        data: this.degreesToCartesian(flight.currentLocation.location),
       }, InterpolationType.POSITION);
       this.listPlaneMap.set(flightId, result);
       return result;
     }
     else {
       // console.log(this.listPlaneMap.get(flightId));
-      const newTime = Cesium.JulianDate.addSeconds(Cesium.JulianDate.now(), config.updateIntervalMs, new Cesium.JulianDate());
+      const newTime = Cesium.JulianDate.addSeconds(Cesium.JulianDate.now(), environment.config.updateFlightIntervalMs, new Cesium.JulianDate());
       const result = InterpolationService.interpolate({
         time: newTime,
-        data: flight.currentLocation.location,
+        data: this.degreesToCartesian(flight.currentLocation.location),
         cesiumSampledProperty: positionProperty,
       });
       return result;
@@ -100,35 +96,6 @@ export class FlightComponent implements OnDestroy, OnInit {
 
   test(f) {
     console.log(f);
-  }
-
-  destinationPoint(lat, lon, distance, bearing) {
-    let radius = 6371e3; // (Mean) radius of earth
-
-    let toRadians = function(v) { return v * Math.PI / 180; };
-    let toDegrees = function(v) { return v * 180 / Math.PI; };
-
-    // sinφ2 = sinφ1·cosδ + cosφ1·sinδ·cosθ
-    // tanΔλ = sinθ·sinδ·cosφ1 / cosδ−sinφ1·sinφ2
-    // see mathforum.org/library/drmath/view/52049.html for derivation
-
-    let δ = Number(distance) / radius; // angular distance in radians
-    let θ = toRadians(Number(bearing));
-
-    let φ1 = toRadians(Number(lat));
-    let λ1 = toRadians(Number(lon));
-
-    let sinφ1 = Math.sin(φ1), cosφ1 = Math.cos(φ1);
-    let sinδ = Math.sin(δ), cosδ = Math.cos(δ);
-    let sinθ = Math.sin(θ), cosθ = Math.cos(θ);
-
-    let sinφ2 = sinφ1*cosδ + cosφ1*sinδ*cosθ;
-    let φ2 = Math.asin(sinφ2);
-    let y = sinθ * sinδ * cosφ1;
-    let x = cosδ - sinφ1 * sinφ2;
-    let λ2 = λ1 + Math.atan2(y, x);
-
-    return [toDegrees(φ2), (toDegrees(λ2)+540)%360-180]; // normalise to −180..+180°
   }
 
   ngOnDestroy(): void {
