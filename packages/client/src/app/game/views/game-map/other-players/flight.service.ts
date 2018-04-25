@@ -2,8 +2,8 @@ import {Injectable} from '@angular/core';
 import {Apollo} from 'apollo-angular';
 import {Observable} from 'rxjs/Observable';
 import {Flights} from '../../../../types';
-import {flightSubscription} from '../../../../graphql/flights.Subscription';
-import {airTrafficQuery} from '../../../../graphql/query/airTraffic.query';
+import {flightSubscription} from '../../../../graphql/subscription/flights.Subscription';
+import {airTrafficQuery} from '../../../../graphql/mutation/airTraffic.query';
 
 
 @Injectable()
@@ -25,10 +25,9 @@ export class FlightService {
   }
 
   public airTrafficQuery(): Observable<any> {
-    this.flights$ = this.apollo.watchQuery<any>({
-      query: airTrafficQuery
-    }).share();
-    return this.flights$;
+    return this.apollo.mutate<any>({
+      mutation: airTrafficQuery
+    });
   }
 
 }

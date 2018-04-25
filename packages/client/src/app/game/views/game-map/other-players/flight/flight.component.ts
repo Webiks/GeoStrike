@@ -39,8 +39,8 @@ export class FlightComponent implements OnDestroy, OnInit {
     // console.log(this.cesiumService.getScene()._primitives._primitives)
     console.log("init flight component");
     this.flightService.airTrafficQuery()
-      .subscribe( ( data) => {
-        console.log(data.data.airTraffic);
+      .subscribe( (x) => {
+        console.log(x);
         });
   }
 
@@ -80,7 +80,6 @@ export class FlightComponent implements OnDestroy, OnInit {
         data: flight.currentLocation.location,
       }, InterpolationType.POSITION);
       this.listPlaneMap.set(flightId, result);
-      // console.log(result);
       return result;
     }
     else {

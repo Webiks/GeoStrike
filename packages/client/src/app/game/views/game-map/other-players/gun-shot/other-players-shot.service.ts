@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import { Observable } from 'rxjs/Observable';
 import { GunShots } from '../../../../../types';
-import { gunShotSubscription } from '../../../../../graphql/gun-shot.subscription';
+import { gunShotSubscription } from '../../../../../graphql/subscription/gun-shot.subscription';
 
 @Injectable()
 export class OtherPlayersShotService {

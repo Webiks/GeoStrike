@@ -15,6 +15,7 @@ export const schema = gql`
     takeControlOverPlayer(playerId: String!): Player
     removeControlOverPlayer: Player
     addMessage(message: String!): [String!]!
+    airTraffic: Boolean
 
   }
 `;

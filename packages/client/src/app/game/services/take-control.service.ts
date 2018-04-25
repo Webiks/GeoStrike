@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { PlayerFields } from '../../types';
 import { Apollo } from 'apollo-angular';
-import { takeControlMutation } from '../../graphql/take-control.mutation';
+import { takeControlMutation } from '../../graphql/mutation/take-control.mutation';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { removeControlMutation } from '../../graphql/remove-player-control.mutation';
+import { removeControlMutation } from '../../graphql/mutation/remove-player-control.mutation';
 import { CharacterService, ViewState } from './character.service';
 
 @Injectable()

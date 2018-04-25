@@ -17,7 +17,7 @@ export const redisPubSub = new RedisPubSub({
 
 
 
-redisPubSub.subscribe(CHANNEL, (payload) => {
+redisPubSub.subscribe(config.channel, (payload) => {
 
     try {
         console.log("redisPubSub:" + JSON.stringify(payload));

@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { playerFragment } from './player.fragment';
+import { playerFragment } from '../player.fragment';
 
 export const toggleFlightModeMutation = gql`
 mutation toggleFlightMode($playerId: String!, $isFlying: Boolean!) {

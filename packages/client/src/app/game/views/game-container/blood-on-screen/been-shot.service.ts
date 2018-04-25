@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import { Observable } from 'rxjs/Observable';
-import { beenShotSubscription } from "../../../../graphql/been-shot.subscription";
+import { beenShotSubscription } from "../../../../graphql/subscription/been-shot.subscription";
 import { BeenShots } from "../../../../types";
 
 @Injectable()

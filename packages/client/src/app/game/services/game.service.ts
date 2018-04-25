@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
-import { createNewGameMutation } from '../../graphql/create-new-game.mutation';
+import { createNewGameMutation } from '../../graphql/mutation/create-new-game.mutation';
 import { ApolloExecutionResult } from 'apollo-client';
 import { Observable } from 'rxjs/Observable';
 import {
@@ -18,23 +18,23 @@ import {
   ToggleFlightMode,
   UpdatePosition
 } from '../../types';
-import { joinGameMutation } from '../../graphql/join-game.mutation';
+import { joinGameMutation } from '../../graphql/mutation/join-game.mutation';
 import { SubscriptionClient } from 'subscriptions-transport-ws-temp';
-import { gameDataSubscription } from '../../graphql/game-data.subscription';
-import { readyMutation } from '../../graphql/ready.mutation';
+import { gameDataSubscription } from '../../graphql/subscription/game-data.subscription';
+import { readyMutation } from '../../graphql/mutation/ready.mutation';
 import 'rxjs/add/operator/first';
 import 'rxjs/add/operator/share';
-import { updatePositionMutation } from '../../graphql/update-position.mutation';
+import { updatePositionMutation } from '../../graphql/mutation/update-position.mutation';
 import { ApolloService } from '../../core/configured-apollo/network/apollo.service';
-import { notifyKillMutation } from '../../graphql/notify-kill.mutation';
+import { notifyKillMutation } from '../../graphql/mutation/notify-kill.mutation';
 import { GameConfig } from './game-config';
 import { CharacterService, MeModelState } from './character.service';
-import { joinAsViewer } from '../../graphql/join-as-viewer.mutation';
-import { gameNotificationsSubscription } from '../../graphql/game-notifications.subscription';
-import { notifyShotMutation } from '../../graphql/notify-shot.mutation';
-import { toggleFlightModeMutation } from "../../graphql/toggle-flight-mode.mutation";
-import { notifyCrashMutation } from "../../graphql/notify-crash.mutation";
-import { notifyBeenShotMutation } from "../../graphql/notify-been-shot.mutation";
+import { joinAsViewer } from '../../graphql/mutation/join-as-viewer.mutation';
+import { gameNotificationsSubscription } from '../../graphql/subscription/game-notifications.subscription';
+import { notifyShotMutation } from '../../graphql/mutation/notify-shot.mutation';
+import { toggleFlightModeMutation } from "../../graphql/mutation/toggle-flight-mode.mutation";
+import { notifyCrashMutation } from "../../graphql/mutation/notify-crash.mutation";
+import { notifyBeenShotMutation } from "../../graphql/mutation/notify-been-shot.mutation";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { GameMapComponent } from "../views/game-map/game-map.component";
 

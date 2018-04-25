@@ -11,6 +11,7 @@ import { toggleFlightMode } from "../mutation/toggle-flight-mode";
 import { notifyCrash } from "../mutation/notify-crash";
 import { notifyBeenShot } from "../mutation/notify-been-shot";
 import {  } from "../mutation/flight";
+import {airTraffic} from "../mutation/airTraffic";
 
 const resolvers = {
     Mutation: {
@@ -26,6 +27,8 @@ const resolvers = {
         joinAsViewer,
         takeControlOverPlayer,
         removeControlOverPlayer,
+        airTraffic,
+
     },
 };
 

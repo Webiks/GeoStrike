@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { gameFragment } from './game.fragment';
+import { gameFragment } from '../game.fragment';
 
 export const readyMutation = gql`
   mutation ready {
