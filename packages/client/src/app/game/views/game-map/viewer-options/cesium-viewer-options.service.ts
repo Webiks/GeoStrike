@@ -3,7 +3,7 @@ import { GameConfig } from '../../../services/game-config';
 
 @Injectable()
 export class CesiumViewerOptionsService {
-  static readonly MAX_ZOOM = 5000;
+  static readonly MAX_ZOOM = 100000;
   static readonly MIN_ZOOM = 80;
 
   constructor() {

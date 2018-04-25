@@ -40,7 +40,6 @@ export class GameService {
   private lastStateSentToServer;
   private terrainEnviormentSource = new BehaviorSubject<string>('URBAN');
   public currentTerrainEnviorment = this.terrainEnviormentSource.asObservable();
-
   public gameStartLocation;
   public  DEFAULT_START_LOCATION =
     Cesium.Cartesian3.fromDegrees(-73.985187, 40.758857, 1000);

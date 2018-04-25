@@ -40,11 +40,7 @@ export class OtherPlayersComponent {
       viewState => viewState === ViewState.OVERVIEW
     );
     this.gameService.currentTerrainEnviorment.subscribe(terrainType => this.terrainType = terrainType);
-   // this.modelsAnimation();
   }
-  // testTerrainIsReady(){
-  //   this.isTerrainReady = true
-  // }
   fixPosition(position, player: PlayerFields.Fragment) {
     if (player.state === "DEAD") {
       return position;
@@ -55,34 +51,6 @@ export class OtherPlayersComponent {
     }
     return position;
   }
-
-  // modelsAnimation(){
-  //   const scene = this.cesiumService.getScene();
-  //   Cesium.when(scene.readyPromise).then((model)=>{
-  //     model.activeAnimations.addAll({
-  //       loop : Cesium.ModelAnimationLoop.REPEAT
-  //     });
-  //   })
-  // }
-
-  // interpolatePlayerPosition(player: PlayerFields.Fragment, playerPosition) {
-  //   const playerId = player.id;
-  //   const fixedPosition = this.fixPosition(playerPosition, player);
-  //   const positionProperty = this.playersPositionMap.get(playerId);
-  //   if (!positionProperty) {
-  //     const result = InterpolationService.interpolate({
-  //       data: fixedPosition,
-  //     }, InterpolationType.POSITION);
-  //     this.playersPositionMap.set(playerId, result);
-  //     return result;
-  //   }
-  //   else {
-  //     return InterpolationService.interpolate({
-  //       data: fixedPosition,
-  //       cesiumSampledProperty: positionProperty,
-  //     });
-  //   }
-  // }
 
   interpolatePlayerPosition(player: PlayerFields.Fragment, playerPosition) {
     const playerId = player.id;

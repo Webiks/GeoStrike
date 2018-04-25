@@ -1,12 +1,6 @@
 import { ChangeDetectorRef, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import {
-  AcMapComponent,
-  AcNotification,
-  CesiumService,
-  MapLayerProviderOptions,
-  ViewerConfiguration
-} from 'angular-cesium';
+import { AcMapComponent, CesiumService, MapLayerProviderOptions, ViewerConfiguration } from 'angular-cesium';
 import { GameFields, PlayerFields } from '../../../types';
 import { CharacterService, MeModelState, ViewState } from '../../services/character.service';
 import { UtilsService } from '../../services/utils.service';
@@ -31,7 +25,8 @@ import { PitchCalculatorService } from './services/pitch-calculator.service';
 export class GameMapComponent implements OnInit, OnDestroy {
   public static readonly DEFAULT_PITCH = -5;
   @Input() me;
-  @Input() playersPositions: Observable<AcNotification>;
+  // @Input() playersPositions: Observable<AcNotification>;
+  @Input() playersPositions: Observable<any>;
   @Input() gameData: Observable<GameFields.Fragment>;
   @ViewChild(AcMapComponent) private mapInstance: AcMapComponent;
 
@@ -43,6 +38,9 @@ export class GameMapComponent implements OnInit, OnDestroy {
   private helperEntityPoint;
   private lastViewState: ViewState;
   mapLayerProviderOptions: MapLayerProviderOptions;
+  // private tilesLoaded;
+  // private tilesLoadedSource = new BehaviorSubject<boolean>(false);
+  // public  tilesLoadedStatus = this.tilesLoadedSource.asObservable();
 
   constructor(private gameService: GameService,
               private character: CharacterService,
@@ -95,6 +93,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
       } else {
         this.character.viewState = ViewState.SEMI_FPV;
         this.startFirstPersonMode(game.me);
+        this.viewer.entities.removeAll();
       }
     });
 
@@ -111,21 +110,30 @@ export class GameMapComponent implements OnInit, OnDestroy {
           this.character.viewState = ViewState.SEMI_FPV;
           this.lastViewState = ViewState.SEMI_FPV_NOT_CONTROLLED;
         }
-
         this.viewer.camera.flyTo({
           destination: Cesium.Cartesian3.fromRadians(posWithHeight.longitude, posWithHeight.latitude, posWithHeight.height),
           complete: () => {
             this.viewerOptions.setFpvCameraOptions(this.viewer);
             this.startFirstPersonMode(controlledPlayer, initPlayer);
           }
-        });
+        })
       }
-
       this.lastViewState = newViewState;
     });
 
+    this.playersPositions.map(player => player.entity).filter(x => x.team !== 'NONE').subscribe(x => {
+      console.log(x);
+      this.viewer.entities.add({
+        name : 'test',
+        position : x.currentLocation.location,
+        billboard : {
+        image : new Cesium.PinBuilder().fromText('?', Cesium.Color.BLACK, 48).toDataURL(),
+        verticalOrigin : Cesium.VerticalOrigin.BOTTOM,
+        color: 0.0
+      }
+      })
+    })
   }
-
   private startFirstPersonMode(player: PlayerFields.Fragment, initCharacter = true) {
     if (initCharacter) {
       this.character.initCharacter({
@@ -161,12 +169,16 @@ export class GameMapComponent implements OnInit, OnDestroy {
 
   private overviewSettings() {
     this.viewerOptions.setFreeCameraOptions(this.viewer);
-    this.gameService.currentTerrainEnviorment.subscribe( (terrainType) => {
+    this.gameService.currentTerrainEnviorment.subscribe((terrainType) => {
       if (terrainType === 'URBAN')
-        this.viewer.camera.flyTo({destination: this.gameService.gameStartLocation});
+      // this.viewer.camera.flyTo(this.viewer.entities);
+        this.viewer.flyTo(this.viewer.entities);
+
+      // this.viewer.camera.flyTo({destination: this.gameService.gameStartLocation});
       else {
-        const overviewPosition = this.utils.toHeightOffset(this.gameService.gameStartLocation, 3000)
-        this.viewer.camera.flyTo({destination: overviewPosition});
+        const overviewPosition = this.utils.toHeightOffset(this.gameService.gameStartLocation, 3000);
+        // this.viewer.flyTo(this.viewer.entities, {offset: {heading: 0, pitch: -1.5708, range: 0}});
+        this.viewer.flyTo(this.viewer.entities);
       }
     })
   }
@@ -219,6 +231,30 @@ export class GameMapComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.elementRef.nativeElement.removeEventListener('mousemove', this.onMousemove);
+  }
+
+  testFullyLoadImagery() {
+    let test = this.viewer.scene.globe.tilesLoaded;
+    let helper = new Cesium.EventHelper();
+    // const tilesLoaded = this.viewer.scene.globe.tilesLoaded;
+    // helper.add(this.viewer.scene.globe.tileLoadedEvent, function (event) {
+    //   console.log("tileLoadedEvent");
+    //   if(tilesLoaded){
+    //     console.log("tilesLoaded:"+tilesLoaded);
+    //   }
+    // });
+    let res;
+    // this.tilesLoaded = res;
+    // this.tilesLoadedSource.next(res) image: image,;
+
+    helper.add(this.viewer.scene.globe.tileLoadProgressEvent, function (event) {
+      console.log("Tiles to load: " + event);
+      if (event == 0) {
+        console.log("yay");
+        res = true;
+      }
+    });
+
   }
 }
 
