@@ -1,4 +1,14 @@
-import { ChangeDetectorRef, Component, ElementRef, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  HostListener,
+  Input,
+  NgZone,
+  OnDestroy,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import { ActionType, CesiumService } from 'angular-cesium';
 import { CharacterService, CharacterState, MeModelState, ViewState } from '../../../services/character.service';
 import { UtilsService } from '../../../services/utils.service';
@@ -53,35 +63,35 @@ export class MeComponent implements OnInit, OnDestroy {
   playerInFlightModeNotFlying = false;
   isFlightInPlace: boolean = false;
 
-  // @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
-  //   if (event.keyCode == 70 && !this.character.isFlying) {
-  //     this.playerInFlightModeNotFlying = true;
-  //     this.setSlowlyMovingForward();
-  //   }
-  //   if (event.keyCode == 70 && this.character.isFlying) {
-  //     this.playerInFlightModeNotFlying = false;
-  //     clearInterval(this.intervalId);
-  //   }
-  //   if (event.shiftKey && event.keyCode == 87) {
-  //     this.playerInFlightModeNotFlying = false;
-  //     clearInterval(this.intervalId);
-  //   }
-  //   if (event.key === 'w') {
-  //     this.playerInFlightModeNotFlying = false;
-  //     clearInterval(this.intervalId);
-  //   }
-  // }
+  @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
+    // if (event.keyCode == 70 && !this.character.isFlying) {
+    //   this.playerInFlightModeNotFlying = true;
+    //   this.setSlowlyMovingForward();
+    // }
+    // if (event.keyCode == 70 && this.character.isFlying) {
+    //   this.playerInFlightModeNotFlying = false;
+    //   clearInterval(this.intervalId);
+    // }
+    // if (event.shiftKey && event.keyCode == 87) {
+    //   this.playerInFlightModeNotFlying = false;
+    //   clearInterval(this.intervalId);
+    // }
+    if (event.key === 'w') {
+      this.playerInFlightModeNotFlying = true;
+      // clearInterval(this.intervalId);
+    }
+  }
   //
-  // @HostListener('document:keyup', ['$event']) onKeyupHandler(event: KeyboardEvent) {
-  //   if (event.key === 'w' && this.character.isFlying) {
-  //     this.playerInFlightModeNotFlying = true;
-  //     this.setSlowlyMovingForward();
-  //   }
-  //   if (event.shiftKey && event.keyCode == 87 && this.character.isFlying) {
-  //     this.playerInFlightModeNotFlying = true;
-  //     this.setSlowlyMovingForward();
-  //   }
-  // }
+  @HostListener('document:keyup', ['$event']) onKeyupHandler(event: KeyboardEvent) {
+    if (event.key === 'w') {
+      this.playerInFlightModeNotFlying = false;
+    }
+    //   if (event.shiftKey && event.keyCode == 87 && this.character.isFlying) {
+    //     this.playerInFlightModeNotFlying = true;
+    //     this.setSlowlyMovingForward();
+    //   }
+    // }
+  }
 
   constructor(private character: CharacterService,
               public utils: UtilsService,
