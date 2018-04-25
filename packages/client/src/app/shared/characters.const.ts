@@ -11,18 +11,36 @@ export const AVAILABLE_CHARACTERS = [
     team: 'BLUE',
     imageUrl: '/assets/characters/ironman.png',
   },
+  // {
+  //   name: 'Peter Parker',
+  //   description: 'Red Team',
+  //   team: 'RED',
+  //   imageUrl: '/assets/characters/spiderman.png',
+  // },
+  // {
+  //   name: 'Dr. Bruce Banner',
+  //   description: 'Red Team',
+  //   team: 'RED',
+  //   imageUrl: '/assets/characters/hulk.png',
+  // },
   {
-    name: 'Peter Parker',
+    name: 'Wade Wilson',
     description: 'Red Team',
     team: 'RED',
-    imageUrl: '/assets/characters/spiderman.png',
+    imageUrl: '/assets/characters/deadpool.png',
   },
   {
-    name: 'Bruce Wayne',
+    name: 'Natasha Romanova',
     description: 'Red Team',
     team: 'RED',
-    imageUrl: '/assets/characters/batman.png',
+    imageUrl: '/assets/characters/blackwidow.png',
   },
+  // {
+  //   name: 'Bruce Wayne',
+  //   description: 'Red Team',
+  //   team: 'RED',
+  //   imageUrl: '/assets/characters/batman.png',
+  // },
 ];
 export const VIEWER = {
   name: 'viewer',
