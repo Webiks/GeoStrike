@@ -6,7 +6,7 @@
     position: player.currentLocation.location,
     orientation: getOrientation(player.currentLocation.location, player.currentLocation.heading, player),
     shadows: Cesium.ShadowMode.DISABLED,
-    runAnimations: player.state !== 'DEAD',
+    runAnimations: player.state !== 'DEAD' && playerMoving(),
 	}">
   </ac-model-desc>
   <ac-billboard-primitive-desc *ngIf="isOverview$| async" props="{

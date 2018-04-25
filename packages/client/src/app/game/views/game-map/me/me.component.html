@@ -8,7 +8,7 @@
 					orientation: getOrientation(me.location, me.heading,me),
 					shadows: Cesium.ShadowMode.DISABLED,
 					color: getColor(),
-          runAnimations: !playerInFlightModeNotFlying
+          runAnimations: playerMoving()
   }">
   </ac-model-desc>
 </ac-layer>
@@ -19,3 +19,5 @@
 <blood-on-screen [isInShootingPosition]="isInShootingPosition"></blood-on-screen>
 <!--position: isPlayerInFlightModeNotFlying(me),-->
 <!--position: getPosition(me.location),-->
+<!--runAnimations: isPlayerMoving(me.location)-->
+
