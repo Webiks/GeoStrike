@@ -53,9 +53,9 @@ export const PLAYER_CHARACTERS: CharacterData[] = [
         description: 'Red Team',
         team: 'RED',
         imageUrl: '/assets/characters/blackwidow.png',
-        portraitUrl: '/assets/characters/hulk_portrait.png',
-        iconUrl: '/assets/icons/hulk-mark.png',
-        iconDeadUrl: '/assets/icons/hulk-mark-dead.png',
+        portraitUrl: '/assets/characters/blackwidow_portrait.png',
+        iconUrl: '/assets/icons/blackwidow-mark.png',
+        iconDeadUrl: '/assets/icons/blackwidow-mark-dead.png',
     },
     {
         name: 'Bruce Wayne',
