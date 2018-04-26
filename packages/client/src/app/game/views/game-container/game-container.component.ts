@@ -47,6 +47,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
   private flightSubscription: Subscription;
   private tempData;
   private flightMap$ = new Map<string, any>();
+  fStatus: boolean;
 
   constructor(private gameService: GameService,
               private character: CharacterService,
@@ -120,69 +121,81 @@ export class GameContainerComponent implements OnInit, OnDestroy {
         });
       });
       this.ngZone.runOutsideAngular(() => {
-        this.flightSubscription = this.flightService.subscribeAirTraffic()
-          .subscribe((data) => {
-            this.tempData = data;
 
-            this.tempData.messageAdded.forEach(flight => {
-              // console.log(flight)
-              let character: CharacterData = {
-                name: 'plane',
-                model: '/assets/models/planes/plane.gltf',
-                scale: 1,
-                team: null,
-                imageUrl: null,
-                description: null,
-                portraitUrl: null,
-                iconUrl: '/assets/icons/plane-mark2-big.png',
-                iconDeadUrl: '/assets/icons/plane-mark-dead.png',
-                fixedHeight: null,
-              };
-              let location = {
-                x: Number(flight.longitude),
-                y: Number(flight.latitude),
-                z: Number(flight.geo_altitude)
-              };
-              let mapping: any = {
-                id: flight.icao24,
-                username: null,
-                character: character,
-                state: 'ALIVE',
-                lifeState: 'FULL',
-                lifeStatePerctange: 100,
-                isCrawling: false,
-                isFlying: false,
-                isShooting: false,
-                isMe: false,
-                flight: null,
-                currentLocation: {
-                  location: location,
-                  heading: flight.heading,
-                  velocity: flight.velocity,
-                  distance: (flight.velocity *(environment.config.updateFlightIntervalMs*0.001))
-                },
-                team: 'NONE',
-                syncState: 'VALID',
-                type: 'BACKGROUND_CHARACTER',
-              };
-              const acMap = {
-                id: flight.icao24,
-                actionType: ActionType.ADD_UPDATE,
-                entity: new AcEntity(mapping),
-              };
-
-              if(!this.flightMap$.get(flight.icao24)){
-                this.flights$.next(acMap);
-                this.flightMap$.set(flight.icao24, mapping);
-                this.nextLocation(flight.icao24);
+        if(!this.fStatus){
+          this.flightSubscription = this.flightService.subscribeAirTraffic()
+            .subscribe((data) => {
+              console.log("sub");
+              this.tempData = data;
+              if (this.tempData.messageAdded.length === 0 ) {
+                console.error("The air traffic data received empty");
               }
-              else {
-                this.flightMap$.set(flight.icao24, mapping);
-                this.nextLocation(flight.icao24);
-              }
+              this.tempData.messageAdded.forEach(flight => {
+                // console.log(flight)
+                const flightId = flight.icao24;
+                let character: CharacterData = {
+                  name: 'plane',
+                  model: '/assets/models/planes/plane.gltf',
+                  scale: 1,
+                  team: null,
+                  imageUrl: null,
+                  description: null,
+                  portraitUrl: null,
+                  iconUrl: '/assets/icons/plane-mark2-big.png',
+                  iconDeadUrl: '/assets/icons/plane-mark-dead.png',
+                  fixedHeight: null,
+                };
+                let location = {
+                  x: Number(flight.longitude),
+                  y: Number(flight.latitude),
+                  z: Number(flight.geo_altitude)
+                };
+                let mapping: any = {
+                  id: flightId,
+                  username: null,
+                  character: character,
+                  state: 'ALIVE',
+                  lifeState: 'FULL',
+                  lifeStatePerctange: 100,
+                  isCrawling: false,
+                  isFlying: false,
+                  isShooting: false,
+                  isMe: false,
+                  flight: null,
+                  currentLocation: {
+                    location: location,
+                    heading: Number(flight.heading),
+                    velocity: Number(flight.velocity),
+                    distance: Number(flight.velocity *environment.config.updateFlightIntervalSec)
+                  },
+                  team: 'NONE',
+                  syncState: 'VALID',
+                  type: 'BACKGROUND_CHARACTER',
+                };
+                const acMap = {
+                  id: flightId,
+                  actionType: ActionType.ADD_UPDATE,
+                  entity: new AcEntity(mapping),
+                };
 
+                if(!this.flightMap$.get(flightId)){
+//                  console.log(flightId);
+                  this.flights$.next(acMap);
+
+                }
+                this.flightMap$.set(flightId, mapping);
+              });
+              this.flightMap$.forEach(flight=> {
+                  this.nextLocation(flight.id);
+                }
+              )
             });
-          });
+        }
+        else {
+          this.flightSubscription.unsubscribe();
+          this.flights$.unsubscribe();
+        }
+
       });
     });
   }
@@ -237,6 +250,9 @@ export class GameContainerComponent implements OnInit, OnDestroy {
     if (this.paramsSubscription) {
       this.paramsSubscription.unsubscribe();
     }
+    if (this.flightSubscription) {
+      this.flightSubscription.unsubscribe()
+    }
   }
 
   getPlayers(team: Team): Observable<PlayerFields.Fragment[]> {
@@ -265,26 +281,29 @@ export class GameContainerComponent implements OnInit, OnDestroy {
   nextLocation (id) {
     // currentLocation,velocity, heading
     const plane = this.flightMap$.get(id);
-    console.log(plane.currentLocation.location);
+    // console.log(plane.currentLocation.location)
 
-    // let newLocation = this.destinationPoint(plane.currentLocation.location.y, plane.currentLocation.location.x,50,300)
-    let newLocation = this.destinationPoint(plane.currentLocation.location.y, plane.currentLocation.location.x,plane.currentLocation.distance,plane.currentLocation.heading)
-    console.log(newLocation);
+    /*For simulation*/
+    // let newLocation = this.destinationPoint(plane.currentLocation.location.y, plane.currentLocation.location.x,200,300)
+    let newLocation = this.destinationPoint(plane.currentLocation.location.y, plane.currentLocation.location.x,plane.currentLocation.distance,plane.currentLocation.heading);
+
+
+    // console.log(newLocation);
     const newPosition = {
       ...plane,
       currentLocation : {
         ...plane.currentLocation,
         location: {
           ...plane.currentLocation.location,
-          x: newLocation.nextLon,
-          y: newLocation.nextLat,
+          x: Number(newLocation.nextLon),
+          y: Number(newLocation.nextLat),
         }
       }
     };
-    console.log(newPosition);
+    // console.log(newPosition);
 
     const acMap = {
-      id: plane.icao24,
+      id: id,
       actionType: ActionType.ADD_UPDATE,
       entity: new AcEntity(newPosition),
     };

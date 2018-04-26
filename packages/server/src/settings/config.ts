@@ -47,8 +47,8 @@ export const config = {
     port: process.env.PORT_STAGE || 6379,
     channel: process.env.CHANNEL ||  `messageAdded`,
     KEY: process.env.REDIS_KEY || 'onAir1',
-    SIMULATION_KEY:  process.env.REDIS_SIMULATION_KEY ||'jfk2',
+    SIMULATION_KEY:  process.env.REDIS_SIMULATION_KEY ||'new',
     START: process.env.START || 0,
-    END : process.env.END || 100,
+    END : process.env.END || 1000,
 
 };

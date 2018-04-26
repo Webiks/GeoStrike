@@ -19,12 +19,21 @@
   border-top-right-radius: 10px;
   color: white;
   overflow: hidden;
+  margin-bottom: 53px;
 
   .settings-item {
     width: 150px;
     padding: 10px;
     overflow: hidden;
     text-align: center;
+
+    input {
+      display: none;
+    }
+    strong{
+      display: block;
+      text-align: center;
+    }
     &:hover {
       cursor: pointer;
       background: rgba(0,0,0,0.9);

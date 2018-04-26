@@ -63,7 +63,7 @@ export class BackgroundCharacterManager {
   constructor(private gameId: string, private gameManager: GamesManager, private terrainType: string) {
     this.NUMBER_OF_BG_CHARACTERS =
       config.backgroundCharacters.numberOfBgCharacters;
-    this.UPDATE_INTERVAL_MS = config.backgroundCharacters.updateFlightIntervalMs;
+    this.UPDATE_INTERVAL_MS = config.backgroundCharacters.updateIntervalMs;
     BG_CHARACTER_TYPES.forEach(c => {
         if(c.terrainType === terrainType)
         {

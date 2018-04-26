@@ -24,8 +24,16 @@ import {SoundService} from '../../../services/sound.service';
     </div>
     <div class="settings-panel" *ngIf="showMenu" [excludeBeforeClick]="true" [delayClickOutsideInit]="100" (clickOutside)="showMenu=false">
       <div class="settings-item">GAME CODE: {{gameCode}}</div>
-      
-      <div class="settings-item" (click)="flightsStatus()">flights status</div>
+
+      <label class="settings-item">
+        <input type="checkbox" (change)="checkClicked(flightStatus)">
+        <strong *ngIf="!flightStatus">
+          Flights Status: ON
+        </strong>
+        <strong *ngIf="flightStatus">
+          Flights Status: OFF
+        </strong>
+      </label>
       <div class="settings-item" (click)="exitGame()">EXIT THE GAME</div>
     </div>
   `,
@@ -33,11 +41,12 @@ import {SoundService} from '../../../services/sound.service';
 })
 export class GameToolbarComponent implements OnInit {
 
-  @Input()
-  gameCode: string;
+  @Input() gameCode: string;
+  @Input() flightStatus : boolean = true;
   showMenu = false;
   mute = false;
   fullScreenIcon = 'full-screen';
+
 
   constructor(private  dialog: MatDialog,
               private gameService: GameService,
@@ -79,9 +88,15 @@ export class GameToolbarComponent implements OnInit {
     this.audioService.toggleMute();
     this.mute = !this.mute;
   }
-  flightsStatus(){
-  console.log("flights ON/OFF")
-  }
+  checkClicked(val){
+    console.log(`val: ${val}`);
+    if(val){
+      this.flightStatus = false;
+    }
+    else{
+      this.flightStatus = true;
+    }
+    console.log(val);  }
   exitGame() {
     const killSubscription = this.gameService.notifyKill(this.character.meFromServer.id)
       .subscribe(() => killSubscription.unsubscribe());

@@ -7,17 +7,17 @@
     <!--heading: flight.currentLocation.heading,-->
     <!--position: interpolatePosition(flight),-->
     <!--orientation: getOrientation(flight),-->
-    <!--test: test(flight),-->
+    <!--&lt;!&ndash;test: test(flight),&ndash;&gt;-->
   <!--}">-->
   <!--</ac-model-desc>-->
-  <ac-billboard-desc *ngIf="(isOverview$ | async) ||!(isOverview$ | async) " props="{
+  <ac-billboard-desc *ngIf="(isOverview$ | async) || !(isOverview$ | async)" props="{
   heightReference: utils.getRelativeToGroundHeightReference(),
   image: flight.character.iconUrl,
   scale: flight.character.scale,
   position: interpolatePosition(flight),
   orientation: getOrientation(flight),
   alignedAxis : VelocityVectorProperty(flight),
-  test: test(flight),
+  <!--test: test(flight),-->
   }">
   </ac-billboard-desc>
 </ac-layer>

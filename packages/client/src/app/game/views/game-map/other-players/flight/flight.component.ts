@@ -23,7 +23,7 @@ export class FlightComponent implements OnDestroy, OnInit {
   @Input() private flights$: Observable<AcNotification>;
   isOverview$: Observable<boolean>;
   listPlaneMap = new Map<string, any>();
-
+  tempBool = true;
   constructor(private flightService: FlightService,
               public character: CharacterService,
               private ngZone: NgZone,
@@ -34,10 +34,16 @@ export class FlightComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    // console.log(this.cesiumService.getScene()._primitives._primitives)
+    console.log(this.cesiumService.getScene()._primitives._primitives);
     console.log("init flight component");
     this.flightService.airTrafficQuery()
       .subscribe();
+    this.character.viewState$.subscribe(characterState => {
+
+      if(characterState === ViewState.OVERVIEW){
+          console.log(this.cesiumService.getScene()._primitives._primitives)
+      }
+    })
   }
 
   planeTypeModel(typeModel) {
@@ -76,11 +82,11 @@ export class FlightComponent implements OnDestroy, OnInit {
         data: this.degreesToCartesian(flight.currentLocation.location),
       }, InterpolationType.POSITION);
       this.listPlaneMap.set(flightId, result);
-      return result;
+      // return result;
     }
     else {
       // console.log(this.listPlaneMap.get(flightId));
-      const newTime = Cesium.JulianDate.addSeconds(Cesium.JulianDate.now(), environment.config.updateFlightIntervalMs, new Cesium.JulianDate());
+      const newTime = Cesium.JulianDate.addSeconds(Cesium.JulianDate.now(), environment.config.updateFlightIntervalSec, new Cesium.JulianDate());
       const result = InterpolationService.interpolate({
         time: newTime,
         data: this.degreesToCartesian(flight.currentLocation.location),
@@ -96,6 +102,7 @@ export class FlightComponent implements OnDestroy, OnInit {
 
   test(f) {
     console.log(f);
+    // console.log(this.cesiumService.getScene()._primitives._primitives);
   }
 
   ngOnDestroy(): void {
