@@ -1,12 +1,12 @@
 <game-map [playersPositions]="otherPlayers$" [gameData]="gameData$" [flights]="flights$">
   <team-info-bar [players]="getPlayers('BLUE')" [changeDirection]="true" class="blue-team-info"></team-info-bar>
   <team-info-bar [players]="getPlayers('RED')" class="red-team-info"></team-info-bar>
-  <game-toolbar [gameCode]="gameCode" [flightStatus]="fStatus"></game-toolbar>
+  <game-toolbar [gameCode]="gameCode" (flightStatus)="flightStatus($event)" ></game-toolbar>
   <flight-mode [me]="controlledService.controlledPlayer || me" [username]="me?.username"></flight-mode>
   <player-details [me]="controlledService.controlledPlayer || me" [username]="me?.username"></player-details>
   <viewer-controls *ngIf="isViewer"></viewer-controls>
 </game-map>
 <game-dialogs [gameResult]="gameResult$"></game-dialogs>
-<!--<game-credits></game-credits>-->
+<game-credits></game-credits>
 <game-countdown [count]="5" (done)="gameStarted()"></game-countdown>
 

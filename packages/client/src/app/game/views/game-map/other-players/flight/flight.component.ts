@@ -18,12 +18,12 @@ import { environment } from '../../../../../../environments/environment';
   selector: 'flight',
   templateUrl: './flight.component.html',
 })
-export class FlightComponent implements OnDestroy, OnInit {
+export class FlightComponent implements  OnInit {
   flightSubscription: Subscription;
   @Input() private flights$: Observable<AcNotification>;
   isOverview$: Observable<boolean>;
   listPlaneMap = new Map<string, any>();
-  tempBool = true;
+
   constructor(private flightService: FlightService,
               public character: CharacterService,
               private ngZone: NgZone,
@@ -34,10 +34,8 @@ export class FlightComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    console.log(this.cesiumService.getScene()._primitives._primitives);
-    console.log("init flight component");
-    this.flightService.airTrafficQuery()
-      .subscribe();
+    // console.log("init flight component");
+
     this.character.viewState$.subscribe(characterState => {
 
       if(characterState === ViewState.OVERVIEW){
@@ -60,11 +58,12 @@ export class FlightComponent implements OnDestroy, OnInit {
   }
 
   getOrientation(flight) {
-
+  const normalizedHeading = (flight.currentLocation.heading.toFixed(0)-90)%360;
+    console.log();
     if (flight.state === 'DEAD') {
       // TODO: kill the Plane.
     } else {
-      return this.utils.getOrientation(this.degreesToCartesian(flight.currentLocation.location), flight.currentLocation.heading, 0, 0);
+      return this.utils.getOrientation(this.degreesToCartesian(flight.currentLocation.location),normalizedHeading , 0, 0);
     }
   }
 
@@ -101,11 +100,6 @@ export class FlightComponent implements OnDestroy, OnInit {
   }
 
   test(f) {
-    console.log(f);
     // console.log(this.cesiumService.getScene()._primitives._primitives);
-  }
-
-  ngOnDestroy(): void {
-    this.flightSubscription.unsubscribe();
   }
 }

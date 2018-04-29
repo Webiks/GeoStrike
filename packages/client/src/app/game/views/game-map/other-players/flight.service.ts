@@ -20,7 +20,7 @@ export class FlightService {
         query: flightSubscription
       });
     }
-
+    console.log("subscribeAirTraffic");
     return this.flights$;
   }
 
@@ -29,5 +29,6 @@ export class FlightService {
       mutation: airTrafficQuery
     });
   }
+
 
 }

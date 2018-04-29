@@ -1,22 +1,22 @@
 import {Component, Input, NgZone, OnDestroy, OnInit} from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { GameService } from '../../services/game.service';
-import { AuthorizationMiddleware } from '../../../core/configured-apollo/network/authorization-middleware';
-import { CurrentGame, GameFields, PlayerFields, Team } from '../../../types';
-import { Subscription } from 'rxjs/Subscription';
-import { Subject } from 'rxjs/Subject';
-import { AcEntity, AcNotification, ActionType } from 'angular-cesium';
-import { Observable } from 'rxjs/Observable';
-import { MatSnackBar } from '@angular/material';
-import { CharacterService, MeModelState, ViewState } from '../../services/character.service';
-import { TakeControlService } from '../../services/take-control.service';
-import { SnackBarContentComponent } from '../../../shared/snack-bar-content/snack-bar-content.component';
+import {ActivatedRoute, Router} from '@angular/router';
+import {GameService} from '../../services/game.service';
+import {AuthorizationMiddleware} from '../../../core/configured-apollo/network/authorization-middleware';
+import {CurrentGame, GameFields, PlayerFields, Team} from '../../../types';
+import {Subscription} from 'rxjs/Subscription';
+import {Subject} from 'rxjs/Subject';
+import {AcEntity, AcNotification, ActionType, CesiumService} from 'angular-cesium';
+import {Observable} from 'rxjs/Observable';
+import {MatSnackBar} from '@angular/material';
+import {CharacterService, MeModelState, ViewState} from '../../services/character.service';
+import {TakeControlService} from '../../services/take-control.service';
+import {SnackBarContentComponent} from '../../../shared/snack-bar-content/snack-bar-content.component';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/map';
 import * as _ from 'lodash';
 import {FlightService} from "../game-map/other-players/flight.service";
 import {Player, CharacterData, PlayerLocation, Location} from '../../../types'
-import { environment } from '../../../../environments/environment';
+import {environment} from '../../../../environments/environment';
 
 
 export class OtherPlayerEntity extends AcEntity {
@@ -47,7 +47,6 @@ export class GameContainerComponent implements OnInit, OnDestroy {
   private flightSubscription: Subscription;
   private tempData;
   private flightMap$ = new Map<string, any>();
-  fStatus: boolean;
 
   constructor(private gameService: GameService,
               private character: CharacterService,
@@ -56,7 +55,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
               private ngZone: NgZone,
               public controlledService: TakeControlService,
               private snackBar: MatSnackBar,
-              private flightService: FlightService) {
+              private flightService: FlightService,) {
     Cesium.BingMapsApi.defaultKey = 'AmzowhvWedaZu8mSrSHOwx2A52aRoYbkKvs4TeVUu_AzSXMnhvLCLFsqLFBqBS0V';
     // Cesium.BingMapsApi.defaultKey = 'AmzowhvWedaZu8mSrSHOwx2A52aRoYbkKvs4TeVUu_AzSXMnhvLCLFsqLFBqBS0V';
     // Cesium.BingMapsApi.defaultKey = 'AkXEfZI-hKtZ995XgjM0XHxTiXpyS4i2Vb4w08Pjozwn-NAfVIvvHBYaP6Pgi717';
@@ -68,7 +67,6 @@ export class GameContainerComponent implements OnInit, OnDestroy {
         if (!params.playerToken) {
           this.router.navigate(['/']);
           this.paramsSubscription.unsubscribe();
-
           return;
         }
 
@@ -120,83 +118,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
           console.log('subscription complete');
         });
       });
-      this.ngZone.runOutsideAngular(() => {
-
-        if(!this.fStatus){
-          this.flightSubscription = this.flightService.subscribeAirTraffic()
-            .subscribe((data) => {
-              console.log("sub");
-              this.tempData = data;
-              if (this.tempData.messageAdded.length === 0 ) {
-                console.error("The air traffic data received empty");
-              }
-              this.tempData.messageAdded.forEach(flight => {
-                // console.log(flight)
-                const flightId = flight.icao24;
-                let character: CharacterData = {
-                  name: 'plane',
-                  model: '/assets/models/planes/plane.gltf',
-                  scale: 1,
-                  team: null,
-                  imageUrl: null,
-                  description: null,
-                  portraitUrl: null,
-                  iconUrl: '/assets/icons/plane-mark2-big.png',
-                  iconDeadUrl: '/assets/icons/plane-mark-dead.png',
-                  fixedHeight: null,
-                };
-                let location = {
-                  x: Number(flight.longitude),
-                  y: Number(flight.latitude),
-                  z: Number(flight.geo_altitude)
-                };
-                let mapping: any = {
-                  id: flightId,
-                  username: null,
-                  character: character,
-                  state: 'ALIVE',
-                  lifeState: 'FULL',
-                  lifeStatePerctange: 100,
-                  isCrawling: false,
-                  isFlying: false,
-                  isShooting: false,
-                  isMe: false,
-                  flight: null,
-                  currentLocation: {
-                    location: location,
-                    heading: Number(flight.heading),
-                    velocity: Number(flight.velocity),
-                    distance: Number(flight.velocity *environment.config.updateFlightIntervalSec)
-                  },
-                  team: 'NONE',
-                  syncState: 'VALID',
-                  type: 'BACKGROUND_CHARACTER',
-                };
-                const acMap = {
-                  id: flightId,
-                  actionType: ActionType.ADD_UPDATE,
-                  entity: new AcEntity(mapping),
-                };
-
-                if(!this.flightMap$.get(flightId)){
-//                  console.log(flightId);
-                  this.flights$.next(acMap);
-
-                }
-                this.flightMap$.set(flightId, mapping);
-              });
-              this.flightMap$.forEach(flight=> {
-                  this.nextLocation(flight.id);
-                }
-              )
-            });
-        }
-        else {
-          this.flightSubscription.unsubscribe();
-          this.flights$.unsubscribe();
-        }
-
-      });
+      this.airTraffic();
     });
   }
 
@@ -238,30 +160,15 @@ export class GameContainerComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy() {
-    if (this.gameDataSubscription) {
-      this.gameDataSubscription.unsubscribe();
-    }
-
-    if (this.gameNotificationsSubscription) {
-      this.gameNotificationsSubscription.unsubscribe();
-    }
-
-    if (this.paramsSubscription) {
-      this.paramsSubscription.unsubscribe();
-    }
-    if (this.flightSubscription) {
-      this.flightSubscription.unsubscribe()
-    }
-  }
 
   getPlayers(team: Team): Observable<PlayerFields.Fragment[]> {
     return this.allPlayers$.map((players) => players.filter(p => p.team === team)).distinctUntilChanged((a, b) => _.isEqual(a, b));
   }
 
-   setPlayers(flight:PlayerFields.Fragment){
+  setPlayers(flight: PlayerFields.Fragment) {
     this.allPlayers$.next()
   }
+
   gameStarted() {
     this.gameNotificationsSubscription = this.gameNotifications$
       .subscribe(notification => {
@@ -278,20 +185,20 @@ export class GameContainerComponent implements OnInit, OnDestroy {
     return new Cesium.Cartesian3.fromDegrees(location.x, location.y, location.z);
   }
 
-  nextLocation (id) {
+  nextLocation(id) {
     // currentLocation,velocity, heading
     const plane = this.flightMap$.get(id);
     // console.log(plane.currentLocation.location)
 
     /*For simulation*/
     // let newLocation = this.destinationPoint(plane.currentLocation.location.y, plane.currentLocation.location.x,200,300)
-    let newLocation = this.destinationPoint(plane.currentLocation.location.y, plane.currentLocation.location.x,plane.currentLocation.distance,plane.currentLocation.heading);
+    let newLocation = this.destinationPoint(plane.currentLocation.location.y, plane.currentLocation.location.x, plane.currentLocation.distance, plane.currentLocation.heading);
 
 
     // console.log(newLocation);
     const newPosition = {
       ...plane,
-      currentLocation : {
+      currentLocation: {
         ...plane.currentLocation,
         location: {
           ...plane.currentLocation.location,
@@ -314,8 +221,121 @@ export class GameContainerComponent implements OnInit, OnDestroy {
     let R = 6371e3; // (Mean) radius of earth
     // console.log(`locationData: ${lat}, ${lon}, ${distance}, ${bearing}`)
     const lat2 = Math.asin(Math.sin(Math.PI / 180 * lat) * Math.cos(distance / R) + Math.cos(Math.PI / 180 * lat) * Math.sin(distance / R) * Math.cos(Math.PI / 180 * bearing));
-    const lon2 = Math.PI / 180 * lon + Math.atan2(Math.sin( Math.PI / 180 * bearing) * Math.sin(distance / R) * Math.cos( Math.PI / 180 * lat ), Math.cos(distance / R) - Math.sin( Math.PI / 180 * lat) * Math.sin(lat2));
+    const lon2 = Math.PI / 180 * lon + Math.atan2(Math.sin(Math.PI / 180 * bearing) * Math.sin(distance / R) * Math.cos(Math.PI / 180 * lat), Math.cos(distance / R) - Math.sin(Math.PI / 180 * lat) * Math.sin(lat2));
 
-    return {'nextLat':(180 / Math.PI * lat2).toFixed(5) , 'nextLon':(180 / Math.PI * lon2).toFixed(5)};
+    return {'nextLat': (180 / Math.PI * lat2).toFixed(5), 'nextLon': (180 / Math.PI * lon2).toFixed(5)};
+  }
+
+  flightStatus(newStatus: any): void {
+
+    console.log('newStatus: ', newStatus);
+    if (newStatus) {
+      this.airTraffic()
+    }
+    else {
+      this.flightMap$.forEach(f => {
+        this.flights$.next({
+          id: f.id,
+          actionType: ActionType.DELETE
+        })
+      });
+
+      this.flightSubscription.unsubscribe()
+    }
+
+  }
+
+  airTraffic() {
+    this.ngZone.runOutsideAngular(() => {
+
+      this.flightService.airTrafficQuery().subscribe();
+      this.flightSubscription = this.flightService.subscribeAirTraffic()
+        .subscribe((data) => {
+          console.log("sub");
+
+          this.tempData = data;
+          if (this.tempData.messageAdded.length === 0) {
+            console.error("The air traffic data received empty");
+          }
+          this.tempData.messageAdded.forEach(flight => {
+            // console.log(flight)
+            const flightId = flight.icao24;
+            let character: CharacterData = {
+              name: 'plane',
+              model: '/assets/models/planes/plane.gltf',
+              scale: 1,
+              team: null,
+              imageUrl: null,
+              description: null,
+              portraitUrl: null,
+              iconUrl: '/assets/icons/plane-mark2-big.png',
+              iconDeadUrl: '/assets/icons/plane-mark-dead.png',
+              fixedHeight: null,
+            };
+            let location = {
+              x: Number(flight.longitude),
+              y: Number(flight.latitude),
+              z: Number(flight.geo_altitude)
+            };
+            let mapping: any = {
+              id: flightId,
+              username: null,
+              character: character,
+              state: 'ALIVE',
+              lifeState: 'FULL',
+              lifeStatePerctange: 100,
+              isCrawling: false,
+              isFlying: false,
+              isShooting: false,
+              isMe: false,
+              flight: null,
+              currentLocation: {
+                location: location,
+                heading: Number(flight.heading),
+                velocity: Number(flight.velocity),
+                distance: Number(flight.velocity * environment.config.updateFlightIntervalSec)
+              },
+              team: 'NONE',
+              syncState: 'VALID',
+              type: 'BACKGROUND_CHARACTER',
+            };
+            const acMap = {
+              id: flightId,
+              actionType: ActionType.ADD_UPDATE,
+              entity: new AcEntity(mapping),
+            };
+
+            if (!this.flightMap$.get(flightId)) {
+              this.flights$.next(acMap);
+
+            }
+            this.flightMap$.set(flightId, mapping);
+          });
+          this.flightMap$.forEach(flight => {
+            this.nextLocation(flight.id);
+          })
+
+
+        });
+
+    });
+  }
+
+
+  ngOnDestroy() {
+    if (this.gameDataSubscription) {
+      this.gameDataSubscription.unsubscribe();
+    }
+
+    if (this.gameNotificationsSubscription) {
+      this.gameNotificationsSubscription.unsubscribe();
+    }
+
+    if (this.paramsSubscription) {
+      this.paramsSubscription.unsubscribe();
+    }
+    if (this.flightSubscription) {
+      this.flightSubscription.unsubscribe()
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import { HowToPlayDialogComponent } from '../../how-to-play-dialog/how-to-play-dialog.component';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { GameService } from '../../../services/game.service';
@@ -26,11 +26,11 @@ import {SoundService} from '../../../services/sound.service';
       <div class="settings-item">GAME CODE: {{gameCode}}</div>
 
       <label class="settings-item">
-        <input type="checkbox" (change)="checkClicked(flightStatus)">
-        <strong *ngIf="!flightStatus">
+        <input type="checkbox" (change)="checkClicked()">
+        <strong *ngIf="fStatus">
           Flights Status: ON
         </strong>
-        <strong *ngIf="flightStatus">
+        <strong *ngIf="!fStatus">
           Flights Status: OFF
         </strong>
       </label>
@@ -42,7 +42,8 @@ import {SoundService} from '../../../services/sound.service';
 export class GameToolbarComponent implements OnInit {
 
   @Input() gameCode: string;
-  @Input() flightStatus : boolean = true;
+  fStatus:boolean = true;
+  @Output() flightStatus: EventEmitter<any> = new EventEmitter<any>(true);
   showMenu = false;
   mute = false;
   fullScreenIcon = 'full-screen';
@@ -88,15 +89,21 @@ export class GameToolbarComponent implements OnInit {
     this.audioService.toggleMute();
     this.mute = !this.mute;
   }
-  checkClicked(val){
-    console.log(`val: ${val}`);
-    if(val){
-      this.flightStatus = false;
+
+  checkClicked(){
+    // console.log(`val: ${this.fStatus}`);
+    if(this.fStatus){
+      this.flightStatus.emit(false);
+      this.fStatus = false;
     }
     else{
-      this.flightStatus = true;
+      this.fStatus = true;
+      this.flightStatus.emit(true);
+
     }
-    console.log(val);  }
+    // console.log(`new val: ${this.fStatus}`);
+  }
+
   exitGame() {
     const killSubscription = this.gameService.notifyKill(this.character.meFromServer.id)
       .subscribe(() => killSubscription.unsubscribe());
