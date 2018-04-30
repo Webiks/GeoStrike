@@ -209,19 +209,6 @@ export class GamesManager {
     return player;
   }
 
-  // changeGameTerrainType(gameId: string, gameType: TerrainType) {
-  //   const game = this.getGameById(gameId);
-  //   game.terrainType = gameType;
-  // }
-
-  // changePlayerLocation(gameId: string, playerId) {
-  //   const game = this.getGameById(gameId);
-  //   const player = game.playersMap.get(playerId);
-  //   const terrainTeamTypeStr = game.terrainType + "_" + player.team;
-  //   const defaultPlayerPositions = TerrainLocation[terrainTeamTypeStr];
-  //   player.currentLocation = defaultPlayerPositions;
-  // }
-
   createNewGame(terrainType: string): IGameObject {
     const gameId = v4();
     const gameCode = this.generateGameCode();

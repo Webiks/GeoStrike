@@ -2,15 +2,9 @@ import { Component, Input } from "@angular/core";
 import { AcNotification, CesiumService } from "angular-cesium";
 import { Observable } from "rxjs/Observable";
 import { UtilsService } from "../../../services/utils.service";
-import {
-  InterpolationService,
-  InterpolationType
-} from "../../../services/interpolation.service";
+import { InterpolationService, InterpolationType } from "../../../services/interpolation.service";
 import { PlayerFields } from "../../../../types";
-import {
-  CharacterService,
-  ViewState
-} from "../../../services/character.service";
+import { CharacterService, ViewState } from "../../../services/character.service";
 import { TakeControlService } from "../../../services/take-control.service";
 import { OtherPlayersShotService } from "./gun-shot/other-players-shot.service";
 import { GameService } from "../../../services/game.service";
@@ -28,7 +22,6 @@ export class OtherPlayersComponent {
   isOverview$: Observable<boolean>;
   terrainType: string;
 
-
   constructor(
     public utils: UtilsService,
     public character: CharacterService,
@@ -39,8 +32,11 @@ export class OtherPlayersComponent {
     this.isOverview$ = character.viewState$.map(
       viewState => viewState === ViewState.OVERVIEW
     );
-    this.gameService.currentTerrainEnviorment.subscribe(terrainType => this.terrainType = terrainType);
+    this.gameService.currentTerrainEnviorment.subscribe(
+      terrainType => (this.terrainType = terrainType)
+    );
   }
+
   fixPosition(position, player: PlayerFields.Fragment) {
     if (player.state === "DEAD") {
       return position;
@@ -118,10 +114,10 @@ export class OtherPlayersComponent {
     return [xOffset, 45];
   }
 
-  getPositiveInfinity(){
-   let num= new Number();
-   num = Number.POSITIVE_INFINITY;
-   return num;
+  getPositiveInfinity() {
+    let num = new Number();
+    num = Number.POSITIVE_INFINITY;
+    return num;
   }
 
   getPlayerName(player) {

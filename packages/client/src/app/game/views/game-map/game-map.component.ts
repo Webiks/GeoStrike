@@ -51,7 +51,6 @@ export class GameMapComponent implements OnInit, OnDestroy {
     private collisionDetector: CollisionDetectorService,
     private pitchCalculatorService: PitchCalculatorService,
     private takeControlService: TakeControlService,
-    private cesiumService: CesiumService
   ) {
     viewerConf.viewerOptions = viewerOptions.getViewerOption();
 
@@ -138,7 +137,6 @@ export class GameMapComponent implements OnInit, OnDestroy {
       .map(player => player.entity)
       .filter(x => x.team !== "NONE")
       .subscribe(x => {
-        // console.log(x);
         this.viewer.entities.add({
           name: "test",
           position: x.currentLocation.location,
