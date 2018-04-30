@@ -1,5 +1,8 @@
 <div class="background-win">
-  <div class="small-text">YOU'VE BEEN SHOT!</div>
+  <div class="small-text">
+    <span *ngIf="causeOfDeath === 'beenShot'">YOU'VE BEEN SHOT!</span>
+    <span *ngIf="causeOfDeath === 'crashed'">YOU'VE BEEN CRASHED!</span>
+  </div>
   <div class="win-text">GAME OVER</div>
   <div *ngIf="!gameOver" class="small-text">YOUR TEAM IS STILL IN GAME</div>
   <div *ngIf="gameOver" class="small-text">THE {{losingTeam}} TEAM LOST THE GAME</div>

@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit } from '@angular/core';
+import { Component, HostListener, NgZone, OnInit } from '@angular/core';
 import { CesiumService, GeoUtilsService, KeyboardControlParams, KeyboardControlService, } from 'angular-cesium';
 import { CharacterService, MeModelState, ViewState, } from '../../../services/character.service';
 import { environment } from '../../../../../environments/environment';
@@ -7,6 +7,10 @@ import { GameService } from '../../../services/game.service';
 import { CollisionDetectorService } from '../../../services/collision-detector.service';
 import { TakeControlService } from '../../../services/take-control.service';
 import { MatSnackBar } from '@angular/material';
+import { UtilsService } from "../../../services/utils.service";
+import { FlightData } from "../../../../../../../server/src/types";
+import { FlightHeight } from "../../../../types";
+import { FlightModeService } from "../../game-container/flight-mode/flight-mode.service";
 
 const LookDirection = {
   Up: 'ArrowUp',
@@ -16,10 +20,10 @@ const LookDirection = {
 };
 
 const LookDirectionsDelta = {
-  [LookDirection.Up]: { field: 'pitch', value: 1 },
-  [LookDirection.Down]: { field: 'pitch', value: -1 },
-  [LookDirection.Left]: { field: 'heading', value: -1 },
-  [LookDirection.Right]: { field: 'heading', value: 1 },
+  [LookDirection.Up]: {field: 'pitch', value: 1},
+  [LookDirection.Down]: {field: 'pitch', value: -1},
+  [LookDirection.Left]: {field: 'heading', value: -1},
+  [LookDirection.Right]: {field: 'heading', value: 1},
 };
 
 const MoveDirection = {
@@ -45,6 +49,11 @@ export class KeyboardControlComponent implements OnInit {
   private viewer;
   private lookFactor = 0;
   private lastLook;
+  private increase = true;
+  private intervalId;
+  private flightData: FlightData;
+  private flightHeightLevel: FlightHeight;
+  private nextLocation;
 
   constructor(private character: CharacterService,
               private keyboardControlService: KeyboardControlService,
@@ -54,7 +63,9 @@ export class KeyboardControlComponent implements OnInit {
               private collisionDetector: CollisionDetectorService,
               private ngZone: NgZone,
               private snackBar: MatSnackBar,
-              private takeControlService: TakeControlService) {
+              private takeControlService: TakeControlService,
+              public utils: UtilsService,
+              private flightModeService: FlightModeService) {
     this.viewer = cesiumService.getViewer();
   }
 
@@ -96,7 +107,7 @@ export class KeyboardControlComponent implements OnInit {
         );
       },
       action: () => {
-        const position = this.character.location;
+        let position = this.character.location;
         let speed = environment.movement.walkingSpeed;
 
         if (this.character.state === MeModelState.RUNNING) {
@@ -106,27 +117,55 @@ export class KeyboardControlComponent implements OnInit {
           speed = environment.movement.crawlingSpeed;
         }
 
-        const nextLocation = GeoUtilsService.pointByLocationDistanceAndAzimuth(
-          position,
-          speed,
-          Cesium.Math.toRadians(this.character.heading + delta),
-          true
-        );
-        if (this.character.enteredBuilding) {
-          if (!this.collisionDetector.detectCollision(nextLocation, true)) {
-            this.character.location = nextLocation;
+        if (!this.character.isFlying) {
+          this.nextLocation = GeoUtilsService.pointByLocationDistanceAndAzimuth(
+            position,
+            speed,
+            Cesium.Math.toRadians(this.character.heading + delta),
+            true
+          );
+        }
+        if (this.character.isFlying) {
+          this.flightData = this.character.meFromServer.flight;
+          if (this.character.state === MeModelState.RUNNING) {
+            speed = environment.movement.flyingHighSpeed;
+          }
+          else{
+            speed = environment.movement.flyingLowSpeed;
+          }
+          this.nextLocation = this.utils.pointByLocationDistanceAndAzimuthAndHeight3d(
+            position,
+            speed,
+            Cesium.Math.toRadians(this.character.heading + delta),
+            true
+          );
+          if (!this.collisionDetector.detectCollision(this.nextLocation)){
+            this.flightHeightLevel = this.utils.calculateHeightLevel(this.flightData, this.nextLocation);
+            this.flightData.heightLevel = this.flightHeightLevel;
+            this.character.flightData = this.flightData;
+            this.character.location = this.nextLocation;
+          }
+          else {
+            this.character.flightData.remainingTime = 0;
+            let crashSubscription;
+            setTimeout(() => crashSubscription = this.gameService.notifyCrash(this.character.meFromServer.id)
+              .subscribe(() => crashSubscription.unsubscribe()), 2000);
+          }
+        }
+        else if (this.character.enteredBuilding) {
+          if (!this.collisionDetector.detectCollision(this.nextLocation, true)) {
+            this.character.location = this.nextLocation;
           }
         }
         else if (direction !== MoveDirection.Forward) {
-          this.character.location = nextLocation;
+          this.character.location = this.nextLocation;
           if (this.collisionDetector.collision) {
-            this.collisionDetector.detectCollision(nextLocation, true);
+            this.collisionDetector.detectCollision(this.nextLocation, true);
           }
         }
-        else if (!this.collisionDetector.detectCollision(nextLocation)) {
-          this.character.location = nextLocation;
+        else if (!this.collisionDetector.detectCollision(this.nextLocation)) {
+          this.character.location = this.nextLocation;
         }
-
       },
     } as KeyboardControlParams;
   }
@@ -157,7 +196,7 @@ export class KeyboardControlComponent implements OnInit {
   }
 
   changeCrawlingState() {
-    if (this.character.viewState === ViewState.OVERVIEW) {
+    if (this.character.viewState === ViewState.OVERVIEW || this.character.isFlying) {
       return;
     }
     let crawling = false;
@@ -165,6 +204,18 @@ export class KeyboardControlComponent implements OnInit {
       crawling = true;
     }
     this.character.isCrawling = crawling;
+  }
+
+
+  changeFlyingState() {
+    let updateFlyState = this.flightModeService.changeFlyingState();
+    this.gameService.updateServerOnPosition(true);
+    if (updateFlyState) {
+      this.flightData = this.character.meFromServer.flight;
+      this.flightHeightLevel = this.utils.calculateHeightLevel(this.character.meFromServer.flight, this.nextLocation || this.character.meFromServer.currentLocation.location, 50);
+      this.flightData.heightLevel = this.flightHeightLevel;
+      const flightSubscription = this.gameService.toggleFlightMode(this.character.meFromServer.id, this.character.isFlying).subscribe(() => flightSubscription.unsubscribe());
+    }
   }
 
   toggleInspector(inspectorClass, inspectorProp) {
@@ -231,9 +282,9 @@ export class KeyboardControlComponent implements OnInit {
       [LookDirection.Right]: this.buildLookConfig(LookDirection.Right),
       [LookDirection.Down]: this.buildLookConfig(LookDirection.Down),
     };
-    !environment.controls.disableBackward && Object.assign(keyboardDefinitions, { [MoveDirection.Backward]: this.buildMovementConfig(MoveDirection.Backward) });
-    !environment.controls.disableLeft && Object.assign(keyboardDefinitions, { [MoveDirection.Right]: this.buildMovementConfig(MoveDirection.Right) });
-    !environment.controls.disableRight && Object.assign(keyboardDefinitions, { [MoveDirection.Left]: this.buildMovementConfig(MoveDirection.Left) });
+    !environment.controls.disableBackward && Object.assign(keyboardDefinitions, {[MoveDirection.Backward]: this.buildMovementConfig(MoveDirection.Backward)});
+    !environment.controls.disableLeft && Object.assign(keyboardDefinitions, {[MoveDirection.Right]: this.buildMovementConfig(MoveDirection.Right)});
+    !environment.controls.disableRight && Object.assign(keyboardDefinitions, {[MoveDirection.Left]: this.buildMovementConfig(MoveDirection.Left)});
     return keyboardDefinitions;
   }
 
@@ -252,6 +303,11 @@ export class KeyboardControlComponent implements OnInit {
     this.keyboardKeysService.registerKeyBoardEvent('KeyC', 'Switch Crawling', () => {
       this.ngZone.run(() => {
         this.changeCrawlingState();
+      });
+    });
+    this.keyboardKeysService.registerKeyBoardEvent('KeyF', 'Switch Flying Semi FPV', () => {
+      this.ngZone.run(() => {
+        this.changeFlyingState();
       });
     });
     this.keyboardKeysService.registerKeyBoardEvent('KeyM', 'Switch Overview Mode', () => {
@@ -300,3 +356,4 @@ export class KeyboardControlComponent implements OnInit {
     this.keyboardKeysService.registerKeyBoardEventDescription('arrows', 'Look around');
   }
 }
+

@@ -6,6 +6,7 @@ import { GameConfig } from './game-config';
 @Injectable()
 export class CollisionDetectorService {
   static readonly COLLIDE_FACTOR_METER = 3;
+  static readonly COLLIDE_FLIGHT_FACTOR_METER = 2;
   private viewer;
   private _collision = false;
   private characterHeadingWhenCollided: number;
@@ -16,14 +17,17 @@ export class CollisionDetectorService {
     document.body.clientHeight / 2
   );
 
-  constructor(private character: CharacterService) {
-  }
+  constructor(private character: CharacterService) {}
 
   init(cesiumService: CesiumService) {
     this.viewer = cesiumService.getViewer();
   }
 
-  private getDepthDistance(fromLocation: Cartesian3, toWindowPosition: Cartesian2, checkNow = false): number {
+  private getDepthDistance(
+    fromLocation: Cartesian3,
+    toWindowPosition: Cartesian2,
+    checkNow = false
+  ): number {
     this.collisionChecks = this.collisionChecks % 5;
     if (!checkNow && this.collisionChecks !== 0) {
       this.collisionChecks++;
@@ -38,14 +42,29 @@ export class CollisionDetectorService {
   }
 
   private checkCollisionInRoom(location): boolean {
-    const positions = this.character.enteredBuilding.ceiling.map(position => Cesium.Cartographic.fromCartesian(position));
+    const positions = this.character.enteredBuilding.ceiling.map(position =>
+      Cesium.Cartographic.fromCartesian(position)
+    );
     const characterPosition = Cesium.Cartographic.fromCartesian(location);
-    const maxLongitude = positions.reduce((value, pos) => Math.max(value, pos.longitude), Number.MIN_SAFE_INTEGER);
-    const maxLatitude = positions.reduce((value, pos) => Math.max(value, pos.latitude), Number.MIN_SAFE_INTEGER);
-    const minLongitude = positions.reduce((value, pos) => Math.min(value, pos.longitude), Number.MAX_SAFE_INTEGER);
-    const minLatitude = positions.reduce((value, pos) => Math.min(value, pos.latitude), Number.MAX_SAFE_INTEGER);
+    const maxLongitude = positions.reduce(
+      (value, pos) => Math.max(value, pos.longitude),
+      Number.MIN_SAFE_INTEGER
+    );
+    const maxLatitude = positions.reduce(
+      (value, pos) => Math.max(value, pos.latitude),
+      Number.MIN_SAFE_INTEGER
+    );
+    const minLongitude = positions.reduce(
+      (value, pos) => Math.min(value, pos.longitude),
+      Number.MAX_SAFE_INTEGER
+    );
+    const minLatitude = positions.reduce(
+      (value, pos) => Math.min(value, pos.latitude),
+      Number.MAX_SAFE_INTEGER
+    );
 
-    const collision = characterPosition.longitude + this.roomCollisionRange > maxLongitude ||
+    const collision =
+      characterPosition.longitude + this.roomCollisionRange > maxLongitude ||
       characterPosition.latitude + this.roomCollisionRange > maxLatitude ||
       characterPosition.longitude - this.roomCollisionRange < minLongitude ||
       characterPosition.latitude - this.roomCollisionRange < minLatitude;
@@ -54,46 +73,65 @@ export class CollisionDetectorService {
     return collision;
   }
 
-  public detectCollision(fromLocation, skipHeadingOptimization = false): boolean {
-    if (!this.character.enteredBuilding && !skipHeadingOptimization &&
+  public detectCollision(
+    fromLocation,
+    skipHeadingOptimization = false
+  ): boolean {
+    if (
+      !this.character.enteredBuilding &&
+      !skipHeadingOptimization &&
       this._collision &&
       this.characterHeadingWhenCollided &&
-      this.characterHeadingWhenCollided === this.character.heading) {
+      this.characterHeadingWhenCollided === this.character.heading
+    ) {
       return true;
-    }
-    else if (this._collision) {
-      this._collision = this.character.enteredBuilding ?
-        this.checkCollisionInRoom(fromLocation) :
-        this.getDepthDistance(fromLocation, this.windowCenter, true) < CollisionDetectorService.COLLIDE_FACTOR_METER;
-    }
-    else {
-      this._collision = this.character.enteredBuilding ?
-        this.checkCollisionInRoom(fromLocation) :
-        this.getDepthDistance(fromLocation, this.windowCenter) < CollisionDetectorService.COLLIDE_FACTOR_METER;
+    } else if (this._collision) {
+      this._collision = this.character.enteredBuilding
+        ? this.checkCollisionInRoom(fromLocation)
+        : this.getDepthDistance(fromLocation, this.windowCenter, true) <
+          (!this.character.isFlying
+            ? CollisionDetectorService.COLLIDE_FACTOR_METER
+            : CollisionDetectorService.COLLIDE_FLIGHT_FACTOR_METER);
+    } else {
+      this._collision = this.character.enteredBuilding
+        ? this.checkCollisionInRoom(fromLocation)
+        : this.getDepthDistance(fromLocation, this.windowCenter) <
+        (!this.character.isFlying
+          ? CollisionDetectorService.COLLIDE_FACTOR_METER
+          : CollisionDetectorService.COLLIDE_FLIGHT_FACTOR_METER);
     }
 
     if (this._collision) {
       this.characterHeadingWhenCollided = this.character.heading;
       if (!this.character.enteredBuilding) {
-        const pickedFeature = this.viewer.scene.pick(this.windowCenter, 300, 300);
+        const pickedFeature = this.viewer.scene.pick(
+          this.windowCenter,
+          300,
+          300
+        );
         if (pickedFeature && pickedFeature._batchId) {
           const id = pickedFeature._batchId;
-          const batchTableJson = pickedFeature._content._batchTable.batchTableJson;
+          const batchTableJson =
+            pickedFeature._content._batchTable.batchTableJson;
           const latitude = batchTableJson.latitude[id];
           const longitude = batchTableJson.longitude[id];
           const area = batchTableJson.area[id];
-          if (area <= GameConfig.maxEnterableBuildingSize &&
-            area >= GameConfig.minEnterableBuildingSize) {
-            this.character.nearbyBuildingPosition = Cesium.Cartesian3.fromRadians(longitude, latitude, 0);
+          if (
+            area <= GameConfig.maxEnterableBuildingSize &&
+            area >= GameConfig.minEnterableBuildingSize
+          ) {
+            this.character.nearbyBuildingPosition = Cesium.Cartesian3.fromRadians(
+              longitude,
+              latitude,
+              0
+            );
             this.character.tileBuilding = pickedFeature;
           }
-        }
-        else {
+        } else {
           this.character.nearbyBuildingPosition = undefined;
         }
       }
-    }
-    else {
+    } else {
       this.character.nearbyBuildingPosition = undefined;
     }
     return this._collision;
@@ -107,5 +145,4 @@ export class CollisionDetectorService {
     this._collision = false;
     this.collisionChecks = 0;
   }
-
 }

@@ -48,6 +48,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
               public controlledService: TakeControlService,
               private snackBar: MatSnackBar) {
     Cesium.BingMapsApi.defaultKey = 'AmzowhvWedaZu8mSrSHOwx2A52aRoYbkKvs4TeVUu_AzSXMnhvLCLFsqLFBqBS0V';
+    // Cesium.BingMapsApi.defaultKey = 'AkXEfZI-hKtZ995XgjM0XHxTiXpyS4i2Vb4w08Pjozwn-NAfVIvvHBYaP6Pgi717';
   }
 
   ngOnInit() {
@@ -83,7 +84,6 @@ export class GameContainerComponent implements OnInit, OnDestroy {
               this.character.syncState(this.me);
               allPlayers.push(this.me);
             }
-
             if (this.character.initialized) {
               this.setCharacterStateFromServer();
             }
@@ -122,7 +122,6 @@ export class GameContainerComponent implements OnInit, OnDestroy {
         this.character.state = MeModelState.WALKING;
         this.character.viewState = ViewState.OVERVIEW;
         this.character.viewState = ViewState.SEMI_FPV;
-
         this.otherPlayers$.next({
           id: this.me.id,
           actionType: ActionType.DELETE,
@@ -177,5 +176,4 @@ export class GameContainerComponent implements OnInit, OnDestroy {
         });
       });
   }
-
 }

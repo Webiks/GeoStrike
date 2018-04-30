@@ -7,21 +7,25 @@ import { joinAsViewer } from '../mutation/join-as-viewer';
 import { takeControlOverPlayer } from '../mutation/take-control-over-player';
 import { removeControlOverPlayer } from '../mutation/remove-control-over-player';
 import { notifyShot } from '../mutation/notify-shot';
+import { toggleFlightMode } from "../mutation/toggle-flight-mode";
+import { notifyCrash } from "../mutation/notify-crash";
 import { notifyBeenShot } from "../mutation/notify-been-shot";
 
 const resolvers = {
-  Mutation: {
-    createNewGame,
-    joinGame,
-    ready,
-    updatePosition,
-    notifyKill,
-    notifyBeenShot,
-    notifyShot,
-    joinAsViewer,
-    takeControlOverPlayer,
-    removeControlOverPlayer,
-  },
+    Mutation: {
+        createNewGame,
+        joinGame,
+        ready,
+        updatePosition,
+        notifyKill,
+        notifyBeenShot,
+        notifyCrash,
+        notifyShot,
+        toggleFlightMode,
+        joinAsViewer,
+        takeControlOverPlayer,
+        removeControlOverPlayer,
+    },
 };
 
 export default resolvers;

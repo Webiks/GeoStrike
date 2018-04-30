@@ -34,7 +34,8 @@ export class GameDialogsComponent implements OnInit {
     this.character.state$.subscribe(characterState => {
       const isOverview = this.character.viewState === ViewState.OVERVIEW;
       if (characterState && characterState.state === MeModelState.DEAD && !this.gameoverDialogOpen && !isOverview) {
-        this.openGameOverDialog(false);
+        const causeOfDeath = this.character.meFromServer.flight.remainingTime === 0 ? 'crashed' : 'beenShot' ;
+        this.openGameOverDialog(false,causeOfDeath);
         if (this.character.initialized) {
           this.character.state = MeModelState.DEAD;
         }
@@ -53,13 +54,13 @@ export class GameDialogsComponent implements OnInit {
     this.gameResult.subscribe(winingTeam => {
       if (winingTeam !== 'NONE' && (!this.wonDialogOpen && !this.gameoverDialogOpen)) {
         const loseTeam: Team = winingTeam === 'RED' ? 'BLUE' : 'RED';
-
+        const causeOfDeath = this.character.isFlying ? 'crashed' : 'beenShot' ;
         const isViewer = this.character.meFromServer['__typename'] === 'Viewer';
         this.dialog.closeAll();
         if (isViewer || winingTeam === this.character.currentStateValue.team) {
           this.openWinDialog(loseTeam);
         } else {
-          this.openGameOverDialog(true, loseTeam);
+          this.openGameOverDialog(true, causeOfDeath, loseTeam);
         }
         this.cd.detectChanges();
       }
@@ -97,7 +98,7 @@ export class GameDialogsComponent implements OnInit {
     });
   }
 
-  private openGameOverDialog(gameOver: boolean, losingTeam?: Team) {
+  private openGameOverDialog(gameOver: boolean, causeOfDeath?: string, losingTeam?: Team, ) {
     this.gameoverDialogOpen = true;
     this.ngZone.run(() => {
       this.dialog.open(EndGameDialogComponent, {
@@ -106,7 +107,8 @@ export class GameDialogsComponent implements OnInit {
         disableClose: true,
         data: {
           gameOver,
-          losingTeam
+          losingTeam,
+          causeOfDeath
         }
       }).afterClosed().subscribe((toOverView) => {
         if (toOverView) {

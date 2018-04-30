@@ -2,17 +2,20 @@
 
 # --- deploying server ---
 # cd packages/server
-# ../../deploy.sh cesium-server $VERSION $isStage
+# ../../deploy.sh server-[stable or stage] $VERSION $isStage
 
 # --- deploying client ---
 # cd packages/client
 # npm run build:prod
-# ../../deploy.sh cesium/client $VERSION $isStage
+# ../../deploy.sh client-[stable or stage] $VERSION $isStage
 
 target=$1
 echo "target $target"
 if [ -z "$target" ]
 then
+   echo "Missing deployment target"
+else
+   target=geostrike-$target
 	echo "Missing deployment target"
 fi
 
@@ -30,7 +33,14 @@ then
     isStage=""
 else
     isStage=-stage
+   echo "Missing deployment version"
 fi
+
+
+serverAddress=223455578796.dkr.ecr.eu-central-1.amazonaws.com/
+
+uploadServerAddress=$serverAddress$target:$version
+echo "$uploadServerAddress"
 
 $SHELL
 exit
@@ -47,11 +57,10 @@ docker tag "$target$isStage:latest" "223455578796.dkr.ecr.eu-central-1.amazonaws
 
 docker tag "$target$isStage:latest" "223455578796.dkr.ecr.eu-central-1.amazonaws.com/$target$isStage:$version"
 
-docker push "223455578796.dkr.ecr.eu-central-1.amazonaws.com/$target$isStage:latest"
+docker push "2234555787 96.dkr.ecr.eu-central-1.amazonaws.com/$target$isStage:latest"
 
 docker push "223455578796.dkr.ecr.eu-central-1.amazonaws.com/$target$isStage:$version"
 
 echo "deployment succeeded";
 
-PAUSE
 read -n1 -r -p "Press any key to continue..." key

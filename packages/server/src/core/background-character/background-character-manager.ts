@@ -108,8 +108,8 @@ export class BackgroundCharacterManager {
     const bgPlayer = {
       playerId: v4(),
       character,
-      state: "ALIVE",
-      lifeState: "FULL",
+      state: 'ALIVE',
+      lifeState: 'FULL',
       game: this.game,
       currentLocation: currentPath.location,
       heading: 0,
@@ -117,7 +117,8 @@ export class BackgroundCharacterManager {
       type: CharacterType.BACKGROUND_CHARACTER,
       syncState: "VALID",
       isCrawling: false,
-      isShooting: false
+      isShooting: false,
+      isFlying: false,
     } as IPlayer;
 
     const nextLocationNode = this.getRandomLocation(currentPath.points);
@@ -150,6 +151,7 @@ export class BackgroundCharacterManager {
             heading,
             false,
             true,
+            false,
             undefined
           );
         }

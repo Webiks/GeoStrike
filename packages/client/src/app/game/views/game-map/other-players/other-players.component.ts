@@ -51,14 +51,21 @@ export class OtherPlayersComponent {
   interpolatePlayerPosition(player: PlayerFields.Fragment, playerPosition) {
     const playerId = player.id;
     const fixedPosition = this.fixPosition(playerPosition, player);
-    const result = InterpolationService.interpolate(
-      {
-        data: fixedPosition
-      },
-      InterpolationType.POSITION
-    );
-    this.playersPositionMap.set(playerId, result);
-    return result;
+    const positionProperty = this.playersPositionMap.get(playerId);
+    if (!positionProperty) {
+      const result = InterpolationService.interpolate({
+        data: fixedPosition,
+      }, InterpolationType.POSITION);
+      this.playersPositionMap.set(playerId, result);
+      return result;
+    }
+    else {
+      const result = InterpolationService.interpolate({
+        data: fixedPosition,
+        cesiumSampledProperty: positionProperty,
+      });
+      return result;
+    }
   }
 
   getOrientation(location, heading: number, player: PlayerFields.Fragment) {
@@ -67,7 +74,7 @@ export class OtherPlayersComponent {
       return this.utils.getOrientation(location, heading, 0, roll);
     } else {
       const playerHeading = player.type === "PLAYER" ? heading : heading + 90;
-      const roll = player.isCrawling ? 90 : 0;
+      const roll = player.isCrawling ? 90 : ((player.isFlying) ? (45) : 0);
       return this.utils.getOrientation(location, playerHeading, 0, roll);
     }
   }

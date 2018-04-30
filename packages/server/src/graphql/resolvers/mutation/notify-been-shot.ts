@@ -8,6 +8,7 @@ export const notifyBeenShot = (rootValue, {playerId}, {games, game, player}: IGr
     }
     const numOfShotsToKill: number = 4;
     let shotPlayer = game.playersMap.get(playerId);
+    let lifeState;
     const ShootingPlayer = ((game.controlledPlayersMap.get(playerId) || player) as IPlayer);
     const ShotPlayerState = shotPlayer.state;
     shotPlayer.numberOfShotsThatHit += 1;
@@ -23,14 +24,29 @@ export const notifyBeenShot = (rootValue, {playerId}, {games, game, player}: IGr
         return shotPlayer;
     }
     if (lifeStatePerctangeRounded === 0.75)
-        games.updatePlayerLifeState(game.gameId, playerId, 'HIGH');
-    else if (lifeStatePerctangeRounded === 0.5)
-        games.updatePlayerLifeState(game.gameId, playerId, 'MEDIUM');
-    else if (lifeStatePerctangeRounded === 0.25)
-        games.updatePlayerLifeState(game.gameId, playerId, 'LOW');
-    else if (lifeStatePerctangeRounded === 0){
-        games.updatePlayerLifeState(game.gameId, playerId, 'EMPTY');
+    {
+        lifeState = 'HIGH'
     }
+    else if (lifeStatePerctangeRounded === 0.5)
+    {
+        lifeState = 'MEDIUM'
+    }
+    else if (lifeStatePerctangeRounded === 0.25)
+    {
+        lifeState = 'LOW'
+    }
+    else if (lifeStatePerctangeRounded === 0){
+        lifeState = 'EMPTY'
+    }
+    games.updatePlayerLifeState(game.gameId, playerId, lifeState);
+
+    pubsub.publish(ESubscriptionTopics.BEEN_SHOT, {
+        beenShot: {
+            id: playerId,
+            lifeState: lifeState,
+            gameId: game.gameId
+        }
+    });
     return shotPlayer;
 
 };

@@ -6,13 +6,15 @@
   "author": "dotansimha <dotansimha@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "lerna": "^2.0.0",
-    "concurrently": "^3.5.0"
+    "concurrently": "^3.5.0",
+    "gulp": "^3.9.1",
+    "lerna": "^2.0.0"
   },
   "scripts": {
     "start": "concurrently \"yarn server\" \"yarn client\"",
     "client": "(cd packages/client && yarn start)",
     "server": "(cd packages/server && yarn start)",
     "postinstall": "lerna bootstrap"
-  }
+  },
+  "devDependencies": {}
 }

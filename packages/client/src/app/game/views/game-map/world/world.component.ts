@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { CharacterService, ViewState, } from '../../../services/character.service';
 import { GameConfig } from '../../../services/game-config';
 import { AcEntity, AcNotification, AcTileset3dComponent, ActionType, CesiumService, } from 'angular-cesium';
@@ -17,7 +17,7 @@ export class BackgroundEntity extends AcEntity {
 })
 export class WorldComponent implements OnInit {
   @ViewChild('tiles') tiles: AcTileset3dComponent;
-  public tilesUrl;
+  public tilesUrl = environment.tiles.url;
   public loadTiles = environment.load3dTiles;
   public treesAndBoxes$: Subject<AcNotification> = new Subject();
   public tilesStyle = {
@@ -79,7 +79,10 @@ export class WorldComponent implements OnInit {
   }
 
   loadTerrain() {
-    this.cesiumService.getViewer().terrainProvider = new Cesium.createWorldTerrain(environment.terrain.url);
+    // this.cesiumService.getViewer().terrainProvider = Cesium.createWorldTerrain();
+    this.cesiumService.getViewer().terrainProvider = new Cesium.CesiumTerrainProvider(
+      environment.terrain
+    );
   }
 
   getTilesMatrix() {

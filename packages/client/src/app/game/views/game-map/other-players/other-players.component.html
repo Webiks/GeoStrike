@@ -9,8 +9,8 @@
     runAnimations: player.state !== 'DEAD',
 	}">
   </ac-model-desc>
-  <ac-billboard-desc *ngIf="(isOverview$ | async) &&  (terrainType !== 'URBAN')" props="{
-    position:  utils.toFixedHeight(player.currentLocation.location, 5),
+  <ac-billboard-desc *ngIf="(isOverview$| async) &&  (terrainType !== 'URBAN')" props="{
+    position: player.isFlying? player.currentLocation.location :utils.toFixedHeight(player.currentLocation.location, 5),
     heightReference: utils.getClampedToGroundHeightReference(),
     verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
     disableDepthTestDistance: 2900,
@@ -50,3 +50,4 @@
 </ac-layer>
 <other-players-gun-sound></other-players-gun-sound>
 <gun-indicator></gun-indicator>
+<flight-indicator></flight-indicator>

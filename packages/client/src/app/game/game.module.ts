@@ -48,11 +48,15 @@ import { ArrowKeysComponent } from './views/how-to-play-dialog/arrow-keys/arrow-
 import { OtherPlayersGunSoundComponent } from './views/game-map/other-players/gun-shot/other-players-gun-sound/other-players-gun-sound.component';
 import { GunIndicatorComponent } from './views/game-map/other-players/gun-shot/gun-indicator/gun-indicator.component';
 import { SoundService } from './services/sound.service';
+import { FlightModeComponent } from './views/game-container/flight-mode/flight-mode.component';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { GameCreditsComponent } from './views/game-container/game-credits/game-credits.component';
 import { CreditsDialogComponent } from './views/credits-dialog/credits-dialog.component';
 import { BloodOnScreen } from './views/game-container/blood-on-screen/blood-on-screen';
+import { FlightModeService } from './views/game-container/flight-mode/flight-mode.service';
+import { FlightIndicator } from "./views/game-map/other-players/flight/flight-indicator.component";
 import { MapProviderComponent } from './views/game-map/map-provider/map-provider.component';
+import { BeenShotService } from "./views/game-container/blood-on-screen/been-shot.service";
 
 @NgModule({
   declarations: [
@@ -85,6 +89,9 @@ import { MapProviderComponent } from './views/game-map/map-provider/map-provider
     GameCreditsComponent,
     CreditsDialogComponent,
     BloodOnScreen,
+    FlightModeComponent,
+    FlightIndicator,
+    BloodOnScreen,
     MapProviderComponent
   ],
   imports: [
@@ -115,6 +122,8 @@ import { MapProviderComponent } from './views/game-map/map-provider/map-provider
     BuildingsService,
     CollisionDetectorService,
     SoundService,
+    FlightModeService,
+    BeenShotService
   ],
   entryComponents: [
     EndGameDialogComponent,

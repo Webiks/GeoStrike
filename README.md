@@ -60,7 +60,7 @@
     - [nodemon](https://github.com/remy/nodemon)
  - client tools for running  angular/cli dev server:
     - [@angular/cli](https://github.com/angular/angular-cli)
- - generate code for GraphQL: [graphql-code-generator](https://github.com/dotansimha/graphql-code-generator)
+ - generate code for GraphQL: [graphql-code-generator](https://github.com/dotansimha/graphql-code-generator) 
 
 ## Credits list - how to modify
   to modify credits, open assets/credits/credits.json and add\delete\change destinated credit

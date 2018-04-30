@@ -295,7 +295,7 @@ amdefine@>=0.0.4:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
 
-angular-cesium@^0.0.28:
+angular-cesium@0.0.28:
   version "0.0.28"
   resolved "https://registry.yarnpkg.com/angular-cesium/-/angular-cesium-0.0.28.tgz#7e9ae1e6e96d4af9f5d97efc27b27f50644a69f7"
   dependencies:
