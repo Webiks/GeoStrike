@@ -115,7 +115,6 @@ export class OtherPlayersComponent {
     return player.username ? player.username : '';
   }
   playerMoving(){
-    console.log(this.isPlayerMoving);
     return this.isPlayerMoving;
   }
 }

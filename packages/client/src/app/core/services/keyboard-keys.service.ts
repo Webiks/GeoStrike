@@ -28,16 +28,6 @@ export class KeyboardKeysService {
         }
       });
     });
-    // this.ngZone.runOutsideAngular(() => {
-    //   document.addEventListener('keyup', (keyEvent: KeyboardEvent) => {
-    //     if (this.eventMap.has(keyEvent.code)) {
-    //       const keyInput = this.eventMap.get(keyEvent.code);
-    //       if (keyInput.callback) {
-    //         keyInput.callback(keyEvent);
-    //       }
-    //     }
-    //   });
-    // });
   }
 
   registerKeyBoardEvent(keyName: string, description: string, callback: (event: KeyboardEvent) => void) {

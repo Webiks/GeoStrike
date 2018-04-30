@@ -3,10 +3,10 @@
     heightReference: utils.getRelativeToGroundHeightReference(),
     uri: getModel(player),
     scale: getModelScale(player),
-    position: player.currentLocation.location,
+    position: interpolatePlayerPosition(player, player.currentLocation.location),
     orientation: getOrientation(player.currentLocation.location, player.currentLocation.heading, player),
     shadows: Cesium.ShadowMode.DISABLED,
-    runAnimations: player.state !== 'DEAD' && playerMoving(),
+    runAnimations: player.state !== 'DEAD' && player.team === 'NONE',
 	}">
   </ac-model-desc>
   <ac-billboard-primitive-desc *ngIf="isOverview$| async" props="{

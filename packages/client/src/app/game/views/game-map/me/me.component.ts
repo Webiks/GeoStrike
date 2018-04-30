@@ -390,8 +390,7 @@ export class MeComponent implements OnInit, OnDestroy {
       return this.getPosition(me.location);
     }
   }
-  playerMoving(){
-    console.log(this.isPlayerMoving);
+  detectIfPlayerMoving(){
     return this.isPlayerMoving;
   }
 }
