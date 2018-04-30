@@ -17,7 +17,7 @@ export class BackgroundEntity extends AcEntity {
 })
 export class WorldComponent implements OnInit {
   @ViewChild('tiles') tiles: AcTileset3dComponent;
-  public tilesUrl = environment.tiles.url;
+  public tilesUrl = environment.tiles;
   public loadTiles = environment.load3dTiles;
   public treesAndBoxes$: Subject<AcNotification> = new Subject();
   public tilesStyle = {

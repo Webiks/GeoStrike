@@ -170,7 +170,7 @@ export class GamesManager {
     const terrainTeamTypeStr = game.terrainType + "_" + team;
     const defaultPlayerPositions = TerrainLocation[terrainTeamTypeStr];
 
-    constrealPlayerTeamCount = Array.from(game.playersMap.values()).filter(
+    const realPlayerTeamCount = Array.from(game.playersMap.values()).filter(
       p => p.type === CharacterType.PLAYER && p.team === team
     ).length;let timer:Timer;
         const initFlightData: FlightData = {
