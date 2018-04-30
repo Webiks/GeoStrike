@@ -85,7 +85,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
 
     this.gameData.first().subscribe(game => {
       this.gameService.modifyTerrainEnviorment(game.terrainType);
-      this.gameService.setDefaultStartLocation(game.terrainType);
+      // this.gameService.setDefaultStartLocation(game.terrainType);
       const overviewMode = game.me['__typename'] === 'Viewer' || game.me.type === 'OVERVIEW';
       if (overviewMode) {
         this.character.viewState = ViewState.OVERVIEW;
@@ -93,7 +93,6 @@ export class GameMapComponent implements OnInit, OnDestroy {
       } else {
         this.character.viewState = ViewState.SEMI_FPV;
         this.startFirstPersonMode(game.me);
-        this.viewer.entities.removeAll();
       }
     });
 
@@ -117,12 +116,13 @@ export class GameMapComponent implements OnInit, OnDestroy {
             this.startFirstPersonMode(controlledPlayer, initPlayer);
           }
         })
+        // this.viewer.entities.removeAll();
       }
       this.lastViewState = newViewState;
     });
 
     this.playersPositions.map(player => player.entity).filter(x => x.team !== 'NONE').subscribe(x => {
-      console.log(x);
+      // console.log(x);
       this.viewer.entities.add({
         name : 'test',
         position : x.currentLocation.location,
@@ -173,7 +173,6 @@ export class GameMapComponent implements OnInit, OnDestroy {
       if (terrainType === 'URBAN')
       // this.viewer.camera.flyTo(this.viewer.entities);
         this.viewer.flyTo(this.viewer.entities);
-
       // this.viewer.camera.flyTo({destination: this.gameService.gameStartLocation});
       else {
         const overviewPosition = this.utils.toHeightOffset(this.gameService.gameStartLocation, 3000);
