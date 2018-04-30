@@ -42,7 +42,6 @@ const terrainTypeProviderOptions = {
   templateUrl: './map-provider.component.html'
 })
 
-
 export class MapProviderComponent {
   options = {};
   mapLayerProviderOptions: MapLayerProviderOptions;
