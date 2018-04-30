@@ -44,8 +44,6 @@ export class GameMapComponent implements OnInit, OnDestroy {
   private helperEntityPoint;
   private lastViewState: ViewState;
   mapLayerProviderOptions: MapLayerProviderOptions;
-  increase = true;
-  intervalId;
 
   constructor(
     private gameService: GameService,
@@ -287,17 +285,21 @@ export class GameMapComponent implements OnInit, OnDestroy {
     ) {
       return;
     }
+
+
+    if(this.lastPlayerLocation && Cesium.Cartographic.fromCartesian(this.character.location).longitude === Cesium.Cartographic.fromCartesian(this.lastPlayerLocation).longitude && !this.character.isFlying){
+      this.flightService.isPlayerMoving.next(false);
+    }
+    else{
+      this.flightService.isPlayerMoving.next(true);
+    }
+
     if(this.character.isFlying && (Cesium.Cartographic.fromCartesian(this.character.location).longitude === Cesium.Cartographic.fromCartesian(this.lastPlayerLocation).longitude) &&
       (Cesium.Cartographic.fromCartesian(this.character.location).latitude === Cesium.Cartographic.fromCartesian(this.lastPlayerLocation).latitude) ) {
-      if(!this.intervalId){
-        // this.setFlightVibrations();
         this.flightService.isInFlightModeNotMoving.next(true);
-      }
     }
     else {
       this.flightService.isInFlightModeNotMoving.next(false);
-      // clearInterval(this.intervalId);
-      // this.intervalId = false;
     }
 
     const pitchDeg = this.character.pitch;

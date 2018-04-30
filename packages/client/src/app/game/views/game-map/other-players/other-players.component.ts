@@ -8,6 +8,7 @@ import { CharacterService, ViewState } from "../../../services/character.service
 import { TakeControlService } from "../../../services/take-control.service";
 import { OtherPlayersShotService } from "./gun-shot/other-players-shot.service";
 import { GameService } from "../../../services/game.service";
+import { FlightModeService } from "../../game-container/flight-mode/flight-mode.service";
 
 @Component({
   selector: "other-players",
@@ -20,21 +21,12 @@ export class OtherPlayersComponent {
   Cesium = Cesium;
 
   isOverview$: Observable<boolean>;
-  terrainType: string;
 
-  constructor(
-    public utils: UtilsService,
-    public character: CharacterService,
-    private takeControlService: TakeControlService,
-    private cesiumService: CesiumService,
-    private gameService: GameService
-  ) {
-    this.isOverview$ = character.viewState$.map(
-      viewState => viewState === ViewState.OVERVIEW
-    );
-    this.gameService.currentTerrainEnviorment.subscribe(
-      terrainType => (this.terrainType = terrainType)
-    );
+  constructor(public utils: UtilsService, public character: CharacterService, private takeControlService: TakeControlService, private flightService: FlightModeService) {
+    this.isOverview$ = character.viewState$.map(viewState => viewState === ViewState.OVERVIEW);
+    this.flightService.currentMovingMode.subscribe( isPlayerMoving => {
+      this.isPlayerMoving = isPlayerMoving;
+    })
   }
 
   fixPosition(position, player: PlayerFields.Fragment) {
@@ -129,5 +121,8 @@ export class OtherPlayersComponent {
 
   getPlayerName(player) {
     return player.username ? player.username : "";
+  }
+  playerMoving(){
+    return this.isPlayerMoving;
   }
 }

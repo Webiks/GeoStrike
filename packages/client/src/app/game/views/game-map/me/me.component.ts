@@ -54,6 +54,7 @@ export class MeComponent implements OnInit, OnDestroy {
   intervalId;
   playerInFlightModeNotFlying = false;
   isFlightInPlace: boolean = false;
+  isPlayerMoving: boolean = false;
 
   @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
     // if (event.keyCode == 70 && !this.character.isFlying) {
@@ -283,6 +284,9 @@ export class MeComponent implements OnInit, OnDestroy {
       // else
       //   clearInterval(this.intervalId);
     });
+    this.flightService.currentMovingMode.subscribe( isPlayerMoving => {
+      this.isPlayerMoving = isPlayerMoving;
+    } )
   }
 
   ngOnDestroy(): void {
@@ -415,5 +419,8 @@ export class MeComponent implements OnInit, OnDestroy {
     else {
       return this.getPosition(me.location);
     }
+  }
+  detectIfPlayerMoving(){
+    return this.isPlayerMoving;
   }
 }
