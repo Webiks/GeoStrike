@@ -1,16 +1,17 @@
 export const AVAILABLE_CHARACTERS = [
   {
-    name: 'Wolverine',
-    description: 'Blue Team',
-    team: 'BLUE',
-    imageUrl: '/assets/characters/wolverine.png',
-  },
-  {
     name: 'Anthony Stark',
     description: 'Blue Team',
     team: 'BLUE',
     imageUrl: '/assets/characters/ironman.png',
   },
+  {
+    name: 'Wolverine',
+    description: 'Blue Team',
+    team: 'BLUE',
+    imageUrl: '/assets/characters/wolverine.png',
+  },
+
   // {
   //   name: 'Peter Parker',
   //   description: 'Red Team',
@@ -24,17 +25,18 @@ export const AVAILABLE_CHARACTERS = [
   //   imageUrl: '/assets/characters/hulk.png',
   // },
   {
-    name: 'Wade Wilson',
-    description: 'Red Team',
-    team: 'RED',
-    imageUrl: '/assets/characters/deadpool.png',
-  },
-  {
     name: 'Natasha Romanova',
     description: 'Red Team',
     team: 'RED',
     imageUrl: '/assets/characters/blackwidow.png',
   },
+  {
+    name: 'Wade Wilson',
+    description: 'Red Team',
+    team: 'RED',
+    imageUrl: '/assets/characters/deadpool.png',
+  },
+
   // {
   //   name: 'Bruce Wayne',
   //   description: 'Red Team',
