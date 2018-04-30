@@ -41,7 +41,7 @@ const characterServiceStub = {
   }
 }
 
-describe('FlightModeComponent', () => {
+fdescribe('FlightModeComponent', () => {
   let component: FlightModeComponent;
   let fixture: ComponentFixture<FlightModeComponent>;
 
