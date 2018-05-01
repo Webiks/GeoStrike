@@ -9,4 +9,21 @@
     eyeOffset: eyeOffset
   }">
   </ac-billboard-primitive-desc>
+  <ac-billboard-primitive-desc *ngIf="(isOverview$ | async)" props="{
+   show: player?.isFlying === true,
+    position: player?.currentLocation?.location,
+    image: getPlayerIcon(player)
+  }">
+  </ac-billboard-primitive-desc>
+  <ac-label-primitive-desc *ngIf="(isOverview$ | async)" props="{
+    show: player?.isFlying === true,
+    position: player?.currentLocation?.location,
+    text: getPlayerName(player),
+    font: '15px sans-serif',
+    scale: 0.9,
+    pixelOffset: getLabelPixelOffset(player) | pixelOffset,
+    showBackground: true
+  }">
+  </ac-label-primitive-desc>
+
 </ac-layer>

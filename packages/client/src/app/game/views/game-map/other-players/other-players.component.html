@@ -9,7 +9,8 @@
     runAnimations: player.state !== 'DEAD' && player.team === 'NONE',
 	}">
   </ac-model-desc>
-  <ac-billboard-desc *ngIf="(isOverview$| async) &&  (terrainType !== 'URBAN')" props="{
+  <ac-billboard-desc *ngIf="(isOverview$| async)" props="{
+    show: terrainType !== 'URBAN'&& player.isFlying === false,
     position: player.isFlying? player.currentLocation.location :utils.toFixedHeight(player.currentLocation.location, 5),
     heightReference: utils.getClampedToGroundHeightReference(),
     verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
@@ -17,8 +18,27 @@
     image: getPlayerIcon(player)
   }">
   </ac-billboard-desc>
-  <ac-label-desc *ngIf="(isOverview$ | async) &&  (terrainType !== 'URBAN')" props="{
-    show: player.type === 'PLAYER',
+
+  <ac-billboard-primitive-desc *ngIf="(isOverview$ | async)" props="{
+    show: terrainType === 'URBAN' && !player?.isFlying,
+    position:  utils.toFixedHeight(player.currentLocation.location, 5),
+    heightReference: utils.getClampedToGroundHeightReference(),
+    image: getPlayerIcon(player)
+  }">
+  </ac-billboard-primitive-desc>
+  <ac-label-primitive-desc *ngIf="(isOverview$ | async)" props="{
+    show: player.type === 'PLAYER' && player?.isFlying === false && terrainType === 'URBAN',
+    position: utils.toFixedHeight(player.currentLocation.location, 5),
+    heightReference: utils.getClampedToGroundHeightReference(),
+    text: getPlayerName(player),
+    font: '15px sans-serif',
+    scale: 0.9,
+    pixelOffset: getLabelPixelOffset(player) | pixelOffset,
+    showBackground: true
+  }">
+  </ac-label-primitive-desc>
+  <ac-label-desc *ngIf="(isOverview$ | async)" props="{
+    show: player.type === 'PLAYER' && player?.isFlying === false && terrainType !== 'URBAN',
     position: utils.toFixedHeight(player.currentLocation.location, 5),
     heightReference: utils.getClampedToGroundHeightReference(),
     verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
@@ -30,23 +50,6 @@
     showBackground: true
   }">
   </ac-label-desc>
-  <ac-billboard-primitive-desc *ngIf="(isOverview$ | async) &&  (terrainType === 'URBAN')" props="{
-    position:  utils.toFixedHeight(player.currentLocation.location, 5),
-    heightReference: utils.getClampedToGroundHeightReference(),
-    image: getPlayerIcon(player)
-  }">
-  </ac-billboard-primitive-desc>
-  <ac-label-primitive-desc *ngIf="(isOverview$ | async) &&  (terrainType === 'URBAN')" props="{
-    show: player.type === 'PLAYER',
-    position: utils.toFixedHeight(player.currentLocation.location, 5),
-    heightReference: utils.getClampedToGroundHeightReference(),
-    text: getPlayerName(player),
-    font: '15px sans-serif',
-    scale: 0.9,
-    pixelOffset: getLabelPixelOffset(player) | pixelOffset,
-    showBackground: true
-  }">
-  </ac-label-primitive-desc>
 </ac-layer>
 <other-players-gun-sound></other-players-gun-sound>
 <gun-indicator></gun-indicator>

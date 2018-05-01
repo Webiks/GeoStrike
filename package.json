@@ -8,7 +8,8 @@
   "dependencies": {
     "concurrently": "^3.5.0",
     "gulp": "^3.9.1",
-    "lerna": "^2.0.0"
+    "lerna": "^2.0.0",
+    "ts-node": "^6.0.2"
   },
   "scripts": {
     "start": "concurrently \"yarn server\" \"yarn client\"",

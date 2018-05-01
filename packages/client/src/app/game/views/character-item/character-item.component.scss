@@ -9,6 +9,7 @@
   width: 200px;
   min-width: 100px;
   transition: all 0.5s;
+  justify-content: center;
 
   @media screen and (max-width: 1300px), screen and (max-height: 650px) {
     height: 120px;
