@@ -423,4 +423,7 @@ export class MeComponent implements OnInit, OnDestroy {
   detectIfPlayerMoving(){
     return this.isPlayerMoving;
   }
+  isPlayerOnGround(){
+    return !this.character.isFlying;
+  }
 }

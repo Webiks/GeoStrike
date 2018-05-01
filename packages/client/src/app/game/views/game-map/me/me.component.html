@@ -8,7 +8,7 @@
 					orientation: getOrientation(me.location, me.heading,me),
 					shadows: Cesium.ShadowMode.DISABLED,
 					color: getColor(),
-          runAnimations: detectIfPlayerMoving()
+          runAnimations: detectIfPlayerMoving() && isPlayerOnGround()
   }">
   </ac-model-desc>
 </ac-layer>

@@ -21,6 +21,7 @@ export class OtherPlayersComponent {
   Cesium = Cesium;
 
   isOverview$: Observable<boolean>;
+  private isPlayerMoving = false;
 
   constructor(public utils: UtilsService, public character: CharacterService, private takeControlService: TakeControlService, private flightService: FlightModeService) {
     this.isOverview$ = character.viewState$.map(viewState => viewState === ViewState.OVERVIEW);
