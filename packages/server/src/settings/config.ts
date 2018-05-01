@@ -1,7 +1,7 @@
 const DEFAULT_RED_PLAYERS_LOCATION = [
     // { "x": 1353344.952433592, "y": -4654221.773484461, "z": 4131857.9765254767 },  // JFK Air port - lines
     // { "x": 1354125.1864658548, "y": -4653217.859040503, "z": 4132727.1070192996 }     //JFK Air port - for live traffic
-  {  "x": 1321401.2582556354, "y": -4658791.375161841, "z": 4137009.5198578103  }  //newark Air port
+  // {  "x": 1321401.2582556354, "y": -4658791.375161841, "z": 4137009.5198578103  }  //newark Air port
   // {'x': 1334835.2740264672, 'y': -4650313.671862999, 'z': 4142196.788770844},
   // {'x': 1334834.4816037307, 'y': -4650316.138359212, 'z': 4142194.291900026},
   // {'x': 1334834.085234359, 'y': -4650318.491170774, 'z': 4142191.7950271457},
@@ -42,13 +42,13 @@ export const config = {
     RED: process.env.TERRAIN ? TERRAIN_PLAYERS_LOCATION : DEFAULT_RED_PLAYERS_LOCATION,
     BLUE: process.env.TERRAIN ? TERRAIN_PLAYERS_LOCATION : DEFAULT_BULE_PLAYERS_LOCATION,
   },
-    // host: process.env.REDIS_HOST || '172.0.0.2',
-    host: '127.0.0.1',
+    host: process.env.REDIS_HOST || '127.0.0.1',
+    // host: '127.0.0.1',
     port: process.env.PORT_STAGE || 6379,
     channel: process.env.CHANNEL ||  `messageAdded`,
     KEY: process.env.REDIS_KEY || 'onAir1',
     SIMULATION_KEY:  process.env.REDIS_SIMULATION_KEY ||'new',
     START: process.env.START || 0,
-    END : process.env.END || 100,
+    END : process.env.END || -1,
 
 };

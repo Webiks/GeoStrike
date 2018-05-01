@@ -1,4 +1,7 @@
-import {ChangeDetectorRef, Component, ElementRef,HostListener, Input, NgZone, OnDestroy, OnInit,Output, ViewChild} from '@angular/core';
+import {
+  AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, Input, NgZone, OnDestroy, OnInit, Output,
+  ViewChild
+} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {AcMapComponent, AcNotification, CesiumService, MapLayerProviderOptions,
   ViewerConfiguration} from 'angular-cesium';
@@ -23,7 +26,7 @@ import {Subject} from "rxjs/Subject";
   ],
   styleUrls: ['./game-map.component.scss'],
 })
-export class GameMapComponent implements OnInit, OnDestroy {
+export class GameMapComponent implements OnInit, OnDestroy , AfterViewInit {
   // public static readonly DEFAULT_START_LOCATION =
   //   Cesium.Cartesian3.fromDegrees(-73.985187, 40.758857, 1000);
   // public static readonly DEFAULT_MOUNTAINS_START_LOCATION =
@@ -254,6 +257,9 @@ private isFlyingInFlyingMode = false;
     this.lastPlayerLocation = this.character.location;
     this.lastPlayerHead = playerHeadCart;
     this.lastPlayerHPR = {heading: this.character.heading, pitch: this.character.pitch, range};
+  }
+  ngAfterViewInit() {
+    console.log("NGAfterView");
   }
 
   ngOnDestroy(): void {

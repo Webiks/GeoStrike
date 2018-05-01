@@ -20,7 +20,7 @@ export const redisPubSub = new RedisPubSub({
 redisPubSub.subscribe(config.channel, (payload) => {
 
     try {
-        console.log("redisPubSub:" + JSON.stringify(payload));
+        // console.log("redisPubSub:" + JSON.stringify(payload));
     } catch (error) {
         console.error(`Error trying to extract new message from payload`);
         console.error(error.message);

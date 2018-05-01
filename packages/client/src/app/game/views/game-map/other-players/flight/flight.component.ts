@@ -36,12 +36,12 @@ export class FlightComponent implements  OnInit {
   ngOnInit() {
     // console.log("init flight component");
 
-    this.character.viewState$.subscribe(characterState => {
-
-      if(characterState === ViewState.OVERVIEW){
-          console.log(this.cesiumService.getScene()._primitives._primitives)
-      }
-    })
+    // this.character.viewState$.subscribe(characterState => {
+    //
+    //   if(characterState === ViewState.OVERVIEW){
+    //       console.log(this.cesiumService.getScene()._primitives._primitives)
+    //   }
+    // })
   }
 
   planeTypeModel(typeModel) {

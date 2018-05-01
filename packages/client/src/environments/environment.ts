@@ -40,7 +40,7 @@ export const environment = {
     disableRight: true,
   },
   config: {
-    updateFlightIntervalSec: 20,
+    updateFlightIntervalSec: 25,
   }
 };
 

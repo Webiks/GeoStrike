@@ -1,4 +1,4 @@
-import {Component, Input, NgZone, OnDestroy, OnInit} from '@angular/core';
+import {AfterContentInit, AfterViewInit, Component, Input, NgZone, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {GameService} from '../../services/game.service';
 import {AuthorizationMiddleware} from '../../../core/configured-apollo/network/authorization-middleware';
@@ -118,7 +118,8 @@ export class GameContainerComponent implements OnInit, OnDestroy {
           console.log('subscription complete');
         });
       });
-      this.airTraffic();
+
+      // this.airTraffic();
     });
   }
 
@@ -230,7 +231,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
 
     console.log('newStatus: ', newStatus);
     if (newStatus) {
-      this.airTraffic()
+      // this.airTraffic()
     }
     else {
       this.flightMap$.forEach(f => {
@@ -239,13 +240,40 @@ export class GameContainerComponent implements OnInit, OnDestroy {
           actionType: ActionType.DELETE
         })
       });
-
       this.flightSubscription.unsubscribe()
     }
 
   }
 
   airTraffic() {
+    // this.character.viewState$.subscribe(viewState => {
+    //
+    //   if (viewState === ViewState.OVERVIEW) {
+    //     console.log('OVERVIEW.');
+    //
+    //     // this.flightMap$.forEach(f => {
+    //     //   this.flights$.next({
+    //     //     id: f.id,
+    //     //     actionType: ActionType.ADD_UPDATE
+    //     //   })
+    //     // });
+    //     // this.flightMap$.forEach(flight => {
+    //     //   this.nextLocation(flight.id);
+    //     // })
+    //   }
+    //   if (viewState === ViewState.SEMI_FPV) {
+    //     console.log('SEMI_FPV');
+    //     // this.flightMap$.forEach(f => {
+    //     //   this.flights$.next({
+    //     //     id: f.id,
+    //     //     actionType: ActionType.ADD_UPDATE
+    //     //   })
+    //     // });
+    //     // this.flightMap$.forEach(flight => {
+    //     //   this.nextLocation(flight.id);
+    //     // })
+    //   }
+    // });
     this.ngZone.runOutsideAngular(() => {
 
       this.flightService.airTrafficQuery().subscribe();
@@ -320,7 +348,12 @@ export class GameContainerComponent implements OnInit, OnDestroy {
 
     });
   }
-
+  // ngAfterViewInit() {
+  //   console.log("NGAfterView");
+  // }
+  // ngAfterContentInit() {
+  //   console.log("ngAfterContentInit");
+  // }
 
   ngOnDestroy() {
     if (this.gameDataSubscription) {
