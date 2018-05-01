@@ -1,13 +1,37 @@
 .game-room {
-  padding: 50px;
+  padding-top: 5%;
+  padding-left: 10%;
+  padding-right: 10%;
+  width: 80%;
+  min-width: 1152px;
+  padding-bottom: 5%;
 
   .header {
     color: white;
+    height: 274PX;
+    .active-player {
+      .fighting-for-msg {
+        FONT-SIZE: 34PX;
+        LINE-HEIGHT: 40PX;
+        MARGIN-TOP: 48PX;
+        MARGIN-BOTTOM: 12PX;
+        font-weight: normal;
+      }
+      .mission-description {
+        FONT-SIZE: 34PX;
+        LINE-HEIGHT: 40PX;
+        MARGIN-TOP: 12PX;
+        MARGIN-BOTTOM: 48PX;
+        font-weight: normal;
+      }
+    }
   }
 
   .players {
     display: flex;
     align-content: flex-start;
+    margin-top: 5%;
+    min-width: 1152px;
 
     .player-container {
       display: flex;
@@ -23,12 +47,13 @@
     }
   }
 
-  .game-code-text{
+  .game-code-text {
     font-size: 2.5em;
   }
-  .ready-text{
-    font-size: 1.5em;
-    margin-top: 39px;
+  .ready-text {
+    font-size: 34PX;
+    LINE-HEIGHT: 40PX;
+    font-weight: normal;
   }
   .state-text {
     font-size: 30px;
@@ -36,16 +61,30 @@
     color: white;
     text-align: center;
     font-family: system-ui, sans-serif;
-    color: rgba(255,255,255,0.6);
+    color: rgba(255, 255, 255, 0.6);
   }
   .first-text-row {
     display: flex;
     justify-content: space-between;
     max-width: 1800px;
+    height: 34PX;
+
+    .hello-msg {
+      font-size: 34PX;
+      line-height: 34PX;
+      margin-top: -2PX;
+      font-weight: normal;
+    }
+    .game-code-text {
+      FONT-SIZE: 34PX;
+      LINE-HEIGHT: 34PX;
+      MARGIN-TOP: -2PX;
+      font-weight: normal;
+    }
   }
 }
 
-.loading{
+.loading {
   display: flex;
   justify-content: center;
   align-items: center;
