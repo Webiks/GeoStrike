@@ -33,13 +33,13 @@ export class FlightIndicator implements OnInit, OnDestroy {
   }
 
   getJetpackImage() {
-    return '/assets/icons/jetpack-marker.svg';
+    return '/assets/icons/jetpack.png';
+    // return '/assets/icons/jetpack-marker.svg';
   }
 
   ngOnInit() {
     this.ngZone.runOutsideAngular(() => {
       this.flightsSubscription = this.gameService.getCurrentGameData()
-        .filter(()=> this.character.viewState === ViewState.OVERVIEW)
         .map(result => result.gameData.players)
         .flatMap(p => p)
         .filter(p=> p.type === 'PLAYER')
@@ -50,8 +50,8 @@ export class FlightIndicator implements OnInit, OnDestroy {
             entity: player,
           }
         })
-        .subscribe(shotEntity => {
-          this.flights$.next(shotEntity)
+        .subscribe(flyingPlayer => {
+          this.flights$.next(flyingPlayer)
         })
     });
   }
