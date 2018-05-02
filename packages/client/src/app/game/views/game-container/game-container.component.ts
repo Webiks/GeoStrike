@@ -125,7 +125,6 @@ export class GameContainerComponent implements OnInit, OnDestroy {
 
   private setCharacterStateFromServer() {
     if (!this.isViewer) {
-      // this.gameService.toggleFlightMode(this.me.id,false).subscribe(()=> console.log('tat'));
       if (this.me.state === 'DEAD') {
         this.character.state = MeModelState.DEAD;
       } else if (this.me.state === 'CONTROLLED') {
