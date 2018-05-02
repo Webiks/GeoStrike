@@ -125,6 +125,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
 
   private setCharacterStateFromServer() {
     if (!this.isViewer) {
+      // this.gameService.toggleFlightMode(this.me.id,false).subscribe(()=> console.log('tat'));
       if (this.me.state === 'DEAD') {
         this.character.state = MeModelState.DEAD;
       } else if (this.me.state === 'CONTROLLED') {
@@ -171,6 +172,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
   }
 
   gameStarted() {
+    this.gameService.toggleFlightMode(this.me.id,false).subscribe(()=> {});
     this.gameNotificationsSubscription = this.gameNotifications$
       .subscribe(notification => {
         this.ngZone.run(() => {
