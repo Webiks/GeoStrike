@@ -118,9 +118,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
           console.log('subscription complete');
         });
       });
-
-      this.airTraffic();
-    });
+      });
   }
 
   private setCharacterStateFromServer() {
@@ -228,8 +226,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
   }
 
   flightStatus(newStatus: any): void {
-
-    console.log('newStatus: ', newStatus);
+    // console.log('newStatus: ', newStatus);
     if (newStatus) {
       this.airTraffic()
     }
@@ -240,7 +237,8 @@ export class GameContainerComponent implements OnInit, OnDestroy {
           actionType: ActionType.DELETE
         })
       });
-      this.flightSubscription.unsubscribe()
+      this.flightSubscription.unsubscribe();
+      this.flightMap$.clear();
     }
 
   }
@@ -280,7 +278,10 @@ export class GameContainerComponent implements OnInit, OnDestroy {
       this.flightSubscription = this.flightService.subscribeAirTraffic()
         .subscribe((data) => {
           console.log("sub");
+          // const xx = JSON.stringify(data);
 
+          // const yy = xx.localeCompare()
+          // console.log(this.flightMap$.values());
           this.tempData = data;
           if (this.tempData.messageAdded.length === 0) {
             console.error("The air traffic data received empty");
@@ -343,17 +344,10 @@ export class GameContainerComponent implements OnInit, OnDestroy {
             this.nextLocation(flight.id);
           })
 
-
         });
 
     });
   }
-  // ngAfterViewInit() {
-  //   console.log("NGAfterView");
-  // }
-  // ngAfterContentInit() {
-  //   console.log("ngAfterContentInit");
-  // }
 
   ngOnDestroy() {
     if (this.gameDataSubscription) {

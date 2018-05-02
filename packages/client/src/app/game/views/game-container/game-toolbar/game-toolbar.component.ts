@@ -26,13 +26,13 @@ import {SoundService} from '../../../services/sound.service';
       <div class="settings-item">GAME CODE: {{gameCode}}</div>
 
       <label class="settings-item">
-        <input type="checkbox" (change)="checkClicked()">
-        <strong *ngIf="fStatus">
+        <input id="flights" type="checkbox" (change)="checkClicked()">
+        <span id="flightSwitch" *ngIf="fStatus">
           Flights Status: ON
-        </strong>
-        <strong *ngIf="!fStatus">
+        </span>
+        <span id="flightSwitch" *ngIf="!fStatus">
           Flights Status: OFF
-        </strong>
+        </span>
       </label>
       <div class="settings-item" (click)="exitGame()">EXIT THE GAME</div>
     </div>
@@ -42,8 +42,8 @@ import {SoundService} from '../../../services/sound.service';
 export class GameToolbarComponent implements OnInit {
 
   @Input() gameCode: string;
-  fStatus:boolean = true;
-  @Output() flightStatus: EventEmitter<any> = new EventEmitter<any>(true);
+  fStatus:boolean = false;
+  @Output() flightStatus: EventEmitter<any> = new EventEmitter<any>(false);
   showMenu = false;
   mute = false;
   fullScreenIcon = 'full-screen';
