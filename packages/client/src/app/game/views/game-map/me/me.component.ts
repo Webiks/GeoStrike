@@ -1,16 +1,9 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  HostListener,
-  Input,
-  NgZone,
-  OnDestroy,
-  OnInit,
-  ViewChild
-} from '@angular/core';
+import {ChangeDetectorRef, Component, ElementRef,HostListener, Input, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { ActionType, CesiumService } from 'angular-cesium';
-import { CharacterService, CharacterState, MeModelState, ViewState } from '../../../services/character.service';
+import {
+  CharacterService, CharacterState, MeModelState,
+  ViewState
+} from '../../../services/character.service';
 import { UtilsService } from '../../../services/utils.service';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/combineLatest';
@@ -25,21 +18,20 @@ import { MatSnackBar } from '@angular/material';
 import { SnackBarContentComponent } from '../../../../shared/snack-bar-content/snack-bar-content.component';
 import { SoundService } from '../../../services/sound.service';
 import { InterpolationService, InterpolationType } from "../../../services/interpolation.service";
+import { FlightModeService } from "../../game-container/flight-mode/flight-mode.service";
 import { environment } from "../../../../../environments/environment";
-import { BeenShotService } from "../../game-container/blood-on-screen/been-shot.service";
 
 @Component({
-  selector: 'me',
-  templateUrl: './me.component.html',
-  styleUrls: ['./me.component.scss'],
+  selector: "me",
+  templateUrl: "./me.component.html",
+  styleUrls: ["./me.component.scss"]
 })
 export class MeComponent implements OnInit, OnDestroy {
-
   private meModelDrawSubscription: Subscription;
   @Input() me;
-  @ViewChild('cross') crossElement: ElementRef;
-  @ViewChild('muzzleFlash') muzzleFlash: ElementRef;
-  @ViewChild('meModel') meModel: BasicDesc;
+  @ViewChild("cross") crossElement: ElementRef;
+  @ViewChild("muzzleFlash") muzzleFlash: ElementRef;
+  @ViewChild("meModel") meModel: BasicDesc;
 
   showWeapon$: Subscription;
   showWeapon = false;
@@ -59,42 +51,23 @@ export class MeComponent implements OnInit, OnDestroy {
   Cesium = Cesium;
   playersPositionMap = new Map<string, any>();
   increase = true;
-  intervalId;
   playerInFlightModeNotFlying = false;
+  isFlightInPlace: boolean = false;
+  isPlayerMoving: boolean = false;
 
   @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
-    if (event.keyCode == 70 && !this.character.isFlying) {
+    if (event.key === 'w') {
       this.playerInFlightModeNotFlying = true;
-      this.setFlightVibrations();
     }
-    if (event.keyCode == 70 && this.character.isFlying) {
-      this.playerInFlightModeNotFlying = false;
-      clearInterval(this.intervalId);
-    }
-    if (event.shiftKey && event.keyCode == 87) {
-      this.playerInFlightModeNotFlying = false;
-      clearInterval(this.intervalId);
-    }
+  }
+  @HostListener('document:keyup', ['$event']) onKeyupHandler(event: KeyboardEvent) {
     if (event.key === 'w') {
       this.playerInFlightModeNotFlying = false;
-      clearInterval(this.intervalId);
     }
   }
 
-
-  showBloodSubscription : Subscription;
-  @HostListener('document:keyup', ['$event']) onKeyupHandler(event: KeyboardEvent) {
-    if (event.key === 'w' && this.character.isFlying) {
-      this.playerInFlightModeNotFlying = true;
-      this.setFlightVibrations();
-    }
-    if (event.shiftKey && event.keyCode == 87 && this.character.isFlying) {
-      this.playerInFlightModeNotFlying = true;
-      this.setFlightVibrations();
-    }
-  }
-
-  constructor(private character: CharacterService,
+  constructor(
+              private character: CharacterService,
               public utils: UtilsService,
               private cesiumService: CesiumService,
               private gameService: GameService,
@@ -103,92 +76,118 @@ export class MeComponent implements OnInit, OnDestroy {
               private snackBar: MatSnackBar,
               private soundService: SoundService,
               private cd: ChangeDetectorRef,
-              private beenShotService: BeenShotService) {
+              private flightService: FlightModeService) {
+
   }
+
 
   get notifications$() {
     return this.character.state$.filter(f => f !== null).map(meState => ({
       actionType: ActionType.ADD_UPDATE,
       id: meState.id,
-      entity: meState,
+      entity: meState
     }));
   }
 
   setShootEvent() {
-    this.keyboardKeysService.registerKeyBoardEventDescription('LeftMouse', 'Shoot');
-    const enterSub$ = Observable.create((observer) => {
-      this.keyboardKeysService.registerKeyBoardEvent('Enter', 'Shoot', () => {
+    this.keyboardKeysService.registerKeyBoardEventDescription(
+      "LeftMouse",
+      "Shoot"
+    );
+    const enterSub$ = Observable.create(observer => {
+      this.keyboardKeysService.registerKeyBoardEvent("Enter", "Shoot", () => {
         observer.next();
       });
     });
-    this.shootSub$ = Observable.fromEvent(document.body, 'click')
+    this.shootSub$ = Observable.fromEvent(document.body, "click")
       .filter(() => !!document.pointerLockElement)
       .merge(enterSub$)
       .filter(() => this.character.state === MeModelState.SHOOTING)
-      .do(() => this.gameService.notifyShot(this.character.meFromServer.id, this.character.location))
+      .do(() =>
+        this.gameService.notifyShot(
+          this.character.meFromServer.id,
+          this.character.location
+        )
+      )
       .subscribe((e: MouseEvent) => {
         this.showGunMuzzleFlash();
         this.soundService.gunShot();
         const crossElement = this.crossElement.nativeElement;
         const crossLocation = {
           x: crossElement.x + crossElement.width / 2,
-          y: crossElement.y + crossElement.height / 2,
+          y: crossElement.y + crossElement.height / 2
         };
         const picked = this.cesiumService.getScene().pick(crossLocation);
-        if (picked && picked.id && picked.id.acEntity && picked.id.acEntity instanceof OtherPlayerEntity) {
+        if (
+          picked &&
+          picked.id &&
+          picked.id.acEntity &&
+          picked.id.acEntity instanceof OtherPlayerEntity
+        ) {
           const shotedEntity = picked.id.acEntity;
           let killSubscription;
           killSubscription = this.gameService.notifyBeenShot(shotedEntity.id)
-            .subscribe(beenShotData => {
-              this.setKillEvent(beenShotData.data.notifyBeenShot.lifeState, shotedEntity.id)
-              killSubscription.unsubscribe()
+            .subscribe( beenShotData => {
+                this.setKillEvent(beenShotData.data.notifyBeenShot.lifeState,shotedEntity.id);
+                killSubscription.unsubscribe();
             });
         }
       });
   }
 
-  setKillEvent(lifeState:string, shotedEntityId) {
-    if(lifeState === "EMPTY"){
-
-        let killSubscription = this.gameService.notifyKill(shotedEntityId)
-          .subscribe(() => killSubscription.unsubscribe());
-      }
+  setKillEvent(lifeState: string, shotedEntityId) {
+    if (lifeState === "EMPTY") {
+      let killSubscription = this.gameService
+        .notifyKill(shotedEntityId)
+        .subscribe(() => killSubscription.unsubscribe());
+    }
   }
 
   ngOnInit(): void {
     this.showWeapon$ = Observable.combineLatest(
       this.character.viewState$.map(viewState => viewState === ViewState.FPV),
-      this.character.state$.map(meState => meState && meState.state === MeModelState.SHOOTING)
-    ).map((result => result[0] || result[1])).subscribe((value) => {
-      this.showWeapon = value;
-      this.cd.detectChanges();
-    });
-    this.showCross$ = this.character.state$.map(meState => meState && meState.state === MeModelState.SHOOTING).subscribe((value) => {
-      this.showCross = value;
-      this.cd.detectChanges();
-    });
-    this.isInShootingPosition$ = this.character.viewState$.map(viewState => viewState === ViewState.FPV).subscribe((x) => {
-      this.isInShootingPosition = x;
-      this.cd.detectChanges();
-    })
+      this.character.state$.map(
+        meState => meState && meState.state === MeModelState.SHOOTING
+      )
+    )
+      .map(result => result[0] || result[1])
+      .subscribe(value => {
+        this.showWeapon = value;
+        this.cd.detectChanges();
+      });
+    this.showCross$ = this.character.state$
+      .map(meState => meState && meState.state === MeModelState.SHOOTING)
+      .subscribe(value => {
+        this.showCross = value;
+        this.cd.detectChanges();
+      });
+    this.isInShootingPosition$ = this.character.viewState$
+      .map(viewState => viewState === ViewState.FPV)
+      .subscribe(x => {
+        this.isInShootingPosition = x;
+        this.cd.detectChanges();
+      });
     this.meModelDrawSubscription = this.meModel.onDraw.subscribe(entity => {
       this.character.entity = entity.cesiumEntity;
     });
 
     this.setShootEvent();
     this.character.state$.subscribe(state => {
-      if (state && !state.enteredBuilding && this.buildingNearby !== !!state.nearbyBuildingPosition) {
+      if (
+        state &&
+        !state.enteredBuilding &&
+        this.buildingNearby !== !!state.nearbyBuildingPosition
+      ) {
         this.buildingNearby = !!state.nearbyBuildingPosition;
         if (this.buildingNearby) {
           this.ngZone.run(() => {
             this.snackBar.dismiss();
             this.snackBar.openFromComponent(SnackBarContentComponent, {
               data: `Press E to Enter Building`,
-              duration: 3000,
+              duration: 3000
             });
           });
-        }
-        else {
+        } else {
           this.ngZone.run(() => this.snackBar.dismiss());
         }
       }
@@ -200,11 +199,10 @@ export class MeComponent implements OnInit, OnDestroy {
             this.snackBar.dismiss();
             this.snackBar.openFromComponent(SnackBarContentComponent, {
               data: `Press E to Exit Building`,
-              duration: 3000,
+              duration: 3000
             });
           });
-        }
-        else {
+        } else {
           this.ngZone.run(() => this.snackBar.dismiss());
         }
       }
@@ -258,6 +256,17 @@ export class MeComponent implements OnInit, OnDestroy {
         }
       }
     });
+
+    this.flightService.currentFlightMode.subscribe(isFlightInPlace => {
+      this.isFlightInPlace = isFlightInPlace;
+      if (this.isFlightInPlace)
+        this.setSlowlyMovingForward();
+      // else
+      //   clearInterval(this.intervalId);
+    });
+    this.flightService.currentMovingMode.subscribe( isPlayerMoving => {
+      this.isPlayerMoving = isPlayerMoving;
+    } )
   }
 
   ngOnDestroy(): void {
@@ -268,8 +277,11 @@ export class MeComponent implements OnInit, OnDestroy {
   }
 
   private showGunMuzzleFlash() {
-    this.muzzleFlash.nativeElement.style.visibility = 'visible';
-    setTimeout(() => this.muzzleFlash.nativeElement.style.visibility = 'hidden', 20);
+    this.muzzleFlash.nativeElement.style.visibility = "visible";
+    setTimeout(
+      () => (this.muzzleFlash.nativeElement.style.visibility = "hidden"),
+      20
+    );
   }
 
   canvasPropagation() {
@@ -288,7 +300,9 @@ export class MeComponent implements OnInit, OnDestroy {
   }
 
   get characterInfo(): CharacterData {
-    return this.character.currentStateValue.characterInfo || {} as CharacterData;
+    return (
+      this.character.currentStateValue.characterInfo || ({} as CharacterData)
+    );
   }
 
   getColor() {
@@ -299,7 +313,10 @@ export class MeComponent implements OnInit, OnDestroy {
   }
 
   showMeModel() {
-    return this.character.viewState !== ViewState.OVERVIEW && this.character.state !== MeModelState.CONTROLLED;
+    return (
+      this.character.viewState !== ViewState.OVERVIEW &&
+      this.character.state !== MeModelState.CONTROLLED
+    );
   }
 
   getPosition(position) {
@@ -309,7 +326,10 @@ export class MeComponent implements OnInit, OnDestroy {
     } else if (this.character.isCrawling) {
       return this.utils.toHeightOffset(position, 0.2);
     } else if (this.characterInfo.fixedHeight) {
-      return this.utils.toHeightOffset(position, this.characterInfo.fixedHeight);
+      return this.utils.toHeightOffset(
+        position,
+        this.characterInfo.fixedHeight
+      );
     }
     else if (this.character.isFlying) {
       return position;
@@ -329,35 +349,24 @@ export class MeComponent implements OnInit, OnDestroy {
   }
 
   interpolatePlayerPosition(player, playerPosition) {
-    if (this.character.isFlying && this.playerInFlightModeNotFlying) {
-      const playerId = player.id;
-      const positionProperty = this.playersPositionMap.get(playerId);
-      if (!positionProperty) {
-        const result = InterpolationService.interpolate({
-          data: playerPosition,
-        }, InterpolationType.POSITION);
-        this.playersPositionMap.set(playerId, result);
-        return result;
-      }
-      else {
-        // this.setFlightVibrations();
-        return InterpolationService.interpolate({
-          data: playerPosition,
-          cesiumSampledProperty: positionProperty,
-        });
-      }
+    const playerId = player.id;
+    const positionProperty = this.playersPositionMap.get(playerId);
+    if (!positionProperty) {
+      const result = InterpolationService.interpolate({
+        data: playerPosition,
+      }, InterpolationType.POSITION);
+      this.playersPositionMap.set(playerId, result);
+      return result;
     }
     else {
-      return this.getPosition(playerPosition);
+      return InterpolationService.interpolate({
+        data: playerPosition,
+        cesiumSampledProperty: positionProperty,
+      });
     }
   }
 
   setFlightVibrations() {
-    this.intervalId = setInterval(() => {
-      if(this.character.state === MeModelState.DEAD){
-        clearInterval(this.intervalId);
-        return;
-      }
       let vibrationHeightMeters = this.character.viewState === ViewState.SEMI_FPV ? 0.3 : 1;
       let location = this.character.location;
       if (this.increase) {
@@ -368,6 +377,33 @@ export class MeComponent implements OnInit, OnDestroy {
         this.character.location = this.utils.toHeightOffset(location, -vibrationHeightMeters)
         this.increase = !this.increase;
       }
-    }, 750)
+  }
+
+  setSlowlyMovingForward() {
+    if (this.character.location) {
+      const speed = environment.movement.walkingSpeed;
+      const nextLocation = this.utils.pointByLocationDistanceAndAzimuthAndHeight3d(
+        this.character.location,
+        speed,
+        Cesium.Math.toRadians(this.character.heading + 180),
+        true
+      );
+      this.character.location = nextLocation;
+    }
+  }
+
+  isPlayerInFlightModeNotFlying(me) {
+    if (this.character.isFlying && this.isFlightInPlace) {
+      return this.interpolatePlayerPosition(me, me.location);
+    }
+    else {
+      return this.getPosition(me.location);
+    }
+  }
+  detectIfPlayerMoving(){
+    return this.isPlayerMoving;
+  }
+  isPlayerOnGround(){
+    return !this.character.isFlying;
   }
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { CharacterService, ViewState, } from '../../../services/character.service';
 import { GameConfig } from '../../../services/game-config';
 import { AcEntity, AcNotification, AcTileset3dComponent, ActionType, CesiumService, } from 'angular-cesium';
@@ -17,7 +17,7 @@ export class BackgroundEntity extends AcEntity {
 })
 export class WorldComponent implements OnInit {
   @ViewChild('tiles') tiles: AcTileset3dComponent;
-  public tilesUrl;
+  public tilesUrl = environment.tiles;
   public loadTiles = environment.load3dTiles;
   public treesAndBoxes$: Subject<AcNotification> = new Subject();
   public tilesStyle = {
@@ -36,7 +36,7 @@ export class WorldComponent implements OnInit {
   };
   public hideWorld = false;
   private treesAndBoxes;
-  public terrainView: string = 'URBAN';
+  private terrainView: string = 'URBAN';
 
   constructor(public utils: UtilsService,
               private cesiumService: CesiumService,
@@ -79,16 +79,9 @@ export class WorldComponent implements OnInit {
   }
 
   loadTerrain() {
-    if (this.terrainView == 'SWISS') {
-      this.cesiumService.getViewer().terrainProvider = new Cesium.CesiumTerrainProvider(environment.swiss_terrain);
-      let scene = this.cesiumService.getScene();
-      scene.primitives.add(new Cesium.Cesium3DTileset({
-        url: 'https://vectortiles.geo.admin.ch/ch.swisstopo.swisstlm3d.3d/20161217/tileset.json'
-      }));
-    }
-    else {
-         this.cesiumService.getViewer().terrainProvider = new Cesium.createWorldTerrain(environment.terrain.url);
-    }
+    this.cesiumService.getViewer().terrainProvider = new Cesium.CesiumTerrainProvider(
+      environment.terrain
+    );
   }
 
   getTilesMatrix() {
@@ -98,7 +91,7 @@ export class WorldComponent implements OnInit {
   setTerrainType() {
     this.gameService.currentTerrainEnviorment.subscribe(terrainType => {
       this.terrainView = terrainType;
-      let tilesStr = terrainType.toLowerCase()+"_url";
+      let tilesStr = terrainType.toLowerCase() + "_url";
       this.tilesUrl = environment.tiles[tilesStr];
       if (terrainType !== 'URBAN')
         this.loadTerrain();

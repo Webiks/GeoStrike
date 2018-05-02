@@ -6,7 +6,7 @@ export const notifyCrash = (rootValue, {playerId}, {games, game, player}: IGraph
         return null;
     }
     const crashedPlayer = game.playersMap.get(playerId);
-    games.updatePlayerState(game.gameId, playerId, 'DEAD');
+    games.updatePlayerState(game.gameId, playerId, 'DEAD', true);
     pubsub.publish(ESubscriptionTopics.GAME_STATE_CHANGED, { gameData: game });
 
     const killedPlayerTeamColor = crashedPlayer.team.toString().toLowerCase();

@@ -11,7 +11,6 @@ const tillingScheme = new Cesium.GeographicTilingScheme({
 });
 
 const terrainTypeProvider = {
-  'SWISS': MapLayerProviderOptions.UrlTemplateImagery,
   'MOUNTAIN': MapLayerProviderOptions.BingMaps,
   'URBAN': MapLayerProviderOptions.BingMaps,
   'AUSTRALIA': MapLayerProviderOptions.BingMaps,
@@ -20,13 +19,6 @@ const terrainTypeProvider = {
 }
 
 const terrainTypeProviderOptions = {
-  'SWISS': {
-    url: '//wmts20.geo.admin.ch/1.0.0/ch.swisstopo.swissimage-product/default/current/4326/{z}/{x}/{y}.jpeg',
-    minimumLevel: 8,
-    maximumLevel: 17,
-    tilingScheme: tillingScheme,
-    rectangle: rectangle
-  },
   'MOUNTAIN': {
     url: 'https://dev.virtualearth.net',
     key: 'AkXEfZI-hKtZ995XgjM0XHxTiXpyS4i2Vb4w08Pjozwn-NAfVIvvHBYaP6Pgi717'
@@ -49,7 +41,6 @@ const terrainTypeProviderOptions = {
   selector: 'map-provider',
   templateUrl: './map-provider.component.html'
 })
-
 
 export class MapProviderComponent {
   options = {};

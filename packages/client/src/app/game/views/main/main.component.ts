@@ -90,7 +90,6 @@ export class MainComponent {
     if (!this.validate(true)) {
       return;
     }
-    debugger;
     this.loading = true;
     this.error = '';
 

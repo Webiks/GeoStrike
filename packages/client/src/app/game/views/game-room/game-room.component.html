@@ -5,7 +5,7 @@
   <div *ngIf="!gameStarted">
     <div class="header">
       <div class="first-text-row">
-        <h1 >Hey {{me.username}},</h1>
+        <h1 class="hello-msg">Hey {{me.username}},</h1>
         <h1 class="game-code-text">Game Code: {{gameCode}}</h1>
       </div>
 
@@ -13,9 +13,9 @@
         <h1>The fight between the teams is about to start, each team's mission is to hunt and shoot their rivals down.</h1>
         <h1>During the game you can bench players, and take control over their characters.</h1>
       </div>
-      <div *ngIf="!isViewer">
-        <h1>You are fighting for the {{me.team}} team.</h1>
-        <h1>Your mission is to locate and shoot the {{getOpponentTeam()}} team members down!</h1>
+      <div class="active-player" *ngIf="!isViewer">
+        <h1 class="fighting-for-msg">You are fighting for the {{me.team}} team.</h1>
+        <h1 class="mission-description">Your mission is to locate and shoot the {{getOpponentTeam()}} team members down!</h1>
       </div>
 
       <h1 class="ready-text">The game will start when all the players confirm they are ready.</h1>

@@ -33,6 +33,9 @@ export class KeyboardKeysService {
   registerKeyBoardEvent(keyName: string, description: string, callback: (event: KeyboardEvent) => void) {
     this.eventMap.set(keyName, { callback, description });
   }
+  registerKeyBoardKeyUpEvent(keyName: string, description: string, callback: (event: KeyboardEvent) => void) {
+      this.eventMap.set(keyName, { callback, description });
+  }
 
   registerKeyBoardEventDescription(keyName: string, description: string) {
     this.eventMap.set(keyName, { description });

@@ -108,7 +108,7 @@ export class BackgroundCharacterManager {
     const bgPlayer = {
       playerId: v4(),
       character,
-      state: "ALIVE",
+      state: 'ALIVE',
       lifeState: 'FULL',
       game: this.game,
       currentLocation: currentPath.location,

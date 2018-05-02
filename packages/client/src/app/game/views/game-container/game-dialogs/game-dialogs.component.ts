@@ -34,7 +34,7 @@ export class GameDialogsComponent implements OnInit {
     this.character.state$.subscribe(characterState => {
       const isOverview = this.character.viewState === ViewState.OVERVIEW;
       if (characterState && characterState.state === MeModelState.DEAD && !this.gameoverDialogOpen && !isOverview) {
-        const causeOfDeath = this.character.isFlying ? 'crashed' : 'beenShot' ;
+        const causeOfDeath = this.character.meFromServer.flight.remainingTime === 0 ? 'crashed' : 'beenShot' ;
         this.openGameOverDialog(false,causeOfDeath);
         if (this.character.initialized) {
           this.character.state = MeModelState.DEAD;

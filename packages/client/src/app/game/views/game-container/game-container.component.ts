@@ -119,7 +119,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
         });
       });
 
-      // this.airTraffic();
+      this.airTraffic();
     });
   }
 
@@ -231,7 +231,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
 
     console.log('newStatus: ', newStatus);
     if (newStatus) {
-      // this.airTraffic()
+      this.airTraffic()
     }
     else {
       this.flightMap$.forEach(f => {

@@ -49,6 +49,6 @@ export const config = {
     KEY: process.env.REDIS_KEY || 'onAir1',
     SIMULATION_KEY:  process.env.REDIS_SIMULATION_KEY ||'new',
     START: process.env.START || 0,
-    END : process.env.END || -1,
+    END : process.env.END || 1000,
 
 };

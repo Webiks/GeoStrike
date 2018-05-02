@@ -2,18 +2,13 @@ import { Component, Input } from "@angular/core";
 import { AcNotification, CesiumService } from "angular-cesium";
 import { Observable } from "rxjs/Observable";
 import { UtilsService } from "../../../services/utils.service";
-import {
-  InterpolationService,
-  InterpolationType
-} from "../../../services/interpolation.service";
+import { InterpolationService, InterpolationType } from "../../../services/interpolation.service";
 import { PlayerFields } from "../../../../types";
-import {
-  CharacterService,
-  ViewState
-} from "../../../services/character.service";
+import { CharacterService, ViewState } from "../../../services/character.service";
 import { TakeControlService } from "../../../services/take-control.service";
 import { OtherPlayersShotService } from "./gun-shot/other-players-shot.service";
 import { GameService } from "../../../services/game.service";
+import { FlightModeService } from "../../game-container/flight-mode/flight-mode.service";
 
 @Component({
   selector: "other-players",
@@ -26,25 +21,15 @@ export class OtherPlayersComponent {
   Cesium = Cesium;
 
   isOverview$: Observable<boolean>;
-  terrainType: string;
+  private isPlayerMoving = false;
 
-
-  constructor(
-    public utils: UtilsService,
-    public character: CharacterService,
-    private takeControlService: TakeControlService,
-    private cesiumService: CesiumService,
-    private gameService: GameService
-  ) {
-    this.isOverview$ = character.viewState$.map(
-      viewState => viewState === ViewState.OVERVIEW
-    );
-    this.gameService.currentTerrainEnviorment.subscribe(terrainType => this.terrainType = terrainType);
-   // this.modelsAnimation();
+  constructor(public utils: UtilsService, public character: CharacterService, private takeControlService: TakeControlService, private flightService: FlightModeService) {
+    this.isOverview$ = character.viewState$.map(viewState => viewState === ViewState.OVERVIEW);
+    this.flightService.currentMovingMode.subscribe( isPlayerMoving => {
+      this.isPlayerMoving = isPlayerMoving;
+    })
   }
-  // testTerrainIsReady(){
-  //   this.isTerrainReady = true
-  // }
+
   fixPosition(position, player: PlayerFields.Fragment) {
     if (player.state === "DEAD") {
       return position;
@@ -56,45 +41,24 @@ export class OtherPlayersComponent {
     return position;
   }
 
-  // modelsAnimation(){
-  //   const scene = this.cesiumService.getScene();
-  //   Cesium.when(scene.readyPromise).then((model)=>{
-  //     model.activeAnimations.addAll({
-  //       loop : Cesium.ModelAnimationLoop.REPEAT
-  //     });
-  //   })
-  // }
-
-  // interpolatePlayerPosition(player: PlayerFields.Fragment, playerPosition) {
-  //   const playerId = player.id;
-  //   const fixedPosition = this.fixPosition(playerPosition, player);
-  //   const positionProperty = this.playersPositionMap.get(playerId);
-  //   if (!positionProperty) {
-  //     const result = InterpolationService.interpolate({
-  //       data: fixedPosition,
-  //     }, InterpolationType.POSITION);
-  //     this.playersPositionMap.set(playerId, result);
-  //     return result;
-  //   }
-  //   else {
-  //     return InterpolationService.interpolate({
-  //       data: fixedPosition,
-  //       cesiumSampledProperty: positionProperty,
-  //     });
-  //   }
-  // }
-
   interpolatePlayerPosition(player: PlayerFields.Fragment, playerPosition) {
     const playerId = player.id;
     const fixedPosition = this.fixPosition(playerPosition, player);
-    const result = InterpolationService.interpolate(
-      {
-        data: fixedPosition
-      },
-      InterpolationType.POSITION
-    );
-    this.playersPositionMap.set(playerId, result);
-    return result;
+    const positionProperty = this.playersPositionMap.get(playerId);
+    if (!positionProperty) {
+      const result = InterpolationService.interpolate({
+        data: fixedPosition,
+      }, InterpolationType.POSITION);
+      this.playersPositionMap.set(playerId, result);
+      return result;
+    }
+    else {
+      const result = InterpolationService.interpolate({
+        data: fixedPosition,
+        cesiumSampledProperty: positionProperty,
+      });
+      return result;
+    }
   }
 
   getOrientation(location, heading: number, player: PlayerFields.Fragment) {
@@ -103,7 +67,7 @@ export class OtherPlayersComponent {
       return this.utils.getOrientation(location, heading, 0, roll);
     } else {
       const playerHeading = player.type === "PLAYER" ? heading : heading + 90;
-      const roll = player.isCrawling ? 90 : 0;
+      const roll = player.isCrawling ? 90 : ((player.isFlying) ? (45) : 0);
       return this.utils.getOrientation(location, playerHeading, 0, roll);
     }
   }
@@ -149,14 +113,16 @@ export class OtherPlayersComponent {
 
     return [xOffset, 45];
   }
-
-  getPositiveInfinity(){
-   let num= new Number();
-   num = Number.POSITIVE_INFINITY;
-   return num;
+  getPositiveInfinity() {
+    let num = new Number();
+    num = Number.POSITIVE_INFINITY;
+    return num;
   }
 
   getPlayerName(player) {
     return player.username ? player.username : "";
+  }
+  playerMoving(){
+    return this.isPlayerMoving;
   }
 }

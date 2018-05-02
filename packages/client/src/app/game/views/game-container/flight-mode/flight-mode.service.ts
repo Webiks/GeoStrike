@@ -2,16 +2,21 @@ import { Injectable } from '@angular/core';
 import { CharacterService, ViewState } from "../../../services/character.service";
 import { UtilsService } from "../../../services/utils.service";
 import { GameService } from "../../../services/game.service";
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
 @Injectable()
 export class FlightModeService {
 
   constructor(private character:CharacterService, private utils:UtilsService , private gameService:GameService) { }
+  isInFlightModeNotMoving = new BehaviorSubject<boolean>(true);
+  currentFlightMode = this.isInFlightModeNotMoving.asObservable();
+  isPlayerMoving = new BehaviorSubject<boolean>(false);
+  currentMovingMode = this.isPlayerMoving.asObservable();
 
 
   changeFlyingState () {
     let isFlyStateUpdated = true;
-    if (this.character.viewState === ViewState.OVERVIEW || this.character.viewState === ViewState.FPV || this.character.meFromServer.flight.remainingTime <= 0) {
+    if (this.character.viewState === ViewState.OVERVIEW || this.character.meFromServer.flight.remainingTime <= 0) {
       return;
     }
     if(!this.character.isFlying){

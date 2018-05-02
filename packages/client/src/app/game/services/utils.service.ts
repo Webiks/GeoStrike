@@ -48,7 +48,7 @@ export class UtilsService {
     return Cesium.Cartesian3.fromRadians(cart.longitude, cart.latitude, cart.height);
   }
   isFlightHeightOkForLanding(curPosition, flightData){
-    const currHeight =  Cesium.Cartographic.fromCartesian(curPosition).height;
+    const currHeight =  Math.round(Cesium.Cartographic.fromCartesian(curPosition).height);
     const heightRes = flightData.maxHeight - flightData.minHeight;
     const steps = 6;
     const heightStep = Math.ceil(heightRes / steps);
@@ -78,20 +78,20 @@ export class UtilsService {
   }
 
 
-  calculateHeightLevel (flightData: FlightData, currentPosition: Cartesian3) {
+  calculateHeightLevel (flightData: FlightData, currentPosition: Cartesian3, initalHeight: number = 0) {
     const heightRes = flightData.maxHeight - flightData.minHeight;
     const minHeight = flightData.minHeight;
-    const currHeight = Cesium.Cartographic.fromCartesian(currentPosition).height;
+    const currHeight = initalHeight == 0 ? Cesium.Cartographic.fromCartesian(currentPosition).height : initalHeight;
     const steps = 6;
     const heightStep = Math.ceil(heightRes / steps);
     let currHeightLevel;
     if(currHeight < minHeight)
       currHeightLevel = 'NONE';
-    else if(Math.floor(currHeight) === Math.floor(minHeight - 5) || Math.floor(currHeight) === Math.floor(minHeight ) || Math.floor(currHeight) <= minHeight + heightStep)
+    else if(Math.floor(currHeight) === Math.floor(minHeight - 15) || Math.floor(currHeight) === Math.floor(minHeight ) || Math.floor(currHeight) <= minHeight + heightStep)
       currHeightLevel  = 'A';
     else if(currHeight <= minHeight + (heightStep*2))
       currHeightLevel  = 'B';
-    else if(currHeight <= minHeight + (heightStep*2))
+    else if(currHeight <= minHeight + (heightStep*3))
       currHeightLevel  = 'C';
     else if(currHeight <= minHeight + (heightStep*4))
       currHeightLevel  = 'D';
