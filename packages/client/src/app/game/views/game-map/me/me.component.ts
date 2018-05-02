@@ -259,10 +259,8 @@ export class MeComponent implements OnInit, OnDestroy {
 
     this.flightService.currentFlightMode.subscribe(isFlightInPlace => {
       this.isFlightInPlace = isFlightInPlace;
-      if (this.isFlightInPlace)
+      if (this.isFlightInPlace && this.character.state !== MeModelState.DEAD)
         this.setSlowlyMovingForward();
-      // else
-      //   clearInterval(this.intervalId);
     });
     this.flightService.currentMovingMode.subscribe( isPlayerMoving => {
       this.isPlayerMoving = isPlayerMoving;
