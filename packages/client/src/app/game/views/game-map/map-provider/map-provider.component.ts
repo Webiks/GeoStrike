@@ -2,14 +2,6 @@ import { Component } from '@angular/core';
 import { MapLayerProviderOptions } from 'angular-cesium';
 import { GameService } from "../../../services/game.service";
 
-const rectangle = Cesium.Rectangle.fromDegrees(
-  5.013926957923385, 45.35600133779394, 11.477436312994008, 48.27502358353741);
-
-const tillingScheme = new Cesium.GeographicTilingScheme({
-  numberOfLevelZeroTilesX: 2,
-  numberOfLevelZeroTilesY: 1
-});
-
 const terrainTypeProvider = {
   'MOUNTAIN': MapLayerProviderOptions.BingMaps,
   'URBAN': MapLayerProviderOptions.BingMaps,
