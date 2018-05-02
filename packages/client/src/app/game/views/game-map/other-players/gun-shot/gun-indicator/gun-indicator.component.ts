@@ -53,15 +53,4 @@ export class GunIndicatorComponent implements OnInit, OnDestroy {
         })
     });
   }
-
-  determineOffsetIfFlying() {
-    if (this.character.isFlying) {
-      console.log('good');
-      return [0, -100];
-    }
-    else {
-      console.log('bad')
-      return [0, -50]
-    }
-  }
 }

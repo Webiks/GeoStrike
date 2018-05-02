@@ -169,6 +169,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
   }
 
   gameStarted() {
+    this.gameService.toggleFlightMode(this.me.id,false).subscribe(()=> {});
     this.gameNotificationsSubscription = this.gameNotifications$
       .subscribe(notification => {
         this.ngZone.run(() => {
