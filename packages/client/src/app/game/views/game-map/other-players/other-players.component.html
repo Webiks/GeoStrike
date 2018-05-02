@@ -10,7 +10,7 @@
 	}">
   </ac-model-desc>
   <ac-billboard-desc *ngIf="(isOverview$| async)" props="{
-    show: terrainType !== 'URBAN'&& player.isFlying === false,
+    show: terrainType !== 'URBAN',
     position: player.isFlying? player.currentLocation.location :utils.toFixedHeight(player.currentLocation.location, 5),
     heightReference: utils.getClampedToGroundHeightReference(),
     verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
@@ -38,7 +38,7 @@
   }">
   </ac-label-primitive-desc>
   <ac-label-desc *ngIf="(isOverview$ | async)" props="{
-    show: player.type === 'PLAYER' && player?.isFlying === false && terrainType !== 'URBAN',
+    show: player.type === 'PLAYER' && terrainType !== 'URBAN',
     position: utils.toFixedHeight(player.currentLocation.location, 5),
     heightReference: utils.getClampedToGroundHeightReference(),
     verticalOrigin: Cesium.VerticalOrigin.BOTTOM,

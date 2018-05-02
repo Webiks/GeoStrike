@@ -51,39 +51,19 @@ export class MeComponent implements OnInit, OnDestroy {
   Cesium = Cesium;
   playersPositionMap = new Map<string, any>();
   increase = true;
-  intervalId;
   playerInFlightModeNotFlying = false;
   isFlightInPlace: boolean = false;
   isPlayerMoving: boolean = false;
 
   @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
-    // if (event.keyCode == 70 && !this.character.isFlying) {
-    //   this.playerInFlightModeNotFlying = true;
-    //   this.setSlowlyMovingForward();
-    // }
-    // if (event.keyCode == 70 && this.character.isFlying) {
-    //   this.playerInFlightModeNotFlying = false;
-    //   clearInterval(this.intervalId);
-    // }
-    // if (event.shiftKey && event.keyCode == 87) {
-    //   this.playerInFlightModeNotFlying = false;
-    //   clearInterval(this.intervalId);
-    // }
     if (event.key === 'w') {
       this.playerInFlightModeNotFlying = true;
-      // clearInterval(this.intervalId);
     }
   }
-  //
   @HostListener('document:keyup', ['$event']) onKeyupHandler(event: KeyboardEvent) {
     if (event.key === 'w') {
       this.playerInFlightModeNotFlying = false;
     }
-    //   if (event.shiftKey && event.keyCode == 87 && this.character.isFlying) {
-    //     this.playerInFlightModeNotFlying = true;
-    //     this.setSlowlyMovingForward();
-    //   }
-    // }
   }
 
   constructor(

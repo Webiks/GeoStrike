@@ -113,7 +113,6 @@ export class OtherPlayersComponent {
 
     return [xOffset, 45];
   }
-
   getPositiveInfinity() {
     let num = new Number();
     num = Number.POSITIVE_INFINITY;

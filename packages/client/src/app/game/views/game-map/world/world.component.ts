@@ -75,11 +75,11 @@ export class WorldComponent implements OnInit {
       }
       this.cd.detectChanges();
       this.drawBackgroundItems();
-    });
+    })
+
   }
 
   loadTerrain() {
-    // this.cesiumService.getViewer().terrainProvider = Cesium.createWorldTerrain();
     this.cesiumService.getViewer().terrainProvider = new Cesium.CesiumTerrainProvider(
       environment.terrain
     );
@@ -92,7 +92,7 @@ export class WorldComponent implements OnInit {
   setTerrainType() {
     this.gameService.currentTerrainEnviorment.subscribe(terrainType => {
       this.terrainView = terrainType;
-      let tilesStr = terrainType.toLowerCase()+"_url";
+      let tilesStr = terrainType.toLowerCase() + "_url";
       this.tilesUrl = environment.tiles[tilesStr];
       if (terrainType !== 'URBAN')
         this.loadTerrain();

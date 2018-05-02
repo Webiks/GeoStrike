@@ -12,12 +12,8 @@
   }">
   </ac-model-desc>
 </ac-layer>
-
 <img *ngIf="showWeapon" src="assets/gun1.png" class="gun" alt="" (click)="canvasPropagation()">
 <img #muzzleFlash src="assets/muzzle-flash.png" class="gun-flare" alt="">
 <img #cross *ngIf="showCross" src="assets/focus.png" class="gun-cross" alt="">
 <blood-on-screen [isInShootingPosition]="isInShootingPosition"></blood-on-screen>
-<!--position: isPlayerInFlightModeNotFlying(me),-->
-<!--position: getPosition(me.location),-->
-<!--runAnimations: isPlayerMoving(me.location)-->
 
