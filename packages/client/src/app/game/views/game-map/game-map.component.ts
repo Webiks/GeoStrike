@@ -159,7 +159,8 @@ export class GameMapComponent implements OnInit, OnDestroy {
         isCrawling: false,
         isShooting: false,
         isFlying: false,
-        characterInfo: player.character
+        isMoving: false,
+      characterInfo: player.character
       });
     }
     this.gameService.startServerUpdatingLoop();
@@ -270,12 +271,14 @@ export class GameMapComponent implements OnInit, OnDestroy {
     if(this.character.isFlying && (Cesium.Cartographic.fromCartesian(this.character.location).longitude === Cesium.Cartographic.fromCartesian(this.lastPlayerLocation).longitude) &&
       (Cesium.Cartographic.fromCartesian(this.character.location).latitude === Cesium.Cartographic.fromCartesian(this.lastPlayerLocation).latitude) ) {
       if(!this.intervalId){
-        // this.setFlightVibrations();
         this.flightService.isInFlightModeNotMoving.next(true);
+        this.character.isMoving = true;
       }
     }
     else {
       this.flightService.isInFlightModeNotMoving.next(false);
+      this.character.isMoving = false;
+
       // clearInterval(this.intervalId);
       // this.intervalId = false;
     }

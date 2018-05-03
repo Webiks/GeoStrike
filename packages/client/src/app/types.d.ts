@@ -39,6 +39,7 @@ export interface Player extends User {
   lifeStatePerctange: number;
   isCrawling: boolean;
   isFlying: boolean;
+  isMoving: boolean;
   isShooting: boolean;
   isMe: boolean;
   flight: FlightData;
@@ -147,6 +148,7 @@ export interface UpdatePositionMutationArgs {
   isCrawling: boolean;
   isShooting: boolean;
   isFlying: boolean;
+  isMoving: boolean;
   enteringBuildingPosition?: LocationInput;
   skipValidation?: boolean;
 }
@@ -411,6 +413,7 @@ export namespace UpdatePosition {
     isCrawling: boolean;
     isShooting: boolean;
     isFlying: boolean;
+    isMoving: boolean;
     enteringBuildingPosition?: LocationInput;
     skipValidation?: boolean;
   }
@@ -451,6 +454,7 @@ export namespace PlayerFields {
     lifeStatePerctange: number;
     isCrawling: boolean;
     isFlying: boolean;
+    isMoving: boolean;
     flight: FlightData;
     isShooting: boolean;
     isMe: boolean;

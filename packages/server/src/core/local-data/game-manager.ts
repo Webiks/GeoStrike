@@ -45,6 +45,7 @@ export interface IPlayer {
     isCrawling: boolean;
     isShooting: boolean;
     isFlying: boolean;
+    isMoving: boolean;
     flight: FlightData;
     game: IGameObject;
     currentLocation: ICartesian3Location;
@@ -189,6 +190,7 @@ export class GamesManager {
             isCrawling: false,
             isShooting: false,
             isFlying: false,
+            isMoving: false,
             flight: initFlightData,
             syncState: 'VALID',
         };
@@ -256,6 +258,7 @@ export class GamesManager {
                          isCrawling: boolean,
                          isShooting: boolean,
                          isFlying: boolean,
+                         isMoving: boolean,
                          enteringBuildingPosition: ICartesian3Location,
                          skipValidation = false) {
         const game = this.getGameById(gameId);
@@ -277,6 +280,7 @@ export class GamesManager {
                 player.isCrawling = isCrawling;
                 player.isShooting = isShooting;
                 player.isFlying = isFlying;
+                player.isMoving = isMoving;
                 player.enteringBuildingPosition = enteringBuildingPosition;
             } else {
                 player.syncState = 'INVALID';
