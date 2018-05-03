@@ -62,5 +62,9 @@
     - [@angular/cli](https://github.com/angular/angular-cli)
  - generate code for GraphQL: [graphql-code-generator](https://github.com/dotansimha/graphql-code-generator) 
 
+## Required redis server for deployment
+- install and run redis server
+    - [redis windows](https://github.com/ServiceStack/redis-windows/raw/master/downloads/redis-latest.zip)
+
 ## Credits list - how to modify
   to modify credits, open assets/credits/credits.json and add\delete\change destinated credit
