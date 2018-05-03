@@ -289,6 +289,8 @@ export class KeyboardControlComponent implements OnInit {
   private addKeyboardEvents() {
     this.keyboardKeysService.init();
     this.keyboardKeysService.registerKeyBoardEventDescription('KeyW', 'Move Forward');
+    this.keyboardKeysService.registerKeyBoardEventDescription('KeyEsc', 'Undo controlling the character by mouse movement (cursor hidden)');
+
     if (!environment.controls.disableBackward) {
       this.keyboardKeysService.registerKeyBoardEventDescription('KeyS', 'Move Backward');
     }
@@ -298,29 +300,32 @@ export class KeyboardControlComponent implements OnInit {
     if (!environment.controls.disableRight) {
       this.keyboardKeysService.registerKeyBoardEventDescription('KeyD', 'Move Right');
     }
-    this.keyboardKeysService.registerKeyBoardEvent('KeyC', 'Switch Crawling', () => {
-      this.ngZone.run(() => {
-        this.changeCrawlingState();
-      });
-    });
-    this.keyboardKeysService.registerKeyBoardEvent('KeyF', 'Switch Flying Semi FPV', () => {
-      this.ngZone.run(() => {
-        this.changeFlyingState();
-      });
-    });
-    this.keyboardKeysService.registerKeyBoardEvent('KeyM', 'Switch Overview Mode', () => {
-      this.ngZone.run(() => {
-        this.changeOverviewMode();
-      });
-    });
-    this.keyboardKeysService.registerKeyBoardEvent('Tab', 'Switch FPV/Semi FPV',
+    this.keyboardKeysService.registerKeyBoardEvent('Tab', 'Switch between semi-FPV and FPV',
       (keyEvent: KeyboardEvent) => {
         this.ngZone.run(() => {
           keyEvent.preventDefault();
           this.changeViewMove();
         });
       });
-    this.keyboardKeysService.registerKeyBoardEvent('KeyE', 'Enter Nearby Building',
+    this.keyboardKeysService.registerKeyBoardEvent('KeyC', 'Enter/exit crawling mode',
+      () => {
+        this.ngZone.run(() => {
+        this.changeCrawlingState();
+      });
+    });
+    this.keyboardKeysService.registerKeyBoardEvent('KeyF', 'Enter/exit flight mode',
+      () => {
+      this.ngZone.run(() => {
+        this.changeFlyingState();
+      });
+    });
+    this.keyboardKeysService.registerKeyBoardEvent('KeyM', 'Switch to Map view', () => {
+      this.ngZone.run(() => {
+        this.changeOverviewMode();
+      });
+    });
+
+    this.keyboardKeysService.registerKeyBoardEvent('KeyE', 'Enter/exit a Building',
       (keyEvent: KeyboardEvent) => {
         if (this.character.enteredBuilding && this.character.canExitBuilding) {
           this.character.isInsideBuilding = false;
@@ -334,7 +339,7 @@ export class KeyboardControlComponent implements OnInit {
         }
       });
     this.keyboardKeysService.registerKeyBoardEventDescription('Shift', 'Run Forward');
-    this.keyboardKeysService.registerKeyBoardEvent('Space', 'Switch Shooting Mode',
+    this.keyboardKeysService.registerKeyBoardEvent('Space', 'Enter/exit shooting mode',
       (keyEvent: KeyboardEvent) => {
         this.ngZone.run(() => {
           keyEvent.preventDefault();
