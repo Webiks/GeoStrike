@@ -377,13 +377,4 @@ export class MeComponent implements OnInit, OnDestroy {
       this.character.location = nextLocation;
     }
   }
-
-  isPlayerInFlightModeNotFlying(me) {
-    if (this.character.isFlying && this.isFlightInPlace) {
-      return this.interpolatePlayerPosition(me, me.location);
-    }
-    else {
-      return this.getPosition(me.location);
-    }
-  }
 }

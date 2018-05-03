@@ -280,6 +280,7 @@ export class GamesManager {
                 player.isCrawling = isCrawling;
                 player.isShooting = isShooting;
                 player.isFlying = isFlying;
+                console.log(isMoving);
                 player.isMoving = isMoving;
                 player.enteringBuildingPosition = enteringBuildingPosition;
             } else {
