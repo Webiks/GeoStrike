@@ -5,7 +5,6 @@ export const notifyCrash = (rootValue, {playerId}, {games, game, player}: IGraph
     if (!game || !player) {
         return null;
     }
-    console.log('here');
     const crashedPlayer = game.playersMap.get(playerId);
     clearInterval(crashedPlayer.flight.flightId);
     games.updatePlayerState(game.gameId, playerId, 'DEAD');
