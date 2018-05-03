@@ -25,16 +25,14 @@ import {SoundService} from '../../../services/sound.service';
     <div class="settings-panel" *ngIf="showMenu" [excludeBeforeClick]="true" [delayClickOutsideInit]="100" (clickOutside)="showMenu=false">
       <div class="settings-item">GAME CODE: {{gameCode}}</div>
 
-      <label class="settings-item">
-        <input type="checkbox" (change)="checkClicked()">
-        <strong *ngIf="fStatus">
-          Flights Status: ON
-        </strong>
-        <strong *ngIf="!fStatus">
-          Flights Status: OFF
-        </strong>
-      </label>
-      <div class="settings-item" (click)="exitGame()">EXIT THE GAME</div>
+      <div class="settings-item">
+        <span>Flights Status:</span>
+        <input type="checkbox" id="switch"  [checked]="fStatus" (change)="checkClicked()" />
+        <label for="switch">
+        </label>
+      </div>
+      
+        <div class="settings-item" (click)="exitGame()">EXIT THE GAME</div>
     </div>
   `,
   styleUrls: ['./game-toolbar.component.scss']
@@ -42,8 +40,8 @@ import {SoundService} from '../../../services/sound.service';
 export class GameToolbarComponent implements OnInit {
 
   @Input() gameCode: string;
-  fStatus:boolean = true;
-  @Output() flightStatus: EventEmitter<any> = new EventEmitter<any>(true);
+  fStatus:boolean = false;
+  @Output() flightStatus: EventEmitter<any> = new EventEmitter<any>(false);
   showMenu = false;
   mute = false;
   fullScreenIcon = 'full-screen';
@@ -94,6 +92,7 @@ export class GameToolbarComponent implements OnInit {
     // console.log(`val: ${this.fStatus}`);
     if(this.fStatus){
       this.flightStatus.emit(false);
+
       this.fStatus = false;
     }
     else{

@@ -118,8 +118,6 @@ export class GameContainerComponent implements OnInit, OnDestroy {
           console.log('subscription complete');
         });
       });
-
-      this.airTraffic();
     });
   }
 
@@ -171,7 +169,8 @@ export class GameContainerComponent implements OnInit, OnDestroy {
   }
 
   gameStarted() {
-    this.gameService.toggleFlightMode(this.me.id,false).subscribe(()=> {});
+    this.gameService.toggleFlightMode(this.me.id, false).subscribe(() => {
+    });
     this.gameNotificationsSubscription = this.gameNotifications$
       .subscribe(notification => {
         this.ngZone.run(() => {
@@ -229,8 +228,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
   }
 
   flightStatus(newStatus: any): void {
-
-    console.log('newStatus: ', newStatus);
+    // console.log('newStatus: ', newStatus);
     if (newStatus) {
       this.airTraffic()
     }
@@ -241,7 +239,8 @@ export class GameContainerComponent implements OnInit, OnDestroy {
           actionType: ActionType.DELETE
         })
       });
-      this.flightSubscription.unsubscribe()
+      this.flightSubscription.unsubscribe();
+      this.flightMap$.clear();
     }
 
   }
@@ -281,6 +280,9 @@ export class GameContainerComponent implements OnInit, OnDestroy {
       this.flightSubscription = this.flightService.subscribeAirTraffic()
         .subscribe((data) => {
           console.log("sub");
+          // const xx = JSON.stringify(data);
+
+          // const yy = xx.localeCompare()
 
           this.tempData = data;
           if (this.tempData.messageAdded.length === 0) {
@@ -338,23 +340,21 @@ export class GameContainerComponent implements OnInit, OnDestroy {
               this.flights$.next(acMap);
 
             }
+            // else {
+            //   this.flightMap$.forEach(x => {
+            //     console.log(x);
+            //   })
+            // }
+
             this.flightMap$.set(flightId, mapping);
           });
           this.flightMap$.forEach(flight => {
             this.nextLocation(flight.id);
           })
-
-
         });
 
     });
   }
-  // ngAfterViewInit() {
-  //   console.log("NGAfterView");
-  // }
-  // ngAfterContentInit() {
-  //   console.log("ngAfterContentInit");
-  // }
 
   ngOnDestroy() {
     if (this.gameDataSubscription) {

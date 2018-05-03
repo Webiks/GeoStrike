@@ -196,12 +196,9 @@ export class GameMapComponent implements OnInit, OnDestroy {
 
   private overviewSettings() {
     this.viewerOptions.setFreeCameraOptions(this.viewer);
-    this.gameService.currentTerrainEnviorment.subscribe(terrainType => {
-      if (terrainType === "URBAN")
-        this.viewer.flyTo(this.viewer.entities);
-      else {
-        this.viewer.flyTo(this.viewer.entities);
-      }
+    this.gameService.currentTerrainEnviorment.subscribe(() => {
+    this.viewer.flyTo(this.viewer.entities);
+
     });
   }
 
