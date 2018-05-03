@@ -30,6 +30,7 @@ export interface Player extends User {
   lifeState: PlayerLifeState;
   isCrawling: boolean;
   isFlying: boolean;
+  isMoving: boolean;
   flight:FlightData;
   isShooting: boolean; 
   isMe: boolean; 
@@ -137,6 +138,7 @@ export interface UpdatePositionMutationArgs {
   isCrawling: boolean; 
   isShooting: boolean;
   isFlying: boolean;
+  isMoving: boolean;
   enteringBuildingPosition?: LocationInput; 
   skipValidation?: boolean; 
 }
