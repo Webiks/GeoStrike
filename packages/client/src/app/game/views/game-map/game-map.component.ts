@@ -198,7 +198,6 @@ export class GameMapComponent implements OnInit, OnDestroy {
     this.viewerOptions.setFreeCameraOptions(this.viewer);
     this.gameService.currentTerrainEnviorment.subscribe(() => {
     this.viewer.flyTo(this.viewer.entities);
-
     });
   }
 
