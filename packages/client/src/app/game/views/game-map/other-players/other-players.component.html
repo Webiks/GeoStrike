@@ -10,17 +10,16 @@
 	}">
   </ac-model-desc>
   <ac-billboard-desc *ngIf="(isOverview$| async)" props="{
-    show: terrainType !== 'URBAN'&& player.isFlying === false,
-    position: player.isFlying? player.currentLocation.location :utils.toFixedHeight(player.currentLocation.location, 5),
+    show: terrainType !== 'URBAN',
+    position: utils.toFixedHeight(player.currentLocation.location, 5),
     heightReference: utils.getClampedToGroundHeightReference(),
     verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
     disableDepthTestDistance: 2900,
     image: getPlayerIcon(player)
   }">
   </ac-billboard-desc>
-
   <ac-billboard-primitive-desc *ngIf="(isOverview$ | async)" props="{
-    show: terrainType === 'URBAN' && !player?.isFlying,
+    show: terrainType === 'URBAN' && player?.isFlying === false,
     position:  utils.toFixedHeight(player.currentLocation.location, 5),
     heightReference: utils.getClampedToGroundHeightReference(),
     image: getPlayerIcon(player)
@@ -37,6 +36,12 @@
     showBackground: true
   }">
   </ac-label-primitive-desc>
+  <ac-billboard-primitive-desc *ngIf="(isOverview$ | async)" props="{
+   show: player?.isFlying === true && terrainType === 'URBAN',
+    position: player?.currentLocation?.location,
+    image: getPlayerIcon(player)
+  }">
+  </ac-billboard-primitive-desc>
   <ac-label-desc *ngIf="(isOverview$ | async)" props="{
     show: player.type === 'PLAYER' && player?.isFlying === false && terrainType !== 'URBAN',
     position: utils.toFixedHeight(player.currentLocation.location, 5),

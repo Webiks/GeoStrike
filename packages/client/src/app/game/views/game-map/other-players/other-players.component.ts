@@ -19,15 +19,19 @@ export class OtherPlayersComponent {
   @Input() private playersPositions: Observable<AcNotification>;
   playersPositionMap = new Map<string, any>();
   Cesium = Cesium;
+  terrainType;
 
   isOverview$: Observable<boolean>;
   private isPlayerMoving = false;
 
-  constructor(public utils: UtilsService, public character: CharacterService, private takeControlService: TakeControlService, private flightService: FlightModeService) {
+  constructor(public utils: UtilsService, public character: CharacterService, private takeControlService: TakeControlService, private flightService: FlightModeService, private gameService: GameService) {
     this.isOverview$ = character.viewState$.map(viewState => viewState === ViewState.OVERVIEW);
     this.flightService.currentMovingMode.subscribe( isPlayerMoving => {
       this.isPlayerMoving = isPlayerMoving;
     })
+    this.gameService.currentTerrainEnviorment.subscribe(terrainType => {
+      this.terrainType = terrainType;
+    });
   }
 
   fixPosition(position, player: PlayerFields.Fragment) {
