@@ -299,12 +299,16 @@ export class GamesManager {
         return null;
     }
 
-    updatePlayerState(gameId: string, playerId: string, newState: PlayerState) {
+    updatePlayerState(gameId: string, playerId: string, newState: PlayerState, isCrashed?: boolean) {
         const game = this.getGameById(gameId);
         const player =
             game.controlledPlayersMap.get(playerId) || game.playersMap.get(playerId);
 
-        if (player) {
+        if (player && isCrashed) {
+            player.state = newState;
+            player.flight.remainingTime = 0;
+        }
+        else if (player) {
             player.state = newState;
         }
 
