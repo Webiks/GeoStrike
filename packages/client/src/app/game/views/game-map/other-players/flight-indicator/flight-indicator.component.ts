@@ -18,6 +18,7 @@ export class FlightIndicator implements OnInit, OnDestroy {
   flightsSubscription: Subscription;
   isOverview$: Observable<boolean>;
   eyeOffset = new Cesium.Cartesian3(0.0, 0.0, -10.0 );
+  terrainType;
 
   constructor(private character: CharacterService,
               private ngZone: NgZone,
@@ -53,6 +54,9 @@ export class FlightIndicator implements OnInit, OnDestroy {
         .subscribe(flyingPlayer => {
           this.flights$.next(flyingPlayer)
         })
+    });
+    this.gameService.currentTerrainEnviorment.subscribe(terrainType => {
+      this.terrainType = terrainType;
     });
   }
   getPlayerIcon(player: PlayerFields.Fragment) {
