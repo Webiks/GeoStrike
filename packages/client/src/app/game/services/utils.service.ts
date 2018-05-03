@@ -50,7 +50,7 @@ export class UtilsService {
     const heightRes = flightData.maxHeight - flightData.minHeight;
     const steps = 6;
     const heightStep = Math.ceil(heightRes / steps);
-    return Math.floor(currHeight) >= Math.floor(this.character.meFromServer.flight.minHeight) && (Math.floor(currHeight) <= Math.floor(this.character.meFromServer.flight.minHeight + heightStep));
+    return Math.floor(currHeight) <= Math.floor(this.character.meFromServer.flight.minHeight)
   }
 
   pointByLocationDistanceAndAzimuthAndHeight3d(currentLocation: any, meterDistance: number, radianAzimuth: number, isInputCartesian = true) {
