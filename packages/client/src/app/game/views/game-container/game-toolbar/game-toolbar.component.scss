@@ -25,14 +25,52 @@
     width: 150px;
     padding: 10px;
     overflow: hidden;
-    text-align: center;
+    display: block;
 
-    input {
-      display: none;
+    input[type=checkbox]{
+      height: 0;
+      width: 0;
+      visibility: hidden;
+    }
+
+    label {
+      cursor: default;
+      width: 35px;
+      height: 10px;
+      background: grey;
+      display: inline-block;
+      border-radius: 100px;
+      position: relative;
+      left: 30px;
+
+    }
+
+    label:after {
+      content: '';
+      position: absolute;
+      top: -1px;
+      width:  15px;
+      height: 15px;
+      background: #fff;
+      border-radius: 90px;
+      transition: 0.3s;
+    }
+
+    input:checked + label {
+      background: #8ad869;
+    }
+
+    input:checked + label:after {
+      background: #67a34e;
+      left: calc(100% - 15px);
+      //transform: translateX(-100%);
+    }
+    span{
+      display: inline-block;
     }
 
     #flightSwitch {
-      display: block;
+      display: inline-block;
       text-align: center;
     }
     &:hover {
@@ -40,4 +78,5 @@
       background: rgba(0,0,0,0.9);
     }
   }
+
 }

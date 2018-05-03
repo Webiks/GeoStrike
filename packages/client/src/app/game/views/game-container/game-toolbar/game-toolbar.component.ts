@@ -25,16 +25,14 @@ import {SoundService} from '../../../services/sound.service';
     <div class="settings-panel" *ngIf="showMenu" [excludeBeforeClick]="true" [delayClickOutsideInit]="100" (clickOutside)="showMenu=false">
       <div class="settings-item">GAME CODE: {{gameCode}}</div>
 
-      <label class="settings-item">
-        <input id="flights" type="checkbox" (change)="checkClicked()">
-        <span id="flightSwitch" *ngIf="fStatus">
-          Flights Status: ON
-        </span>
-        <span id="flightSwitch" *ngIf="!fStatus">
-          Flights Status: OFF
-        </span>
-      </label>
-      <div class="settings-item" (click)="exitGame()">EXIT THE GAME</div>
+      <div class="settings-item">
+        <span>Flights Status:</span>
+        <input type="checkbox" id="switch"  [checked]="fStatus" (change)="checkClicked()" />
+        <label for="switch">
+        </label>
+      </div>
+      
+        <div class="settings-item" (click)="exitGame()">EXIT THE GAME</div>
     </div>
   `,
   styleUrls: ['./game-toolbar.component.scss']
@@ -94,6 +92,7 @@ export class GameToolbarComponent implements OnInit {
     // console.log(`val: ${this.fStatus}`);
     if(this.fStatus){
       this.flightStatus.emit(false);
+
       this.fStatus = false;
     }
     else{

@@ -118,7 +118,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
           console.log('subscription complete');
         });
       });
-      });
+    });
   }
 
   private setCharacterStateFromServer() {
@@ -169,7 +169,8 @@ export class GameContainerComponent implements OnInit, OnDestroy {
   }
 
   gameStarted() {
-    this.gameService.toggleFlightMode(this.me.id,false).subscribe(()=> {});
+    this.gameService.toggleFlightMode(this.me.id, false).subscribe(() => {
+    });
     this.gameNotificationsSubscription = this.gameNotifications$
       .subscribe(notification => {
         this.ngZone.run(() => {
@@ -282,7 +283,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
           // const xx = JSON.stringify(data);
 
           // const yy = xx.localeCompare()
-          // console.log(this.flightMap$.values());
+
           this.tempData = data;
           if (this.tempData.messageAdded.length === 0) {
             console.error("The air traffic data received empty");
@@ -339,12 +340,17 @@ export class GameContainerComponent implements OnInit, OnDestroy {
               this.flights$.next(acMap);
 
             }
+            // else {
+            //   this.flightMap$.forEach(x => {
+            //     console.log(x);
+            //   })
+            // }
+
             this.flightMap$.set(flightId, mapping);
           });
           this.flightMap$.forEach(flight => {
             this.nextLocation(flight.id);
           })
-
         });
 
     });
