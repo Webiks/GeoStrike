@@ -82,13 +82,13 @@ export const PLAYER_CHARACTERS: CharacterData[] = [
     {
         name: 'grandpa',
         model: '/assets/models/grandpa.gltf',
-        scale: 10,
+        scale: 0.035,
         description: null,
         team: null,
         imageUrl: null,
         portraitUrl: null,
-        iconUrl: '/assets/icons/grandpa-mark.png',
-        iconDeadUrl: '/assets/icons/grandpa-dead-mark.png',
+        iconUrl: '/assets/icons/grandmother-mark.png',
+        iconDeadUrl: '/assets/icons/grandmother-dead-mark.png',
     },
     {
         name: 'deer',
