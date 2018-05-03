@@ -64,7 +64,7 @@
 
 ## Required redis server for deployment
 - install and run redis server
-    -[redis windows] (https://github.com/ServiceStack/redis-windows/raw/master/downloads/redis-latest.zip)
+    - [redis windows](https://github.com/ServiceStack/redis-windows/raw/master/downloads/redis-latest.zip)
 
 ## Credits list - how to modify
   to modify credits, open assets/credits/credits.json and add\delete\change destinated credit
