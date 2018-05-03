@@ -1,6 +1,6 @@
 <ac-layer acFor="let player of flights$" [context]="this">
   <ac-billboard-primitive-desc *ngIf="isOverview$| async" props="{
-    show: player?.isFlying,
+    show: player?.isFlying && terrainType === 'URBAN',
     position: player?.currentLocation?.location,
     image: getJetpackImage(),
     height: 24,
@@ -9,21 +9,15 @@
     eyeOffset: eyeOffset
   }">
   </ac-billboard-primitive-desc>
-  <ac-billboard-primitive-desc *ngIf="(isOverview$ | async)" props="{
-   show: player?.isFlying === true,
+  <ac-billboard-primitive-desc *ngIf="isOverview$| async" props="{
+    show: player?.isFlying && terrainType !== 'URBAN',
     position: player?.currentLocation?.location,
-    image: getPlayerIcon(player)
+    image: getJetpackImage(),
+    height: 24,
+    width:  24,
+    pixelOffset: [2,-100] | pixelOffset,
+    eyeOffset: eyeOffset
   }">
   </ac-billboard-primitive-desc>
-  <ac-label-primitive-desc *ngIf="(isOverview$ | async)" props="{
-    show: player?.isFlying === true,
-    position: player?.currentLocation?.location,
-    text: getPlayerName(player),
-    font: '15px sans-serif',
-    scale: 0.9,
-    pixelOffset: getLabelPixelOffset(player) | pixelOffset,
-    showBackground: true
-  }">
-  </ac-label-primitive-desc>
 
 </ac-layer>

@@ -5,6 +5,7 @@ import { AcNotification, ActionType } from 'angular-cesium';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 import { GameService } from '../../../../../services/game.service';
+import { UtilsService } from "../../../../../services/utils.service";
 
 @Component({
   selector: 'gun-indicator',
@@ -17,10 +18,11 @@ export class GunIndicatorComponent implements OnInit, OnDestroy {
   gunShotSubscription: Subscription;
   isOverview$: Observable<boolean>;
   eyeOffset = new Cesium.Cartesian3(0.0, 0.0, -10.0);
-
+  terrainType;
   constructor(private character: CharacterService,
               private ngZone: NgZone,
-              private gameService: GameService) {
+              private gameService: GameService,
+              public utils: UtilsService) {
     this.isOverview$ = character.viewState$.map(viewState => viewState === ViewState.OVERVIEW);
   }
 
@@ -52,5 +54,8 @@ export class GunIndicatorComponent implements OnInit, OnDestroy {
           this.gunShots$.next(shotEntity)
         })
     });
+    this.gameService.currentTerrainEnviorment.subscribe(terrainType => {
+      this.terrainType = terrainType;
+    })
   }
 }

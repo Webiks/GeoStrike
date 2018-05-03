@@ -42,15 +42,13 @@ const MoveDirectionsDelta = {
 
 @Component({
   selector: 'keyboard-control',
-  template: '',
+  template: ''
 })
 export class KeyboardControlComponent implements OnInit {
   private inspector = false;
   private viewer;
   private lookFactor = 0;
   private lastLook;
-  private increase = true;
-  private intervalId;
   private flightData: FlightData;
   private flightHeightLevel: FlightHeight;
   private nextLocation;
