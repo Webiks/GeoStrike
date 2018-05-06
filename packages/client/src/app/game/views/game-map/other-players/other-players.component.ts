@@ -3,7 +3,7 @@ import { AcNotification, CesiumService } from "angular-cesium";
 import { Observable } from "rxjs/Observable";
 import { UtilsService } from "../../../services/utils.service";
 import { InterpolationService, InterpolationType } from "../../../services/interpolation.service";
-import { PlayerFields } from "../../../../types";
+import { Player, PlayerFields } from "../../../../types";
 import { CharacterService, ViewState } from "../../../services/character.service";
 import { TakeControlService } from "../../../services/take-control.service";
 import { OtherPlayersShotService } from "./gun-shot/other-players-shot.service";
@@ -128,5 +128,8 @@ export class OtherPlayersComponent {
   }
   playerMoving(){
     return this.isPlayerMoving;
+  }
+  detectIfPlayerIsMoving(player: Player) {
+    return (player.state !== 'DEAD' && player.team === 'NONE') || (player.state !== 'DEAD' && player.team !== 'NONE' && player.isMoving);
   }
 }
