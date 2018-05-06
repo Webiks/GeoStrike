@@ -20,15 +20,10 @@ export class OtherPlayersComponent {
   playersPositionMap = new Map<string, any>();
   Cesium = Cesium;
   terrainType;
-
   isOverview$: Observable<boolean>;
-  private isPlayerMoving = false;
 
   constructor(public utils: UtilsService, public character: CharacterService, private takeControlService: TakeControlService, private flightService: FlightModeService, private gameService: GameService) {
     this.isOverview$ = character.viewState$.map(viewState => viewState === ViewState.OVERVIEW);
-    this.flightService.currentMovingMode.subscribe( isPlayerMoving => {
-      this.isPlayerMoving = isPlayerMoving;
-    })
     this.gameService.currentTerrainEnviorment.subscribe(terrainType => {
       this.terrainType = terrainType;
     });
@@ -125,9 +120,6 @@ export class OtherPlayersComponent {
 
   getPlayerName(player) {
     return player.username ? player.username : "";
-  }
-  playerMoving(){
-    return this.isPlayerMoving;
   }
   detectIfPlayerIsMoving(player: Player) {
     return (player.state !== 'DEAD' && player.team === 'NONE') || (player.state !== 'DEAD' && player.team !== 'NONE' && player.isMoving);

@@ -10,9 +10,6 @@ export class FlightModeService {
   constructor(private character:CharacterService, private utils:UtilsService , private gameService:GameService) { }
   isInFlightModeNotMoving = new BehaviorSubject<boolean>(true);
   currentFlightMode = this.isInFlightModeNotMoving.asObservable();
-  isPlayerMoving = new BehaviorSubject<boolean>(false);
-  currentMovingMode = this.isPlayerMoving.asObservable();
-
 
   changeFlyingState () {
     let isFlyStateUpdated = true;
