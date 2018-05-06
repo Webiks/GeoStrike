@@ -3,7 +3,7 @@ import { GameConfig } from '../../../services/game-config';
 
 @Injectable()
 export class CesiumViewerOptionsService {
-  static readonly MAX_ZOOM = 100000;
+  static readonly MAX_ZOOM = 5000;
   static readonly MIN_ZOOM = 80;
 
   constructor() {
@@ -11,7 +11,6 @@ export class CesiumViewerOptionsService {
 
   getViewerOption() {
     return {
-      shouldAnimate: true,
       selectionIndicator: false,
       timeline: false,
       infoBox: false,
@@ -34,10 +33,6 @@ export class CesiumViewerOptionsService {
     viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
     viewer.scene.globe.enableLighting = GameConfig.enableLighting;
     viewer.scene.fog.enabled = GameConfig.fog;
-  }
-
-  toggleDepthTestAgainstTerrain(viewer, newState){
-    viewer.scene.globe.depthTestAgainstTerrain = newState;
   }
 
   setFpvCameraOptions(viewer) {

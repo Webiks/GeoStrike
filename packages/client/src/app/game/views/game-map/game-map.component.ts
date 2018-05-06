@@ -124,6 +124,11 @@ export class GameMapComponent implements OnInit, OnDestroy {
           this.character.viewState = ViewState.SEMI_FPV;
           this.lastViewState = ViewState.SEMI_FPV_NOT_CONTROLLED;
         }
+
+        // this.viewerOptions.setFpvCameraOptions(this.viewer);
+        this.startFirstPersonMode(controlledPlayer, initPlayer);
+
+
         this.viewer.camera.flyTo({
           destination: Cesium.Cartesian3.fromRadians(
             posWithHeight.longitude,
@@ -142,7 +147,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
 
     this.playersPositions
       .map(player => player.entity)
-      .filter(x => x.team !== "NONE")
+      .filter(x => x && x.team !== "NONE")
       .subscribe(x => {
         this.viewer.entities.add({
           name: "test",

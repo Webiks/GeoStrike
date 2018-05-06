@@ -84,7 +84,9 @@ export class FlightModeComponent implements OnInit, OnDestroy {
           }
         })
         .subscribe(player => {
-          this.flightData = player.entity.flight;
+          if (player.entity.flight)
+          {
+            this.flightData = player.entity.flight;
           const cart = Cesium.Cartographic.fromCartesian(this.character.location);
           this.currentFlightHeight = cart.height;
           this.playerId = player.id;
@@ -100,6 +102,7 @@ export class FlightModeComponent implements OnInit, OnDestroy {
           else if (this.character.isFlying) {
             this.setCrash();
           }
+        }
           this.cd.detectChanges();
         })
     });
