@@ -289,11 +289,9 @@ export class GameMapComponent implements OnInit, OnDestroy {
 
 
     if(this.lastPlayerLocation && Cesium.Cartographic.fromCartesian(this.character.location).longitude === Cesium.Cartographic.fromCartesian(this.lastPlayerLocation).longitude && !this.character.isFlying){
-      this.flightService.isPlayerMoving.next(false);
       this.character.isMoving = false;
     }
     else{
-      this.flightService.isPlayerMoving.next(true);
       this.character.isMoving = true;
     }
 
