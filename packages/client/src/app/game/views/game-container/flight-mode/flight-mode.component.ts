@@ -130,6 +130,7 @@ export class FlightModeComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnDestroy() {
     this.flightDataSubscription.unsubscribe();
+    this.flightSubscription.unsubscribe();
   }
 
   calculateRemainingTime(timeInSeconds) {
