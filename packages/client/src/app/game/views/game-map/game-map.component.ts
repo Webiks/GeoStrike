@@ -182,7 +182,8 @@ export class GameMapComponent implements OnInit, OnDestroy {
         isShooting: false,
         isFlying: false,
         isMoving: false,
-      characterInfo: player.character
+        flight: player.flight,
+        characterInfo: player.character
       });
     }
     this.gameService.startServerUpdatingLoop();
@@ -274,7 +275,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
         .height;
       if (
         this.character.flightData.remainingTime === 0 ||
-        this.character.meFromServer.flight.remainingTime === 0 ||
+        // this.character.meFromServer.flight.remainingTime === 0 ||
         height <= 0 || this.character.state === MeModelState.DEAD
       ) {
         this.flightCrashSettings();

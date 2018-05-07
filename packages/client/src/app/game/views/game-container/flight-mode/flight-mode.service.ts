@@ -13,12 +13,13 @@ export class FlightModeService {
 
   changeFlyingState () {
     let isFlyStateUpdated = true;
-    if (this.character.viewState === ViewState.OVERVIEW || this.character.meFromServer.flight.remainingTime <= 0) {
+    let flightData = this.character.flightData ? this.character.flightData : this.character.meFromServer.flight;
+    if (this.character.viewState === ViewState.OVERVIEW ||  flightData.remainingTime <= 0) {
       return;
     }
     if(!this.character.isFlying){
       this.character.isFlying = true;
-      this.character.flightData = this.character.meFromServer.flight;
+      this.character.flightData = flightData;
       this.character.location = this.utils.toHeightOffset(this.character.location, 50);
     }
     else

@@ -1,5 +1,7 @@
 /* tslint:disable */
 
+import Timer = NodeJS.Timer;
+
 export interface User {
   id: string;
   username?: string;
@@ -24,6 +26,7 @@ export interface FlightData {
   minHeight: number;
   maxHeight: number;
   heightLevel: FlightHeight;
+  flightId: Timer;
 }
 
 export type FlightSpeed = "NONE" | "MIN" | "MAX";
