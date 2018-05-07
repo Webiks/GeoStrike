@@ -161,6 +161,7 @@ export class GameService {
     const isCrawling = this.character.isCrawling;
     const isShooting = this.character.state === MeModelState.SHOOTING;
     const isFlying = this.character.isFlying;
+    const isMoving = this.character.isMoving;
     const enteringBuildingPosition = this.character.enteringBuildingPosition && this.character.enteringBuildingPosition.location;
     if (!location || !heading) {
       return;
@@ -176,6 +177,7 @@ export class GameService {
       isCrawling,
       isShooting,
       isFlying,
+      isMoving,
       enteringBuildingPosition,
     };
   }

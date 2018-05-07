@@ -20,6 +20,7 @@ export const playerFragment = gql`
     isCrawling
     isShooting
     isFlying
+    isMoving
     flight {
       speed
       minHeight

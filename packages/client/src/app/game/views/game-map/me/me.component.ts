@@ -53,7 +53,6 @@ export class MeComponent implements OnInit, OnDestroy {
   increase = true;
   playerInFlightModeNotFlying = false;
   isFlightInPlace: boolean = false;
-  isPlayerMoving: boolean = false;
 
   @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
     if (event.key === 'w') {
@@ -262,9 +261,6 @@ export class MeComponent implements OnInit, OnDestroy {
       if (this.isFlightInPlace && this.character.state !== MeModelState.DEAD)
         this.setSlowlyMovingForward();
     });
-    this.flightService.currentMovingMode.subscribe( isPlayerMoving => {
-      this.isPlayerMoving = isPlayerMoving;
-    } )
   }
 
   ngOnDestroy(): void {
@@ -318,7 +314,6 @@ export class MeComponent implements OnInit, OnDestroy {
   }
 
   getPosition(position) {
-    const cart = Cesium.Cartographic.fromCartesian(position);
     if (this.character.state === MeModelState.DEAD) {
       return position;
     } else if (this.character.isCrawling) {
@@ -397,9 +392,6 @@ export class MeComponent implements OnInit, OnDestroy {
     else {
       return this.getPosition(me.location);
     }
-  }
-  detectIfPlayerMoving(){
-    return this.isPlayerMoving;
   }
   isPlayerOnGround(){
     return !this.character.isFlying;

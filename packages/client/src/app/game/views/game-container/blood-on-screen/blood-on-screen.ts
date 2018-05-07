@@ -1,37 +1,41 @@
-import { ChangeDetectorRef, Component, Input, NgZone, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, NgZone, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { Subscription } from "rxjs/Subscription";
 import { ActionType } from "angular-cesium";
 import { GameService } from "../../../services/game.service";
 import { BeenShotService } from "./been-shot.service";
+import { TakeControlService } from "../../../services/take-control.service";
+import { CharacterService } from "../../../services/character.service";
 
 @Component({
   selector: 'blood-on-screen',
   templateUrl: './blood-on-screen.html',
   styleUrls: ['./blood-on-screen.scss']
 })
-export class BloodOnScreen implements OnDestroy {
+export class BloodOnScreen implements OnDestroy, OnChanges {
   showBloodSubscription: Subscription;
   lifePercentage: string;
   @Input() isInShootingPosition = false;
+  viewer;
 
   constructor(private ngZone: NgZone,
               private gameService: GameService,
               private cd: ChangeDetectorRef,
-              private beenShotService: BeenShotService
+              private beenShotService: BeenShotService,
+              private controlledService: TakeControlService,
+              private character: CharacterService
   ) {
   }
   ngOnInit() {
     this.gameService.getCurrentGameData()
-      .map(result => result.gameData.me)
-      .map(player => {
-        return {
-          id: player.id,
-          actionType: ActionType.ADD_UPDATE,
-          entity: player,
+      .map(result => result.gameData)
+      .subscribe(gameData => {
+        if (this.lifePercentage && (this.controlledService.controlledPlayer.id === this.character.meFromServer.id)){
+          this.lifePercentage = this.controlledService.controlledPlayer.lifeState
         }
-      })
-      .subscribe(me => {
-        this.lifePercentage = me.entity.lifeState
+        else if (this.lifePercentage && (this.controlledService.controlledPlayer.id !== this.character.meFromServer.id)){
+          let player = gameData.players.find(x => x.id === this.controlledService.controlledPlayer.id);
+          this.lifePercentage = player.lifeState;
+        }
       })
     this.ngZone.runOutsideAngular(() => {
       this.showBloodSubscription = this.beenShotService.subscribeToBeenShot().subscribe((data) => {
@@ -42,5 +46,11 @@ export class BloodOnScreen implements OnDestroy {
   }
   ngOnDestroy() {
     this.showBloodSubscription.unsubscribe();
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.controlledService.controlledPlayer) {
+      this.viewer = this.controlledService.controlledPlayer['__typename'] === 'Viewer';
+      this.lifePercentage = this.controlledService.controlledPlayer.lifeState;
+    }
   }
 }

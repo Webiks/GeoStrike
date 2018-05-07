@@ -30,6 +30,7 @@ export interface CharacterState {
   lifeStatePerctange: number;
   isCrawling: boolean;
   isFlying: boolean;
+  isMoving: boolean;
   flight: FlightData;
   team: Team;
   characterInfo: PlayerFields.Character;
@@ -97,8 +98,18 @@ export class CharacterService {
     })
   }
 
+  set isMoving(value: boolean){
+    this.modifyCurrentStateValue({
+      isMoving: value,
+    })
+  }
+
   get flightData() {
     return this._character.getValue().flight;
+  }
+
+  get isMoving(){
+    return this._character.getValue().isMoving;
   }
 
   get flightData$() {
