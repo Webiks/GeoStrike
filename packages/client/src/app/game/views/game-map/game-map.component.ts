@@ -129,6 +129,11 @@ export class GameMapComponent implements OnInit, OnDestroy {
           this.character.viewState = ViewState.SEMI_FPV;
           this.lastViewState = ViewState.SEMI_FPV_NOT_CONTROLLED;
         }
+
+        // this.viewerOptions.setFpvCameraOptions(this.viewer);
+        this.startFirstPersonMode(controlledPlayer, initPlayer);
+
+
         this.viewer.camera.flyTo({
           destination: Cesium.Cartesian3.fromRadians(posWithHeight.longitude, posWithHeight.latitude, posWithHeight.height),
           complete: () => {
@@ -143,7 +148,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
 
     this.playersPositions
       .map(player => player.entity)
-      .filter(x => x.team !== "NONE")
+      .filter(x => x && x.team !== "NONE")
       .subscribe(x => {
         this.viewer.entities.add({
           name: "test",
@@ -172,6 +177,8 @@ export class GameMapComponent implements OnInit, OnDestroy {
         isCrawling: false,
         isShooting:false,
         isFlying: false,
+        isMoving: false,
+        flight: player.flight,
         characterInfo: player.character
       });
     }
@@ -250,7 +257,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
         .height;
       if (
         this.character.flightData.remainingTime === 0 ||
-        this.character.meFromServer.flight.remainingTime === 0 ||
+        // this.character.meFromServer.flight.remainingTime === 0 ||
         height <= 0
       || this.character.state === MeModelState.DEAD) {
         this.flightCrashSettings();
@@ -273,10 +280,10 @@ export class GameMapComponent implements OnInit, OnDestroy {
 
 
     if(this.lastPlayerLocation && Cesium.Cartographic.fromCartesian(this.character.location).longitude === Cesium.Cartographic.fromCartesian(this.lastPlayerLocation).longitude && !this.character.isFlying){
-      this.flightService.isPlayerMoving.next(false);
+      this.character.isMoving = false;
     }
     else{
-      this.flightService.isPlayerMoving.next(true);
+      this.character.isMoving = true;
     }
 
     if(this.character.isFlying && (Cesium.Cartographic.fromCartesian(this.character.location).longitude === Cesium.Cartographic.fromCartesian(this.lastPlayerLocation).longitude) &&

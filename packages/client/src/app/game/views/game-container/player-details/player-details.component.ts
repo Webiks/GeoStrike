@@ -23,14 +23,11 @@ import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleCha
   styleUrls: ['./player-details.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PlayerDetailsComponent implements OnInit, OnChanges {
+export class PlayerDetailsComponent implements OnChanges {
 
   viewer = false;
-
   @Input() me;
-
   @Input() username;
-
   lifeState: string;
   lifeStatePerctange: number;
 
@@ -59,9 +56,6 @@ export class PlayerDetailsComponent implements OnInit, OnChanges {
       this.lifeState = this.me.lifeState;
       this.lifeStatePerctange = this.me.lifeStatePerctange;
     }
-  }
-
-  ngOnInit() {
   }
 
 }

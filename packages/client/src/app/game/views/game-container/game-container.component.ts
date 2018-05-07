@@ -61,7 +61,6 @@ export class GameContainerComponent implements OnInit, OnDestroy {
               private flightService: FlightService,
               ) {
     Cesium.BingMapsApi.defaultKey = 'AmzowhvWedaZu8mSrSHOwx2A52aRoYbkKvs4TeVUu_AzSXMnhvLCLFsqLFBqBS0V';
-    // Cesium.BingMapsApi.defaultKey = 'AmzowhvWedaZu8mSrSHOwx2A52aRoYbkKvs4TeVUu_AzSXMnhvLCLFsqLFBqBS0V';
     // Cesium.BingMapsApi.defaultKey = 'AkXEfZI-hKtZ995XgjM0XHxTiXpyS4i2Vb4w08Pjozwn-NAfVIvvHBYaP6Pgi717';
   }
 

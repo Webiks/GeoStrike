@@ -10,18 +10,16 @@ export class FlightModeService {
   constructor(private character:CharacterService, private utils:UtilsService , private gameService:GameService) { }
   isInFlightModeNotMoving = new BehaviorSubject<boolean>(true);
   currentFlightMode = this.isInFlightModeNotMoving.asObservable();
-  isPlayerMoving = new BehaviorSubject<boolean>(false);
-  currentMovingMode = this.isPlayerMoving.asObservable();
-
 
   changeFlyingState () {
     let isFlyStateUpdated = true;
-    if (this.character.viewState === ViewState.OVERVIEW || this.character.meFromServer.flight.remainingTime <= 0) {
+    let flightData = this.character.flightData ? this.character.flightData : this.character.meFromServer.flight;
+    if (this.character.viewState === ViewState.OVERVIEW ||  flightData.remainingTime <= 0) {
       return;
     }
     if(!this.character.isFlying){
       this.character.isFlying = true;
-      this.character.flightData = this.character.meFromServer.flight;
+      this.character.flightData = flightData;
       this.character.location = this.utils.toHeightOffset(this.character.location, 50);
     }
     else

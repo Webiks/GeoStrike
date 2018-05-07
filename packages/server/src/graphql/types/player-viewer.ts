@@ -18,6 +18,7 @@ export const schema = gql`
     lifeStatePerctange: Float
     isCrawling: Boolean!
     isFlying: Boolean
+    isMoving: Boolean,
     flight: FlightData
     isShooting: Boolean!
     isMe: Boolean!
