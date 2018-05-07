@@ -1,4 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { GameService } from "../../../services/game.service";
+import { TakeControlService } from "../../../services/take-control.service";
+import { CharacterService } from "../../../services/character.service";
 
 @Component({
   selector: 'player-details',
@@ -23,7 +26,7 @@ import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleCha
   styleUrls: ['./player-details.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PlayerDetailsComponent implements OnChanges {
+export class PlayerDetailsComponent implements OnInit, OnChanges {
 
   viewer = false;
   @Input() me;
@@ -31,9 +34,24 @@ export class PlayerDetailsComponent implements OnChanges {
   lifeState: string;
   lifeStatePerctange: number;
 
-  constructor() {
+  constructor(private gameService: GameService, private controlledService: TakeControlService, private character: CharacterService) {
   }
 
+  ngOnInit() {
+    this.gameService.getCurrentGameData()
+      .map(result => result.gameData)
+      .subscribe(gameData => {
+        if (this.lifeStatePerctange && (this.controlledService.controlledPlayer.id === this.character.meFromServer.id)){
+          this.lifeStatePerctange = this.controlledService.controlledPlayer.lifeStatePerctange
+          this.lifeState = this.controlledService.controlledPlayer.lifeState;
+        }
+        else if (this.lifeStatePerctange && (this.controlledService.controlledPlayer.id !== this.character.meFromServer.id)){
+          let player = gameData.players.find(x => x.id === this.controlledService.controlledPlayer.id);
+          this.lifeStatePerctange = player.lifeStatePerctange
+          this.lifeState = player.lifeState;
+        }
+      })
+  }
   getPortrait() {
     const url = this.me && this.me.character && this.me.character.portraitUrl;
     if (url) {
