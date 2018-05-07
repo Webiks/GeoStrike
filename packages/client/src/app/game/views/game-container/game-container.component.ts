@@ -7,6 +7,7 @@ import {Subscription} from 'rxjs/Subscription';
 import {Subject} from 'rxjs/Subject';
 import {AcEntity, AcNotification, ActionType, CesiumService} from 'angular-cesium';
 import {Observable} from 'rxjs/Observable';
+import {EmptyObservable} from 'rxjs/observable/EmptyObservable';
 import {MatSnackBar} from '@angular/material';
 import {CharacterService, MeModelState, ViewState} from '../../services/character.service';
 import {TakeControlService} from '../../services/take-control.service';
@@ -46,7 +47,9 @@ export class GameContainerComponent implements OnInit, OnDestroy {
   flights$: Subject<AcNotification> = new Subject<AcNotification>();
   private flightSubscription: Subscription;
   private tempData;
-  private flightMap$ = new Map<string, any>();
+  flightMap$ = new Map<string, any>();
+  statusFlights:boolean = false;
+  changeView: boolean = false;
 
   constructor(private gameService: GameService,
               private character: CharacterService,
@@ -55,7 +58,8 @@ export class GameContainerComponent implements OnInit, OnDestroy {
               private ngZone: NgZone,
               public controlledService: TakeControlService,
               private snackBar: MatSnackBar,
-              private flightService: FlightService,) {
+              private flightService: FlightService,
+              ) {
     Cesium.BingMapsApi.defaultKey = 'AmzowhvWedaZu8mSrSHOwx2A52aRoYbkKvs4TeVUu_AzSXMnhvLCLFsqLFBqBS0V';
     // Cesium.BingMapsApi.defaultKey = 'AmzowhvWedaZu8mSrSHOwx2A52aRoYbkKvs4TeVUu_AzSXMnhvLCLFsqLFBqBS0V';
     // Cesium.BingMapsApi.defaultKey = 'AkXEfZI-hKtZ995XgjM0XHxTiXpyS4i2Vb4w08Pjozwn-NAfVIvvHBYaP6Pgi717';
@@ -117,6 +121,19 @@ export class GameContainerComponent implements OnInit, OnDestroy {
         }, () => {
           console.log('subscription complete');
         });
+      });
+      this.character.viewState$.subscribe(viewState => {
+
+        if (viewState === ViewState.OVERVIEW && this.statusFlights) {
+          console.log('OVERVIEW. '+ this.statusFlights);
+          this.flightService.airTrafficQuery().subscribe();
+          this.changeView = true;
+        }
+        if (viewState === ViewState.SEMI_FPV && this.statusFlights) {
+          console.log('SEMI_FPV');
+          // this.flightService.airTrafficQuery().subscribe();
+          // this.changeView = true;
+        }
       });
     });
   }
@@ -228,129 +245,252 @@ export class GameContainerComponent implements OnInit, OnDestroy {
   }
 
   flightStatus(newStatus: any): void {
-    // console.log('newStatus: ', newStatus);
-    if (newStatus) {
-      this.airTraffic()
+    this.statusFlights = newStatus;
+    if (this.statusFlights) {
+      console.log("air traffic on");
+      this.airTraffic();
     }
-    else {
+    if (!this.statusFlights) {
+      console.log("air traffic off");
+
       this.flightMap$.forEach(f => {
-        this.flights$.next({
-          id: f.id,
-          actionType: ActionType.DELETE
+         this.flights$.next({
+         id: f.id,
+         entity: new AcEntity(),
+         actionType: ActionType.DELETE
         })
       });
+      // this.flights$.forEach(x=>{
+      //   console.log(x);
+      // });
       this.flightSubscription.unsubscribe();
       this.flightMap$.clear();
-    }
+      delete this.tempData;
 
+    }
   }
 
   airTraffic() {
-    // this.character.viewState$.subscribe(viewState => {
-    //
-    //   if (viewState === ViewState.OVERVIEW) {
-    //     console.log('OVERVIEW.');
-    //
-    //     // this.flightMap$.forEach(f => {
-    //     //   this.flights$.next({
-    //     //     id: f.id,
-    //     //     actionType: ActionType.ADD_UPDATE
-    //     //   })
-    //     // });
-    //     // this.flightMap$.forEach(flight => {
-    //     //   this.nextLocation(flight.id);
-    //     // })
-    //   }
-    //   if (viewState === ViewState.SEMI_FPV) {
-    //     console.log('SEMI_FPV');
-    //     // this.flightMap$.forEach(f => {
-    //     //   this.flights$.next({
-    //     //     id: f.id,
-    //     //     actionType: ActionType.ADD_UPDATE
-    //     //   })
-    //     // });
-    //     // this.flightMap$.forEach(flight => {
-    //     //   this.nextLocation(flight.id);
-    //     // })
-    //   }
-    // });
+
     this.ngZone.runOutsideAngular(() => {
 
       this.flightService.airTrafficQuery().subscribe();
       this.flightSubscription = this.flightService.subscribeAirTraffic()
         .subscribe((data) => {
           console.log("sub");
-          // const xx = JSON.stringify(data);
+          if(this.tempData){
+            const checkDeduplicateData = JSON.stringify(this.tempData).localeCompare(JSON.stringify(data));
+            if (checkDeduplicateData){
+              // createFlight();
+              console.log("createFlight");
+              this.tempData = {...data};
+              // console.log(this.tempData);
 
-          // const yy = xx.localeCompare()
+              if (this.tempData.messageAdded.length === 0) {
+                console.error("The air traffic data received empty");
+                this.flightService.airTrafficQuery().subscribe();
+              }
+              this.tempData.messageAdded.forEach(flight => {
+                // console.log(flight)
 
-          this.tempData = data;
-          if (this.tempData.messageAdded.length === 0) {
-            console.error("The air traffic data received empty");
-          }
-          this.tempData.messageAdded.forEach(flight => {
-            // console.log(flight)
-            const flightId = flight.icao24;
-            let character: CharacterData = {
-              name: 'plane',
-              model: '/assets/models/planes/plane.gltf',
-              scale: 1,
-              team: null,
-              imageUrl: null,
-              description: null,
-              portraitUrl: null,
-              iconUrl: '/assets/icons/plane-mark2-big.png',
-              iconDeadUrl: '/assets/icons/plane-mark-dead.png',
-              fixedHeight: null,
-            };
-            let location = {
-              x: Number(flight.longitude),
-              y: Number(flight.latitude),
-              z: Number(flight.geo_altitude)
-            };
-            let mapping: any = {
-              id: flightId,
-              username: null,
-              character: character,
-              state: 'ALIVE',
-              lifeState: 'FULL',
-              lifeStatePerctange: 100,
-              isCrawling: false,
-              isFlying: false,
-              isShooting: false,
-              isMe: false,
-              flight: null,
-              currentLocation: {
-                location: location,
-                heading: Number(flight.heading),
-                velocity: Number(flight.velocity),
-                distance: Number(flight.velocity * environment.config.updateFlightIntervalSec)
-              },
-              team: 'NONE',
-              syncState: 'VALID',
-              type: 'BACKGROUND_CHARACTER',
-            };
-            const acMap = {
-              id: flightId,
-              actionType: ActionType.ADD_UPDATE,
-              entity: new AcEntity(mapping),
-            };
+                const flightId = flight.icao24;
+                let character: CharacterData = {
+                  name: 'plane',
+                  model: '/assets/models/planes/plane.gltf',
+                  scale: 1,
+                  team: null,
+                  imageUrl: null,
+                  description: null,
+                  portraitUrl: null,
+                  iconUrl: '/assets/icons/plane-mark2-big.png',
+                  iconDeadUrl: '/assets/icons/plane-mark-dead.png',
+                  fixedHeight: null,
+                };
+                let location = {
+                  x: Number(flight.longitude),
+                  y: Number(flight.latitude),
+                  z: Number(flight.geo_altitude)
+                };
+                let mapping: any = {
+                  id: flightId,
+                  username: null,
+                  character: character,
+                  state: 'ALIVE',
+                  lifeState: 'FULL',
+                  lifeStatePerctange: 100,
+                  isCrawling: false,
+                  isFlying: false,
+                  isShooting: false,
+                  isMe: false,
+                  flight: null,
+                  currentLocation: {
+                    location: location,
+                    heading: Number(flight.heading),
+                    velocity: Number(flight.velocity),
+                    distance: Number(flight.velocity * (environment.config.updateFlightIntervalSec))
+                  },
+                  team: 'NONE',
+                  syncState: 'VALID',
+                  type: 'BACKGROUND_CHARACTER',
+                };
+                const acMap = {
+                  id: flightId,
+                  actionType: ActionType.ADD_UPDATE,
+                  entity: new AcEntity(mapping),
+                };
 
-            if (!this.flightMap$.get(flightId)) {
-              this.flights$.next(acMap);
+                if (!this.flightMap$.get(flightId)) {
+                  this.flights$.next(acMap);
+
+                }
+
+                this.flightMap$.set(flightId, mapping);
+              });
+              this.flightMap$.forEach(flight => {
+                this.nextLocation(flight.id);
+              })
+            }
+            else{
+              console.log("same Data !!!!!");
+                if(this.changeView){
+                  console.log("so what ?!?");
+                  this.tempData.messageAdded.forEach(flight => {
+                   let remainTime = Number ((new Date().getTime()/1000-flight.time).toFixed(0));
+                    console.log(`remainTime--- ${remainTime}`);
+                    const flightId = flight.icao24;
+
+                    let character: CharacterData = {
+                      name: 'plane',
+                      model: '/assets/models/planes/plane.gltf',
+                      scale: 1,
+                      team: null,
+                      imageUrl: null,
+                      description: null,
+                      portraitUrl: null,
+                      iconUrl: '/assets/icons/plane-mark2-big.png',
+                      iconDeadUrl: '/assets/icons/plane-mark-dead.png',
+                      fixedHeight: null,
+                    };
+                    let location = {
+                      x: Number(flight.longitude),
+                      y: Number(flight.latitude),
+                      z: Number(flight.geo_altitude)
+                    };
+                    let mapping: any = {
+                      id: flightId,
+                      username: null,
+                      character: character,
+                      state: 'ALIVE',
+                      lifeState: 'FULL',
+                      lifeStatePerctange: 100,
+                      isCrawling: false,
+                      isFlying: false,
+                      isShooting: false,
+                      isMe: false,
+                      flight: null,
+                      currentLocation: {
+                        location: location,
+                        heading: Number(flight.heading),
+                        velocity: Number(flight.velocity),
+                        distance: Number(flight.velocity * (environment.config.updateFlightIntervalSec-(remainTime)))
+                      },
+                      team: 'NONE',
+                      syncState: 'VALID',
+                      type: 'BACKGROUND_CHARACTER',
+                    };
+                    const acMap = {
+                      id: flightId,
+                      actionType: ActionType.ADD_UPDATE,
+                      entity: new AcEntity(mapping),
+                    };
+
+                    if (!this.flightMap$.get(flightId)) {
+                      this.flights$.next(acMap);
+
+                    }
+
+                    this.flightMap$.set(flightId, mapping);
+                  });
+                  this.flightMap$.forEach(flight => {
+                    this.nextLocation(flight.id);
+                  })
+                  this.changeView = false;
+                };
 
             }
-            // else {
-            //   this.flightMap$.forEach(x => {
-            //     console.log(x);
-            //   })
-            // }
 
-            this.flightMap$.set(flightId, mapping);
-          });
-          this.flightMap$.forEach(flight => {
-            this.nextLocation(flight.id);
-          })
+          }else{
+            // createFlight();
+            this.tempData = {...data};
+            console.log("first time");
+
+            if (this.tempData.messageAdded.length === 0) {
+              console.error("The air traffic data received empty");
+            }
+            this.tempData.messageAdded.forEach(flight => {
+
+              const flightId = flight.icao24;
+              let remainTime = Number ((new Date().getTime()/1000-flight.time).toFixed(0));
+              // console.log(`remainTime---${remainTime}`);
+              let character: CharacterData = {
+                name: 'plane',
+                model: '/assets/models/planes/plane.gltf',
+                scale: 1,
+                team: null,
+                imageUrl: null,
+                description: null,
+                portraitUrl: null,
+                iconUrl: '/assets/icons/plane-mark2-big.png',
+                iconDeadUrl: '/assets/icons/plane-mark-dead.png',
+                fixedHeight: null,
+              };
+              let location = {
+                x: Number(flight.longitude),
+                y: Number(flight.latitude),
+                z: Number(flight.geo_altitude)
+              };
+              let mapping: any = {
+                id: flightId,
+                username: null,
+                character: character,
+                state: 'ALIVE',
+                lifeState: 'FULL',
+                lifeStatePerctange: 100,
+                isCrawling: false,
+                isFlying: false,
+                isShooting: false,
+                isMe: false,
+                flight: null,
+                currentLocation: {
+                  location: location,
+                  heading: Number(flight.heading),
+                  velocity: Number(flight.velocity),
+                  distance: Number(flight.velocity * (environment.config.updateFlightIntervalSec-(remainTime)))
+
+            },
+                team: 'NONE',
+                syncState: 'VALID',
+                type: 'BACKGROUND_CHARACTER',
+                remainTime: remainTime+1
+
+              };
+              const acMap = {
+                id: flightId,
+                actionType: ActionType.ADD_UPDATE,
+                entity: new AcEntity(mapping),
+              };
+
+              if (!this.flightMap$.get(flightId)) {
+                this.flights$.next(acMap);
+
+              }
+
+              this.flightMap$.set(flightId, mapping);
+            });
+            this.flightMap$.forEach(flight => {
+              this.nextLocation(flight.id);
+            })
+          }
         });
 
     });

@@ -69,6 +69,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
     viewerConf.viewerOptions = viewerOptions.getViewerOption();
 
     viewerConf.viewerModifier = (viewer) => {
+
       this.viewer = viewer;
       this.helperEntityPoint = this.viewer.entities.add({
         point: {
@@ -135,7 +136,6 @@ export class GameMapComponent implements OnInit, OnDestroy {
             this.startFirstPersonMode(controlledPlayer, initPlayer);
           }
         });
-        // this.viewer.entities.removeAll();
       }
 
       this.lastViewState = newViewState;

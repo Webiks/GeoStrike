@@ -8,4 +8,5 @@ export const schema = gql`
     geo_altitude: String
     velocity: String
     heading: String
+    time: String
 }`;

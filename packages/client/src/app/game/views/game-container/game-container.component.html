@@ -1,4 +1,4 @@
-<game-map [playersPositions]="otherPlayers$" [gameData]="gameData$" [flights]="flights$">
+<game-map [playersPositions]="otherPlayers$" [gameData]="gameData$" [flights]="flights$" >
   <team-info-bar [players]="getPlayers('BLUE')" [changeDirection]="true" class="blue-team-info"></team-info-bar>
   <team-info-bar [players]="getPlayers('RED')" class="red-team-info"></team-info-bar>
   <game-toolbar [gameCode]="gameCode" (flightStatus)="flightStatus($event)" ></game-toolbar>
