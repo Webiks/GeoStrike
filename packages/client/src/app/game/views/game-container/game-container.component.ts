@@ -50,6 +50,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
   flightMap$ = new Map<string, any>();
   statusFlights:boolean = false;
   changeView: boolean = false;
+  firstTimeFlage = true;
 
   constructor(private gameService: GameService,
               private character: CharacterService,
@@ -124,12 +125,14 @@ export class GameContainerComponent implements OnInit, OnDestroy {
       this.character.viewState$.subscribe(viewState => {
 
         if (viewState === ViewState.OVERVIEW && this.statusFlights) {
-          console.log('OVERVIEW. '+ this.statusFlights);
+          // console.log('OVERVIEW. '+ this.statusFlights);
           this.flightService.airTrafficQuery().subscribe();
           this.changeView = true;
         }
         if (viewState === ViewState.SEMI_FPV && this.statusFlights) {
-          console.log('SEMI_FPV');
+          // console.log('SEMI_FPV');
+          this.flightService.airTrafficQuery().subscribe();
+          this.changeView = true;
           // this.flightService.airTrafficQuery().subscribe();
           // this.changeView = true;
         }
@@ -255,16 +258,15 @@ export class GameContainerComponent implements OnInit, OnDestroy {
       this.flightMap$.forEach(f => {
          this.flights$.next({
          id: f.id,
-         entity: new AcEntity(),
+         entity: Object.assign({}, new AcEntity()),
          actionType: ActionType.DELETE
         })
       });
-      // this.flights$.forEach(x=>{
-      //   console.log(x);
-      // });
       this.flightSubscription.unsubscribe();
       this.flightMap$.clear();
       delete this.tempData;
+      this.firstTimeFlage = true;
+
 
     }
   }
@@ -277,12 +279,17 @@ export class GameContainerComponent implements OnInit, OnDestroy {
       this.flightSubscription = this.flightService.subscribeAirTraffic()
         .subscribe((data) => {
           console.log("sub");
+          // if(this.tempData){
+          let checkDeduplicateData = 1;
           if(this.tempData){
-            const checkDeduplicateData = JSON.stringify(this.tempData).localeCompare(JSON.stringify(data));
+            checkDeduplicateData = JSON.stringify(this.tempData).localeCompare(JSON.stringify(data));
+          }
+
             if (checkDeduplicateData){
               // createFlight();
-              console.log("createFlight");
+              console.log("create new Flight");
               this.tempData = {...data};
+
               // console.log(this.tempData);
 
               if (this.tempData.messageAdded.length === 0) {
@@ -293,6 +300,8 @@ export class GameContainerComponent implements OnInit, OnDestroy {
                 // console.log(flight)
 
                 const flightId = flight.icao24;
+                let remainTime = Number ((new Date().getTime()/1000-flight.time).toFixed(0));
+
                 let character: CharacterData = {
                   name: 'plane',
                   model: '/assets/models/planes/plane.gltf',
@@ -326,11 +335,13 @@ export class GameContainerComponent implements OnInit, OnDestroy {
                     location: location,
                     heading: Number(flight.heading),
                     velocity: Number(flight.velocity),
-                    distance: Number(flight.velocity * (environment.config.updateFlightIntervalSec))
+                    distance: this.firstTimeFlage ? Number(flight.velocity * (environment.config.updateFlightIntervalSec-(remainTime)+5)) :
+                                                    Number(flight.velocity * (environment.config.updateFlightIntervalSec))
                   },
                   team: 'NONE',
                   syncState: 'VALID',
                   type: 'BACKGROUND_CHARACTER',
+                  remainTime:  this.firstTimeFlage ? (environment.config.updateFlightIntervalSec-remainTime)+5: environment.config.updateFlightIntervalSec
                 };
                 const acMap = {
                   id: flightId,
@@ -340,7 +351,6 @@ export class GameContainerComponent implements OnInit, OnDestroy {
 
                 if (!this.flightMap$.get(flightId)) {
                   this.flights$.next(acMap);
-
                 }
 
                 this.flightMap$.set(flightId, mapping);
@@ -348,6 +358,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
               this.flightMap$.forEach(flight => {
                 this.nextLocation(flight.id);
               })
+              this.firstTimeFlage = false;
             }
             else{
               console.log("same Data !!!!!");
@@ -355,7 +366,6 @@ export class GameContainerComponent implements OnInit, OnDestroy {
                   console.log("so what ?!?");
                   this.tempData.messageAdded.forEach(flight => {
                    let remainTime = Number ((new Date().getTime()/1000-flight.time).toFixed(0));
-                    console.log(`remainTime--- ${remainTime}`);
                     const flightId = flight.icao24;
 
                     let character: CharacterData = {
@@ -396,6 +406,8 @@ export class GameContainerComponent implements OnInit, OnDestroy {
                       team: 'NONE',
                       syncState: 'VALID',
                       type: 'BACKGROUND_CHARACTER',
+                      remainTime: environment.config.updateFlightIntervalSec-(remainTime)
+
                     };
                     const acMap = {
                       id: flightId,
@@ -405,7 +417,6 @@ export class GameContainerComponent implements OnInit, OnDestroy {
 
                     if (!this.flightMap$.get(flightId)) {
                       this.flights$.next(acMap);
-
                     }
 
                     this.flightMap$.set(flightId, mapping);
@@ -415,81 +426,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
                   })
                   this.changeView = false;
                 };
-
             }
-
-          }else{
-            // createFlight();
-            this.tempData = {...data};
-            console.log("first time");
-
-            if (this.tempData.messageAdded.length === 0) {
-              console.error("The air traffic data received empty");
-            }
-            this.tempData.messageAdded.forEach(flight => {
-
-              const flightId = flight.icao24;
-              let remainTime = Number ((new Date().getTime()/1000-flight.time).toFixed(0));
-              // console.log(`remainTime---${remainTime}`);
-              let character: CharacterData = {
-                name: 'plane',
-                model: '/assets/models/planes/plane.gltf',
-                scale: 1,
-                team: null,
-                imageUrl: null,
-                description: null,
-                portraitUrl: null,
-                iconUrl: '/assets/icons/plane-mark2-big.png',
-                iconDeadUrl: '/assets/icons/plane-mark-dead.png',
-                fixedHeight: null,
-              };
-              let location = {
-                x: Number(flight.longitude),
-                y: Number(flight.latitude),
-                z: Number(flight.geo_altitude)
-              };
-              let mapping: any = {
-                id: flightId,
-                username: null,
-                character: character,
-                state: 'ALIVE',
-                lifeState: 'FULL',
-                lifeStatePerctange: 100,
-                isCrawling: false,
-                isFlying: false,
-                isShooting: false,
-                isMe: false,
-                flight: null,
-                currentLocation: {
-                  location: location,
-                  heading: Number(flight.heading),
-                  velocity: Number(flight.velocity),
-                  distance: Number(flight.velocity * (environment.config.updateFlightIntervalSec-(remainTime)))
-
-            },
-                team: 'NONE',
-                syncState: 'VALID',
-                type: 'BACKGROUND_CHARACTER',
-                remainTime: remainTime+1
-
-              };
-              const acMap = {
-                id: flightId,
-                actionType: ActionType.ADD_UPDATE,
-                entity: new AcEntity(mapping),
-              };
-
-              if (!this.flightMap$.get(flightId)) {
-                this.flights$.next(acMap);
-
-              }
-
-              this.flightMap$.set(flightId, mapping);
-            });
-            this.flightMap$.forEach(flight => {
-              this.nextLocation(flight.id);
-            })
-          }
         });
 
     });

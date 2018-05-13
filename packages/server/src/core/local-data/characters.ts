@@ -80,6 +80,17 @@ export const PLAYER_CHARACTERS: CharacterData[] = [
         iconDeadUrl: '/assets/icons/car-dead-mark.png',
     },
     {
+        name: 'newCar',
+        model: '/assets/models/car.gltf',
+        scale: 1,
+        description: null,
+        team: null,
+        imageUrl: null,
+        portraitUrl: null,
+        iconUrl: '/assets/icons/car-mark.png',
+        iconDeadUrl: '/assets/icons/car-dead-mark.png',
+    },
+    {
         name: 'grandpa',
         model: '/assets/models/grandpa.gltf',
         scale: 0.035,

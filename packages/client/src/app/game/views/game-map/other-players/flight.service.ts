@@ -25,7 +25,7 @@ export class FlightService {
   }
 
   public airTrafficQuery(): Observable<any> {
-    console.log("airTrafficQuery");
+    // console.log("airTrafficQuery");
     return this.apollo.mutate<any>({
       mutation: airTrafficQuery
     });
