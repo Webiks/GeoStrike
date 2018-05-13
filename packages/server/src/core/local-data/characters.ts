@@ -87,8 +87,8 @@ export const PLAYER_CHARACTERS: CharacterData[] = [
         team: null,
         imageUrl: null,
         portraitUrl: null,
-        iconUrl: '/assets/icons/grandmother-mark.png',
-        iconDeadUrl: '/assets/icons/grandmother-dead-mark.png',
+        iconUrl: '/assets/icons/grandpa-mark.png',
+        iconDeadUrl: '/assets/icons/grandpa-dead-mark.png',
     },
     {
         name: 'deer',

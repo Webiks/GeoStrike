@@ -47,14 +47,7 @@ export class UtilsService {
     cart.height = height;
     return Cesium.Cartesian3.fromRadians(cart.longitude, cart.latitude, cart.height);
   }
-  isFlightHeightOkForLanding(curPosition, flightData){
-    const currHeight =  Math.round(Cesium.Cartographic.fromCartesian(curPosition).height);
-    const heightRes = flightData.maxHeight - flightData.minHeight;
-    const steps = 6;
-    const heightStep = Math.ceil(heightRes / steps);
-    return Math.floor(currHeight) < Math.floor(this.character.flightData.minHeight) || (Math.floor(currHeight) <= Math.floor(this.character.flightData.minHeight + heightStep));
-    // return Math.floor(currHeight) < Math.floor(this.character.meFromServer.flight.minHeight) || (Math.floor(currHeight) <= Math.floor(this.character.meFromServer.flight.minHeight + heightStep));
-  }
+
 
   pointByLocationDistanceAndAzimuthAndHeight3d(currentLocation: any, meterDistance: number, radianAzimuth: number, isInputCartesian = true) {
     const distance = meterDistance / Cesium.Ellipsoid.WGS84.maximumRadius;
@@ -76,31 +69,6 @@ export class UtilsService {
     destinationHeight = currHeight + heightCalculation;
     destinationLon = (destinationLon + 3 * Math.PI) % (2 * Math.PI) - Math.PI;
     return Cesium.Cartesian3.fromRadians(destinationLon, destinationLat, destinationHeight);
-  }
-
-
-  calculateHeightLevel (flightData: FlightData, currentPosition: Cartesian3, initalHeight: number = 0) {
-    const heightRes = flightData.maxHeight - flightData.minHeight;
-    const minHeight = flightData.minHeight;
-    const currHeight = initalHeight == 0 ? Cesium.Cartographic.fromCartesian(currentPosition).height : initalHeight;
-    const steps = 6;
-    const heightStep = Math.ceil(heightRes / steps);
-    let currHeightLevel;
-    if(currHeight < minHeight)
-      currHeightLevel = 'NONE';
-    else if(Math.floor(currHeight) === Math.floor(minHeight - 15) || Math.floor(currHeight) === Math.floor(minHeight ) || Math.floor(currHeight) <= minHeight + heightStep)
-      currHeightLevel  = 'A';
-    else if(currHeight <= minHeight + (heightStep*2))
-      currHeightLevel  = 'B';
-    else if(currHeight <= minHeight + (heightStep*3))
-      currHeightLevel  = 'C';
-    else if(currHeight <= minHeight + (heightStep*4))
-      currHeightLevel  = 'D';
-    else if(currHeight <= minHeight + (heightStep*5))
-      currHeightLevel  = 'E';
-    else
-      currHeightLevel  = 'MAX';
-    return currHeightLevel;
   }
 
   getIconPosition(player, height){

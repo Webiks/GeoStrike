@@ -9,6 +9,7 @@
 # npm run build:prod
 # ../../deploy.sh client-[stable or stage] $VERSION
 
+
 target=$1
 echo "target $target"
 if [ -z "$target" ]

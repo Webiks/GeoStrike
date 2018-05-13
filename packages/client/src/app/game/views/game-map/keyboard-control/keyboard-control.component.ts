@@ -139,7 +139,7 @@ export class KeyboardControlComponent implements OnInit {
             true
           );
           if (!this.collisionDetector.detectCollision(this.nextLocation)){
-            this.flightHeightLevel = this.utils.calculateHeightLevel(this.flightData, this.nextLocation);
+            this.flightHeightLevel = this.flightModeService.calculateHeightLevel(this.flightData, this.nextLocation);
             this.flightData.heightLevel = this.flightHeightLevel;
             this.character.flightData = this.flightData;
             this.character.location = this.nextLocation;
@@ -211,10 +211,7 @@ export class KeyboardControlComponent implements OnInit {
     this.gameService.updateServerOnPosition(true);
     if (updateFlyState) {
       this.flightData = this.character.flightData;
-      // this.flightData = this.character.meFromServer.flight;
-      this.flightHeightLevel = this.utils.calculateHeightLevel(this.character.flightData, this.nextLocation || this.character.location, 50);
-
-      // this.flightHeightLevel = this.utils.calculateHeightLevel(this.character.meFromServer.flight, this.nextLocation || this.character.meFromServer.currentLocation.location, 50);
+      this.flightHeightLevel = this.flightModeService.calculateHeightLevel(this.character.flightData, this.nextLocation || this.character.location, 50);
       this.flightData.heightLevel = this.flightHeightLevel;
       const flightSubscription = this.gameService.toggleFlightMode(this.character.meFromServer.id, this.character.isFlying).subscribe(() => flightSubscription.unsubscribe());
     }

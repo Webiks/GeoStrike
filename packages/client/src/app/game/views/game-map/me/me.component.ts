@@ -117,6 +117,8 @@ export class MeComponent implements OnInit, OnDestroy {
           y: crossElement.y + crossElement.height / 2
         };
         const picked = this.cesiumService.getScene().pick(crossLocation);
+        console.log("x:"+crossLocation.x);
+        console.log("y:"+crossLocation.y);
         if (
           picked &&
           picked.id &&
@@ -246,12 +248,13 @@ export class MeComponent implements OnInit, OnDestroy {
             this.snackBar.dismiss();
             this.snackBar.openFromComponent(SnackBarContentComponent, {
               data: `Press F to land and exit flight mode`,
-              duration: 3000,
+
             });
           });
         }
         if (state.flight.heightLevel !== 'A') {
           this.flightLandAlertDisplayedOnce = false;
+          this.snackBar.dismiss();
         }
       }
     });
