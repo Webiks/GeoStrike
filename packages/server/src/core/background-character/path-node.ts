@@ -2,7 +2,7 @@ import { Location } from '../../types';
 
 enum JsonType {
     CAR = 'car',
-    NEWCAR = 'NewCar',
+    NEWCAR = 'newCar',
     PEOPLE = 'people',
     DEER = 'deer',
     RHINO = 'rhino',
