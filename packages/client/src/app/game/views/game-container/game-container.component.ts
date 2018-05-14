@@ -119,22 +119,18 @@ export class GameContainerComponent implements OnInit, OnDestroy {
           console.log('subscription error', e);
           this.router.navigate(['/']);
         }, () => {
-          console.log('subscription complete');
+          {}
         });
       });
       this.character.viewState$.subscribe(viewState => {
 
         if (viewState === ViewState.OVERVIEW && this.statusFlights) {
-          // console.log('OVERVIEW. '+ this.statusFlights);
           this.flightService.airTrafficQuery().subscribe();
           this.changeView = true;
         }
         if (viewState === ViewState.SEMI_FPV && this.statusFlights) {
-          // console.log('SEMI_FPV');
           this.flightService.airTrafficQuery().subscribe();
           this.changeView = true;
-          // this.flightService.airTrafficQuery().subscribe();
-          // this.changeView = true;
         }
       });
     });
@@ -206,16 +202,13 @@ export class GameContainerComponent implements OnInit, OnDestroy {
   }
 
   nextLocation(id) {
-    // currentLocation,velocity, heading
     const plane = this.flightMap$.get(id);
-    // console.log(plane.currentLocation.location)
 
     /*For simulation*/
     // let newLocation = this.destinationPoint(plane.currentLocation.location.y, plane.currentLocation.location.x,200,300)
     let newLocation = this.destinationPoint(plane.currentLocation.location.y, plane.currentLocation.location.x, plane.currentLocation.distance, plane.currentLocation.heading);
 
 
-    // console.log(newLocation);
     const newPosition = {
       ...plane,
       currentLocation: {
@@ -227,7 +220,6 @@ export class GameContainerComponent implements OnInit, OnDestroy {
         }
       }
     };
-    // console.log(newPosition);
 
     const acMap = {
       id: id,
@@ -238,8 +230,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
   }
 
   destinationPoint(lat, lon, distance, bearing) {
-    let R = 6371e3; // (Mean) radius of earth
-    // console.log(`locationData: ${lat}, ${lon}, ${distance}, ${bearing}`)
+    let R = 6371e3;
     const lat2 = Math.asin(Math.sin(Math.PI / 180 * lat) * Math.cos(distance / R) + Math.cos(Math.PI / 180 * lat) * Math.sin(distance / R) * Math.cos(Math.PI / 180 * bearing));
     const lon2 = Math.PI / 180 * lon + Math.atan2(Math.sin(Math.PI / 180 * bearing) * Math.sin(distance / R) * Math.cos(Math.PI / 180 * lat), Math.cos(distance / R) - Math.sin(Math.PI / 180 * lat) * Math.sin(lat2));
 
@@ -249,11 +240,11 @@ export class GameContainerComponent implements OnInit, OnDestroy {
   flightStatus(newStatus: any): void {
     this.statusFlights = newStatus;
     if (this.statusFlights) {
-      console.log("air traffic on");
+      // console.log("air traffic on");
       this.airTraffic();
     }
     if (!this.statusFlights) {
-      console.log("air traffic off");
+      // console.log("air traffic off");
 
       this.flightMap$.forEach(f => {
          this.flights$.next({
@@ -278,26 +269,20 @@ export class GameContainerComponent implements OnInit, OnDestroy {
       this.flightService.airTrafficQuery().subscribe();
       this.flightSubscription = this.flightService.subscribeAirTraffic()
         .subscribe((data) => {
-          console.log("sub");
-          // if(this.tempData){
           let checkDeduplicateData = 1;
           if(this.tempData){
             checkDeduplicateData = JSON.stringify(this.tempData).localeCompare(JSON.stringify(data));
           }
 
             if (checkDeduplicateData){
-              // createFlight();
-              console.log("create new Flight");
               this.tempData = {...data};
 
-              // console.log(this.tempData);
 
               if (this.tempData.messageAdded.length === 0) {
                 console.error("The air traffic data received empty");
                 this.flightService.airTrafficQuery().subscribe();
               }
               this.tempData.messageAdded.forEach(flight => {
-                // console.log(flight)
 
                 const flightId = flight.icao24;
                 let remainTime = Number ((new Date().getTime()/1000-flight.time).toFixed(0));
@@ -361,9 +346,7 @@ export class GameContainerComponent implements OnInit, OnDestroy {
               this.firstTimeFlage = false;
             }
             else{
-              console.log("same Data !!!!!");
                 if(this.changeView){
-                  console.log("so what ?!?");
                   this.tempData.messageAdded.forEach(flight => {
                    let remainTime = Number ((new Date().getTime()/1000-flight.time).toFixed(0));
                     const flightId = flight.icao24;

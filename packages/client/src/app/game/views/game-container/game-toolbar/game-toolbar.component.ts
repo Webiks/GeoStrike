@@ -90,7 +90,6 @@ export class GameToolbarComponent implements OnInit {
   }
 
   checkClicked(){
-    // console.log(`val: ${this.fStatus}`);
     if(this.fStatus){
       this.flightStatus.emit(false);
 
@@ -101,7 +100,6 @@ export class GameToolbarComponent implements OnInit {
       this.flightStatus.emit(true);
 
     }
-    // console.log(`new val: ${this.fStatus}`);
   }
 
   exitGame() {

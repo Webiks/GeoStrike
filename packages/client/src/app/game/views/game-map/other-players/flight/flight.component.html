@@ -6,7 +6,6 @@
     uri: flight.character.model,
     position: interpolatePosition(flight),
     orientation: getOrientation(flight),
-    test: test(flight),
   }">
   </ac-model-desc>
   <ac-billboard-desc *ngIf="(isOverview$ | async)" props="{
@@ -15,8 +14,7 @@
   scale: flight.character.scale,
   position: interpolatePosition(flight),
   orientation: getOrientation(flight),
-  alignedAxis : VelocityVectorProperty(flight),
-  test: test(flight),
+  alignedAxis: VelocityVectorProperty(flight),
   }">
   </ac-billboard-desc>
 </ac-layer>

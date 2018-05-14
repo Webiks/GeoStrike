@@ -1,4 +1,3 @@
-console.log("env stage")
 export const environment = {
   production: true,
   serverUrl: `35.156.14.39:3001`,

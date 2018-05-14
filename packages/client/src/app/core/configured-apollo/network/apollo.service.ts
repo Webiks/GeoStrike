@@ -13,7 +13,6 @@ export class ApolloService {
 
 
   constructor(ngZone: NgZone) {
-    console.log(environment.serverUrl)
     ngZone.runOutsideAngular(() => {
       this._subscriptionClient = new SubscriptionClient(`${environment.wsSchema}://${environment.serverUrl}/subscriptions`, {
         reconnect: true,

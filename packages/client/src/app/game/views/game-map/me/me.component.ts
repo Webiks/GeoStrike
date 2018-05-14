@@ -118,8 +118,7 @@ export class MeComponent implements OnInit, OnDestroy {
           y: crossElement.y + crossElement.height / 2
         };
         const picked = this.cesiumService.getScene().pick(crossLocation);
-        console.log("x:"+crossLocation.x);
-        console.log("y:"+crossLocation.y);
+
         if (
           picked &&
           picked.id &&

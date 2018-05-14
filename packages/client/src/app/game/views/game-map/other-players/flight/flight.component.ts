@@ -59,7 +59,6 @@ export class FlightComponent implements  OnInit {
 
   getOrientation(flight) {
   const normalizedHeading = (flight.currentLocation.heading.toFixed(0)-90)%360;
-    console.log();
     if (flight.state === 'DEAD') {
       // TODO: kill the Plane.
     } else {
@@ -85,7 +84,6 @@ export class FlightComponent implements  OnInit {
     }
     else {
       const remainSec = flight.remainTime? flight.remainTime: environment.config.updateFlightIntervalSec;
-      // console.log(`remainSec: ${remainSec}`);
       const newTime = Cesium.JulianDate.addSeconds(
                       Cesium.JulianDate.now(),remainSec, new Cesium.JulianDate());
                       // Cesium.JulianDate.now(),remainSec, new Cesium.JulianDate());
@@ -102,9 +100,5 @@ export class FlightComponent implements  OnInit {
     return new Cesium.Cartesian3.fromDegrees(location.x, location.y, location.z);
   }
 
-  test(f) {
-    // console.log(this.cesiumService.getScene()._primitives._primitives);
-  // console.log(f);
-  }
 
 }
