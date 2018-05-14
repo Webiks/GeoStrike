@@ -6,7 +6,9 @@ const terrainTypeProvider = {
   'MOUNTAIN': MapLayerProviderOptions.BingMaps,
   'URBAN': MapLayerProviderOptions.BingMaps,
   'AUSTRALIA': MapLayerProviderOptions.BingMaps,
-  'NEWZEALAND': MapLayerProviderOptions.BingMaps
+  'NEWZEALAND': MapLayerProviderOptions.BingMaps,
+  'JFK': MapLayerProviderOptions.BingMaps,
+
 }
 
 const terrainTypeProviderOptions = {
@@ -25,7 +27,11 @@ const terrainTypeProviderOptions = {
   'URBAN': {
     url: 'https://dev.virtualearth.net',
     key: 'AkXEfZI-hKtZ995XgjM0XHxTiXpyS4i2Vb4w08Pjozwn-NAfVIvvHBYaP6Pgi717'
-  }
+  },
+  'JFK': {
+    url: 'https://dev.virtualearth.net',
+    key: 'AkXEfZI-hKtZ995XgjM0XHxTiXpyS4i2Vb4w08Pjozwn-NAfVIvvHBYaP6Pgi717'
+  },
 }
 
 @Component({

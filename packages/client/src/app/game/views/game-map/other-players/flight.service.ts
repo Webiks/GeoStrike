@@ -20,11 +20,12 @@ export class FlightService {
         query: flightSubscription
       });
     }
-    console.log("subscribeAirTraffic");
+    // console.log("subscribeAirTraffic");
     return this.flights$;
   }
 
   public airTrafficQuery(): Observable<any> {
+    // console.log("airTrafficQuery");
     return this.apollo.mutate<any>({
       mutation: airTrafficQuery
     });

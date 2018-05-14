@@ -2,6 +2,7 @@ import { Location } from '../../types';
 
 enum JsonType {
     CAR = 'car',
+    NEWCAR = 'NewCar',
     PEOPLE = 'people',
     DEER = 'deer',
     RHINO = 'rhino',
@@ -28,6 +29,7 @@ const loadPath = (type: JsonType) => {
 };
 
 const peoplePathsGraph: [PathNode] = loadPath(JsonType.PEOPLE);
+const newcarsPathsGraph: [PathNode] = loadPath(JsonType.NEWCAR);
 const carsPathsGraph: [PathNode] = loadPath(JsonType.CAR);
 const deerssPathsGraph: [PathNode] = loadPath(JsonType.DEER);
 const rhinosPathsGraph: [PathNode] = loadPath(JsonType.RHINO);
@@ -36,6 +38,7 @@ const indinanWomanPathsGraph: [PathNode] = loadPath(JsonType.INDIANWOMAN);
 
 export const PATHS_GRAPHS = {
     CAR: carsPathsGraph,
+    NEWCAR: newcarsPathsGraph,
     PEOPLE: peoplePathsGraph,
     DEER: deerssPathsGraph,
     RHINO: rhinosPathsGraph,

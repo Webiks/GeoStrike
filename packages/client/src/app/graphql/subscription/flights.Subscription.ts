@@ -10,6 +10,7 @@ export const flightSubscription = gql`
     geo_altitude
     velocity
     heading
+    time
   }
 } 
 `;

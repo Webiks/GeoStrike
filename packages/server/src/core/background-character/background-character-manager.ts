@@ -48,6 +48,12 @@ const BG_CHARACTER_TYPES = [
     paths: PATHS_GRAPHS.CAR,
     updateDistanceMeters: 1.0,
     terrainType:"URBAN"
+  },
+  {
+      characterName: "newCar",
+      paths: PATHS_GRAPHS.NEWCAR,
+      updateDistanceMeters: 1.0,
+      terrainType:"JFK"
   }
 ];
 

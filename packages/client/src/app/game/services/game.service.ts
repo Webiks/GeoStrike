@@ -53,6 +53,8 @@ export class GameService {
     new Cesium.Cartesian3(-3787298.0827794825, 4351128.063305529, -2713957.9001589464);
   public  DEFAULT_NEWZEALAND_START_LOCATION =
     new Cesium.Cartesian3(-4361556.164988852, 978059.7002869517, -4534895.227650116);
+  public  DEFAULT_JFK_START_LOCATION =
+    new Cesium.Cartesian3( 1354028.6609812926,-4653476.016247244, 4132469.7809857675);
 
   constructor(private apollo: Apollo,
               subscriptionClientService: ApolloService,
@@ -279,6 +281,10 @@ export class GameService {
     else if(terrainType == "NEWZEALAND")
     {
       this.gameStartLocation = this.DEFAULT_NEWZEALAND_START_LOCATION;
+    }
+    else if(terrainType == "JFK")
+    {
+      this.gameStartLocation = this.DEFAULT_JFK_START_LOCATION;
     }
   }
 }

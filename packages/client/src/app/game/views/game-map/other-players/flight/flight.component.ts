@@ -84,8 +84,11 @@ export class FlightComponent implements  OnInit {
       // return result;
     }
     else {
-      // console.log(this.listPlaneMap.get(flightId));
-      const newTime = Cesium.JulianDate.addSeconds(Cesium.JulianDate.now(), environment.config.updateFlightIntervalSec, new Cesium.JulianDate());
+      const remainSec = flight.remainTime? flight.remainTime: environment.config.updateFlightIntervalSec;
+      // console.log(`remainSec: ${remainSec}`);
+      const newTime = Cesium.JulianDate.addSeconds(
+                      Cesium.JulianDate.now(),remainSec, new Cesium.JulianDate());
+                      // Cesium.JulianDate.now(),remainSec, new Cesium.JulianDate());
       const result = InterpolationService.interpolate({
         time: newTime,
         data: this.degreesToCartesian(flight.currentLocation.location),
@@ -101,5 +104,7 @@ export class FlightComponent implements  OnInit {
 
   test(f) {
     // console.log(this.cesiumService.getScene()._primitives._primitives);
+  // console.log(f);
   }
+
 }

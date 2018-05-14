@@ -43,12 +43,12 @@ export const config = {
     BLUE: process.env.TERRAIN ? TERRAIN_PLAYERS_LOCATION : DEFAULT_BULE_PLAYERS_LOCATION,
   },
     host: process.env.REDIS_HOST || '127.0.0.1',
-    // host: '127.0.0.1',
+    // host: '172.17.0.1',
     port: process.env.PORT_STAGE || 6379,
     channel: process.env.CHANNEL ||  `messageAdded`,
-    KEY: process.env.REDIS_KEY || 'onAir1',
+    KEY: process.env.REDIS_KEY || 'onAir',
     SIMULATION_KEY:  process.env.REDIS_SIMULATION_KEY ||'new',
     START: process.env.START || 0,
-    END : process.env.END || 1500,
+    END : process.env.END || 1000,
 
 };
