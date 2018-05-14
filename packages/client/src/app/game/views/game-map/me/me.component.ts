@@ -53,7 +53,8 @@ export class MeComponent implements OnInit, OnDestroy {
   increase = true;
   playerInFlightModeNotFlying = false;
   isFlightInPlace: boolean = false;
-
+  prevFlightState: boolean = false;
+  prevHeightLevel = 'NONE';
   @HostListener('document:keydown', ['$event']) onKeydownHandler(event: KeyboardEvent) {
     if (event.key === 'w') {
       this.playerInFlightModeNotFlying = true;
@@ -208,6 +209,7 @@ export class MeComponent implements OnInit, OnDestroy {
         }
       }
       if (state && state.isFlying && state.flight && state.flight.remainingTime) {
+        this.prevFlightState = true;
         if (!this.crashAlertDisplayedOnce) {
           if (state.flight.remainingTime <= 30) {
             this.crashAlertDisplayedOnce = true;
@@ -242,10 +244,10 @@ export class MeComponent implements OnInit, OnDestroy {
             });
           });
         }
-        if (state.flight.heightLevel === 'A' && !this.flightLandAlertDisplayedOnce) {
+        if (state.flight.heightLevel === 'A' && this.prevHeightLevel !== 'A' && this.flightAlertDisplayedOnce) {
+          this.prevHeightLevel = 'A';
           this.flightLandAlertDisplayedOnce = true;
           this.ngZone.run(() => {
-            this.snackBar.dismiss();
             this.snackBar.openFromComponent(SnackBarContentComponent, {
               data: `Press F to land and exit flight mode`,
 
@@ -253,10 +255,18 @@ export class MeComponent implements OnInit, OnDestroy {
           });
         }
         if (state.flight.heightLevel !== 'A') {
+          this.prevHeightLevel = state.flight.heightLevel;
           this.flightLandAlertDisplayedOnce = false;
           this.snackBar.dismiss();
         }
       }
+       if(state && !state.isFlying && this.prevFlightState) {
+         this.prevFlightState = false;
+         this.ngZone.run(() => {
+           this.prevHeightLevel = 'NONE'
+           this.snackBar.dismiss();
+         })
+       }
     });
 
     this.flightService.currentFlightMode.subscribe(isFlightInPlace => {
