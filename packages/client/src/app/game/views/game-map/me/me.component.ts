@@ -248,9 +248,6 @@ export class MeComponent implements OnInit, OnDestroy {
           this.prevHeightLevel = 'A';
           this.flightLandAlertDisplayedOnce = true;
           this.ngZone.run(() => {
-            // this.snackBar.dismiss();
-            console.log('good')
-
             this.snackBar.openFromComponent(SnackBarContentComponent, {
               data: `Press F to land and exit flight mode`,
 
@@ -266,7 +263,6 @@ export class MeComponent implements OnInit, OnDestroy {
        if(state && !state.isFlying && this.prevFlightState) {
          this.prevFlightState = false;
          this.ngZone.run(() => {
-           console.log('bad')
            this.prevHeightLevel = 'NONE'
            this.snackBar.dismiss();
          })
