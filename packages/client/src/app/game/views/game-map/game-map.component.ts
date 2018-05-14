@@ -130,7 +130,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
         }
 
         // this.viewerOptions.setFpvCameraOptions(this.viewer);
-        this.startFirstPersonMode(controlledPlayer, initPlayer);
+        this.startFirstPersonMode(controlledPlayer, initPlayer, this.character.isFlying);
 
 
         this.viewer.camera.flyTo({
@@ -164,7 +164,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
       });
   }
 
-  private startFirstPersonMode(player: PlayerFields.Fragment, initCharacter = true) {
+  private startFirstPersonMode(player: PlayerFields.Fragment, initCharacter = true, isFlying = false) {
     if (initCharacter) {
       this.character.initCharacter({
         id: 'me',
@@ -176,7 +176,7 @@ export class GameMapComponent implements OnInit, OnDestroy {
         team: player.team,
         isCrawling: false,
         isShooting:false,
-        isFlying: false,
+        isFlying: isFlying,
         isMoving: false,
         flight: player.flight,
         characterInfo: player.character

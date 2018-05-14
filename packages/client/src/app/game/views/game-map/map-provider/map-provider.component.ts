@@ -7,7 +7,6 @@ const terrainTypeProvider = {
   'URBAN': MapLayerProviderOptions.BingMaps,
   'AUSTRALIA': MapLayerProviderOptions.BingMaps,
   'NEWZEALAND': MapLayerProviderOptions.BingMaps
-
 }
 
 const terrainTypeProviderOptions = {
