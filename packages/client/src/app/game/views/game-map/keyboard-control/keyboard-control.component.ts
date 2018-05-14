@@ -124,12 +124,12 @@ export class KeyboardControlComponent implements OnInit {
           );
         }
         if (this.character.isFlying) {
-            this.flightData = this.character.flightData
+          this.flightData = this.character.flightData
           // this.flightData = this.character.meFromServer.flight;
           if (this.character.state === MeModelState.RUNNING) {
             speed = environment.movement.flyingHighSpeed;
           }
-          else{
+          else {
             speed = environment.movement.flyingLowSpeed;
           }
           this.nextLocation = this.utils.pointByLocationDistanceAndAzimuthAndHeight3d(
@@ -138,8 +138,8 @@ export class KeyboardControlComponent implements OnInit {
             Cesium.Math.toRadians(this.character.heading + delta),
             true
           );
-          if (!this.collisionDetector.detectCollision(this.nextLocation)){
-            this.flightHeightLevel = this.utils.calculateHeightLevel(this.flightData, this.nextLocation);
+          if (!this.collisionDetector.detectCollision(this.nextLocation)) {
+            this.flightHeightLevel = this.flightModeService.calculateHeightLevel(this.flightData, this.nextLocation);
             this.flightData.heightLevel = this.flightHeightLevel;
             this.character.flightData = this.flightData;
             this.character.location = this.nextLocation;
@@ -211,10 +211,7 @@ export class KeyboardControlComponent implements OnInit {
     this.gameService.updateServerOnPosition(true);
     if (updateFlyState) {
       this.flightData = this.character.flightData;
-      // this.flightData = this.character.meFromServer.flight;
-      this.flightHeightLevel = this.utils.calculateHeightLevel(this.character.flightData, this.nextLocation || this.character.location, 50);
-
-      // this.flightHeightLevel = this.utils.calculateHeightLevel(this.character.meFromServer.flight, this.nextLocation || this.character.meFromServer.currentLocation.location, 50);
+      this.flightHeightLevel = this.flightModeService.calculateHeightLevel(this.character.flightData, this.nextLocation || this.character.location, 50);
       this.flightData.heightLevel = this.flightHeightLevel;
       const flightSubscription = this.gameService.toggleFlightMode(this.character.meFromServer.id, this.character.isFlying).subscribe(() => flightSubscription.unsubscribe());
     }
@@ -314,15 +311,15 @@ export class KeyboardControlComponent implements OnInit {
     this.keyboardKeysService.registerKeyBoardEvent('KeyC', 'Enter/exit crawling mode',
       () => {
         this.ngZone.run(() => {
-        this.changeCrawlingState();
+          this.changeCrawlingState();
+        });
       });
-    });
     this.keyboardKeysService.registerKeyBoardEvent('KeyF', 'Enter/exit flight mode',
       () => {
-      this.ngZone.run(() => {
-        this.changeFlyingState();
+        this.ngZone.run(() => {
+          this.changeFlyingState();
+        });
       });
-    });
     this.keyboardKeysService.registerKeyBoardEvent('KeyM', 'Switch to Map view', () => {
       this.ngZone.run(() => {
         this.changeOverviewMode();

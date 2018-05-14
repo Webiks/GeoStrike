@@ -65,6 +65,7 @@ export class GameToolbarComponent implements OnInit {
   }
 
   toggleFullScreen() {
+    debugger;
     if (!document.fullscreenElement && !document.webkitFullscreenElement) {
       if ('requestFullScreen' in document.body) {
         document.body.requestFullscreen();

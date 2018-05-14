@@ -1,6 +1,5 @@
 import { ChangeDetectorRef, Component, Input, NgZone, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { Subscription } from "rxjs/Subscription";
-import { ActionType } from "angular-cesium";
 import { GameService } from "../../../services/game.service";
 import { BeenShotService } from "./been-shot.service";
 import { TakeControlService } from "../../../services/take-control.service";
@@ -29,12 +28,14 @@ export class BloodOnScreen implements OnDestroy, OnChanges {
     this.gameService.getCurrentGameData()
       .map(result => result.gameData)
       .subscribe(gameData => {
+        if(this.character.meFromServer && this.controlledService.controlledPlayer){
         if (this.lifePercentage && (this.controlledService.controlledPlayer.id === this.character.meFromServer.id)){
           this.lifePercentage = this.controlledService.controlledPlayer.lifeState
         }
         else if (this.lifePercentage && (this.controlledService.controlledPlayer.id !== this.character.meFromServer.id)){
           let player = gameData.players.find(x => x.id === this.controlledService.controlledPlayer.id);
           this.lifePercentage = player.lifeState;
+        }
         }
       })
     this.ngZone.runOutsideAngular(() => {

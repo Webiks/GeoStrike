@@ -2,15 +2,15 @@ import { CharacterData } from '../../types';
 
 export const PLAYER_CHARACTERS: CharacterData[] = [
     {
-        name: 'Wolverine',
-        scale: 0.009,
-        model: '/assets/models/v2/wolverine/scene.gltf',
+        name: 'Captain America',
+        scale: 1.0,
+        model: '/assets/models/CaptainAmerica.gltf',
         description: 'Blue Team',
         team: 'BLUE',
-        imageUrl: '/assets/characters/wolverine.png',
-        portraitUrl: '/assets/characters/wolverine_portrait.png',
-        iconUrl: '/assets/icons/wolverine-mark.png',
-        iconDeadUrl: '/assets/icons/wolverine-dead-mark.png',
+        imageUrl: '/assets/characters/captain_america.png',
+        portraitUrl: '/assets/characters/portrait_captain_america.png',
+        iconUrl: '/assets/icons/captain_america-mark.png',
+        iconDeadUrl: '/assets/icons/captain_america-mark-dead.png',
         fixedHeight: 1
     },
     {
@@ -98,8 +98,8 @@ export const PLAYER_CHARACTERS: CharacterData[] = [
         team: null,
         imageUrl: null,
         portraitUrl: null,
-        iconUrl: '/assets/icons/grandmother-mark.png',
-        iconDeadUrl: '/assets/icons/grandmother-dead-mark.png',
+        iconUrl: '/assets/icons/grandpa-mark.png',
+        iconDeadUrl: '/assets/icons/grandpa-dead-mark.png',
     },
     {
         name: 'deer',

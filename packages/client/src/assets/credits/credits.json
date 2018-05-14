@@ -82,39 +82,6 @@
   },
   {
     "symbol": "",
-    "nameFieldOne": "Logan (Wolverine)",
-    "nameFieldTwo":"SidneyMADMAX",
-    "nameFieldThree":"CC Attribution",
-    "licensed":"is licensed under",
-    "urlOne" :"https://sketchfab.com/models/af530f5b864549f5b4f9191a62a2ec91",
-    "urlTwo": "https://sketchfab.com/sidneymadmax",
-    "urlThree": "http://creativecommons.org/licenses/by/4.0/",
-    "level": "sub"
-  },
-  {
-    "symbol": "",
-    "nameFieldOne": "Wolverine, free cutout images",
-    "nameFieldTwo":"by freepngs",
-    "nameFieldThree":"CC Attribution",
-    "licensed":"is licensed under",
-    "urlOne" :"https://www.freepngs.com/fullscreen-page/comp-j09fb8q5/6da9b0ca-1a16-409f-b935-384dd4868e34/0/%3Fi%3D0%26p%3Dj3l3b%26s%3Dstyle-j09f5qqa",
-    "urlTwo": "https://www.freepngs.com",
-    "urlThree": "http://creativecommons.org/licenses/by/4.0/",
-    "level": "sub"
-  },
-  {
-    "symbol": "",
-    "nameFieldOne": "Wolverine portrait.png",
-    "nameFieldTwo":"by FANDOM",
-    "nameFieldThree":"",
-    "licensed":"",
-    "urlOne" :"http://marvel-contestofchampions.wikia.com/wiki/File:Wolverine_portrait.png",
-    "urlTwo": "http://fandom.wikia.com/",
-    "urlThree": "",
-    "level": "sub"
-  },
-  {
-    "symbol": "",
     "nameFieldOne": "Iron Man Mark7",
     "nameFieldTwo":"mwilson1",
     "nameFieldThree":"CC Attribution",
@@ -144,6 +111,39 @@
     "urlOne" :"https://vignette.wikia.nocookie.net/marvel-contestofchampions/images/c/c0/Iron_Man_portrait.png/revision/latest?cb=20150830074231",
     "urlTwo": "http://fandom.wikia.com/",
     "urlThree": "",
+    "level": "sub"
+  },
+  {
+    "symbol": "",
+    "nameFieldOne": "Captain America (Age Of Ultron)",
+    "nameFieldTwo":"by Ecelon",
+    "nameFieldThree":"CC Attribution",
+    "licensed":"",
+    "urlOne" :"https://www.models-resource.com/mobile/marvelsfuturefight/model/19414/",
+    "urlTwo": "https://www.models-resource.com/submitter/Ecelon/",
+    "urlThree": "",
+    "level": "sub"
+  },
+  {
+    "symbol": "",
+    "nameFieldOne": "Iron Man Mark7",
+    "nameFieldTwo":"mwilson1",
+    "nameFieldThree":"CC Attribution",
+    "licensed":"is licensed under",
+    "urlOne" :"https://sketchfab.com/models/b8d5a0156ef04cb7800d19f6bfd9842b",
+    "urlTwo": "https://sketchfab.com/mwilson1",
+    "urlThree": "http://creativecommons.org/licenses/by/4.0/",
+    "level": "sub"
+  },
+  {
+    "symbol": "",
+    "nameFieldOne": "Iron Man Mark7",
+    "nameFieldTwo":"mwilson1",
+    "nameFieldThree":"CC Attribution",
+    "licensed":"is licensed under",
+    "urlOne" :"https://sketchfab.com/models/b8d5a0156ef04cb7800d19f6bfd9842b",
+    "urlTwo": "https://sketchfab.com/mwilson1",
+    "urlThree": "http://creativecommons.org/licenses/by/4.0/",
     "level": "sub"
   },
   {
