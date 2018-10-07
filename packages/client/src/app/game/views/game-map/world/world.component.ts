@@ -17,7 +17,8 @@ export class BackgroundEntity extends AcEntity {
 })
 export class WorldComponent implements OnInit {
   @ViewChild('tiles') tiles: AcTileset3dComponent;
-  public tilesUrl = environment.tiles;
+  // public tilesUrl = environment.tiles.url;
+  public tilesNewUrl = 'http://localhost:4200/assets/NewYork'; //Cesium.IonResource.fromAssetId(11);
   public loadTiles = environment.load3dTiles;
   public treesAndBoxes$: Subject<AcNotification> = new Subject();
   public tilesStyle = {
@@ -90,7 +91,7 @@ export class WorldComponent implements OnInit {
     this.gameService.currentTerrainEnviorment.subscribe(terrainType => {
       this.terrainView = terrainType;
       let tilesStr = terrainType.toLowerCase() + "_url";
-      this.tilesUrl = environment.tiles[tilesStr];
+      // this.tilesUrl = environment.tiles[tilesStr];
 
       if (!terrainType.includes('URBAN') && !terrainType.includes('JFK')) {
         this.loadTerrain();
