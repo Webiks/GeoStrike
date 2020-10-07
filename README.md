@@ -1,9 +1,7 @@
 # GeoStrike (alpha)
 
- 3D game for real world data. Boom!
- 
- Play it live at [geo-strike.com](http://geo-strike.com/)
- 
+ 3D game experiment for real world data. Boom!
+  
  ### Technologies
  Node, GraphQL, Angular, CesiumJS, [Angular Cesium](https://github.com/TGFTech/angular-cesium) 
  
