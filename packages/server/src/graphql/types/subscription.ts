@@ -5,5 +5,6 @@ export const schema = gql`
         gameData: Game
         gameNotifications: Notification
         gunShot: ShotData
+        beenShot: BeenShotData
     }
 `;
