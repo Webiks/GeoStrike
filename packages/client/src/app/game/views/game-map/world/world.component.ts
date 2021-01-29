@@ -79,6 +79,7 @@ export class WorldComponent implements OnInit {
   }
 
   loadTerrain() {
+    // this.cesiumService.getViewer().terrainProvider = Cesium.createWorldTerrain();
     this.cesiumService.getViewer().terrainProvider = new Cesium.CesiumTerrainProvider(
       environment.terrain
     );

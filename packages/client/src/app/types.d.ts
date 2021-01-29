@@ -1,3 +1,4 @@
+/* tslint:disable */
 
 export interface User {
   id: string;
@@ -17,6 +18,18 @@ export interface Game {
   winingTeam?: Team;
 }
 
+export interface FlightData {
+  remainingTime: number;
+  speed: FlightSpeed;
+  minHeight: number;
+  maxHeight: number;
+  heightLevel: FlightHeight;
+}
+
+export type FlightSpeed = "NONE" | "MIN" | "MAX";
+
+export type FlightHeight = "NONE" | "A" | "B" | "C" | "D" | "E"| "MAX"
+
 export interface Player extends User {
   id: string;
   username?: string;
@@ -25,8 +38,10 @@ export interface Player extends User {
   lifeState: PlayerLifeState;
   lifeStatePerctange: number;
   isCrawling: boolean;
+  isFlying: boolean;
   isShooting: boolean;
   isMe: boolean;
+  flight: FlightData;
   currentLocation: PlayerLocation;
   team: Team;
   syncState: PlayerSyncState;
@@ -126,6 +141,7 @@ export interface UpdatePositionMutationArgs {
   heading: number;
   isCrawling: boolean;
   isShooting: boolean;
+  isFlying: boolean;
   enteringBuildingPosition?: LocationInput;
   skipValidation?: boolean;
 }
@@ -293,6 +309,33 @@ export namespace NotifyBeenShot {
   export type NotifyBeenShot = PlayerFields.Fragment
 }
 
+
+
+export namespace NotifyCrash {
+  export type Variables = {
+    playerId: string;
+  }
+
+  export type Mutation = {
+    NotifyCrash?: NotifyCrash;
+  }
+
+  export type NotifyCrash = PlayerFields.Fragment
+}
+
+export namespace ToggleFlightMode {
+  export type Variables = {
+    playerId: string;
+    isFlying: boolean;
+  }
+
+  export type Mutation = {
+    toggleFlightMode?: ToggleFlightMode;
+  }
+
+  export type ToggleFlightMode = PlayerFields.Fragment
+}
+
 export namespace NotifyShot {
   export type Variables = {
     byPlayerId: string;
@@ -344,6 +387,7 @@ export namespace UpdatePosition {
     heading: number;
     isCrawling: boolean;
     isShooting: boolean;
+    isFlying: boolean;
     enteringBuildingPosition?: LocationInput;
     skipValidation?: boolean;
   }
@@ -383,6 +427,8 @@ export namespace PlayerFields {
     lifeState: PlayerLifeState;
     lifeStatePerctange: number;
     isCrawling: boolean;
+    isFlying: boolean;
+    flight: FlightData;
     isShooting: boolean;
     isMe: boolean;
     id: string;

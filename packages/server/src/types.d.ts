@@ -1,5 +1,8 @@
 /* tslint:disable */
 
+import { PlayerLifeState } from "../../client/src/app/types";
+import Timer = NodeJS.Timer;
+
 export interface User {
   id: string; 
   username?: string; 
@@ -24,7 +27,9 @@ export interface Player extends User {
   character: CharacterData; 
   state: PlayerState;
   lifeState: PlayerLifeState;
-  isCrawling: boolean; 
+  isCrawling: boolean;
+  isFlying: boolean;
+  flight:FlightData;
   isShooting: boolean; 
   isMe: boolean; 
   currentLocation: PlayerLocation; 
@@ -124,7 +129,8 @@ export interface UpdatePositionMutationArgs {
   position: LocationInput; 
   heading: number; 
   isCrawling: boolean; 
-  isShooting: boolean; 
+  isShooting: boolean;
+  isFlying: boolean;
   enteringBuildingPosition?: LocationInput; 
   skipValidation?: boolean; 
 }
@@ -139,19 +145,28 @@ export interface TakeControlOverPlayerMutationArgs {
   playerId: string; 
 }
 
-export type Team = "BLUE" | "RED" | "NONE";
+export interface FlightData {
+  remainingTime: number;
+  speed: FlightSpeed;
+  minHeight: number;
+  maxHeight: number;
+  heightLevel: FlightHeight;
+  flightId: Timer;
+}
 
+export type FlightSpeed = "NONE" | "MIN" | "MAX";
+
+export type FlightHeight = "NONE" | "A" | "B" | "C" | "D" | "E"| "MAX"
+
+export type Team = "BLUE" | "RED" | "NONE";
 
 export type PlayerState = "WAITING" | "READY" | "ALIVE" | "DEAD" | "CONTROLLED";
 
+export type PlayerLifeState = "FULL" | "HIGH" | "MEDIUM" | "LOW" | "EMPTY";
 
 export type PlayerSyncState = "VALID" | "INVALID";
 
-
 export type CharacterType = "PLAYER" | "BACKGROUND_CHARACTER" | "OVERVIEW";
-
 
 export type GameState = "WAITING" | "ACTIVE" | "DONE";
 
-
-export type PlayerLifeState = "FULL" | "HIGH" | "MEDIUM" | "LOW" | "EMPTY";

@@ -1,0 +1,12 @@
+<ac-layer acFor="let player of flights$" [context]="this">
+  <ac-billboard-primitive-desc *ngIf="isOverview$| async" props="{
+    show: player?.isFlying,
+    position: player?.currentLocation?.location,
+    image: getJetpackImage(),
+    height: 24,
+    width:  24,
+    pixelOffset: [2,-55] | pixelOffset,
+    eyeOffset: eyeOffset
+  }">
+  </ac-billboard-primitive-desc>
+</ac-layer>

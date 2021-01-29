@@ -1,0 +1,103 @@
+.flight-container {
+  border-top-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+  color: white;
+  border: 1px solid white;
+  height: 65px;
+  font-size: 34px;
+  display: flex;
+  align-items: center;
+  position: fixed;
+  bottom: 153px;
+  left: 10px;
+  width: 200px;
+  background-color: rgba(0, 0, 0, 0.42);
+  &.isDangerousRemainingTime {
+    background-color: rgba(235, 87, 87, 0.54);
+  }
+  .clickable {
+    cursor: pointer;
+  }
+  .img-container {
+    width: 64px;
+    height: 64px;
+    border: 1px solid white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0) 0%, #000000 100%)
+  }
+  .img-container:hover {
+    background-color: rgba(111, 207, 151, 0.26);
+  }
+  .text {
+    padding: 0 10px;
+    margin: auto;
+    span {
+      padding: 0;
+      margin: -3px;
+    }
+  }
+  .gauges {
+    position: fixed;
+    bottom: 242px;
+    left: 22px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    .gauge-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-right: 16px;
+      .gauge-levels {
+        border-top-right-radius: 8px;
+        border-bottom-left-radius: 8px;
+        color: white;
+        border: 1px solid white;
+        width: 36px;
+        height: 60vh;
+        @media screen and (max-width: 1440px) {
+          height: 40vh;
+        }
+        background: linear-gradient(black, rgba(255, 255, 255, 0.3));
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        &.isActive {
+          background-color: rgba(111, 207, 151, 0.54);
+        }
+        .gauge-level {
+          display: flex;
+          flex-direction: column-reverse;
+          align-items: flex-end;
+          width: inherit;
+          height: inherit;
+          padding: 0;
+          margin: 0;
+          .divider {
+            width: 24px;
+            height: 16.6%;
+            padding: 0;
+            margin: 0;
+            border-bottom: 1px solid white;
+          }
+          &.isActive {
+            background-color: rgba(111, 207, 151, 0.54);
+            &.isDangerousRemainingTime {
+              background-color: rgba(235, 87, 87, 0.54);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
+
+
+

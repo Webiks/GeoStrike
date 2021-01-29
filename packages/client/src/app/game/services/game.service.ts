@@ -9,11 +9,13 @@ import {
   GameNotifications,
   JoinAsViewer,
   JoinGame,
+  NotifyBeenShot,
+  NotifyCrash,
   NotifyKill,
   NotifyShot,
-  NotifyBeenShot,
   Ready,
   Team,
+  ToggleFlightMode,
   UpdatePosition
 } from '../../types';
 import { joinGameMutation } from '../../graphql/join-game.mutation';
@@ -30,6 +32,8 @@ import { CharacterService, MeModelState } from './character.service';
 import { joinAsViewer } from '../../graphql/join-as-viewer.mutation';
 import { gameNotificationsSubscription } from '../../graphql/game-notifications.subscription';
 import { notifyShotMutation } from '../../graphql/notify-shot.mutation';
+import { toggleFlightModeMutation } from "../../graphql/toggle-flight-mode.mutation";
+import { notifyCrashMutation } from "../../graphql/notify-crash.mutation";
 import { notifyBeenShotMutation } from "../../graphql/notify-been-shot.mutation";
 
 @Injectable()
@@ -127,17 +131,15 @@ export class GameService {
     clearInterval(this.serverPositionUpdateInterval);
   }
 
-
   updateServerOnPosition(skipValidation = true) {
     const state = this.createState();
     if (!state || !this.isDifferentFromLastState(state)) {
       return;
     }
-
     this.lastStateSentToServer = state;
     const subscription = this.apollo.mutate<UpdatePosition.Mutation>({
       mutation: updatePositionMutation,
-      variables: { ...state, skipValidation },
+      variables: {...state, skipValidation},
     }).subscribe(() => subscription.unsubscribe());
   }
 
@@ -146,6 +148,7 @@ export class GameService {
     const heading = this.character.heading;
     const isCrawling = this.character.isCrawling;
     const isShooting = this.character.state === MeModelState.SHOOTING;
+    const isFlying = this.character.isFlying;
     const enteringBuildingPosition = this.character.enteringBuildingPosition && this.character.enteringBuildingPosition.location;
     if (!location || !heading) {
       return;
@@ -160,6 +163,7 @@ export class GameService {
       heading,
       isCrawling,
       isShooting,
+      isFlying,
       enteringBuildingPosition,
     };
   }
@@ -172,11 +176,13 @@ export class GameService {
     const oldStateHeading = this.lastStateSentToServer.heading;
     const oldStateCrawling = this.lastStateSentToServer.isCrawling;
     const oldStateShooting = this.lastStateSentToServer.isShooting;
+    const oldStateFlying = this.lastStateSentToServer.isFlying;
     const oldEnteringBuildingPosition = this.lastStateSentToServer.EnteringBuildingPosition;
     const newStatePosition = state.position;
     const newStateHeading = state.heading;
     const newStateCrawling = state.isCrawling;
     const newStateShooting = state.isShooting;
+    const newStateFlying = state.isFlying;
     const newStateEnteringBuildingPosition = state.enteringBuildingPosition;
     return (
       oldStatePosition.x !== newStatePosition.x ||
@@ -185,8 +191,19 @@ export class GameService {
       oldStateHeading !== newStateHeading ||
       oldStateCrawling !== newStateCrawling ||
       oldStateShooting !== newStateShooting ||
-      oldEnteringBuildingPosition !== newStateEnteringBuildingPosition
+      oldEnteringBuildingPosition !== newStateEnteringBuildingPosition ||
+      oldStateFlying !== newStateFlying
     );
+  }
+
+  toggleFlightMode(playerId, isFlying): Observable<ApolloExecutionResult<ToggleFlightMode.Mutation>> {
+    return this.apollo.mutate<ToggleFlightMode.Mutation>({
+      mutation: toggleFlightModeMutation,
+      variables: {
+        playerId: playerId,
+        isFlying: isFlying,
+      } as ToggleFlightMode.Variables
+    });
   }
 
   notifyKill(killedPlayerId): Observable<ApolloExecutionResult<NotifyKill.Mutation>> {
@@ -204,6 +221,15 @@ export class GameService {
       variables: {
         playerId: killedPlayerId,
       } as NotifyBeenShot.Variables
+    });
+  }
+
+  notifyCrash(crashedPlayerId): Observable<ApolloExecutionResult<NotifyCrash.Mutation>> {
+    return this.apollo.mutate<NotifyCrash.Mutation>({
+      mutation: notifyCrashMutation,
+      variables: {
+        playerId: crashedPlayerId,
+      } as NotifyCrash.Variables
     });
   }
 

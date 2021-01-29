@@ -1,11 +1,12 @@
 export const environment = {
   production: true,
-  serverUrl: 'cesiumfps.webiks.com:3000',
+  serverUrl: 'cesiumfps.webiks.com:3001',
   wsSchema: 'ws',
   movement: {
     runningSpeed: 1.0,
     walkingSpeed: 0.25,
     crawlingSpeed: 0.1,
+    flyingSpeed: 3.0
   },
   createPathMode: false,
   loadTerrain: false,
