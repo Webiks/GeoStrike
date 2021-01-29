@@ -20,10 +20,16 @@
     </mat-form-field>
     <h2 *ngIf="joinGameMode" class="viewer-btn" [class.selected-viewer]="selectedCharacter === viewer.name" (click)="select.emit(viewer)">
       Continue as Viewer</h2>
-    <div style="width: 260px">
-      <mat-form-field class="gamecode-input" *ngIf="joinGameMode">
+    <div style="width: 260px" *ngIf="joinGameMode">
+      <mat-form-field class="gamecode-input">
         <input matInput placeholder="Enter Game Code" type="number"   (ngModelChange)="gamecodeChange.emit($event)" required [(ngModel)]="gameCode">
       </mat-form-field>
+    </div>
+    <div class="game-terrain-div" *ngIf="!joinGameMode">
+      <h2 class="game-terrain-title">Game Zone*</h2>
+      <select class="game-terrain-select" [(ngModel)]="selectedTerrain" (ngModelChange)="onChange($event)">
+        <option *ngFor="let terrain of terrains; let i = index" [ngValue]="terrain" [selected]="i == 0 ? true : null">{{terrain.name}}</option>
+      </select>
     </div>
   </div>
 </div>

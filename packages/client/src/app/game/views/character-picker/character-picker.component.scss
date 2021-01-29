@@ -41,6 +41,30 @@
       border: solid 2px var(--light-green);
       border-radius: 10px;
     }
+    .game-terrain-div{
+      margin: 0 30px;
+      .game-terrain-title {
+        display: inline-block;
+        color: white;
+        margin: 0 30px;
+      }
+      .game-terrain-select {
+        font-family: Saira ExtraCondensed, sans-serif;
+        background: #0E1C27;
+        height: 65px;
+        font-size: 34px;
+        color: white;
+        padding: 5px;
+        option {
+          background-color: transparent;
+          border: 1px solid white;
+          color: white;
+          cursor: pointer;
+          font-size: 34px;
+          padding: 5px;
+        }
+      }
+    }
   }
 
   .username-input {
@@ -54,4 +78,7 @@
     color: white;
     font-size: 22px;
   }
+
+
+
 }

@@ -32,7 +32,7 @@ export const config = {
   clientsUpdateRate: 200,
   gameTimeoutSec: 3600,
   backgroundCharacters: {
-    numberOfBgCharacters: 10,
+    numberOfBgCharacters: 20,
     updateIntervalMs: 100,
   },
   PLAYERS_SPAWN_POSITIONS: {

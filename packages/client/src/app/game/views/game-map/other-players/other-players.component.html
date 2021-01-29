@@ -3,7 +3,7 @@
     heightReference: utils.getRelativeToGroundHeightReference(),
     uri: getModel(player),
     scale: getModelScale(player),
-    position: interpolatePlayerPosition(player, utils.getPosition(player.currentLocation.location)),
+    position: player.currentLocation.location,
     orientation: getOrientation(player.currentLocation.location, player.currentLocation.heading, player),
     shadows: Cesium.ShadowMode.DISABLED,
     runAnimations: player.state !== 'DEAD',

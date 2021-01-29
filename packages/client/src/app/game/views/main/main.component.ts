@@ -7,6 +7,7 @@ import { VIEWER } from '../../../shared/characters.const';
 import { GameService } from '../../services/game.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from "rxjs/Subscription";
 
 enum GameTabs {
   JOIN_GAME,
@@ -29,10 +30,16 @@ export class MainComponent {
   error = '';
   gameCode = '';
   activeTab: GameTabs = GameTabs.CREATE_GAME;
+  terrainType: string = 'URBAN';
+  terrainSubsription: Subscription;
 
   constructor(private snackBar: MatSnackBar,
               private router: Router,
               private gameService: GameService) {
+    this.gameService.currentTerrainEnviorment.subscribe(terrainType => {
+      // this.terrainType = isTerrain ? 'URBAN' : 'MOUNTAIN';
+      this.terrainType = terrainType;
+    })
   }
 
   characterChanged({name, team}) {
@@ -53,7 +60,6 @@ export class MainComponent {
   }
 
 
-
   createGame() {
     if (!this.validate()) {
       return;
@@ -61,7 +67,7 @@ export class MainComponent {
     this.loading = true;
     const isViewer = this.characterName === VIEWER.name;
     this.gameService
-      .createNewGame(this.characterName, this.username, this.team, isViewer)
+      .createNewGame(this.characterName, this.username, this.team, isViewer, this.terrainType)
       .subscribe((result: ApolloQueryResult<CreateNewGame.Mutation>) => {
         this.loading = false;
         if (!result.loading && result.data) {
@@ -110,7 +116,7 @@ export class MainComponent {
     this.router.navigate(['/room', AuthorizationMiddleware.token, {gameCode}]);
   }
 
-  startGame(){
+  startGame() {
     if (this.activeTab === GameTabs.CREATE_GAME) {
       this.createGame();
     } else {
@@ -118,7 +124,17 @@ export class MainComponent {
     }
   }
 
-  setActiveTab(tabChange: MatTabChangeEvent){
+  setActiveTab(tabChange: MatTabChangeEvent) {
     this.activeTab = tabChange.tab.textLabel === 'New game' ? GameTabs.CREATE_GAME : GameTabs.JOIN_GAME;
+  }
+
+  toggleTerrainType() {
+    this.terrainType = (this.terrainType === 'URBAN') ? 'MOUNTAIN' : 'URBAN';
+    this.gameService.modifyTerrainEnviorment(this.terrainType);
+  }
+  toggleSwiss(){
+    this.terrainType = 'SWISS';
+    this.gameService.modifyTerrainEnviorment(this.terrainType);
+
   }
 }

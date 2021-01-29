@@ -110,6 +110,7 @@ export interface CreateNewGameMutationArgs {
   username: string;
   team: Team;
   isViewer: boolean;
+  terrainType: string;
 }
 export interface JoinGameMutationArgs {
   gameCode: string;
@@ -163,6 +164,7 @@ export namespace CreateNewGame {
     username: string;
     team: Team;
     isViewer: boolean;
+    terrainType: string;
   }
 
   export type Mutation = {
@@ -176,6 +178,7 @@ export namespace CreateNewGame {
 
   export type Game = GameFields.Fragment
 }
+
 export namespace CurrentGame {
   export type Variables = {
   }
