@@ -35,7 +35,7 @@
     "core-js": "^2.4.1",
     "graphql-code-generator": "^0.8.10",
     "graphql-tag": "^2.4.2",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.21",
     "lodash-decorators": "^4.4.1",
     "ng-click-outside": "^3.0.0",
     "rxjs": "^5.4.1",
