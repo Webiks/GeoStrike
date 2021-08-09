@@ -60,7 +60,7 @@
     "karma-jasmine-html-reporter": "^0.2.2",
     "protractor": "~5.1.2",
     "rimraf": "^2.6.2",
-    "serve": "^6.3.1",
+    "serve": "^10.1.2",
     "ts-node": "^3.3.0",
     "tslint": "^5.7.0",
     "typescript": "~2.3.3"
