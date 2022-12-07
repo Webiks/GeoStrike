@@ -28,7 +28,7 @@
     "body-parser": "^1.17.2",
     "cesium": "^1.37.0",
     "cors": "^2.8.4",
-    "express": "^4.15.3",
+    "express": "^4.17.3",
     "express-session": "^1.15.5",
     "graphql": "^0.10.1",
     "graphql-code-generator": "^0.8.10",
